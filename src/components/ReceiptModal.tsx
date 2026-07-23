@@ -109,7 +109,6 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           {/* Note / Status */}
           <div className="flex items-center justify-between text-xs bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
             <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-bold">
-              <CheckCircle2 className="w-4 h-4" />
               <span>{rentRecord.due <= 0 ? t.paidStatus : `${t.dueStatus} ${formatCurrency(rentRecord.due)}`}</span>
             </div>
             {rentRecord.note && (

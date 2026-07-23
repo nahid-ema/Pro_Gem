@@ -373,8 +373,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
                     </td>
                     <td className="p-3">
                       {isPaid ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 font-bold text-[10px] uppercase">
-                          <CheckCircle2 className="w-3 h-3" />
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 font-bold text-[10px] uppercase">
                           {t.paidStatus}
                         </span>
                       ) : (

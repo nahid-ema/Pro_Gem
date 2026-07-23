@@ -105,7 +105,7 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
             </div>
           </div>
           <span className="hidden sm:inline-flex px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 font-bold text-xs shrink-0">
-            {language === 'bn' ? 'পরিশোধিত' : 'Paid in full'}
+            {language === 'bn' ? '(পরিশোধিত)' : '(Paid)'}
           </span>
         </div>
       ) : (

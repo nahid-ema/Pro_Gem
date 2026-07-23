@@ -755,18 +755,13 @@ export default function App() {
           lastCloudBackupTime={lastCloudBackupTime}
         />
 
-        {/* Global Filter Bar with Navigation Dropdown */}
+        {/* Global Filter Bar */}
         <FilterBar
           selectedYear={selectedYear}
           selectedMonth={selectedMonth}
           searchQuery={searchQuery}
           availableYears={availableYears}
           language={language}
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          unpaidCount={unpaidTenantItems.length}
-          totalRoomsCount={rooms.length}
-          totalTenantsCount={tenants.length}
           onYearChange={setSelectedYear}
           onMonthChange={setSelectedMonth}
           onSearchChange={setSearchQuery}
