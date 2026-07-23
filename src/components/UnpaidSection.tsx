@@ -90,14 +90,23 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
 
       {/* Table / Status */}
       {safeUnpaidItems.length === 0 ? (
-        <div className="p-8 text-center bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 rounded-xl">
-          <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto mb-2" />
-          <h4 className="text-sm font-semibold text-slate-900 dark:text-white mb-1">
-            {t.unpaidClear}
-          </h4>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
-            {language === 'bn' ? 'সকল ভাড়াটিয়ার চলতি হিসাব শতভাগ পরিশোধিত রয়েছে।' : 'All occupants are up to date on rent payments.'}
-          </p>
+        <div className="p-3.5 sm:p-4 bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-500/20 rounded-2xl flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+              <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5" />
+            </div>
+            <div>
+              <h4 className="text-xs sm:text-sm font-bold text-emerald-800 dark:text-emerald-300">
+                {t.unpaidClear}
+              </h4>
+              <p className="text-[11px] sm:text-xs text-emerald-600/90 dark:text-emerald-400/90 font-medium">
+                {language === 'bn' ? 'সকল ভাড়াটিয়ার চলতি হিসাব শতভাগ পরিশোধিত রয়েছে।' : 'All occupants are up to date on rent payments.'}
+              </p>
+            </div>
+          </div>
+          <span className="hidden sm:inline-flex px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 font-bold text-xs shrink-0">
+            {language === 'bn' ? 'পরিশোধিত' : 'Paid in full'}
+          </span>
         </div>
       ) : (
         <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
