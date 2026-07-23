@@ -37,6 +37,7 @@ import { ReceiptModal } from './components/ReceiptModal';
 import { AuthModal } from './components/AuthModal';
 import { LockScreen } from './components/LockScreen';
 import { Toast, ToastMessage } from './components/Toast';
+import { getTranslation } from './data/translations';
 import { initialRooms, initialTenants, initialRentRecords, initialExpenses, initialShopDues } from './data/sampleData';
 
 export default function App() {
@@ -728,9 +729,33 @@ export default function App() {
     );
   }
 
+  const t = getTranslation(language);
+
   return (
     <div className="min-h-screen bg-[#f3f4f6] dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans p-2 sm:p-4 md:p-6 transition-colors duration-300 relative">
       <div className="max-w-7xl mx-auto space-y-3 sm:space-y-4">
+        {/* Printable Document Report Header (Only visible on PDF / Print) */}
+        <div className="hidden print:block mb-6 pb-4 border-b-2 border-slate-900">
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-xl font-bold text-slate-900">
+                {t.appName}
+              </h1>
+              <p className="text-xs text-slate-600 mt-1">
+                {language === 'bn' ? 'মালিকানা ব্যবস্থাপনা ও হিসাব রিপোর্ট' : 'Property Management & Financial Statement'}
+              </p>
+            </div>
+            <div className="text-right text-xs text-slate-600">
+              <p><strong>{language === 'bn' ? 'তারিখ:' : 'Date:'}</strong> {new Date().toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+              {(selectedYear !== 'all' || selectedMonth !== 'all') && (
+                <p className="mt-0.5">
+                  <strong>{language === 'bn' ? 'সময়কাল:' : 'Period:'}</strong> {selectedYear !== 'all' ? selectedYear : ''} {selectedMonth !== 'all' ? (t.months ? t.months[parseInt(selectedMonth, 10) - 1] : selectedMonth) : ''}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+
         {/* Header */}
         <Header
           language={language}

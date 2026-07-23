@@ -90,29 +90,138 @@
   }
 }
 
-/* Print Optimization Styles */
+/* Print & PDF Report Optimization Styles - Pure Data Report */
 @media print {
   @page {
-    margin: 10mm;
+    margin: 12mm 15mm;
+    size: auto;
   }
 
-  body {
+  /* Reset body and enforce white background and dark high-contrast text */
+  html, body {
     background: #ffffff !important;
-    color: #000000 !important;
-    font-size: 12pt;
+    color: #0f172a !important;
+    font-size: 11pt !important;
+    font-family: 'Google Sans', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
-  .no-print {
+  /* Hide UI interface elements: buttons, inputs, selects, textareas, forms, nav, web header, toasts */
+  .no-print,
+  button,
+  input,
+  select,
+  textarea,
+  form,
+  header,
+  .header-section,
+  nav,
+  .toast {
     display: none !important;
   }
 
-  /* Expand receipt or print view to full width */
-  #receiptContent {
+  /* Make sure print-only report header displays */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Strip UI card shadows, dark mode slate fills, rounded shapes, and background effects */
+  div, section, main, article {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    filter: none !important;
+  }
+
+  /* Tables formatting for crisp report display */
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin-top: 10px !important;
+    margin-bottom: 20px !important;
+    page-break-inside: auto !important;
+  }
+
+  tr {
+    page-break-inside: avoid !important;
+    page-break-after: auto !important;
+  }
+
+  thead {
+    display: table-header-group !important;
+  }
+
+  th {
+    background-color: #f8fafc !important;
+    color: #0f172a !important;
+    font-weight: 700 !important;
+    border: 1px solid #cbd5e1 !important;
+    padding: 8px 10px !important;
+    font-size: 10pt !important;
+    text-align: left !important;
+  }
+
+  td {
+    border: 1px solid #e2e8f0 !important;
+    padding: 7px 10px !important;
+    font-size: 9.5pt !important;
+    color: #0f172a !important;
+  }
+
+  /* Hide Action header/cells in tables */
+  th.no-print, td.no-print {
+    display: none !important;
+  }
+
+  /* Handle Receipt Modal when active */
+  #receiptModalOverlay {
+    position: static !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+
+  #receiptModalCard {
     border: none !important;
     box-shadow: none !important;
-    width: 100% !important;
-    max-width: 100% !important;
     padding: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    background: #ffffff !important;
+  }
+
+  #receiptContent {
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 6px !important;
+    padding: 20px !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  /* Ensure legible dark text colors for print output */
+  *, *:before, *:after {
+    color: #0f172a !important;
+    text-shadow: none !important;
+  }
+
+  .text-emerald-600, .text-emerald-700, .text-emerald-800 {
+    color: #047857 !important;
+  }
+
+  .text-rose-600, .text-rose-700, .text-rose-800 {
+    color: #be123c !important;
+  }
+
+  /* Remove max-height scrolling restrictions in print */
+  .max-h-\[500px\], .overflow-x-auto, .overflow-y-auto {
+    max-height: none !important;
+    overflow: visible !important;
   }
 }
 

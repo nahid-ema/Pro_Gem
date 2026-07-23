@@ -99,7 +99,7 @@ export const Header: React.FC<HeaderProps> = ({
   ];
 
   return (
-    <header className="header-section bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-3.5 sm:p-5 mb-3 sm:mb-5 shadow-sm text-slate-800 dark:text-slate-200 transition-colors relative z-50">
+    <header className="header-section no-print bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-3.5 sm:p-5 mb-3 sm:mb-5 shadow-sm text-slate-800 dark:text-slate-200 transition-colors relative z-50">
       <div className="flex items-center justify-between gap-3">
         {/* Left: Branding & Status */}
         <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0">

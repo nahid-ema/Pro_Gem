@@ -227,7 +227,7 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
                       <span>{tn.phone}</span>
                       <a
                         href={`tel:${tn.phone}`}
-                        className="p-1 rounded bg-slate-100 dark:bg-slate-800 text-indigo-600 hover:bg-slate-200 transition-colors"
+                        className="no-print p-1 rounded bg-slate-100 dark:bg-slate-800 text-indigo-600 hover:bg-slate-200 transition-colors"
                         title="Call Tenant"
                       >
                         <Phone className="w-3 h-3" />
@@ -236,7 +236,7 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
                         href={`https://wa.me/${getCleanPhone(tn.phone)}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-1 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-600 hover:bg-emerald-200 transition-colors"
+                        className="no-print p-1 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-600 hover:bg-emerald-200 transition-colors"
                         title="Open WhatsApp"
                       >
                         <MessageSquare className="w-3 h-3" />
