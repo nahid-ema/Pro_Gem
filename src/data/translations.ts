@@ -2,7 +2,7 @@ import { Language } from '../types';
 
 export const translations = {
   bn: {
-    appName: "নাহিদ কুটির প্রো",
+    appName: "নাহিদ কুটির",
     appSubtitle: "ইকো-লাক্সারি বাসা ও ভাড়া ব্যবস্থাপনা সিস্টেম",
     mainTitle: "নাহিদ কুটির 🏠",
     tagline: "স্মার্ট প্রপার্টি ও ভাড়া ড্যাশবোর্ড",
@@ -186,7 +186,7 @@ export const translations = {
   },
 
   en: {
-    appName: "Nahid Kutir Pro",
+    appName: "Nahid Kutir",
     appSubtitle: "Eco-Luxury Property & Rent Management System",
     mainTitle: "Nahid Kutir 🏠",
     tagline: "Smart Property & Rent Management Dashboard",

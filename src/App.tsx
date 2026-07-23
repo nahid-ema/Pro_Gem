@@ -729,12 +729,14 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#ebecee] dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans p-2 sm:p-4 md:p-6 transition-colors duration-300">
+    <div className="min-h-screen bg-[#f3f4f6] dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans p-2 sm:p-4 md:p-6 transition-colors duration-300 relative">
       <div className="max-w-7xl mx-auto space-y-3 sm:space-y-4">
         {/* Header */}
         <Header
           language={language}
           theme={theme}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
           onLanguageToggle={() => setLanguage(language === 'bn' ? 'en' : 'bn')}
           onThemeToggle={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           onTriggerBackup={handleTriggerBackup}

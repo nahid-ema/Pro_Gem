@@ -1,5 +1,5 @@
 {
-  "name": "Nahid Kutir Pro - Eco-Luxury Property Manager",
+  "name": "Nahid Kutir",
   "description": "Comprehensive Bengali & English property management system for rooms, tenants, rent collections, unpaid dues, expenses, and shop dues with WhatsApp reminders and PDF exports.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

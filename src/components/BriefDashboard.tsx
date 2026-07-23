@@ -54,7 +54,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
     : '';
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl md:rounded-3xl p-3.5 sm:p-5 md:p-6 mb-4 sm:mb-6 shadow-sm relative overflow-hidden">
+    <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-3.5 sm:p-5 md:p-6 mb-4 sm:mb-6 shadow-sm relative overflow-hidden">
       {/* Header Title & Period indicator */}
       <div className="flex items-center justify-between gap-2 mb-4 sm:mb-5 pb-3 sm:pb-4 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
