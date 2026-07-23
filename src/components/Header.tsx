@@ -36,6 +36,7 @@ interface HeaderProps {
   userEmail?: string | null;
   ownerEmail?: string;
   isFirebaseActive: boolean;
+  isSyncing?: boolean;
   lastCloudBackupTime?: string | null;
 }
 
@@ -56,6 +57,7 @@ export const Header: React.FC<HeaderProps> = ({
   userEmail,
   ownerEmail,
   isFirebaseActive,
+  isSyncing,
   lastCloudBackupTime
 }) => {
   const t = getTranslation(language);
@@ -108,15 +110,25 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Right Actions */}
         <div className="flex items-center gap-2 no-print self-end md:self-auto">
-          {/* Quick Firebase Cloud Backup Button */}
-          <button
-            onClick={onFirebaseCloudBackup}
-            title={language === 'bn' ? 'ফায়ারবেস কনসোলে ক্লাউড ব্যাকআপ রাখুন' : 'Backup to Firebase Console Cloud'}
-            className="hidden sm:flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-full text-xs font-semibold transition-all shadow-sm active:scale-95 cursor-pointer"
-          >
-            <CloudUpload className="w-4 h-4" />
-            <span>{language === 'bn' ? 'ক্লাউড ব্যাকআপ' : 'Firebase Backup'}</span>
-          </button>
+          {/* Live Auto-Sync Indicator */}
+          {isFirebaseActive && (
+            <div className="flex items-center gap-2 bg-emerald-500/10 dark:bg-emerald-950/60 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 px-3.5 py-1.5 rounded-full text-xs font-semibold shadow-xs">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isSyncing ? 'bg-amber-400' : 'bg-emerald-400'}`}></span>
+                <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${isSyncing ? 'bg-amber-500' : 'bg-emerald-500'}`}></span>
+              </span>
+              <span>
+                {isSyncing
+                  ? (language === 'bn' ? 'অটো-সিঙ্ক হচ্ছে...' : 'Auto-Syncing...')
+                  : (language === 'bn' ? 'অটো-সিঙ্ক চালু' : 'Auto-Sync Active')}
+              </span>
+              {lastCloudBackupTime && !isSyncing && (
+                <span className="text-[10px] opacity-75 font-mono hidden sm:inline border-l border-emerald-500/20 pl-2">
+                  {lastCloudBackupTime}
+                </span>
+              )}
+            </div>
+          )}
 
           {/* Menu Dropdown */}
           <div className="relative" ref={menuRef}>

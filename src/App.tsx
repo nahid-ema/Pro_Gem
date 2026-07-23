@@ -48,6 +48,7 @@ export default function App() {
     safeGetItem<string>(STORAGE_KEYS.OWNER_EMAIL, 'nahidferdousemonema@gmail.com')
   );
   const [lastCloudBackupTime, setLastCloudBackupTime] = useState<string | null>(null);
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
 
   // Filters State
   const today = new Date();
@@ -120,6 +121,39 @@ export default function App() {
       return () => unsubscribe();
     }
   }, []);
+
+  // Automatic Real-Time Cloud Sync (Debounced Auto-Sync)
+  useEffect(() => {
+    if (!db || !isFirebaseInitialized || !currentUser) return;
+
+    setIsSyncing(true);
+    const syncTimer = setTimeout(async () => {
+      try {
+        const backupPayload = {
+          rooms,
+          tenants,
+          rents,
+          expenses,
+          dokanDues,
+          ownerEmail,
+          updatedAt: new Date().toISOString(),
+        };
+
+        // Automatic document backup in Firestore "cloud_backups/latest"
+        await setDoc(doc(db, 'cloud_backups', 'latest'), backupPayload);
+
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        setLastCloudBackupTime(timeStr);
+      } catch (err) {
+        console.error('Auto cloud sync error:', err);
+      } finally {
+        setIsSyncing(false);
+      }
+    }, 1200);
+
+    return () => clearTimeout(syncTimer);
+  }, [rooms, tenants, rents, expenses, dokanDues, currentUser]);
 
   // Firebase Console Cloud Backup
   const handleFirebaseCloudBackup = async () => {
@@ -398,7 +432,7 @@ export default function App() {
     showToast(language === 'bn' ? 'রুম সফলভাবে যুক্ত করা হয়েছে!' : 'Room added successfully!');
 
     if (db) {
-      try { await addDoc(collection(db, 'rooms'), roomData); } catch (e) {}
+      try { await setDoc(doc(db, 'rooms', newRoom.id), newRoom); } catch (e) {}
     }
   };
 
@@ -407,7 +441,7 @@ export default function App() {
     showToast(language === 'bn' ? 'রুম আপডেট সম্পন্ন হয়েছে!' : 'Room updated successfully!');
 
     if (db) {
-      try { await updateDoc(doc(db, 'rooms', id), roomData); } catch (e) {}
+      try { await setDoc(doc(db, 'rooms', id), { ...roomData, id }, { merge: true }); } catch (e) {}
     }
   };
 
@@ -426,7 +460,7 @@ export default function App() {
     showToast(language === 'bn' ? 'ভাড়াটিয়া যুক্ত করা হয়েছে!' : 'Tenant registered successfully!');
 
     if (db) {
-      try { await addDoc(collection(db, 'tenants'), tenantData); } catch (e) {}
+      try { await setDoc(doc(db, 'tenants', newTenant.id), newTenant); } catch (e) {}
     }
   };
 
@@ -435,7 +469,7 @@ export default function App() {
     showToast(language === 'bn' ? 'ভাড়াটিয়ার তথ্য আপডেট করা হয়েছে!' : 'Tenant profile updated!');
 
     if (db) {
-      try { await updateDoc(doc(db, 'tenants', id), tenantData); } catch (e) {}
+      try { await setDoc(doc(db, 'tenants', id), { ...tenantData, id }, { merge: true }); } catch (e) {}
     }
   };
 
@@ -454,7 +488,7 @@ export default function App() {
     showToast(language === 'bn' ? 'ভাড়া আদায় এন্ট্রি সফলভাবে সংরক্ষণ করা হয়েছে!' : 'Rent collection recorded!');
 
     if (db) {
-      try { await addDoc(collection(db, 'rents'), rentData); } catch (e) {}
+      try { await setDoc(doc(db, 'rents', newRent.id), newRent); } catch (e) {}
     }
   };
 
@@ -463,7 +497,7 @@ export default function App() {
     showToast(language === 'bn' ? 'ভাড়ার এন্ট্রি আপডেট করা হয়েছে!' : 'Rent record updated!');
 
     if (db) {
-      try { await updateDoc(doc(db, 'rents', id), rentData); } catch (e) {}
+      try { await setDoc(doc(db, 'rents', id), { ...rentData, id }, { merge: true }); } catch (e) {}
     }
   };
 
@@ -482,7 +516,7 @@ export default function App() {
     showToast(language === 'bn' ? 'খরচ রেকর্ড করা হয়েছে!' : 'Expense logged!');
 
     if (db) {
-      try { await addDoc(collection(db, 'expenses'), expenseData); } catch (e) {}
+      try { await setDoc(doc(db, 'expenses', newExpense.id), newExpense); } catch (e) {}
     }
   };
 
@@ -491,7 +525,7 @@ export default function App() {
     showToast(language === 'bn' ? 'খরচ আপডেট করা হয়েছে!' : 'Expense updated!');
 
     if (db) {
-      try { await updateDoc(doc(db, 'expenses', id), expenseData); } catch (e) {}
+      try { await setDoc(doc(db, 'expenses', id), { ...expenseData, id }, { merge: true }); } catch (e) {}
     }
   };
 
@@ -510,7 +544,7 @@ export default function App() {
     showToast(language === 'bn' ? 'দোকান বাকি যোগ করা হয়েছে!' : 'Shop credit logged!');
 
     if (db) {
-      try { await addDoc(collection(db, 'dokanBaki'), dueData); } catch (e) {}
+      try { await setDoc(doc(db, 'dokanBaki', newDue.id), newDue); } catch (e) {}
     }
   };
 
@@ -519,7 +553,7 @@ export default function App() {
     showToast(language === 'bn' ? 'দোকান বাকি আপডেট করা হয়েছে!' : 'Shop credit updated!');
 
     if (db) {
-      try { await updateDoc(doc(db, 'dokanBaki', id), dueData); } catch (e) {}
+      try { await setDoc(doc(db, 'dokanBaki', id), { ...dueData, id }, { merge: true }); } catch (e) {}
     }
   };
 
@@ -672,6 +706,7 @@ export default function App() {
           userEmail={currentUser?.email}
           ownerEmail={ownerEmail}
           isFirebaseActive={isFirebaseInitialized && !!currentUser}
+          isSyncing={isSyncing}
           lastCloudBackupTime={lastCloudBackupTime}
         />
 

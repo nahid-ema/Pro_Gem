@@ -1,0 +1,93 @@
+{
+  "entities": {
+    "Room": {
+      "title": "Room Entity",
+      "description": "Represents a rental room",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "roomNumber": { "type": "string" },
+        "type": { "type": "string" },
+        "rentAmount": { "type": "number" },
+        "status": { "type": "string" }
+      }
+    },
+    "Tenant": {
+      "title": "Tenant Entity",
+      "description": "Represents a tenant",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "roomId": { "type": "string" }
+      }
+    },
+    "Rent": {
+      "title": "Rent Record Entity",
+      "description": "Represents rent collection record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "tenantId": { "type": "string" },
+        "amount": { "type": "number" },
+        "month": { "type": "string" }
+      }
+    },
+    "Expense": {
+      "title": "Expense Entity",
+      "description": "Represents an expense entry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "amount": { "type": "number" }
+      }
+    },
+    "DokanDue": {
+      "title": "Dokan Due Entity",
+      "description": "Represents shop due record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "shopName": { "type": "string" },
+        "amount": { "type": "number" }
+      }
+    },
+    "CloudBackup": {
+      "title": "Cloud Backup Snapshot",
+      "description": "Full snapshot backup of property data",
+      "type": "object",
+      "properties": {
+        "updatedAt": { "type": "string" },
+        "ownerEmail": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/rooms/{roomId}": {
+      "schema": { "$ref": "#/entities/Room" },
+      "description": "Collection of rooms"
+    },
+    "/tenants/{tenantId}": {
+      "schema": { "$ref": "#/entities/Tenant" },
+      "description": "Collection of tenants"
+    },
+    "/rents/{rentId}": {
+      "schema": { "$ref": "#/entities/Rent" },
+      "description": "Collection of rent entries"
+    },
+    "/expenses/{expenseId}": {
+      "schema": { "$ref": "#/entities/Expense" },
+      "description": "Collection of expenses"
+    },
+    "/dokanBaki/{dueId}": {
+      "schema": { "$ref": "#/entities/DokanDue" },
+      "description": "Collection of shop dues"
+    },
+    "/cloud_backups/{backupId}": {
+      "schema": { "$ref": "#/entities/CloudBackup" },
+      "description": "Snapshot backups"
+    }
+  }
+}
