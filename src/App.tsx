@@ -729,8 +729,8 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#ebecee] dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans p-3 md:p-6 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto space-y-4">
+    <div className="min-h-screen bg-[#ebecee] dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans p-2 sm:p-4 md:p-6 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto space-y-3 sm:space-y-4">
         {/* Header */}
         <Header
           language={language}

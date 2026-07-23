@@ -76,31 +76,31 @@ export const Header: React.FC<HeaderProps> = ({
   }, []);
 
   return (
-    <header className="header-section bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl md:rounded-3xl p-4 md:p-5 mb-5 shadow-sm dark:shadow-xl text-slate-800 dark:text-slate-200 transition-colors">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <header className="header-section bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl md:rounded-3xl p-3 sm:p-5 mb-3 sm:mb-5 shadow-sm dark:shadow-xl text-slate-800 dark:text-slate-200 transition-colors">
+      <div className="flex items-center justify-between gap-3">
         {/* Left: Branding & Status */}
-        <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center shadow-md text-lg font-black shrink-0 tracking-tighter">
+        <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
+          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center shadow-md text-base sm:text-lg font-black shrink-0 tracking-tighter">
             A
           </div>
-          <div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+              <h1 className="text-base sm:text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white truncate">
                 {t.appName}
               </h1>
-              <span className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full border ${
+              <span className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border shrink-0 ${
                 isFirebaseActive 
                   ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30' 
                   : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30'
               }`}>
-                {isFirebaseActive ? (language === 'bn' ? '✓ ক্লাউড কানেক্টেড' : '✓ Firebase Connected') : t.offlineMode}
+                {isFirebaseActive ? (language === 'bn' ? '✓ ক্লাউড' : '✓ Connected') : t.offlineMode}
               </span>
             </div>
           </div>
         </div>
 
         {/* Right Actions */}
-        <div className="flex items-center gap-2 no-print self-end md:self-auto">
+        <div className="flex items-center gap-2 no-print shrink-0">
           {/* Menu Dropdown */}
           <div className="relative" ref={menuRef}>
             <button

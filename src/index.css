@@ -19,6 +19,27 @@
   }
 }
 
+/* Mobile Screen Density & Touch Optimization */
+@media (max-width: 639px) {
+  html {
+    font-size: 13.5px;
+  }
+
+  body {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Compact touch scroll containers */
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Compact inputs and buttons on mobile */
+  button, input, select, textarea {
+    touch-action: manipulation;
+  }
+}
+
 .bg-coral {
   background-color: #e0533c;
 }
