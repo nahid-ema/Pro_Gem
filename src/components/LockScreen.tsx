@@ -27,18 +27,28 @@ interface LockScreenProps {
   language: Language;
   ownerEmail: string;
   onSetOwnerEmail: (email: string) => void;
-  onUnlockLocal?: () => void;
+  masterPin: string;
+  onVerifyPin: (pin: string) => boolean;
+  onChangePin: (oldPin: string, newPin: string) => boolean;
 }
 
 export const LockScreen: React.FC<LockScreenProps> = ({
   language,
   ownerEmail,
   onSetOwnerEmail,
-  onUnlockLocal
+  masterPin,
+  onVerifyPin,
+  onChangePin
 }) => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [pinInput, setPinInput] = useState('');
+  const [showPin, setShowPin] = useState(false);
+  const [isChangingPin, setIsChangingPin] = useState(false);
+  const [oldPinInput, setOldPinInput] = useState('');
+  const [newPinInput, setNewPinInput] = useState('');
+
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [infoMsg, setInfoMsg] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,6 +56,47 @@ export const LockScreen: React.FC<LockScreenProps> = ({
   const [newOwnerInput, setNewOwnerInput] = useState(ownerEmail);
 
   const isBn = language === 'bn';
+
+  const handlePinSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg(null);
+    setInfoMsg(null);
+
+    if (!pinInput.trim()) {
+      setErrorMsg(isBn ? 'অনুগ্রহ করে সিকিউরিটি পিন পাসকোড প্রদান করুন।' : 'Please enter security PIN passcode.');
+      return;
+    }
+
+    const success = onVerifyPin(pinInput.trim());
+    if (!success) {
+      setErrorMsg(
+        isBn 
+          ? `ভুল সিকিউরিটি পিন! সঠিক পিন টাইপ করুন (ডিফল্ট পিন: ${masterPin})` 
+          : `Incorrect Security PIN! Try default PIN: ${masterPin}`
+      );
+    }
+  };
+
+  const handlePinChangeSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg(null);
+    setInfoMsg(null);
+
+    if (!oldPinInput.trim() || !newPinInput.trim()) {
+      setErrorMsg(isBn ? 'পুরাতন ও নতুন উভয় পিন ফিল্ড পূরণ করুন।' : 'Please fill in both old and new PIN fields.');
+      return;
+    }
+
+    const success = onChangePin(oldPinInput.trim(), newPinInput.trim());
+    if (success) {
+      setInfoMsg(isBn ? 'সিকিউরিটি পিন সফলভাবে পরিবর্তন করা হয়েছে!' : 'Security PIN updated successfully!');
+      setIsChangingPin(false);
+      setOldPinInput('');
+      setNewPinInput('');
+    } else {
+      setErrorMsg(isBn ? 'পুরাতন পিনটি ভুল প্রদান করা হয়েছে!' : 'Old PIN is incorrect.');
+    }
+  };
 
   const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -252,28 +303,97 @@ export const LockScreen: React.FC<LockScreenProps> = ({
           )}
         </div>
 
-        {/* 1-Click Direct Owner Unlock Option */}
-        {onUnlockLocal && (
-          <div className="bg-emerald-950/40 border border-emerald-500/40 rounded-2xl p-4 text-center space-y-2 shadow-lg">
-            <div className="flex items-center justify-center gap-2 text-emerald-400 font-bold text-sm">
-              <ShieldCheck className="w-5 h-5 text-emerald-400" />
-              <span>{isBn ? 'সরাসরি মালিক প্রবেশ' : 'Instant Owner Direct Unlock'}</span>
+        {/* Master Security PIN Card */}
+        <div className="bg-slate-800/90 border border-emerald-500/40 rounded-2xl p-4 space-y-3 shadow-xl">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <span>{isBn ? 'সিকিউরিটি পাসকোড পিন' : 'Security Passcode / PIN'}</span>
             </div>
-            <p className="text-xs text-slate-300">
-              {isBn 
-                ? 'কোনো জটিল সাইন-ইন ঝামেলা ছাড়াই ১-ক্লিকে সরাসরি ওয়েবসাইটে প্রবেশ করুন।' 
-                : 'Access the website instantly without complex sign-in setups.'}
-            </p>
             <button
               type="button"
-              onClick={onUnlockLocal}
-              className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-md active:scale-95 cursor-pointer flex items-center justify-center gap-2"
+              onClick={() => {
+                setIsChangingPin(!isChangingPin);
+                setErrorMsg(null);
+                setInfoMsg(null);
+              }}
+              className="text-xs text-indigo-400 hover:text-indigo-300 underline font-semibold cursor-pointer"
             >
-              <CheckCircle2 className="w-4 h-4" />
-              <span>{isBn ? 'মালিক হিসেবে ১-ক্লিকে আনলক করুন' : 'Unlock Now as Owner (1-Click)'}</span>
+              {isChangingPin 
+                ? (isBn ? 'বাতিল' : 'Cancel') 
+                : (isBn ? 'পিন পরিবর্তন করুন' : 'Change PIN')}
             </button>
           </div>
-        )}
+
+          {!isChangingPin ? (
+            <form onSubmit={handlePinSubmit} className="space-y-3">
+              <div className="relative">
+                <KeyRound className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+                <input
+                  type={showPin ? 'text' : 'password'}
+                  required
+                  value={pinInput}
+                  onChange={(e) => setPinInput(e.target.value)}
+                  placeholder={isBn ? 'মালিক সিকিউরিটি পিন দিন (ডিফল্ট: 1234)' : 'Enter Security PIN (Default: 1234)'}
+                  className="w-full bg-slate-950 border border-slate-700 focus:border-emerald-500 text-white pl-10 pr-10 py-2.5 rounded-xl text-xs font-mono font-bold focus:outline-none transition-colors"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPin(!showPin)}
+                  className="absolute right-3 top-2.5 text-slate-400 hover:text-slate-200 text-xs cursor-pointer font-medium"
+                >
+                  {showPin ? (isBn ? 'লুকান' : 'Hide') : (isBn ? 'দেখুন' : 'Show')}
+                </button>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-md active:scale-95 cursor-pointer flex items-center justify-center gap-2"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                <span>{isBn ? 'পাসকোড দিয়ে ওয়েবসাইট আনলক করুন' : 'Unlock Website with Passcode'}</span>
+              </button>
+
+              <p className="text-[11px] text-slate-400 text-center italic">
+                {isBn 
+                  ? `💡 ডিফল্ট পিন পাসকোড হলো: ${masterPin} (যেকোনো সময় পরিবর্তন করতে পারেন)` 
+                  : `💡 Default PIN code is: ${masterPin} (You can change it anytime)`}
+              </p>
+            </form>
+          ) : (
+            <form onSubmit={handlePinChangeSubmit} className="space-y-2.5 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+              <p className="text-xs font-bold text-indigo-300">
+                {isBn ? 'নতুন সিকিউরিটি পিন সেট করুন:' : 'Set New Security PIN:'}
+              </p>
+              <div>
+                <input
+                  type="password"
+                  required
+                  value={oldPinInput}
+                  onChange={(e) => setOldPinInput(e.target.value)}
+                  placeholder={isBn ? 'বর্তমান/পুরাতন পিন লিখুন' : 'Current Old PIN'}
+                  className="w-full bg-slate-900 border border-slate-700 text-white px-3 py-1.5 rounded-lg text-xs font-mono focus:outline-none focus:border-indigo-500"
+                />
+              </div>
+              <div>
+                <input
+                  type="password"
+                  required
+                  value={newPinInput}
+                  onChange={(e) => setNewPinInput(e.target.value)}
+                  placeholder={isBn ? 'নতুন সিকিউরিটি পিন দিন (যেমন: 5678)' : 'New PIN (e.g. 5678)'}
+                  className="w-full bg-slate-900 border border-slate-700 text-white px-3 py-1.5 rounded-lg text-xs font-mono focus:outline-none focus:border-indigo-500"
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 rounded-lg text-xs transition-colors cursor-pointer"
+              >
+                {isBn ? 'পিন সেভ করুন' : 'Save New PIN'}
+              </button>
+            </form>
+          )}
+        </div>
 
         {/* Status Messages */}
         {errorMsg && (
@@ -396,22 +516,6 @@ export const LockScreen: React.FC<LockScreenProps> = ({
                 ? (isBn ? 'ইতিমধ্যে অ্যাকাউন্ট আছে? লগইন করুন' : 'Already have an account? Sign in') 
                 : (isBn ? 'নতুন অ্যাকাউন্ট খুলবেন? এখানে চাপুন' : 'First time? Register owner account')}
             </button>
-
-            {onUnlockLocal && (
-              <div className="pt-2 border-t border-slate-800/80">
-                <button
-                  type="button"
-                  onClick={onUnlockLocal}
-                  className="w-full bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 py-2 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs"
-                >
-                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                  <span>{isBn ? 'মালিক অ্যাক্সেস দিয়ে ওয়েবসাইট আনলক করুন' : 'Unlock with Owner Direct Access'}</span>
-                </button>
-                <p className="text-[10px] text-slate-500 mt-1">
-                  {isBn ? '(ফায়ারবেস অথ চালুর পূর্বে বা সরাসরি ব্যবহারের জন্য)' : '(Use for direct access or if Firebase Auth is not enabled)'}
-                </p>
-              </div>
-            )}
           </div>
         </div>
 

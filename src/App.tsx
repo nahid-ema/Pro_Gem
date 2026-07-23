@@ -47,6 +47,9 @@ export default function App() {
   const [ownerEmail, setOwnerEmail] = useState<string>(() => 
     safeGetItem<string>(STORAGE_KEYS.OWNER_EMAIL, 'nahidferdousemonema@gmail.com')
   );
+  const [masterPin, setMasterPin] = useState<string>(() => 
+    safeGetItem<string>('nk_master_pin', '1234')
+  );
   const [isLocalUnlocked, setIsLocalUnlocked] = useState<boolean>(() => 
     safeGetItem<boolean>('nk_local_unlocked', false)
   );
@@ -252,13 +255,30 @@ export default function App() {
     );
   };
 
-  const handleLocalUnlock = () => {
-    setIsLocalUnlocked(true);
-    safeSetItem('nk_local_unlocked', true);
-    showToast(
-      language === 'bn' ? 'মালিক অ্যাক্সেস এনাবল করা হয়েছে।' : 'Owner local access granted.',
-      'success'
-    );
+  const handleVerifyPin = (enteredPin: string): boolean => {
+    if (enteredPin.trim() === masterPin.trim()) {
+      setIsLocalUnlocked(true);
+      safeSetItem('nk_local_unlocked', true);
+      showToast(
+        language === 'bn' ? 'সিকিউরিটি পিন সঠিক! ওয়েবসাইট আনলক করা হয়েছে।' : 'Security PIN correct! Website unlocked.',
+        'success'
+      );
+      return true;
+    }
+    return false;
+  };
+
+  const handleChangePin = (oldPin: string, newPin: string): boolean => {
+    if (oldPin.trim() === masterPin.trim() && newPin.trim().length >= 3) {
+      setMasterPin(newPin.trim());
+      safeSetItem('nk_master_pin', newPin.trim());
+      showToast(
+        language === 'bn' ? 'নতুন পিন পাসকোড সেভ করা হয়েছে।' : 'New security PIN saved.',
+        'success'
+      );
+      return true;
+    }
+    return false;
   };
 
   // Optional Firestore Live Sync if db is available
@@ -693,7 +713,9 @@ export default function App() {
           language={language}
           ownerEmail={ownerEmail}
           onSetOwnerEmail={handleSetOwnerEmail}
-          onUnlockLocal={handleLocalUnlock}
+          masterPin={masterPin}
+          onVerifyPin={handleVerifyPin}
+          onChangePin={handleChangePin}
         />
         <Toast toast={toast} onClose={() => setToast(null)} />
       </>
