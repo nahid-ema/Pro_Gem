@@ -8,6 +8,10 @@
     --accent-coral-hover: #cb422d;
     --accent-coral-light: #fdf0ed;
   }
+
+  html, body, button, input, select, textarea {
+    font-family: 'Google Sans', 'Google Sans Text', 'Product Sans', 'Plus Jakarta Sans', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif !important;
+  }
 }
 
 .bg-coral {
