@@ -19,8 +19,8 @@ import {
   validateAndMergeBackup 
 } from './lib/storage';
 import { auth, db, isFirebaseInitialized } from './lib/firebase';
-import { onAuthStateChanged, User } from 'firebase/auth';
-import { collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
+import { onAuthStateChanged, User, signOut } from 'firebase/auth';
+import { collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, setDoc, getDoc } from 'firebase/firestore';
 
 import { Header } from './components/Header';
 import { TabBar } from './components/TabBar';
@@ -35,6 +35,7 @@ import { ShopDuesSection } from './components/ShopDuesSection';
 import { AnalyticsCharts } from './components/AnalyticsCharts';
 import { ReceiptModal } from './components/ReceiptModal';
 import { AuthModal } from './components/AuthModal';
+import { LockScreen } from './components/LockScreen';
 import { Toast, ToastMessage } from './components/Toast';
 import { initialRooms, initialTenants, initialRentRecords, initialExpenses, initialShopDues } from './data/sampleData';
 
@@ -43,6 +44,10 @@ export default function App() {
   const [language, setLanguage] = useState<Language>(() => safeGetItem<Language>(STORAGE_KEYS.LANG, 'bn'));
   const [theme, setTheme] = useState<Theme>(() => safeGetItem<Theme>(STORAGE_KEYS.THEME, 'light'));
   const [activeTab, setActiveTab] = useState<TabType>('brief');
+  const [ownerEmail, setOwnerEmail] = useState<string>(() => 
+    safeGetItem<string>(STORAGE_KEYS.OWNER_EMAIL, 'nahidferdousemonema@gmail.com')
+  );
+  const [lastCloudBackupTime, setLastCloudBackupTime] = useState<string | null>(null);
 
   // Filters State
   const today = new Date();
@@ -65,6 +70,11 @@ export default function App() {
 
   const showToast = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
     setToast({ id: String(Date.now()), message, type });
+  };
+
+  const handleSetOwnerEmail = (email: string) => {
+    setOwnerEmail(email);
+    safeSetItem(STORAGE_KEYS.OWNER_EMAIL, email);
   };
 
   // Initialize theme class on <body>
@@ -110,6 +120,98 @@ export default function App() {
       return () => unsubscribe();
     }
   }, []);
+
+  // Firebase Console Cloud Backup
+  const handleFirebaseCloudBackup = async () => {
+    if (!db || !isFirebaseInitialized) {
+      showToast(language === 'bn' ? 'ফায়ারবেস ক্লাউড কানেক্টেড নয়!' : 'Firebase Cloud is not initialized!', 'error');
+      return;
+    }
+    try {
+      const backupPayload = {
+        rooms,
+        tenants,
+        rents,
+        expenses,
+        dokanDues,
+        ownerEmail,
+        updatedAt: new Date().toISOString(),
+      };
+
+      // Save snapshot document in Firestore "cloud_backups/latest"
+      await setDoc(doc(db, 'cloud_backups', 'latest'), backupPayload);
+
+      // Also write individual items to Firestore collections for Firebase Console inspection
+      for (const r of rooms) {
+        if (r.id) await setDoc(doc(db, 'rooms', r.id), r, { merge: true });
+      }
+      for (const t of tenants) {
+        if (t.id) await setDoc(doc(db, 'tenants', t.id), t, { merge: true });
+      }
+      for (const rt of rents) {
+        if (rt.id) await setDoc(doc(db, 'rents', rt.id), rt, { merge: true });
+      }
+      for (const e of expenses) {
+        if (e.id) await setDoc(doc(db, 'expenses', e.id), e, { merge: true });
+      }
+      for (const d of dokanDues) {
+        if (d.id) await setDoc(doc(db, 'dokanBaki', d.id), d, { merge: true });
+      }
+
+      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      setLastCloudBackupTime(timeStr);
+      showToast(
+        language === 'bn' 
+          ? '✓ ফায়ারবেস কনসোল ক্লাউডে সফলভাবে ব্যাকআপ রাখা হয়েছে!' 
+          : '✓ Backup saved to Firebase Console Cloud!'
+      );
+    } catch (err: any) {
+      showToast(err?.message || 'Firebase cloud backup failed.', 'error');
+    }
+  };
+
+  // Firebase Console Cloud Restore
+  const handleFirebaseCloudRestore = async () => {
+    if (!db || !isFirebaseInitialized) {
+      showToast(language === 'bn' ? 'ফায়ারবেস ক্লাউড কানেক্টেড নয়!' : 'Firebase Cloud is not initialized!', 'error');
+      return;
+    }
+    try {
+      const backupSnap = await getDoc(doc(db, 'cloud_backups', 'latest'));
+      if (backupSnap.exists()) {
+        const data = backupSnap.data();
+        if (Array.isArray(data.rooms)) setRooms(data.rooms);
+        if (Array.isArray(data.tenants)) setTenants(data.tenants);
+        if (Array.isArray(data.rents)) setRents(data.rents);
+        if (Array.isArray(data.expenses)) setExpenses(data.expenses);
+        if (Array.isArray(data.dokanDues)) setDokanDues(data.dokanDues);
+        showToast(
+          language === 'bn' 
+            ? '✓ ফায়ারবেস ক্লাউড থেকে ডাটা সফলভাবে রিস্টোর করা হয়েছে!' 
+            : '✓ Restored data from Firebase Console Cloud!'
+        );
+      } else {
+        showToast(
+          language === 'bn' 
+            ? 'ফায়ারবেস ক্লাউডে কোনো পূর্ববর্তী ব্যাকআপ ফাইল পাওয়া যায়নি!' 
+            : 'No backup found in Firebase Console Cloud.', 
+          'info'
+        );
+      }
+    } catch (err: any) {
+      showToast(err?.message || 'Firebase cloud restore failed.', 'error');
+    }
+  };
+
+  const handleLockApp = async () => {
+    if (auth) {
+      await signOut(auth);
+      showToast(
+        language === 'bn' ? 'ওয়েবসাইটটি সফলভাবে লক করা হয়েছে।' : 'Website access locked.',
+        'info'
+      );
+    }
+  };
 
   // Optional Firestore Live Sync if db is available
   useEffect(() => {
@@ -532,9 +634,26 @@ export default function App() {
     }
   };
 
+  // Check if owner is authenticated
+  const isOwnerAuthenticated = currentUser && currentUser.email && currentUser.email.toLowerCase() === ownerEmail.toLowerCase();
+
+  // If not authenticated as the owner, render the LockScreen
+  if (!isOwnerAuthenticated) {
+    return (
+      <>
+        <LockScreen
+          language={language}
+          ownerEmail={ownerEmail}
+          onSetOwnerEmail={handleSetOwnerEmail}
+        />
+        <Toast toast={toast} onClose={() => setToast(null)} />
+      </>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans p-3 md:p-6 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-[#ebecee] dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans p-3 md:p-6 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto space-y-4">
         {/* Header */}
         <Header
           language={language}
@@ -543,12 +662,17 @@ export default function App() {
           onThemeToggle={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           onTriggerBackup={handleTriggerBackup}
           onTriggerRestore={handleTriggerRestore}
+          onFirebaseCloudBackup={handleFirebaseCloudBackup}
+          onFirebaseCloudRestore={handleFirebaseCloudRestore}
           onPrint={() => window.print()}
           onLoadDemoData={handleLoadDemoData}
           onResetData={handleResetData}
           onOpenAuthModal={() => setIsAuthModalOpen(true)}
+          onLockApp={handleLockApp}
           userEmail={currentUser?.email}
+          ownerEmail={ownerEmail}
           isFirebaseActive={isFirebaseInitialized && !!currentUser}
+          lastCloudBackupTime={lastCloudBackupTime}
         />
 
         {/* Global Filter Bar with Navigation Dropdown */}
@@ -708,6 +832,7 @@ export default function App() {
       <AuthModal
         isOpen={isAuthModalOpen}
         userEmail={currentUser?.email}
+        ownerEmail={ownerEmail}
         language={language}
         onClose={() => setIsAuthModalOpen(false)}
       />

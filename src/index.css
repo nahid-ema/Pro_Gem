@@ -1,5 +1,35 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --accent-coral: #e0533c;
+    --accent-coral-hover: #cb422d;
+    --accent-coral-light: #fdf0ed;
+  }
+}
+
+.bg-coral {
+  background-color: #e0533c;
+}
+
+.bg-coral:hover {
+  background-color: #cb422d;
+}
+
+.text-coral {
+  color: #e0533c;
+}
+
+.border-coral {
+  border-color: #e0533c;
+}
+
+.bg-coral-light {
+  background-color: #fdf0ed;
+}
+
 @layer utilities {
   /* Keyframe Animations */
   @keyframes fadeIn {
@@ -55,3 +85,4 @@
     padding: 0 !important;
   }
 }
+

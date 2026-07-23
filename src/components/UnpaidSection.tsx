@@ -64,11 +64,11 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
     : '';
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 md:p-6 mb-6 shadow-sm">
+    <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl md:rounded-3xl p-5 md:p-6 mb-6 shadow-sm">
       {/* Title */}
       <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-950/80 text-rose-600 dark:text-rose-400 flex items-center justify-center font-bold text-base">
+          <div className="w-9 h-9 rounded-2xl bg-[#fdf0ed] dark:bg-slate-800 text-[#e0533c] dark:text-[#f87171] flex items-center justify-center font-bold text-base">
             <AlertTriangle className="w-4 h-4" />
           </div>
           <div>
@@ -82,7 +82,7 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
         </div>
 
         {safeUnpaidItems.length > 0 && (
-          <div className="bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 px-3 py-1 rounded-lg text-xs font-semibold">
+          <div className="bg-[#fdf0ed] dark:bg-slate-800 border border-[#e0533c]/30 text-[#e0533c] dark:text-[#f87171] px-3.5 py-1.5 rounded-full text-xs font-semibold">
             {t.unpaidTotalLabel} {formatCurrency(totalUnpaidSum)}
           </div>
         )}

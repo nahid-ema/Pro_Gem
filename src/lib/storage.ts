@@ -12,6 +12,7 @@ const STORAGE_KEYS = {
   THEME: 'nk_theme_v2',
   LANG: 'nk_lang_v2',
   MINIMIZED: 'nk_minimized_cards',
+  OWNER_EMAIL: 'nk_owner_email_v1',
 };
 
 // Safe LocalStorage handler for sandboxed environments

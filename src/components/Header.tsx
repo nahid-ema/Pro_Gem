@@ -12,7 +12,11 @@ import {
   Globe, 
   Sparkles, 
   RefreshCw,
-  ChevronDown
+  ChevronDown,
+  CloudUpload,
+  CloudDownload,
+  Lock,
+  ShieldCheck
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -22,12 +26,17 @@ interface HeaderProps {
   onThemeToggle: () => void;
   onTriggerBackup: () => void;
   onTriggerRestore: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onFirebaseCloudBackup: () => void;
+  onFirebaseCloudRestore: () => void;
   onPrint: () => void;
   onLoadDemoData: () => void;
   onResetData: () => void;
   onOpenAuthModal: () => void;
+  onLockApp?: () => void;
   userEmail?: string | null;
+  ownerEmail?: string;
   isFirebaseActive: boolean;
+  lastCloudBackupTime?: string | null;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -37,12 +46,17 @@ export const Header: React.FC<HeaderProps> = ({
   onThemeToggle,
   onTriggerBackup,
   onTriggerRestore,
+  onFirebaseCloudBackup,
+  onFirebaseCloudRestore,
   onPrint,
   onLoadDemoData,
   onResetData,
   onOpenAuthModal,
+  onLockApp,
   userEmail,
-  isFirebaseActive
+  ownerEmail,
+  isFirebaseActive,
+  lastCloudBackupTime
 }) => {
   const t = getTranslation(language);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -60,38 +74,55 @@ export const Header: React.FC<HeaderProps> = ({
   }, []);
 
   return (
-    <header className="header-section bg-slate-900 border border-slate-800 rounded-xl p-4 md:p-5 mb-5 shadow-xl text-slate-200">
+    <header className="header-section bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl md:rounded-3xl p-4 md:p-5 mb-5 shadow-sm dark:shadow-xl text-slate-800 dark:text-slate-200 transition-colors">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Left: Branding & Status */}
         <div className="flex items-center gap-3.5">
-          <div className="w-10 h-10 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-md text-xl font-bold shrink-0">
+          <div className="w-11 h-11 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center shadow-md text-lg font-black shrink-0 tracking-tighter">
             A
           </div>
           <div>
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <h1 className="text-xl md:text-2xl font-bold tracking-tight text-white">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-xl md:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
                 {t.appName}
               </h1>
               <span className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-0.5 rounded-full border ${
                 isFirebaseActive 
-                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' 
-                  : 'bg-amber-500/10 text-amber-400 border-amber-500/30'
+                  ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30' 
+                  : 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/30'
               }`}>
-                {isFirebaseActive ? t.firebaseConnected : t.offlineMode}
+                {isFirebaseActive ? (language === 'bn' ? '✓ ক্লাউড কানেক্টেড' : '✓ Firebase Connected') : t.offlineMode}
               </span>
             </div>
-            <p className="text-xs text-slate-400 font-medium">
-              {t.appSubtitle}
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium flex items-center gap-2 mt-0.5">
+              <span>{t.appSubtitle}</span>
+              {ownerEmail && (
+                <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-mono font-semibold text-[#e0533c] bg-[#fdf0ed] dark:bg-slate-800 px-2 py-0.5 rounded-full">
+                  <ShieldCheck className="w-3 h-3" />
+                  <span>{language === 'bn' ? 'মালিক:' : 'Owner:'} {ownerEmail}</span>
+                </span>
+              )}
             </p>
           </div>
         </div>
 
-        {/* Right: Single Menu Dropdown Button */}
+        {/* Right Actions */}
         <div className="flex items-center gap-2 no-print self-end md:self-auto">
+          {/* Quick Firebase Cloud Backup Button */}
+          <button
+            onClick={onFirebaseCloudBackup}
+            title={language === 'bn' ? 'ফায়ারবেস কনসোলে ক্লাউড ব্যাকআপ রাখুন' : 'Backup to Firebase Console Cloud'}
+            className="hidden sm:flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-full text-xs font-semibold transition-all shadow-sm active:scale-95 cursor-pointer"
+          >
+            <CloudUpload className="w-4 h-4" />
+            <span>{language === 'bn' ? 'ক্লাউড ব্যাকআপ' : 'Firebase Backup'}</span>
+          </button>
+
+          {/* Menu Dropdown */}
           <div className="relative" ref={menuRef}>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white border border-indigo-500/30 px-4 py-2 rounded-xl text-xs md:text-sm font-semibold transition-all shadow-md active:scale-95 cursor-pointer"
+              className="flex items-center gap-2 bg-[#e0533c] hover:bg-[#cb422d] text-white px-4 py-2 rounded-full text-xs md:text-sm font-semibold transition-all shadow-md active:scale-95 cursor-pointer"
             >
               <Menu className="w-4 h-4" />
               <span>{language === 'bn' ? 'মেনু' : 'Menu'}</span>
@@ -100,49 +131,82 @@ export const Header: React.FC<HeaderProps> = ({
 
             {/* Dropdown Menu */}
             {isMenuOpen && (
-              <div className="absolute right-0 mt-2 w-72 bg-slate-900 text-slate-100 rounded-xl shadow-2xl border border-slate-800 z-50 overflow-hidden py-2 text-xs divide-y divide-slate-800">
+              <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 rounded-2xl shadow-2xl border border-slate-200/80 dark:border-slate-800 z-50 overflow-hidden py-2 text-xs divide-y divide-slate-100 dark:divide-slate-800">
+                
+                {/* Firebase Cloud Console Backup Section */}
+                <div className="px-3.5 py-2.5 bg-slate-50 dark:bg-slate-800/50 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                      <CloudUpload className="w-3.5 h-3.5" />
+                      <span>{language === 'bn' ? 'ফায়ারবেস ক্লাউড ব্যাকআপ' : 'Firebase Cloud Backup'}</span>
+                    </div>
+                    {lastCloudBackupTime && (
+                      <span className="text-[10px] text-slate-400 font-mono">
+                        {lastCloudBackupTime}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 pt-1">
+                    <button
+                      onClick={() => { setIsMenuOpen(false); onFirebaseCloudBackup(); }}
+                      className="flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white py-2 px-2.5 rounded-xl font-bold text-xs transition-colors cursor-pointer"
+                    >
+                      <CloudUpload className="w-3.5 h-3.5" />
+                      <span>{language === 'bn' ? 'ব্যাকআপ নিন' : 'Cloud Backup'}</span>
+                    </button>
+                    <button
+                      onClick={() => { setIsMenuOpen(false); onFirebaseCloudRestore(); }}
+                      className="flex items-center justify-center gap-1.5 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 py-2 px-2.5 rounded-xl font-bold text-xs transition-colors cursor-pointer"
+                    >
+                      <CloudDownload className="w-3.5 h-3.5 text-indigo-500" />
+                      <span>{language === 'bn' ? 'রিস্টোর করুন' : 'Cloud Restore'}</span>
+                    </button>
+                  </div>
+                </div>
+
                 {/* Display & Language Options */}
-                <div className="px-3.5 py-2.5 space-y-2.5">
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <div className="px-3.5 py-2.5 space-y-2">
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400">
                     {language === 'bn' ? 'ডিসপ্লে ও ভাষা' : 'Display & Language'}
                   </div>
 
                   {/* Language Switch */}
-                  <div className="flex items-center justify-between bg-slate-800/80 p-2 rounded-lg border border-slate-700/60">
-                    <div className="flex items-center gap-2 text-slate-200 font-medium">
-                      <Globe className="w-4 h-4 text-indigo-400" />
+                  <div className="flex items-center justify-between bg-slate-100 dark:bg-slate-800/80 p-2 rounded-xl border border-slate-200/60 dark:border-slate-700/60">
+                    <div className="flex items-center gap-2 text-slate-800 dark:text-slate-200 font-medium">
+                      <Globe className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                       <span>{language === 'bn' ? 'ভাষা / Language' : 'Language'}</span>
                     </div>
                     <button
                       onClick={() => { onLanguageToggle(); }}
-                      className="bg-indigo-600 hover:bg-indigo-500 text-white px-2.5 py-1 rounded font-bold text-[11px] transition-colors cursor-pointer"
+                      className="bg-[#e0533c] hover:bg-[#cb422d] text-white px-2.5 py-1 rounded-full font-bold text-[11px] transition-colors cursor-pointer"
                     >
                       {language === 'bn' ? 'English' : 'বাংলা'}
                     </button>
                   </div>
 
                   {/* Dark Mode Switch */}
-                  <div className="flex items-center justify-between bg-slate-800/80 p-2 rounded-lg border border-slate-700/60">
-                    <div className="flex items-center gap-2 text-slate-200 font-medium">
+                  <div className="flex items-center justify-between bg-slate-100 dark:bg-slate-800/80 p-2 rounded-xl border border-slate-200/60 dark:border-slate-700/60">
+                    <div className="flex items-center gap-2 text-slate-800 dark:text-slate-200 font-medium">
                       {theme === 'dark' ? (
                         <Moon className="w-4 h-4 text-indigo-400" />
                       ) : (
-                        <Sun className="w-4 h-4 text-amber-400" />
+                        <Sun className="w-4 h-4 text-amber-500" />
                       )}
                       <span>{language === 'bn' ? 'থিম / Theme' : 'Theme'}</span>
                     </div>
                     <button
                       onClick={() => { onThemeToggle(); }}
-                      className="flex items-center gap-1 bg-slate-700 hover:bg-slate-600 text-slate-100 px-2.5 py-1 rounded font-bold text-[11px] transition-colors cursor-pointer"
+                      className="flex items-center gap-1.5 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 px-2.5 py-1 rounded-full font-bold text-[11px] transition-colors cursor-pointer"
                     >
                       {theme === 'dark' ? (
                         <>
-                          <Sun className="w-3 h-3 text-amber-400" />
+                          <Sun className="w-3.5 h-3.5 text-amber-400" />
                           <span>Light</span>
                         </>
                       ) : (
                         <>
-                          <Moon className="w-3 h-3 text-indigo-400" />
+                          <Moon className="w-3.5 h-3.5 text-indigo-600" />
                           <span>Dark</span>
                         </>
                       )}
@@ -154,46 +218,66 @@ export const Header: React.FC<HeaderProps> = ({
                 <div className="py-1">
                   <button
                     onClick={() => { setIsMenuOpen(false); onPrint(); }}
-                    className="w-full text-left px-3.5 py-2.5 hover:bg-slate-800 flex items-center gap-2.5 text-slate-200 font-medium transition-colors cursor-pointer"
+                    className="w-full text-left px-3.5 py-2.5 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2.5 text-slate-700 dark:text-slate-200 font-medium transition-colors cursor-pointer"
                   >
-                    <Printer className="w-4 h-4 text-emerald-400" />
+                    <Printer className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                     <span>{t.printBtn}</span>
                   </button>
                 </div>
 
-                {/* Account & Cloud Sync */}
-                <div className="px-3.5 py-2.5 bg-slate-900/90">
+                {/* Owner Account & Security */}
+                <div className="px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900/90 space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="font-semibold text-slate-400">{language === 'bn' ? 'অ্যাকাউন্ট:' : 'Account:'}</span>
+                    <span className="font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                      {language === 'bn' ? 'মালিক অ্যাকাউন্ট:' : 'Owner Status:'}
+                    </span>
                     <button
                       onClick={() => { setIsMenuOpen(false); onOpenAuthModal(); }}
-                      className="text-indigo-400 hover:text-indigo-300 font-bold underline cursor-pointer"
+                      className="text-[#e0533c] hover:underline font-bold cursor-pointer text-xs"
                     >
-                      {userEmail ? (language === 'bn' ? 'ম্যানেজ' : 'Manage') : t.loginBtn}
+                      {userEmail ? (language === 'bn' ? 'অ্যাকাউন্ট সেটিংস' : 'Manage') : t.loginBtn}
                     </button>
                   </div>
-                  {userEmail && (
-                    <p className="text-[11px] text-emerald-400 font-mono truncate mt-0.5">
+                  {userEmail ? (
+                    <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-mono truncate">
                       ✓ {userEmail}
                     </p>
+                  ) : (
+                    <p className="text-[11px] text-amber-600 font-medium">
+                      {language === 'bn' ? 'লগইন করা নেই' : 'Not logged in'}
+                    </p>
+                  )}
+
+                  {onLockApp && userEmail && (
+                    <button
+                      onClick={() => { setIsMenuOpen(false); onLockApp(); }}
+                      className="w-full mt-2 py-1.5 px-3 rounded-full bg-slate-200 dark:bg-slate-800 hover:bg-rose-100 dark:hover:bg-rose-950/50 text-rose-600 dark:text-rose-400 font-bold text-[11px] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <Lock className="w-3 h-3" />
+                      <span>{language === 'bn' ? 'ওয়েবসাইট লক করুন' : 'Lock Website Access'}</span>
+                    </button>
                   )}
                 </div>
 
-                {/* Data Backup & Restore */}
+                {/* Local Data Backup & Restore */}
                 <div className="py-1">
+                  <div className="px-3.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                    {language === 'bn' ? 'ফাইল ব্যাকআপ (JSON)' : 'JSON File Backup'}
+                  </div>
                   <button
                     onClick={() => { setIsMenuOpen(false); onTriggerBackup(); }}
-                    className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-center gap-2.5 text-slate-200 font-medium transition-colors cursor-pointer"
+                    className="w-full text-left px-3.5 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2.5 text-slate-700 dark:text-slate-200 font-medium transition-colors cursor-pointer"
                   >
-                    <Download className="w-4 h-4 text-sky-400" />
+                    <Download className="w-4 h-4 text-sky-600 dark:text-sky-400" />
                     <span>{t.backupBtn}</span>
                   </button>
 
                   <button
                     onClick={() => { setIsMenuOpen(false); fileInputRef.current?.click(); }}
-                    className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-center gap-2.5 text-slate-200 font-medium transition-colors cursor-pointer"
+                    className="w-full text-left px-3.5 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2.5 text-slate-700 dark:text-slate-200 font-medium transition-colors cursor-pointer"
                   >
-                    <Upload className="w-4 h-4 text-teal-400" />
+                    <Upload className="w-4 h-4 text-teal-600 dark:text-teal-400" />
                     <span>{t.restoreBtn}</span>
                   </button>
                   <input
@@ -209,7 +293,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <div className="py-1">
                   <button
                     onClick={() => { setIsMenuOpen(false); onLoadDemoData(); }}
-                    className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-center gap-2.5 text-amber-400 font-medium transition-colors cursor-pointer"
+                    className="w-full text-left px-3.5 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2.5 text-amber-600 dark:text-amber-400 font-medium transition-colors cursor-pointer"
                   >
                     <Sparkles className="w-4 h-4" />
                     <span>{t.demoDataBtn}</span>
@@ -217,7 +301,7 @@ export const Header: React.FC<HeaderProps> = ({
 
                   <button
                     onClick={() => { setIsMenuOpen(false); onResetData(); }}
-                    className="w-full text-left px-3.5 py-2 hover:bg-slate-800 flex items-center gap-2.5 text-rose-400 font-medium transition-colors cursor-pointer"
+                    className="w-full text-left px-3.5 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-2.5 text-rose-600 dark:text-rose-400 font-medium transition-colors cursor-pointer"
                   >
                     <RefreshCw className="w-4 h-4" />
                     <span>{t.resetDataBtn}</span>
@@ -231,3 +315,4 @@ export const Header: React.FC<HeaderProps> = ({
     </header>
   );
 };
+
