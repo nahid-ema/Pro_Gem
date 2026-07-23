@@ -78,16 +78,22 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
 
   const safeExpenses = Array.isArray(expenses) ? expenses : [];
 
-  const filteredExpenses = safeExpenses.filter((ex) => {
-    if (!ex || !ex.date) return false;
-    const parts = ex.date.split('-');
-    const matchY = selectedYear === 'all' || parts[0] === selectedYear;
-    const matchM = selectedMonth === 'all' || parts[1] === selectedMonth;
+  const filteredExpenses = safeExpenses
+    .filter((ex) => {
+      if (!ex || !ex.date) return false;
+      const parts = ex.date.split('-');
+      const matchY = selectedYear === 'all' || parts[0] === selectedYear;
+      const matchM = selectedMonth === 'all' || parts[1] === selectedMonth;
 
-    if (!matchY || !matchM) return false;
+      if (!matchY || !matchM) return false;
 
-    return matchesQuery(searchQuery, [ex.desc, ex.amount, ex.date]);
-  });
+      return matchesQuery(searchQuery, [ex.desc, ex.amount, ex.date]);
+    })
+    .sort((a, b) => {
+      const dateCmp = (a.date || '').localeCompare(b.date || '');
+      if (dateCmp !== 0) return dateCmp;
+      return (a.desc || '').localeCompare(b.desc || '');
+    });
 
   const totalExpenseSum = filteredExpenses.reduce((acc, ex) => acc + (ex.amount || 0), 0);
 

@@ -93,17 +93,19 @@ export const RoomsSection: React.FC<RoomsSectionProps> = ({
 
   const safeRooms = Array.isArray(rooms) ? rooms : [];
 
-  const filteredRooms = safeRooms.filter((rm) => {
-    if (!rm) return false;
-    return matchesQuery(searchQuery, [
-      rm.roomNo,
-      rm.meterNo,
-      rm.rentAmount,
-      rm.gasBill,
-      rm.waterBill,
-      rm.wasteBill,
-    ]);
-  });
+  const filteredRooms = safeRooms
+    .filter((rm) => {
+      if (!rm) return false;
+      return matchesQuery(searchQuery, [
+        rm.roomNo,
+        rm.meterNo,
+        rm.rentAmount,
+        rm.gasBill,
+        rm.waterBill,
+        rm.wasteBill,
+      ]);
+    })
+    .sort((a, b) => (a.roomNo || '').localeCompare(b.roomNo || '', undefined, { numeric: true }));
 
   // Calculate Column Totals
   const totalRent = safeRooms.reduce((acc, r) => acc + (r?.rentAmount || 0), 0);

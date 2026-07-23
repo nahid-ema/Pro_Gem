@@ -119,6 +119,7 @@ export default function App() {
       if (!snap.empty) {
         const items: Room[] = [];
         snap.forEach((docSnap) => items.push({ id: docSnap.id, ...docSnap.data() } as Room));
+        items.sort((a, b) => (a.roomNo || '').localeCompare(b.roomNo || '', undefined, { numeric: true }));
         setRooms(items);
       }
     }, () => {});
@@ -127,6 +128,7 @@ export default function App() {
       if (!snap.empty) {
         const items: Tenant[] = [];
         snap.forEach((docSnap) => items.push({ id: docSnap.id, ...docSnap.data() } as Tenant));
+        items.sort((a, b) => (a.room || '').localeCompare(b.room || '', undefined, { numeric: true }));
         setTenants(items);
       }
     }, () => {});
@@ -135,6 +137,7 @@ export default function App() {
       if (!snap.empty) {
         const items: RentRecord[] = [];
         snap.forEach((docSnap) => items.push({ id: docSnap.id, ...docSnap.data() } as RentRecord));
+        items.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
         setRents(items);
       }
     }, () => {});
@@ -143,6 +146,7 @@ export default function App() {
       if (!snap.empty) {
         const items: Expense[] = [];
         snap.forEach((docSnap) => items.push({ id: docSnap.id, ...docSnap.data() } as Expense));
+        items.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
         setExpenses(items);
       }
     }, () => {});
@@ -151,6 +155,7 @@ export default function App() {
       if (!snap.empty) {
         const items: ShopDue[] = [];
         snap.forEach((docSnap) => items.push({ id: docSnap.id, ...docSnap.data() } as ShopDue));
+        items.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
         setDokanDues(items);
       }
     }, () => {});

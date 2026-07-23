@@ -23,16 +23,18 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
 }) => {
   const t = getTranslation(language);
 
-  const safeUnpaidItems = (Array.isArray(unpaidItems) ? unpaidItems : []).filter((item) => {
-    if (!item || !item.tenant) return false;
-    return matchesQuery(searchQuery, [
-      item.tenant.name,
-      item.tenant.room,
-      item.tenant.phone,
-      item.tenant.nid,
-      item.estimatedDue,
-    ]);
-  });
+  const safeUnpaidItems = (Array.isArray(unpaidItems) ? unpaidItems : [])
+    .filter((item) => {
+      if (!item || !item.tenant) return false;
+      return matchesQuery(searchQuery, [
+        item.tenant.name,
+        item.tenant.room,
+        item.tenant.phone,
+        item.tenant.nid,
+        item.estimatedDue,
+      ]);
+    })
+    .sort((a, b) => (a.tenant.room || '').localeCompare(b.tenant.room || '', undefined, { numeric: true }));
 
   const totalUnpaidSum = safeUnpaidItems.reduce((acc, item) => acc + (item?.estimatedDue || 0), 0);
 

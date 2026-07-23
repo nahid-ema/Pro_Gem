@@ -144,25 +144,31 @@ export const RentSection: React.FC<RentSectionProps> = ({
   const safeTenants = Array.isArray(tenants) ? tenants : [];
   const safeRooms = Array.isArray(rooms) ? rooms : [];
 
-  const filteredRents = safeRents.filter((rt) => {
-    if (!rt || !rt.date) return false;
-    const parts = rt.date.split('-');
-    const matchY = selectedYear === 'all' || parts[0] === selectedYear;
-    const matchM = selectedMonth === 'all' || parts[1] === selectedMonth;
+  const filteredRents = safeRents
+    .filter((rt) => {
+      if (!rt || !rt.date) return false;
+      const parts = rt.date.split('-');
+      const matchY = selectedYear === 'all' || parts[0] === selectedYear;
+      const matchM = selectedMonth === 'all' || parts[1] === selectedMonth;
 
-    if (!matchY || !matchM) return false;
+      if (!matchY || !matchM) return false;
 
-    return matchesQuery(searchQuery, [
-      rt.tenant,
-      rt.room,
-      rt.phone,
-      rt.note,
-      rt.date,
-      rt.rent,
-      rt.paid,
-      rt.due,
-    ]);
-  });
+      return matchesQuery(searchQuery, [
+        rt.tenant,
+        rt.room,
+        rt.phone,
+        rt.note,
+        rt.date,
+        rt.rent,
+        rt.paid,
+        rt.due,
+      ]);
+    })
+    .sort((a, b) => {
+      const dateCmp = (a.date || '').localeCompare(b.date || '');
+      if (dateCmp !== 0) return dateCmp;
+      return (a.room || '').localeCompare(b.room || '', undefined, { numeric: true });
+    });
 
   // Calculate totals
   const totalRentAmount = filteredRents.reduce((acc, r) => acc + (r.rent || 0), 0);

@@ -78,16 +78,22 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
 
   const safeDokanDues = Array.isArray(dokanDues) ? dokanDues : [];
 
-  const filteredDokan = safeDokanDues.filter((dk) => {
-    if (!dk || !dk.date) return false;
-    const parts = dk.date.split('-');
-    const matchY = selectedYear === 'all' || parts[0] === selectedYear;
-    const matchM = selectedMonth === 'all' || parts[1] === selectedMonth;
+  const filteredDokan = safeDokanDues
+    .filter((dk) => {
+      if (!dk || !dk.date) return false;
+      const parts = dk.date.split('-');
+      const matchY = selectedYear === 'all' || parts[0] === selectedYear;
+      const matchM = selectedMonth === 'all' || parts[1] === selectedMonth;
 
-    if (!matchY || !matchM) return false;
+      if (!matchY || !matchM) return false;
 
-    return matchesQuery(searchQuery, [dk.desc, dk.amount, dk.date]);
-  });
+      return matchesQuery(searchQuery, [dk.desc, dk.amount, dk.date]);
+    })
+    .sort((a, b) => {
+      const dateCmp = (a.date || '').localeCompare(b.date || '');
+      if (dateCmp !== 0) return dateCmp;
+      return (a.desc || '').localeCompare(b.desc || '');
+    });
 
   const totalDokanSum = filteredDokan.reduce((acc, dk) => acc + (dk.amount || 0), 0);
 

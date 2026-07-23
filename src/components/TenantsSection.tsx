@@ -74,18 +74,20 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
   const safeTenants = Array.isArray(tenants) ? tenants : [];
   const safeRooms = Array.isArray(rooms) ? rooms : [];
 
-  const filteredTenants = safeTenants.filter((tn) => {
-    if (!tn) return false;
-    return matchesQuery(searchQuery, [
-      tn.name,
-      tn.phone,
-      tn.room,
-      tn.nid,
-      tn.advance,
-      tn.address,
-      tn.occupation,
-    ]);
-  });
+  const filteredTenants = safeTenants
+    .filter((tn) => {
+      if (!tn) return false;
+      return matchesQuery(searchQuery, [
+        tn.name,
+        tn.phone,
+        tn.room,
+        tn.nid,
+        tn.advance,
+        tn.address,
+        tn.occupation,
+      ]);
+    })
+    .sort((a, b) => (a.room || '').localeCompare(b.room || '', undefined, { numeric: true }));
 
   const getCleanPhone = (p: string) => {
     let clean = p.replace(/[^0-9]/g, '');
