@@ -75,16 +75,11 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
         </div>
 
         {/* Collection Efficiency Gauge Badge */}
-        <div className="flex items-center gap-1.5 sm:gap-2 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2.5 sm:px-3.5 py-1 rounded-full shrink-0">
-          <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-500" />
-          <div className="text-right">
-            <span className="block text-[9px] sm:text-[10px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-              {t.collectionProgress}
-            </span>
-            <span className="text-xs font-bold text-slate-900 dark:text-white">
-              {collectionPercentage}%
-            </span>
-          </div>
+        <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-500/20 text-emerald-800 dark:text-emerald-300 px-2.5 sm:px-3.5 py-1.5 rounded-full shrink-0 text-xs font-semibold">
+          <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-500 shrink-0" />
+          <span className="hidden sm:inline">{t.collectionProgress}:</span>
+          <span className="sm:hidden">{language === 'bn' ? 'আদায় অগ্রগতি:' : 'Collection:'}</span>
+          <span className="font-bold text-emerald-600 dark:text-emerald-400">{collectionPercentage}%</span>
         </div>
       </div>
 
