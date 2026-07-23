@@ -103,7 +103,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     } catch (err: any) {
       setIsError(true);
       let errMsg = err?.message || 'Authentication error occurred.';
-      if (err?.code === 'auth/user-not-found' || err?.code === 'auth/wrong-password' || err?.code === 'auth/invalid-credential') {
+      if (err?.code === 'auth/operation-not-allowed') {
+        errMsg = language === 'bn' 
+          ? '⚠️ ফায়ারবেস কনসোলে এই লগইন প্রোভাইডার চালু করা নেই। Firebase Console -> Authentication -> Sign-in Method এ গিয়ে এটি এনাবল (Enable) করুন।' 
+          : '⚠️ This sign-in method is disabled in your Firebase Console. Please go to Firebase Console -> Authentication -> Sign-in method and enable it.';
+      } else if (err?.code === 'auth/user-not-found' || err?.code === 'auth/wrong-password' || err?.code === 'auth/invalid-credential') {
         errMsg = language === 'bn' ? 'ইমেইল বা পাসওয়ার্ড ভুল দেওয়া হয়েছে' : 'Invalid email or password.';
       } else if (err?.code === 'auth/email-already-in-use') {
         errMsg = language === 'bn' ? 'এই ইমেইল দিয়ে ইতোমধ্যে একটি অ্যাকাউন্ট রয়েছে' : 'An account with this email already exists.';

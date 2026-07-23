@@ -27,12 +27,14 @@ interface LockScreenProps {
   language: Language;
   ownerEmail: string;
   onSetOwnerEmail: (email: string) => void;
+  onUnlockLocal?: () => void;
 }
 
 export const LockScreen: React.FC<LockScreenProps> = ({
   language,
   ownerEmail,
-  onSetOwnerEmail
+  onSetOwnerEmail,
+  onUnlockLocal
 }) => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
@@ -90,7 +92,13 @@ export const LockScreen: React.FC<LockScreenProps> = ({
       }
     } catch (err: any) {
       console.error(err);
-      if (err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
+      if (err.code === 'auth/operation-not-allowed') {
+        setErrorMsg(
+          isBn
+            ? '⚠️ ফায়ারবেস কনসোলে ইমেইল/পাসওয়ার্ড প্রোভাইডার চালু (Enable) করা নেই! অনুগ্রহ করে আপনার Firebase Console -> Authentication -> Sign-in method এ গিয়ে Email/Password এনাবল করুন।'
+            : '⚠️ Email/Password authentication is disabled in your Firebase Console. Please go to Firebase Console -> Authentication -> Sign-in method and enable Email/Password.'
+        );
+      } else if (err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
         setErrorMsg(isBn ? 'ভুল ইমেইল অথবা পাসওয়ার্ড!' : 'Incorrect email or password.');
       } else if (err.code === 'auth/email-already-in-use') {
         setErrorMsg(isBn ? 'এই ইমেইলটি ইতিমধ্যে নিবন্ধিত।' : 'This email is already registered.');
@@ -125,7 +133,15 @@ export const LockScreen: React.FC<LockScreenProps> = ({
       }
     } catch (err: any) {
       console.error(err);
-      setErrorMsg(err.message || (isBn ? 'গুগল লগইন ব্যর্থ হয়েছে।' : 'Google Sign-In failed.'));
+      if (err.code === 'auth/operation-not-allowed') {
+        setErrorMsg(
+          isBn
+            ? '⚠️ ফায়ারবেস কনসোলে গুগল সাইন-ইন প্রোভাইডার চালু করা নেই। Firebase Console -> Authentication -> Sign-in method এ গুগল এনাবল করুন।'
+            : '⚠️ Google Sign-In is disabled in your Firebase Console. Enable Google in Firebase Console -> Authentication -> Sign-in method.'
+        );
+      } else {
+        setErrorMsg(err.message || (isBn ? 'গুগল লগইন ব্যর্থ হয়েছে।' : 'Google Sign-In failed.'));
+      }
     } finally {
       setIsLoading(false);
     }
@@ -335,7 +351,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({
             <span>{isBn ? 'গুগল দিয়ে সাইন ইন' : 'Sign in with Google'}</span>
           </button>
 
-          <div className="text-center pt-2">
+          <div className="text-center pt-2 space-y-2">
             <button
               type="button"
               onClick={() => { setIsSignUp(!isSignUp); setErrorMsg(null); setInfoMsg(null); }}
@@ -345,6 +361,22 @@ export const LockScreen: React.FC<LockScreenProps> = ({
                 ? (isBn ? 'ইতিমধ্যে অ্যাকাউন্ট আছে? লগইন করুন' : 'Already have an account? Sign in') 
                 : (isBn ? 'নতুন অ্যাকাউন্ট খুলবেন? এখানে চাপুন' : 'First time? Register owner account')}
             </button>
+
+            {onUnlockLocal && (
+              <div className="pt-2 border-t border-slate-800/80">
+                <button
+                  type="button"
+                  onClick={onUnlockLocal}
+                  className="w-full bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 py-2 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+                >
+                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  <span>{isBn ? 'মালিক অ্যাক্সেস দিয়ে ওয়েবসাইট আনলক করুন' : 'Unlock with Owner Direct Access'}</span>
+                </button>
+                <p className="text-[10px] text-slate-500 mt-1">
+                  {isBn ? '(ফায়ারবেস অথ চালুর পূর্বে বা সরাসরি ব্যবহারের জন্য)' : '(Use for direct access or if Firebase Auth is not enabled)'}
+                </p>
+              </div>
+            )}
           </div>
         </div>
 

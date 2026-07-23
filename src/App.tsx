@@ -47,6 +47,9 @@ export default function App() {
   const [ownerEmail, setOwnerEmail] = useState<string>(() => 
     safeGetItem<string>(STORAGE_KEYS.OWNER_EMAIL, 'nahidferdousemonema@gmail.com')
   );
+  const [isLocalUnlocked, setIsLocalUnlocked] = useState<boolean>(() => 
+    safeGetItem<boolean>('nk_local_unlocked', false)
+  );
   const [lastCloudBackupTime, setLastCloudBackupTime] = useState<string | null>(null);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
 
@@ -238,13 +241,24 @@ export default function App() {
   };
 
   const handleLockApp = async () => {
+    setIsLocalUnlocked(false);
+    safeSetItem('nk_local_unlocked', false);
     if (auth) {
-      await signOut(auth);
-      showToast(
-        language === 'bn' ? 'ওয়েবসাইটটি সফলভাবে লক করা হয়েছে।' : 'Website access locked.',
-        'info'
-      );
+      try { await signOut(auth); } catch (e) {}
     }
+    showToast(
+      language === 'bn' ? 'ওয়েবসাইটটি সফলভাবে লক করা হয়েছে।' : 'Website access locked.',
+      'info'
+    );
+  };
+
+  const handleLocalUnlock = () => {
+    setIsLocalUnlocked(true);
+    safeSetItem('nk_local_unlocked', true);
+    showToast(
+      language === 'bn' ? 'মালিক অ্যাক্সেস এনাবল করা হয়েছে।' : 'Owner local access granted.',
+      'success'
+    );
   };
 
   // Optional Firestore Live Sync if db is available
@@ -668,8 +682,8 @@ export default function App() {
     }
   };
 
-  // Check if owner is authenticated
-  const isOwnerAuthenticated = currentUser && currentUser.email && currentUser.email.toLowerCase() === ownerEmail.toLowerCase();
+  // Check if owner is authenticated or locally unlocked
+  const isOwnerAuthenticated = (currentUser && currentUser.email && currentUser.email.toLowerCase() === ownerEmail.toLowerCase()) || isLocalUnlocked;
 
   // If not authenticated as the owner, render the LockScreen
   if (!isOwnerAuthenticated) {
@@ -679,6 +693,7 @@ export default function App() {
           language={language}
           ownerEmail={ownerEmail}
           onSetOwnerEmail={handleSetOwnerEmail}
+          onUnlockLocal={handleLocalUnlock}
         />
         <Toast toast={toast} onClose={() => setToast(null)} />
       </>
