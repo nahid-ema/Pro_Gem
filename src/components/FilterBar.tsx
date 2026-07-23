@@ -51,8 +51,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 }) => {
   const t = getTranslation(language);
 
-  const isFiltered = selectedYear !== 'all' || selectedMonth !== 'all' || searchQuery.trim() !== '';
-
   const tabs: { id: TabType; label: string; icon: React.ReactNode; badge?: number | string }[] = [
     { id: 'brief', label: t.tabBrief, icon: <BarChart3 className="w-4 h-4" /> },
     { id: 'rooms', label: t.tabRooms, icon: <DoorClosed className="w-4 h-4" />, badge: totalRoomsCount },
@@ -125,16 +123,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             </select>
           </div>
 
-          {isFiltered && (
-            <button
-              type="button"
-              onClick={onClearFilters}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-300 border border-rose-200 dark:border-rose-800/50 text-xs font-semibold transition-colors shrink-0 hover:bg-rose-100"
-            >
-              <X className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">{t.clearFilter}</span>
-            </button>
-          )}
+          {/* Selectors (Year & Month) without cross button */}
         </div>
       </div>
 
