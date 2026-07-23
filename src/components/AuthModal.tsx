@@ -8,7 +8,8 @@ import {
   sendPasswordResetEmail,
   signOut,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  signInWithRedirect
 } from 'firebase/auth';
 import { Lock, Mail, Key, LogOut, CheckCircle2, AlertCircle, X, UserPlus, LogIn, RefreshCw } from 'lucide-react';
 
@@ -128,17 +129,38 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   const handleGoogleSignIn = async () => {
     if (!auth || !isFirebaseInitialized) return;
+    const provider = new GoogleAuthProvider();
     try {
       setIsLoading(true);
       setStatusMsg('');
-      const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
       setStatusMsg(language === 'bn' ? '✓ গুগল অ্যাকাউন্টে সাইন-ইন সম্পন্ন হয়েছে' : '✓ Signed in with Google!');
       setIsError(false);
       setTimeout(() => onClose(), 800);
     } catch (err: any) {
+      console.error('Google Sign In error:', err);
+      if (
+        err.code === 'auth/popup-blocked' || 
+        err.code === 'auth/popup-closed-by-user' || 
+        err.code === 'auth/cancelled-popup-request'
+      ) {
+        try {
+          await signInWithRedirect(auth, provider);
+          return;
+        } catch (redirectErr: any) {
+          console.error('Redirect sign in error:', redirectErr);
+        }
+      }
       setIsError(true);
-      setStatusMsg(err?.message || 'Google sign-in failed.');
+      if (err.code === 'auth/unauthorized-domain') {
+        setStatusMsg(
+          language === 'bn'
+            ? '⚠️ এই ডোমেনটি ফায়ারবেসে অনুমোদিত নয়। মোবাইল ব্যবহারকারীরা Security PIN ব্যবহার করুন।'
+            : '⚠️ Domain restricted by Firebase. Please use Security Passcode PIN.'
+        );
+      } else {
+        setStatusMsg(err?.message || 'Google sign-in failed.');
+      }
     } finally {
       setIsLoading(false);
     }

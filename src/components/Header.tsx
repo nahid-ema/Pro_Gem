@@ -261,13 +261,13 @@ export const Header: React.FC<HeaderProps> = ({
                     </p>
                   )}
 
-                  {onLockApp && userEmail && (
+                  {onLockApp && (
                     <button
                       onClick={() => { setIsMenuOpen(false); onLockApp(); }}
-                      className="w-full mt-2 py-1.5 px-3 rounded-full bg-slate-200 dark:bg-slate-800 hover:bg-rose-100 dark:hover:bg-rose-950/50 text-rose-600 dark:text-rose-400 font-bold text-[11px] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                      className="w-full mt-2 py-1.5 px-3 rounded-full bg-[#e0533c]/10 hover:bg-[#e0533c]/20 text-[#e0533c] font-bold text-[11px] transition-colors flex items-center justify-center gap-1.5 cursor-pointer border border-[#e0533c]/30"
                     >
                       <Lock className="w-3 h-3" />
-                      <span>{language === 'bn' ? 'ওয়েবসাইট লক করুন' : 'Lock Website Access'}</span>
+                      <span>{language === 'bn' ? 'ওয়েবসাইট লক করুন (লগআউট)' : 'Lock Website (Log Out)'}</span>
                     </button>
                   )}
                 </div>

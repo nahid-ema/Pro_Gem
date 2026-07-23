@@ -255,6 +255,15 @@ export default function App() {
     );
   };
 
+  const handleUnlockOwner = () => {
+    setIsLocalUnlocked(true);
+    safeSetItem('nk_local_unlocked', true);
+    showToast(
+      language === 'bn' ? '✓ সফলভাবে মালিক হিসেবে সাইন-ইন করা হয়েছে!' : '✓ Owner logged in successfully!',
+      'success'
+    );
+  };
+
   const handleVerifyPin = (enteredPin: string): boolean => {
     if (enteredPin.trim() === masterPin.trim()) {
       setIsLocalUnlocked(true);
@@ -712,10 +721,7 @@ export default function App() {
         <LockScreen
           language={language}
           ownerEmail={ownerEmail}
-          onSetOwnerEmail={handleSetOwnerEmail}
-          masterPin={masterPin}
-          onVerifyPin={handleVerifyPin}
-          onChangePin={handleChangePin}
+          onUnlockOwner={handleUnlockOwner}
         />
         <Toast toast={toast} onClose={() => setToast(null)} />
       </>
