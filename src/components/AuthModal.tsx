@@ -107,6 +107,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         errMsg = language === 'bn' 
           ? '⚠️ ফায়ারবেস কনসোলে এই লগইন প্রোভাইডার চালু করা নেই। Firebase Console -> Authentication -> Sign-in Method এ গিয়ে এটি এনাবল (Enable) করুন।' 
           : '⚠️ This sign-in method is disabled in your Firebase Console. Please go to Firebase Console -> Authentication -> Sign-in method and enable it.';
+      } else if (err?.code === 'auth/unauthorized-domain') {
+        errMsg = language === 'bn'
+          ? '⚠️ এই ডোমেইনটি ফায়ারবেসে Authorized Domains এ যুক্ত নেই। Firebase Console -> Authentication -> Settings -> Authorized domains এ গিয়ে "run.app" বা বর্তমান ডোমেইন এড করুন।'
+          : '⚠️ Unauthorized domain. Go to Firebase Console -> Authentication -> Settings -> Authorized domains and add "run.app" or your domain.';
       } else if (err?.code === 'auth/user-not-found' || err?.code === 'auth/wrong-password' || err?.code === 'auth/invalid-credential') {
         errMsg = language === 'bn' ? 'ইমেইল বা পাসওয়ার্ড ভুল দেওয়া হয়েছে' : 'Invalid email or password.';
       } else if (err?.code === 'auth/email-already-in-use') {

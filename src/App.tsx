@@ -127,7 +127,7 @@ export default function App() {
 
   // Automatic Real-Time Cloud Sync (Debounced Auto-Sync)
   useEffect(() => {
-    if (!db || !isFirebaseInitialized || !currentUser) return;
+    if (!db || !isFirebaseInitialized || (!currentUser && !isLocalUnlocked)) return;
 
     setIsSyncing(true);
     const syncTimer = setTimeout(async () => {
@@ -720,7 +720,7 @@ export default function App() {
           onLockApp={handleLockApp}
           userEmail={currentUser?.email}
           ownerEmail={ownerEmail}
-          isFirebaseActive={isFirebaseInitialized && !!currentUser}
+          isFirebaseActive={isFirebaseInitialized && (!!currentUser || isLocalUnlocked)}
           isSyncing={isSyncing}
           lastCloudBackupTime={lastCloudBackupTime}
         />

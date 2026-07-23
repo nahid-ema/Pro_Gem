@@ -98,6 +98,12 @@ export const LockScreen: React.FC<LockScreenProps> = ({
             ? '⚠️ ফায়ারবেস কনসোলে ইমেইল/পাসওয়ার্ড প্রোভাইডার চালু (Enable) করা নেই! অনুগ্রহ করে আপনার Firebase Console -> Authentication -> Sign-in method এ গিয়ে Email/Password এনাবল করুন।'
             : '⚠️ Email/Password authentication is disabled in your Firebase Console. Please go to Firebase Console -> Authentication -> Sign-in method and enable Email/Password.'
         );
+      } else if (err.code === 'auth/unauthorized-domain') {
+        setErrorMsg(
+          isBn
+            ? '⚠️ এই ডোমেইনটি ফায়ারবেস কনসোলে Authorized Domains তালিকায় যোগ করা নেই! Firebase Console -> Authentication -> Settings -> Authorized domains এ গিয়ে "run.app" বা বর্তমান ডোমেনটি যোগ করুন। অথবা নিচে "মালিক অ্যাক্সেস দিয়ে ওয়েবসাইট আনলক করুন" বাটনে চাপ দিয়ে প্রবেশ করুন।'
+            : '⚠️ Unauthorized Domain in Firebase! Please add "run.app" in Firebase Console -> Authentication -> Settings -> Authorized domains. Alternatively, click "Unlock with Owner Direct Access" below.'
+        );
       } else if (err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
         setErrorMsg(isBn ? 'ভুল ইমেইল অথবা পাসওয়ার্ড!' : 'Incorrect email or password.');
       } else if (err.code === 'auth/email-already-in-use') {
@@ -138,6 +144,12 @@ export const LockScreen: React.FC<LockScreenProps> = ({
           isBn
             ? '⚠️ ফায়ারবেস কনসোলে গুগল সাইন-ইন প্রোভাইডার চালু করা নেই। Firebase Console -> Authentication -> Sign-in method এ গুগল এনাবল করুন।'
             : '⚠️ Google Sign-In is disabled in your Firebase Console. Enable Google in Firebase Console -> Authentication -> Sign-in method.'
+        );
+      } else if (err.code === 'auth/unauthorized-domain') {
+        setErrorMsg(
+          isBn
+            ? '⚠️ এই ডোমেইনটি ফায়ারবেসে অনুমোদিত নয়! Firebase Console -> Authentication -> Settings -> Authorized domains এ গিয়ে "run.app" যোগ করুন বা নিচে "মালিক অ্যাক্সেস দিয়ে ওয়েবসাইট আনলক করুন" চাপুন।'
+            : '⚠️ Unauthorized Domain in Firebase! Please add "run.app" in Firebase Console -> Authentication -> Settings -> Authorized domains, or click "Unlock with Owner Direct Access" below.'
         );
       } else {
         setErrorMsg(err.message || (isBn ? 'গুগল লগইন ব্যর্থ হয়েছে।' : 'Google Sign-In failed.'));
@@ -239,6 +251,29 @@ export const LockScreen: React.FC<LockScreenProps> = ({
             </p>
           )}
         </div>
+
+        {/* 1-Click Direct Owner Unlock Option */}
+        {onUnlockLocal && (
+          <div className="bg-emerald-950/40 border border-emerald-500/40 rounded-2xl p-4 text-center space-y-2 shadow-lg">
+            <div className="flex items-center justify-center gap-2 text-emerald-400 font-bold text-sm">
+              <ShieldCheck className="w-5 h-5 text-emerald-400" />
+              <span>{isBn ? 'সরাসরি মালিক প্রবেশ' : 'Instant Owner Direct Unlock'}</span>
+            </div>
+            <p className="text-xs text-slate-300">
+              {isBn 
+                ? 'কোনো জটিল সাইন-ইন ঝামেলা ছাড়াই ১-ক্লিকে সরাসরি ওয়েবসাইটে প্রবেশ করুন।' 
+                : 'Access the website instantly without complex sign-in setups.'}
+            </p>
+            <button
+              type="button"
+              onClick={onUnlockLocal}
+              className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-md active:scale-95 cursor-pointer flex items-center justify-center gap-2"
+            >
+              <CheckCircle2 className="w-4 h-4" />
+              <span>{isBn ? 'মালিক হিসেবে ১-ক্লিকে আনলক করুন' : 'Unlock Now as Owner (1-Click)'}</span>
+            </button>
+          </div>
+        )}
 
         {/* Status Messages */}
         {errorMsg && (
