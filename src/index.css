@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: 'Google Sans', 'Product Sans', 'Google Sans Text', 'Plus Jakarta Sans', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Google Sans', 'Product Sans', 'Google Sans Text', 'Plus Jakarta Sans', 'Noto Sans Bengali', monospace;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
@@ -9,8 +14,8 @@
     --accent-coral-light: #fdf0ed;
   }
 
-  html, body, button, input, select, textarea {
-    font-family: 'Google Sans', 'Google Sans Text', 'Product Sans', 'Plus Jakarta Sans', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif !important;
+  *, ::before, ::after, html, body, button, input, select, textarea {
+    font-family: 'Google Sans', 'Product Sans', 'Google Sans Text', 'Plus Jakarta Sans', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif !important;
   }
 }
 

@@ -96,40 +96,11 @@ export const Header: React.FC<HeaderProps> = ({
                 {isFirebaseActive ? (language === 'bn' ? '✓ ক্লাউড কানেক্টেড' : '✓ Firebase Connected') : t.offlineMode}
               </span>
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium flex items-center gap-2 mt-0.5">
-              <span>{t.appSubtitle}</span>
-              {ownerEmail && (
-                <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-mono font-semibold text-[#e0533c] bg-[#fdf0ed] dark:bg-slate-800 px-2 py-0.5 rounded-full">
-                  <ShieldCheck className="w-3 h-3" />
-                  <span>{language === 'bn' ? 'মালিক:' : 'Owner:'} {ownerEmail}</span>
-                </span>
-              )}
-            </p>
           </div>
         </div>
 
         {/* Right Actions */}
         <div className="flex items-center gap-2 no-print self-end md:self-auto">
-          {/* Live Auto-Sync Indicator */}
-          {isFirebaseActive && (
-            <div className="flex items-center gap-2 bg-emerald-500/10 dark:bg-emerald-950/60 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 px-3.5 py-1.5 rounded-full text-xs font-semibold shadow-xs">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isSyncing ? 'bg-amber-400' : 'bg-emerald-400'}`}></span>
-                <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${isSyncing ? 'bg-amber-500' : 'bg-emerald-500'}`}></span>
-              </span>
-              <span>
-                {isSyncing
-                  ? (language === 'bn' ? 'অটো-সিঙ্ক হচ্ছে...' : 'Auto-Syncing...')
-                  : (language === 'bn' ? 'অটো-সিঙ্ক চালু' : 'Auto-Sync Active')}
-              </span>
-              {lastCloudBackupTime && !isSyncing && (
-                <span className="text-[10px] opacity-75 font-mono hidden sm:inline border-l border-emerald-500/20 pl-2">
-                  {lastCloudBackupTime}
-                </span>
-              )}
-            </div>
-          )}
-
           {/* Menu Dropdown */}
           <div className="relative" ref={menuRef}>
             <button
