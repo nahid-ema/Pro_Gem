@@ -692,26 +692,6 @@ export default function App() {
     e.target.value = '';
   };
 
-  const handleLoadDemoData = () => {
-    setRooms(initialRooms);
-    setTenants(initialTenants);
-    setRents(initialRentRecords);
-    setExpenses(initialExpenses);
-    setDokanDues(initialShopDues);
-    showToast(language === 'bn' ? 'ডেমো ডাটা সফলভাবে লোড করা হয়েছে!' : 'Demo data loaded successfully!');
-  };
-
-  const handleResetData = () => {
-    if (confirm(language === 'bn' ? 'আপনি কি নিশ্চিত যে সকল ডাটা মুছে ফেলতে চান?' : 'Are you sure you want to reset all data?')) {
-      setRooms([]);
-      setTenants([]);
-      setRents([]);
-      setExpenses([]);
-      setDokanDues([]);
-      showToast(language === 'bn' ? 'সকল ডাটা রিসেট করা হয়েছে।' : 'Data reset complete.', 'info');
-    }
-  };
-
   // Check if owner is authenticated or locally unlocked
   const isOwnerAuthenticated = (currentUser && currentUser.email && currentUser.email.toLowerCase() === ownerEmail.toLowerCase()) || isLocalUnlocked;
 
@@ -769,8 +749,6 @@ export default function App() {
           onFirebaseCloudBackup={handleFirebaseCloudBackup}
           onFirebaseCloudRestore={handleFirebaseCloudRestore}
           onPrint={() => window.print()}
-          onLoadDemoData={handleLoadDemoData}
-          onResetData={handleResetData}
           onOpenAuthModal={() => setIsAuthModalOpen(true)}
           onLockApp={handleLockApp}
           userEmail={currentUser?.email}

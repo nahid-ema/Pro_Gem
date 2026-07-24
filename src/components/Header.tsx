@@ -10,7 +10,6 @@ import {
   Sun, 
   Moon, 
   Globe, 
-  Sparkles, 
   RefreshCw,
   ChevronDown,
   CloudUpload,
@@ -39,8 +38,6 @@ interface HeaderProps {
   onFirebaseCloudBackup: () => void;
   onFirebaseCloudRestore: () => void;
   onPrint: () => void;
-  onLoadDemoData: () => void;
-  onResetData: () => void;
   onOpenAuthModal: () => void;
   onLockApp?: () => void;
   userEmail?: string | null;
@@ -62,8 +59,6 @@ export const Header: React.FC<HeaderProps> = ({
   onFirebaseCloudBackup,
   onFirebaseCloudRestore,
   onPrint,
-  onLoadDemoData,
-  onResetData,
   onOpenAuthModal,
   onLockApp,
   userEmail,
@@ -340,29 +335,6 @@ export const Header: React.FC<HeaderProps> = ({
                       <span>{language === 'bn' ? 'ওয়েবসাইট লক করুন (লগআউট)' : 'Lock Website (Log Out)'}</span>
                     </button>
                   )}
-                </div>
-
-                {/* 7. Advanced Reset & Demo Options */}
-                <div className="py-1 px-3.5 space-y-1">
-                  <div className="flex items-center justify-between gap-2">
-                    <button
-                      type="button"
-                      onClick={() => { setIsMenuOpen(false); onLoadDemoData(); }}
-                      className="flex-1 text-left px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-medium transition-colors cursor-pointer text-[11px]"
-                    >
-                      <Sparkles className="w-3.5 h-3.5 shrink-0" />
-                      <span className="truncate">{t.demoDataBtn}</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => { setIsMenuOpen(false); onResetData(); }}
-                      className="flex-1 text-left px-2.5 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center gap-1.5 text-rose-600 dark:text-rose-400 font-medium transition-colors cursor-pointer text-[11px]"
-                    >
-                      <RefreshCw className="w-3.5 h-3.5 shrink-0" />
-                      <span className="truncate">{t.resetDataBtn}</span>
-                    </button>
-                  </div>
                 </div>
               </div>
             )}
