@@ -70,7 +70,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
       setDispRoom(tn.room);
       setDispPhone(tn.phone);
 
-      const rm = rooms.find((r) => r.roomNo.trim() === tn.room.trim());
+      const rm = rooms.find((r) => (r.roomNo || '').trim() === (tn.room || '').trim());
       if (rm) {
         const totalPkg = rm.rentAmount + rm.gasBill + rm.waterBill + rm.wasteBill;
         setRent(String(totalPkg));
@@ -97,13 +97,13 @@ export const RentSection: React.FC<RentSectionProps> = ({
     setEditingId(rt.id);
     setDate(rt.date);
     const matchedTenant = tenants.find(
-      (tn) => tn.name.trim() === rt.tenant.trim() && tn.room.trim() === rt.room.trim()
+      (tn) => (tn.name || '').trim() === (rt.tenant || '').trim() && (tn.room || '').trim() === (rt.room || '').trim()
     );
     setSelectedTenantId(matchedTenant ? matchedTenant.id : '');
-    setDispRoom(rt.room);
-    setDispPhone(rt.phone);
-    setRent(String(rt.rent));
-    setPaid(String(rt.paid));
+    setDispRoom(rt.room || '');
+    setDispPhone(rt.phone || '');
+    setRent(String(rt.rent || 0));
+    setPaid(String(rt.paid || 0));
     setNote(rt.note || '');
     setIsFormOpen(true);
   };
@@ -176,7 +176,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
   const totalDueAmount = filteredRents.reduce((acc, r) => acc + (r.due || 0), 0);
 
   const getWhatsAppLink = (rt: RentRecord) => {
-    let phone = rt.phone.trim().replace(/[^0-9]/g, '');
+    let phone = (rt.phone || '').trim().replace(/[^0-9]/g, '');
     if (phone.startsWith('0')) phone = '88' + phone;
     const msg = t.waMessageTemplate(rt.tenant, rt.room, rt.due);
     return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;

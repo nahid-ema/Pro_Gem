@@ -90,7 +90,7 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
     .sort((a, b) => (a.room || '').localeCompare(b.room || '', undefined, { numeric: true }));
 
   const getCleanPhone = (p: string) => {
-    let clean = p.replace(/[^0-9]/g, '');
+    let clean = (p || '').replace(/[^0-9]/g, '');
     if (clean.startsWith('0')) clean = '88' + clean;
     return clean;
   };
