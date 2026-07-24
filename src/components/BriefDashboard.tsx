@@ -10,7 +10,8 @@ import {
   Hash, 
   TrendingUp, 
   TrendingDown, 
-  CheckCircle2 
+  CheckCircle2,
+  BarChart3
 } from 'lucide-react';
 
 interface BriefDashboardProps {
@@ -59,7 +60,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
       <div className="flex items-center justify-between gap-2 mb-4 sm:mb-5 pb-3 sm:pb-4 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-[#fdf0ed] dark:bg-slate-800 text-[#e0533c] dark:text-[#f87171] flex items-center justify-center font-bold text-sm sm:text-base shrink-0">
-            📊
+            <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div className="min-w-0">
             <h3 className="text-sm sm:text-base md:text-lg font-semibold text-slate-900 dark:text-white tracking-tight truncate">

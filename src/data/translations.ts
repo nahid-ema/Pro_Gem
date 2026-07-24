@@ -36,7 +36,7 @@ export const translations = {
     collectionProgress: "ভাড়া সংগ্রহের অগ্রগতি",
 
     // Room Section
-    roomTitle: "✦ রুম ও বিল কনফিগারেশন",
+    roomTitle: "রুম ও বিল কনফিগারেশন",
     roomSubtitle: "বাসার সকল রুমের ভাড়া, গ্যাস, পানি ও ময়লার বিলের বিবরণ",
     thRoomNo: "রুম নং",
     thRentAmt: "ভাড়া",
@@ -47,7 +47,7 @@ export const translations = {
     thMeterNo: "মিটার নং",
     thRoomAction: "অ্যাকশন",
     roomSubmitBtn: "রুম যুক্ত করুন",
-    roomUpdateBtn: "রুম আপডেট করুন ⚙️",
+    roomUpdateBtn: "রুম আপডেট করুন",
     roomToggleLabel: "নতুন রুম যোগ করুন",
     rNoPh: "রুম নম্বর (যেমন: 101, 2A)",
     rRentPh: "মূল ভাড়া (টাকা)",
@@ -57,7 +57,7 @@ export const translations = {
     rMeterPh: "বিদ্যুৎ মিটার নং",
 
     // Tenant Section
-    tenantTitle: "✦ ভাড়াটিয়া প্রোফাইল",
+    tenantTitle: "ভাড়াটিয়া প্রোফাইল",
     tenantSubtitle: "বর্তমান ভাড়াটিয়াদের যোগাযোগের তথ্য ও বরাদ্দকৃত রুম",
     thName: "নাম",
     thPhone: "ফোন",
@@ -65,7 +65,7 @@ export const translations = {
     thNid: "NID / জাতীয় পরিচয়পত্র",
     thAction: "অ্যাকশন",
     tenantSubmitBtn: "ভাড়াটিয়া যুক্ত করুন",
-    tenantUpdateBtn: "ভাড়াটিয়া আপডেট করুন ⚙️",
+    tenantUpdateBtn: "ভাড়াটিয়া আপডেট করুন",
     tenantToggleLabel: "নতুন ভাড়াটিয়া যুক্ত করুন",
     tNamePh: "ভাড়াটিয়ার পুরো নাম",
     tPhonePh: "মোবাইল নম্বর (যেমন: 01712345678)",
@@ -73,7 +73,7 @@ export const translations = {
     tNidPh: "এনআইডি বা আইডি নম্বর (ঐচ্ছিক)",
 
     // Rent Collection Section
-    rentTitle: "✦ ভাড়া আদায় ও জমা রেজিস্টার",
+    rentTitle: "ভাড়া আদায় ও জমা রেজিস্টার",
     rentSubtitle: "প্রতি মাসের ভাড়া আদায়ের রসিদ ও হিসাবের তালিকা",
     rentSelectOpt: "ভাড়াটিয়া সিলেক্ট করুন",
     dispRoomPlaceholder: "রুম নম্বর",
@@ -82,7 +82,7 @@ export const translations = {
     paidPlaceholder: "জমা প্রদানকৃত টাকা",
     duePlaceholder: "বকেয়া টাকা",
     rentSubmitBtn: "ভাড়া আদায় রেকর্ড করুন",
-    rentUpdateBtn: "ভাড়ার এন্ট্রি আপডেট করুন ⚙️",
+    rentUpdateBtn: "ভাড়ার এন্ট্রি আপডেট করুন",
     rentToggleLabel: "নতুন ভাড়া জমা করুন",
     thRentDate: "তারিখ",
     thRentName: "নাম (রুম)",
@@ -91,30 +91,30 @@ export const translations = {
     thDueStatus: "পেমেন্ট অবস্থা",
     thRentAction: "অ্যাকশন",
     paidStatus: "(পরিশোধিত)",
-    dueStatus: "⚠️ বকেয়া",
+    dueStatus: "বকেয়া",
     dueSuffix: "টাকা",
     receiptBtn: "রসিদ",
 
     // Unpaid Section
-    unpaidTitle: "⚠️ চলতি সময়কালের অনাদায়ী রুম ও ভাড়াটিয়া",
+    unpaidTitle: "চলতি সময়কালের অনাদায়ী রুম ও ভাড়াটিয়া",
     unpaidSubtitle: "যেসব রুমের এই মাসের ভাড়া এখনো সম্পূর্ণ জমা হয়নি",
     thUnpaidRoom: "রুম নং",
     thUnpaidName: "ভাড়াটিয়ার নাম",
     thUnpaidPhone: "যোগাযোগ",
     thUnpaidAmount: "প্রাক্কলিত পাওনা",
-    unpaidClear: "🎉 অভিনন্দন! এই মাসের শতভাগ ভাড়া আদায় সম্পূর্ণ হয়েছে!",
+    unpaidClear: "সব ভাড়াই এই মাসের আদায় সম্পূর্ণ হয়েছে!",
     unpaidTotalLabel: "সর্বমোট অনাদায়ী টাকা:",
     actionSms: "SMS পাঠান",
     actionWa: "WhatsApp বার্তা",
     quickPay: "দ্রুত জমা",
 
     // Expense Section
-    expenseTitle: "✦ বাসাবাড়ির খরচ ট্র্যাকার",
+    expenseTitle: "বাসাবাড়ির খরচ ট্র্যাকার",
     expenseSubtitle: "রক্ষণাবেক্ষণ, মেরামত, মোটর ও বিদ্যুত বিল সম্পর্কিত খরচ",
     expDescPh: "খরচের বিবরণ (যেমন: পানির পাম্প মেরামত)",
     expAmtPh: "খরচের পরিমাণ (টাকা)",
     expSubmitBtn: "খরচ যোগ করুন",
-    expUpdateBtn: "খরচ আপডেট করুন ⚙️",
+    expUpdateBtn: "খরচ আপডেট করুন",
     expToggleLabel: "নতুন খরচ লিখুন",
     thExpDate: "তারিখ",
     thExpDesc: "বিবরণ",
@@ -122,12 +122,12 @@ export const translations = {
     thExpAct: "অ্যাকশন",
 
     // Shop Dues Section
-    dokanTitle: "✦ দোকান বাকি (মেটেরিয়াল ও হার্ডওয়্যার)",
+    dokanTitle: "দোকান বাকি (মেটেরিয়াল ও হার্ডওয়্যার)",
     dokanSubtitle: "হার্ডওয়্যার বা দোকান হতে বাকি নেওয়া মালামালের হিসাব",
     dokanDescPh: "দোকান বা বাকির বিবরণ (যেমন: রাজু হার্ডওয়্যার রঙ)",
     dokanAmtPh: "টাকা (টাকা)",
     dokanSubmitBtn: "বাকি রেকর্ড করুন",
-    dokanUpdateBtn: "বাকি আপডেট করুন ⚙️",
+    dokanUpdateBtn: "বাকি আপডেট করুন",
     dokanToggleLabel: "নতুন বাকি যোগ করুন",
     thDokDate: "তারিখ",
     thDokDesc: "দোকান ও বিবরণ",
@@ -135,7 +135,7 @@ export const translations = {
     thDokAct: "অ্যাকশন",
 
     // Analytics
-    analyticsTitle: "✦ আর্থিক বিশ্লেষণ ও চার্ট",
+    analyticsTitle: "আর্থিক বিশ্লেষণ ও চার্ট",
     analyticsSubtitle: "মাসভিত্তিক আয়, ব্যয় ও আদায়ের ভিজ্যুয়াল ট্রেন্ড",
     chartIncomeVsExpense: "মাসভিত্তিক আয় বনাম খরচ",
     chartRentCollectionRate: "ভাড়া সংগ্রহের হার (%)",
@@ -153,9 +153,9 @@ export const translations = {
     noData: "কোন তথ্য পাওয়া যায়নি",
     
     // Header & Modals
-    backupBtn: "📥 ব্যাকআপ নিন",
-    restoreBtn: "📤 ডাটা রিস্টোর",
-    printBtn: "📄 PDF রিপোর্ট / প্রিন্ট",
+    backupBtn: "ব্যাকআপ নিন",
+    restoreBtn: "ডাটা রিস্টোর",
+    printBtn: "PDF রিপোর্ট / প্রিন্ট",
     loginBtn: "লগইন করুন",
     logoutBtn: "লগআউট",
     demoDataBtn: "ডেমো ডাটা লোড করুন",
@@ -188,7 +188,7 @@ export const translations = {
   en: {
     appName: "Nahid Kutir",
     appSubtitle: "Eco-Luxury Property & Rent Management System",
-    mainTitle: "Nahid Kutir 🏠",
+    mainTitle: "Nahid Kutir",
     tagline: "Smart Property & Rent Management Dashboard",
 
     // Filters
@@ -220,7 +220,7 @@ export const translations = {
     collectionProgress: "Rent Collection Efficiency",
 
     // Room Section
-    roomTitle: "✦ Rooms & Utility Rates",
+    roomTitle: "Rooms & Utility Rates",
     roomSubtitle: "Rent breakdown including Gas, Water, and Waste fees per unit",
     thRoomNo: "Room No",
     thRentAmt: "Base Rent",
@@ -231,7 +231,7 @@ export const translations = {
     thMeterNo: "Meter No",
     thRoomAction: "Action",
     roomSubmitBtn: "Add Room",
-    roomUpdateBtn: "Update Room ⚙️",
+    roomUpdateBtn: "Update Room",
     roomToggleLabel: "Configure New Room",
     rNoPh: "Room Number (e.g. 101, 2A)",
     rRentPh: "Base Rent (BDT)",
@@ -241,7 +241,7 @@ export const translations = {
     rMeterPh: "Electric Meter No",
 
     // Tenant Section
-    tenantTitle: "✦ Tenant Profiles",
+    tenantTitle: "Tenant Profiles",
     tenantSubtitle: "Active occupant contacts, assigned units, and identity records",
     thName: "Name",
     thPhone: "Phone",
@@ -249,7 +249,7 @@ export const translations = {
     thNid: "NID / Passport No",
     thAction: "Action",
     tenantSubmitBtn: "Add Tenant",
-    tenantUpdateBtn: "Update Tenant ⚙️",
+    tenantUpdateBtn: "Update Tenant",
     tenantToggleLabel: "Register New Tenant",
     tNamePh: "Full Name of Tenant",
     tPhonePh: "Contact Number (e.g. 01712345678)",
@@ -257,7 +257,7 @@ export const translations = {
     tNidPh: "NID / Passport Number (optional)",
 
     // Rent Collection Section
-    rentTitle: "✦ Rent Payment Register",
+    rentTitle: "Rent Payment Register",
     rentSubtitle: "Monthly collection history, receipts, and outstanding dues",
     rentSelectOpt: "Select Tenant",
     dispRoomPlaceholder: "Room No",
@@ -266,7 +266,7 @@ export const translations = {
     paidPlaceholder: "Amount Paid (BDT)",
     duePlaceholder: "Remaining Due",
     rentSubmitBtn: "Record Rent Payment",
-    rentUpdateBtn: "Update Payment Entry ⚙️",
+    rentUpdateBtn: "Update Payment Entry",
     rentToggleLabel: "Record New Payment",
     thRentDate: "Date",
     thRentName: "Tenant (Room)",
@@ -275,30 +275,30 @@ export const translations = {
     thDueStatus: "Payment Status",
     thRentAction: "Action",
     paidStatus: "(Paid)",
-    dueStatus: "⚠️ Due",
+    dueStatus: "Due",
     dueSuffix: "BDT",
     receiptBtn: "Receipt",
 
     // Unpaid Section
-    unpaidTitle: "⚠️ Unpaid Dues for Selected Period",
+    unpaidTitle: "Unpaid Dues for Selected Period",
     unpaidSubtitle: "Occupants with pending or partial payments for this month",
     thUnpaidRoom: "Room No",
     thUnpaidName: "Tenant Name",
     thUnpaidPhone: "Phone",
     thUnpaidAmount: "Estimated Due",
-    unpaidClear: "🎉 Excellent! All rents for this month have been fully collected!",
+    unpaidClear: "All rents for this month have been fully collected!",
     unpaidTotalLabel: "Total Pending Dues:",
     actionSms: "Send SMS",
     actionWa: "WhatsApp Msg",
     quickPay: "Quick Pay",
 
     // Expense Section
-    expenseTitle: "✦ Property Operating Expenses",
+    expenseTitle: "Property Operating Expenses",
     expenseSubtitle: "Maintenance, motor repairs, house paint, and utility bills",
     expDescPh: "Expense description (e.g. Water pump motor repair)",
     expAmtPh: "Amount (BDT)",
     expSubmitBtn: "Log Expense",
-    expUpdateBtn: "Update Expense ⚙️",
+    expUpdateBtn: "Update Expense",
     expToggleLabel: "Add New Expense",
     thExpDate: "Date",
     thExpDesc: "Description",
@@ -306,12 +306,12 @@ export const translations = {
     thExpAct: "Action",
 
     // Shop Dues Section
-    dokanTitle: "✦ Shop Dues & Material Credit",
+    dokanTitle: "Shop Dues & Material Credit",
     dokanSubtitle: "Hardware, paint, and construction material shop credit logs",
     dokanDescPh: "Shop / Material details (e.g. Raju Hardware Paint)",
     dokanAmtPh: "Due Amount (BDT)",
     dokanSubmitBtn: "Log Credit Due",
-    dokanUpdateBtn: "Update Credit Due ⚙️",
+    dokanUpdateBtn: "Update Credit Due",
     dokanToggleLabel: "Add New Shop Due",
     thDokDate: "Date",
     thDokDesc: "Shop & Details",
@@ -319,7 +319,7 @@ export const translations = {
     thDokAct: "Action",
 
     // Analytics
-    analyticsTitle: "✦ Financial Insights & Charts",
+    analyticsTitle: "Financial Insights & Charts",
     analyticsSubtitle: "Visual revenue trends, collection efficiency, and expense analysis",
     chartIncomeVsExpense: "Monthly Income vs. Expenses",
     chartRentCollectionRate: "Rent Collection Rate (%)",
@@ -337,9 +337,9 @@ export const translations = {
     noData: "No records found",
 
     // Header & Modals
-    backupBtn: "📥 Backup JSON",
-    restoreBtn: "📤 Restore Data",
-    printBtn: "📄 PDF / Print Report",
+    backupBtn: "Backup JSON",
+    restoreBtn: "Restore Data",
+    printBtn: "PDF / Print Report",
     loginBtn: "Sign In",
     logoutBtn: "Sign Out",
     demoDataBtn: "Load Demo Data",

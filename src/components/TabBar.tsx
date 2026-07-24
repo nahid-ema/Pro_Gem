@@ -54,7 +54,7 @@ export const TabBar: React.FC<TabBarProps> = ({
             onClick={() => onTabChange(tab.id)}
             className={`flex items-center gap-2 px-3.5 py-2 rounded-lg font-semibold text-xs md:text-sm whitespace-nowrap transition-colors border shrink-0 ${
               isActive
-                ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                ? 'bg-[#e0533c] text-white border-[#e0533c] shadow-xs'
                 : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >

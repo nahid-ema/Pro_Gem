@@ -3,6 +3,12 @@
 @theme {
   --font-sans: 'Google Sans', 'Product Sans', 'Google Sans Text', 'Plus Jakarta Sans', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif;
   --font-mono: 'Google Sans', 'Product Sans', 'Google Sans Text', 'Plus Jakarta Sans', 'Noto Sans Bengali', monospace;
+
+  /* Premium Obsidian & Charcoal Dark Palette (replaces navy-blue tint slate in dark mode) */
+  --color-slate-950: #0a0a0d;
+  --color-slate-900: #131316;
+  --color-slate-800: #1e1e23;
+  --color-slate-700: #2f2f36;
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
