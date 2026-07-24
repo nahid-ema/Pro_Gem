@@ -732,7 +732,7 @@ export default function App() {
   const t = getTranslation(language);
 
   return (
-    <div className="min-h-screen bg-[#f3f4f6] dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans p-2 sm:p-4 md:p-6 transition-colors duration-300 relative">
+    <div className="min-h-screen bg-[#FBF3E8] dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans p-2 sm:p-4 md:p-6 transition-colors duration-300 relative">
       <div className="max-w-7xl mx-auto space-y-3 sm:space-y-4">
         {/* Printable Document Report Header (Only visible on PDF / Print) */}
         <div className="hidden print:block mb-6 pb-4 border-b-2 border-slate-900">
