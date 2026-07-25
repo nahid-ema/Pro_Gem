@@ -765,6 +765,8 @@ export default function App() {
           searchQuery={searchQuery}
           availableYears={availableYears}
           language={language}
+          activeTab={activeTab}
+          onTabChange={setActiveTab}
           onYearChange={setSelectedYear}
           onMonthChange={setSelectedMonth}
           onSearchChange={setSearchQuery}
