@@ -7,7 +7,6 @@ import {
   Tenant, 
   RentRecord, 
   Expense, 
-  RentalExpense,
   ShopDue, 
   UnpaidTenantItem 
 } from './types';
@@ -32,7 +31,6 @@ import { TenantsSection } from './components/TenantsSection';
 import { RentSection } from './components/RentSection';
 import { UnpaidSection } from './components/UnpaidSection';
 import { ExpenseSection } from './components/ExpenseSection';
-import { RentalExpenseSection } from './components/RentalExpenseSection';
 import { ShopDuesSection } from './components/ShopDuesSection';
 import { AnalyticsCharts } from './components/AnalyticsCharts';
 import { ReceiptModal } from './components/ReceiptModal';
@@ -40,7 +38,7 @@ import { AuthModal } from './components/AuthModal';
 import { LockScreen } from './components/LockScreen';
 import { Toast, ToastMessage } from './components/Toast';
 import { getTranslation } from './data/translations';
-import { initialRooms, initialTenants, initialRentRecords, initialExpenses, initialRentalExpenses, initialShopDues } from './data/sampleData';
+import { initialRooms, initialTenants, initialRentRecords, initialExpenses, initialShopDues } from './data/sampleData';
 
 export default function App() {
   // Application Settings State
@@ -70,7 +68,6 @@ export default function App() {
   const [tenants, setTenants] = useState<Tenant[]>([]);
   const [rents, setRents] = useState<RentRecord[]>([]);
   const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [rentalExpenses, setRentalExpenses] = useState<RentalExpense[]>([]);
   const [dokanDues, setDokanDues] = useState<ShopDue[]>([]);
 
   // Auth & Modal States
@@ -107,12 +104,11 @@ export default function App() {
 
   // Load local data on boot
   useEffect(() => {
-    const { rooms: r, tenants: t, rents: rt, expenses: e, rentalExpenses: re, dokan: d } = loadInitialData();
+    const { rooms: r, tenants: t, rents: rt, expenses: e, dokan: d } = loadInitialData();
     setRooms(r);
     setTenants(t);
     setRents(rt);
     setExpenses(e);
-    setRentalExpenses(re);
     setDokanDues(d);
   }, []);
 
@@ -121,7 +117,6 @@ export default function App() {
   useEffect(() => { safeSetItem(STORAGE_KEYS.TENANTS, tenants); }, [tenants]);
   useEffect(() => { safeSetItem(STORAGE_KEYS.RENTS, rents); }, [rents]);
   useEffect(() => { safeSetItem(STORAGE_KEYS.EXPENSES, expenses); }, [expenses]);
-  useEffect(() => { safeSetItem(STORAGE_KEYS.RENTAL_EXPENSES, rentalExpenses); }, [rentalExpenses]);
   useEffect(() => { safeSetItem(STORAGE_KEYS.DOKAN, dokanDues); }, [dokanDues]);
 
   // Auth Listener
@@ -146,7 +141,6 @@ export default function App() {
           tenants,
           rents,
           expenses,
-          rentalExpenses,
           dokanDues,
           ownerEmail,
           updatedAt: new Date().toISOString(),
@@ -166,7 +160,7 @@ export default function App() {
     }, 1200);
 
     return () => clearTimeout(syncTimer);
-  }, [rooms, tenants, rents, expenses, rentalExpenses, dokanDues, currentUser]);
+  }, [rooms, tenants, rents, expenses, dokanDues, currentUser]);
 
   // Firebase Console Cloud Backup
   const handleFirebaseCloudBackup = async () => {
@@ -180,7 +174,6 @@ export default function App() {
         tenants,
         rents,
         expenses,
-        rentalExpenses,
         dokanDues,
         ownerEmail,
         updatedAt: new Date().toISOString(),
@@ -201,9 +194,6 @@ export default function App() {
       }
       for (const e of expenses) {
         if (e.id) await setDoc(doc(db, 'expenses', e.id), e, { merge: true });
-      }
-      for (const rex of rentalExpenses) {
-        if (rex.id) await setDoc(doc(db, 'rentalExpenses', rex.id), rex, { merge: true });
       }
       for (const d of dokanDues) {
         if (d.id) await setDoc(doc(db, 'dokanBaki', d.id), d, { merge: true });
@@ -235,7 +225,6 @@ export default function App() {
         if (Array.isArray(data.tenants)) setTenants(data.tenants);
         if (Array.isArray(data.rents)) setRents(data.rents);
         if (Array.isArray(data.expenses)) setExpenses(data.expenses);
-        if (Array.isArray(data.rentalExpenses)) setRentalExpenses(data.rentalExpenses);
         if (Array.isArray(data.dokanDues)) setDokanDues(data.dokanDues);
         showToast(
           language === 'bn' 
@@ -342,15 +331,6 @@ export default function App() {
       }
     }, () => {});
 
-    const unsubRentalExp = onSnapshot(collection(db, 'rentalExpenses'), (snap) => {
-      if (!snap.empty) {
-        const items: RentalExpense[] = [];
-        snap.forEach((docSnap) => items.push({ id: docSnap.id, ...docSnap.data() } as RentalExpense));
-        items.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-        setRentalExpenses(items);
-      }
-    }, () => {});
-
     const unsubDok = onSnapshot(collection(db, 'dokanBaki'), (snap) => {
       if (!snap.empty) {
         const items: ShopDue[] = [];
@@ -365,7 +345,6 @@ export default function App() {
       unsubTenants();
       unsubRents();
       unsubExp();
-      unsubRentalExp();
       unsubDok();
     };
   }, []);
@@ -378,7 +357,7 @@ export default function App() {
     years.add(String(thisYear));
     years.add(String(thisYear + 1));
 
-    [...(rents || []), ...(expenses || []), ...(rentalExpenses || []), ...(dokanDues || [])].forEach((item) => {
+    [...(rents || []), ...(expenses || []), ...(dokanDues || [])].forEach((item) => {
       if (item && item.date) {
         const match = item.date.match(/^(\d{4})-/);
         if (match) years.add(match[1]);
@@ -386,7 +365,7 @@ export default function App() {
     });
 
     return Array.from(years).sort((a, b) => Number(b) - Number(a));
-  }, [rents, expenses, rentalExpenses, dokanDues]);
+  }, [rents, expenses, dokanDues]);
 
   // Calculate Unpaid Tenants for Selected Period
   const unpaidTenantItems = useMemo<UnpaidTenantItem[]>(() => {
@@ -458,16 +437,6 @@ export default function App() {
     });
   }, [expenses, selectedYear, selectedMonth]);
 
-  const filteredRentalExpensesForTotals = useMemo(() => {
-    return (rentalExpenses || []).filter((rex) => {
-      if (!rex || !rex.date) return false;
-      const [y, m] = rex.date.split('-');
-      const matchY = selectedYear === 'all' || y === selectedYear;
-      const matchM = selectedMonth === 'all' || m === selectedMonth;
-      return matchY && matchM;
-    });
-  }, [rentalExpenses, selectedYear, selectedMonth]);
-
   const filteredDokanForTotals = useMemo(() => {
     return (dokanDues || []).filter((dk) => {
       if (!dk || !dk.date) return false;
@@ -497,9 +466,8 @@ export default function App() {
 
   const totalOutstandingDue = Math.max(0, totalExpectedRent - totalCollectedIncome);
   const totalExpensesSum = filteredExpensesForTotals.reduce((acc, ex) => acc + (ex.amount || 0), 0);
-  const totalRentalExpensesSum = filteredRentalExpensesForTotals.reduce((acc, rex) => acc + (rex.amount || 0), 0);
   const totalShopDuesSum = filteredDokanForTotals.reduce((acc, dk) => acc + (dk.amount || 0), 0);
-  const totalEntriesCount = filteredRentsForTotals.length + filteredExpensesForTotals.length + filteredRentalExpensesForTotals.length + filteredDokanForTotals.length;
+  const totalEntriesCount = filteredRentsForTotals.length + filteredExpensesForTotals.length + filteredDokanForTotals.length;
 
   // Handler Functions
   const handleAddRoom = async (roomData: Omit<Room, 'id'>) => {
@@ -614,34 +582,6 @@ export default function App() {
     }
   };
 
-  const handleAddRentalExpense = async (expenseData: Omit<RentalExpense, 'id'>) => {
-    const newExpense: RentalExpense = { id: `rexp-${Date.now()}`, ...expenseData };
-    setRentalExpenses((prev) => [...prev, newExpense]);
-    showToast(language === 'bn' ? 'রেন্টাল খরচ রেকর্ড করা হয়েছে!' : 'Rental expense logged!');
-
-    if (db) {
-      try { await setDoc(doc(db, 'rentalExpenses', newExpense.id), newExpense); } catch (e) {}
-    }
-  };
-
-  const handleUpdateRentalExpense = async (id: string, expenseData: Omit<RentalExpense, 'id'>) => {
-    setRentalExpenses((prev) => prev.map((e) => (e.id === id ? { ...e, ...expenseData } : e)));
-    showToast(language === 'bn' ? 'রেন্টাল খরচ আপডেট করা হয়েছে!' : 'Rental expense updated!');
-
-    if (db) {
-      try { await setDoc(doc(db, 'rentalExpenses', id), { ...expenseData, id }, { merge: true }); } catch (e) {}
-    }
-  };
-
-  const handleDeleteRentalExpense = async (id: string) => {
-    setRentalExpenses((prev) => prev.filter((e) => e.id !== id));
-    showToast(language === 'bn' ? 'রেন্টাল খরচ মুছে ফেলা হয়েছে!' : 'Rental expense deleted.', 'info');
-
-    if (db) {
-      try { await deleteDoc(doc(db, 'rentalExpenses', id)); } catch (e) {}
-    }
-  };
-
   const handleAddDokanDue = async (dueData: Omit<ShopDue, 'id'>) => {
     const newDue: ShopDue = { id: `dok-${Date.now()}`, ...dueData };
     setDokanDues((prev) => [...prev, newDue]);
@@ -681,7 +621,7 @@ export default function App() {
   };
 
   const handleTriggerBackup = () => {
-    exportBackupJSON(rooms, tenants, rents, expenses, dokanDues, rentalExpenses);
+    exportBackupJSON(rooms, tenants, rents, expenses, dokanDues);
     showToast(language === 'bn' ? 'ব্যাকআপ ফাইল ডাউনলোড হয়েছে!' : 'Backup JSON downloaded successfully!');
   };
 
@@ -704,12 +644,11 @@ export default function App() {
           mergedTenants,
           mergedRents,
           mergedExpenses,
-          mergedRentalExpenses,
           mergedDokan,
           addedCount,
           updatedCount,
           totalImportedCount
-        } = validateAndMergeBackup(json, rooms, tenants, rents, expenses, dokanDues, rentalExpenses);
+        } = validateAndMergeBackup(json, rooms, tenants, rents, expenses, dokanDues);
 
         if (totalImportedCount === 0) {
           showToast(
@@ -725,14 +664,12 @@ export default function App() {
         setTenants(mergedTenants);
         setRents(mergedRents);
         setExpenses(mergedExpenses);
-        setRentalExpenses(mergedRentalExpenses);
         setDokanDues(mergedDokan);
 
         safeSetItem(STORAGE_KEYS.ROOMS, mergedRooms);
         safeSetItem(STORAGE_KEYS.TENANTS, mergedTenants);
         safeSetItem(STORAGE_KEYS.RENTS, mergedRents);
         safeSetItem(STORAGE_KEYS.EXPENSES, mergedExpenses);
-        safeSetItem(STORAGE_KEYS.RENTAL_EXPENSES, mergedRentalExpenses);
         safeSetItem(STORAGE_KEYS.DOKAN, mergedDokan);
 
         const totalMerged = addedCount + updatedCount;
@@ -851,7 +788,6 @@ export default function App() {
                 totalCollectedIncome={totalCollectedIncome}
                 totalOutstandingDue={totalOutstandingDue}
                 totalExpenses={totalExpensesSum}
-                totalRentalExpenses={totalRentalExpensesSum}
                 totalShopDues={totalShopDuesSum}
                 totalEntriesCount={totalEntriesCount}
                 selectedYear={selectedYear}
@@ -940,20 +876,6 @@ export default function App() {
             />
           )}
 
-          {/* 6.5. Rental Expenses */}
-          {activeTab === 'rentalExpense' && (
-            <RentalExpenseSection
-              rentalExpenses={rentalExpenses}
-              language={language}
-              searchQuery={searchQuery}
-              selectedYear={selectedYear}
-              selectedMonth={selectedMonth}
-              onAddRentalExpense={handleAddRentalExpense}
-              onUpdateRentalExpense={handleUpdateRentalExpense}
-              onDeleteRentalExpense={handleDeleteRentalExpense}
-            />
-          )}
-
           {/* 7. Shop Dues */}
           {activeTab === 'dokan' && (
             <ShopDuesSection
@@ -973,7 +895,6 @@ export default function App() {
             <AnalyticsCharts
               rents={rents}
               expenses={expenses}
-              rentalExpenses={rentalExpenses}
               dokanDues={dokanDues}
               language={language}
             />

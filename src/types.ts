@@ -1,6 +1,6 @@
 export type Language = 'bn' | 'en';
 export type Theme = 'light' | 'dark';
-export type TabType = 'brief' | 'rooms' | 'tenants' | 'rent' | 'unpaid' | 'expense' | 'rentalExpense' | 'dokan' | 'analytics';
+export type TabType = 'brief' | 'rooms' | 'tenants' | 'rent' | 'unpaid' | 'expense' | 'dokan' | 'analytics';
 
 export interface Room {
   id: string;
@@ -44,14 +44,6 @@ export interface Expense {
   createdAt?: string;
 }
 
-export interface RentalExpense {
-  id: string;
-  date: string; // YYYY-MM-DD
-  desc: string; // বিবরণ
-  amount: number; // টাকা
-  createdAt?: string;
-}
-
 export interface ShopDue {
   id: string;
   date: string; // YYYY-MM-DD
@@ -66,7 +58,6 @@ export interface BackupData {
   tenants: Omit<Tenant, 'id'>[] | Tenant[];
   rents: Omit<RentRecord, 'id'>[] | RentRecord[];
   expenses: Omit<Expense, 'id'>[] | Expense[];
-  rentalExpenses?: Omit<RentalExpense, 'id'>[] | RentalExpense[];
   dokanBaki: Omit<ShopDue, 'id'>[] | ShopDue[];
   exportDate?: string;
   version?: string;

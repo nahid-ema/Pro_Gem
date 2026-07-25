@@ -21,7 +21,6 @@ export const translations = {
     tabRent: "ভাড়া আদায়",
     tabUnpaid: "অনাদায়ী",
     tabExpense: "খরচ",
-    tabRentalExpense: "ভাড়া বাড়ি খরচ",
     tabDokan: "দোকান বাকি",
     tabAnalytics: "অ্যানালিটিক্স",
 
@@ -30,11 +29,10 @@ export const translations = {
     briefRentLbl: "মোট আনুমানিক ভাড়া",
     briefIncomeLbl: "মোট সংগৃহীত আদায়",
     briefDueLbl: "মোট অবশিষ্ট বকেয়া",
-    briefExpLbl: "মোট খরচ",
-    briefRentalExpLbl: "মোট ভাড়া বাড়ি খরচ",
+    briefExpLbl: "মোট পরিচালনা খরচ",
     briefDokLbl: "মোট দোকান বাকি",
     briefEntriesLbl: "মোট লেনদেন এন্ট্রি",
-    briefNetLbl: "নেট ক্যাশফ্লো পজিশন (আদায় − খরচ − ভাড়া বাড়ি খরচ − দোকান বাকি)",
+    briefNetLbl: "নেট ক্যাশফ্লো পজিশন (আদায় − খরচ − দোকান বাকি)",
     collectionProgress: "ভাড়া সংগ্রহের অগ্রগতি",
 
     // Room Section
@@ -111,8 +109,8 @@ export const translations = {
     quickPay: "দ্রুত জমা",
 
     // Expense Section
-    expenseTitle: "খরচ",
-    expenseSubtitle: "বাজার খরচ, ঘর রক্ষণাবেক্ষণ ও দৈনন্দিন খরচের হিসাব",
+    expenseTitle: "বাসাবাড়ির খরচ ট্র্যাকার",
+    expenseSubtitle: "রক্ষণাবেক্ষণ, মেরামত, মোটর ও বিদ্যুত বিল সম্পর্কিত খরচ",
     expDescPh: "খরচের বিবরণ (যেমন: পানির পাম্প মেরামত)",
     expAmtPh: "খরচের পরিমাণ (টাকা)",
     expSubmitBtn: "খরচ যোগ করুন",
@@ -120,21 +118,14 @@ export const translations = {
     expToggleLabel: "নতুন খরচ লিখুন",
     thExpDate: "তারিখ",
     thExpDesc: "বিবরণ",
+    thExpCategory: "খরচের ধরন",
     thExpAmt: "টাকা",
     thExpAct: "অ্যাকশন",
-
-    // Rental Expense Section
-    rentalExpTitle: "ভাড়া বাড়ি খরচ",
-    rentalExpSubtitle: "ভাড়া সংক্রান্ত ব্যয়, হোল্ডিং ট্যাক্স, এজেন্ট কমিশন ও প্রপার্টি পরিচালনার খরচ",
-    rentalExpDescPh: "বিবরণ (যেমন: হোল্ডিং ট্যাক্স, প্রপার্টি ক্লিনিং বা লিগ্যাল ফি)",
-    rentalExpAmtPh: "টাকা (টাকা)",
-    rentalExpSubmitBtn: "ভাড়া বাড়ি খরচ রেকর্ড করুন",
-    rentalExpUpdateBtn: "ভাড়া বাড়ি খরচ আপডেট করুন",
-    rentalExpToggleLabel: "নতুন ভাড়া বাড়ি খরচ যোগ করুন",
-    thRentalExpDate: "তারিখ",
-    thRentalExpDesc: "বিবরণ",
-    thRentalExpAmt: "টাকা",
-    thRentalExpAct: "অ্যাকশন",
+    expCategoryLbl: "খরচের ধরন / খাত",
+    expCategoryPh: "খরচের ধরন বাছাই বা নতুন লিখুন",
+    expCategoryAll: "সব ধরনের খরচ",
+    customCategoryPh: "নতুন খরচের ধরন লিখুন...",
+    optCustomCategory: "অন্যান্য (কাস্টম লিখুন...)",
 
     // Shop Dues Section
     dokanTitle: "দোকান বাকি (মেটেরিয়াল ও হার্ডওয়্যার)",
@@ -220,7 +211,6 @@ export const translations = {
     tabRent: "Rent Collection",
     tabUnpaid: "Unpaid Dues",
     tabExpense: "Expenses",
-    tabRentalExpense: "Rental Expenses",
     tabDokan: "Shop Dues",
     tabAnalytics: "Analytics",
 
@@ -229,11 +219,10 @@ export const translations = {
     briefRentLbl: "Total Estimated Rent",
     briefIncomeLbl: "Total Collected Income",
     briefDueLbl: "Total Outstanding Due",
-    briefExpLbl: "Total Expenses",
-    briefRentalExpLbl: "Total Rental Expenses",
+    briefExpLbl: "Total Operating Expenses",
     briefDokLbl: "Total Shop Credit Dues",
     briefEntriesLbl: "Total Transaction Records",
-    briefNetLbl: "Net Cashflow Position (Income − Expense − Rental Expense − Shop Dues)",
+    briefNetLbl: "Net Cashflow Position (Income − Expense − Shop Dues)",
     collectionProgress: "Rent Collection Efficiency",
 
     // Room Section
@@ -310,8 +299,8 @@ export const translations = {
     quickPay: "Quick Pay",
 
     // Expense Section
-    expenseTitle: "Expenses",
-    expenseSubtitle: "Daily market shopping, household maintenance, and daily expenses",
+    expenseTitle: "Property Operating Expenses",
+    expenseSubtitle: "Maintenance, motor repairs, house paint, and utility bills",
     expDescPh: "Expense description (e.g. Water pump motor repair)",
     expAmtPh: "Amount (BDT)",
     expSubmitBtn: "Log Expense",
@@ -319,21 +308,14 @@ export const translations = {
     expToggleLabel: "Add New Expense",
     thExpDate: "Date",
     thExpDesc: "Description",
+    thExpCategory: "Expense Type",
     thExpAmt: "Amount",
     thExpAct: "Action",
-
-    // Rental Expense Section
-    rentalExpTitle: "Rental Expenses",
-    rentalExpSubtitle: "Track rental property costs, holding taxes, agent fees, and rental overheads",
-    rentalExpDescPh: "Description (e.g. Holding tax, rental agreement, agent fee)",
-    rentalExpAmtPh: "Amount (BDT)",
-    rentalExpSubmitBtn: "Log Rental Expense",
-    rentalExpUpdateBtn: "Update Rental Expense",
-    rentalExpToggleLabel: "Add New Rental Expense",
-    thRentalExpDate: "Date",
-    thRentalExpDesc: "Description",
-    thRentalExpAmt: "Amount",
-    thRentalExpAct: "Action",
+    expCategoryLbl: "Expense Type / Category",
+    expCategoryPh: "Select or type expense category",
+    expCategoryAll: "All Expense Types",
+    customCategoryPh: "Type custom expense category...",
+    optCustomCategory: "Other (Type custom...)",
 
     // Shop Dues Section
     dokanTitle: "Shop Dues & Material Credit",

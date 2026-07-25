@@ -1,5 +1,5 @@
 import React from 'react';
-import { RentRecord, Expense, RentalExpense, ShopDue, Language } from '../types';
+import { RentRecord, Expense, ShopDue, Language } from '../types';
 import { getTranslation } from '../data/translations';
 import { 
   BarChart, 
@@ -18,7 +18,6 @@ import { LineChart as LineChartIcon, TrendingUp, PieChart as PieChartIcon } from
 interface AnalyticsChartsProps {
   rents: RentRecord[];
   expenses: Expense[];
-  rentalExpenses?: RentalExpense[];
   dokanDues: ShopDue[];
   language: Language;
 }
@@ -26,7 +25,6 @@ interface AnalyticsChartsProps {
 export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
   rents = [],
   expenses = [],
-  rentalExpenses = [],
   dokanDues = [],
   language,
 }) => {
@@ -34,7 +32,6 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
 
   const safeRents = Array.isArray(rents) ? rents : [];
   const safeExpenses = Array.isArray(expenses) ? expenses : [];
-  const safeRentalExpenses = Array.isArray(rentalExpenses) ? rentalExpenses : [];
   const safeDokanDues = Array.isArray(dokanDues) ? dokanDues : [];
 
   // Group by Month (Jan-Dec) for current year
@@ -89,12 +86,31 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
     { name: language === 'bn' ? 'দোকান বাকি' : 'Shop Credit Dues', value: totalShopDues, color: '#f59e0b' },
   ].filter(item => item.value > 0);
 
+  // Calculate Expense Categories Breakdown
+  const categoryMap = new Map<string, number>();
+  safeExpenses.forEach((ex) => {
+    const cat = ex.category || 'General';
+    const prev = categoryMap.get(cat) || 0;
+    categoryMap.set(cat, prev + (ex.amount || 0));
+  });
+
+  const categoryColors = ['#6366f1', '#ec4899', '#14b8a6', '#f97316', '#8b5cf6', '#06b6d4', '#eab308', '#3b82f6', '#a855f7'];
+
+  const expenseCategoryData = Array.from(categoryMap.entries())
+    .map(([name, value], idx) => ({
+      name,
+      value,
+      color: categoryColors[idx % categoryColors.length],
+    }))
+    .filter((item) => item.value > 0)
+    .sort((a, b) => b.value - a.value);
+
   const formatCurrency = (val: number) => `${t.currencySymbol}${val.toLocaleString()}`;
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl md:rounded-3xl p-5 md:p-6 mb-6 shadow-sm">
+    <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl md:rounded-3xl p-5 md:p-6 mb-6 shadow-sm space-y-6">
       {/* Title */}
-      <div className="flex items-center gap-3 pb-4 mb-6 border-b border-slate-100 dark:border-slate-800">
+      <div className="flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
         <div className="w-9 h-9 rounded-2xl bg-[#fdf0ed] dark:bg-slate-800 text-[#e0533c] dark:text-[#f87171] flex items-center justify-center font-bold text-base">
           <LineChartIcon className="w-4 h-4" />
         </div>
@@ -182,6 +198,73 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Expense Type / Category Breakdown Chart */}
+      {expenseCategoryData.length > 0 && (
+        <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <PieChartIcon className="w-4 h-4 text-[#e0533c]" />
+              <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
+                {t.chartExpenseCategories} ({language === 'bn' ? 'খাতভিত্তিক খরচ' : 'Expense Category Breakdown'})
+              </h4>
+            </div>
+            <span className="text-xs font-bold text-rose-600 dark:text-rose-400">
+              {formatCurrency(totalExpenses)}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+            <div className="h-56 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={expenseCategoryData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={45}
+                    outerRadius={75}
+                    paddingAngle={3}
+                    dataKey="value"
+                  >
+                    {expenseCategoryData.map((entry, index) => (
+                      <Cell key={`cat-cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#0f172a',
+                      borderColor: '#334155',
+                      borderRadius: '8px',
+                      color: '#fff',
+                      fontSize: '11px',
+                    }}
+                    formatter={(value: any) => [formatCurrency(Number(value) || 0), '']}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="space-y-2 max-h-56 overflow-y-auto pr-2">
+              {expenseCategoryData.map((catItem) => {
+                const pct = totalExpenses > 0 ? ((catItem.value / totalExpenses) * 100).toFixed(1) : '0';
+                return (
+                  <div key={catItem.name} className="flex items-center justify-between text-xs p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: catItem.color }} />
+                      <span className="font-medium text-slate-800 dark:text-slate-200 truncate">{catItem.name}</span>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="font-bold text-slate-900 dark:text-white">{formatCurrency(catItem.value)}</span>
+                      <span className="text-[10px] text-slate-400 font-mono">({pct}%)</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
