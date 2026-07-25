@@ -20,6 +20,7 @@ interface BriefDashboardProps {
   totalCollectedIncome: number;
   totalOutstandingDue: number;
   totalExpenses: number;
+  totalRentalExpenses?: number;
   totalShopDues: number;
   totalEntriesCount: number;
   selectedYear: string;
@@ -32,6 +33,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
   totalCollectedIncome,
   totalOutstandingDue,
   totalExpenses,
+  totalRentalExpenses = 0,
   totalShopDues,
   totalEntriesCount,
   selectedYear,
@@ -39,7 +41,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
 }) => {
   const t = getTranslation(language);
 
-  const netCashFlow = totalCollectedIncome - totalExpenses - totalShopDues;
+  const netCashFlow = totalCollectedIncome - totalExpenses - totalRentalExpenses - totalShopDues;
   const isNetPositive = netCashFlow >= 0;
 
   const collectionPercentage = totalExpectedRent > 0 
@@ -94,82 +96,95 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
         </div>
       </div>
 
-      {/* 6 Key Stat Cards Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-5">
+      {/* Key Stat Cards Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-5">
         {/* Total Rent Expected */}
-        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
+        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 shadow-xs">
           <div className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-1 truncate">
             {t.briefRentLbl}
           </div>
-          <p className="text-sm sm:text-lg md:text-xl font-bold text-slate-900 dark:text-white truncate">
+          <p className="text-sm sm:text-base md:text-lg font-bold text-slate-900 dark:text-white truncate">
             {formatCurrency(totalExpectedRent)}
           </p>
-          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 sm:mt-3 overflow-hidden">
+          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 overflow-hidden">
             <div className="w-full h-full bg-[#e0533c]"></div>
           </div>
         </div>
 
         {/* Total Collected Income */}
-        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
+        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 shadow-xs">
           <div className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-1 truncate">
             {t.briefIncomeLbl}
           </div>
-          <p className="text-sm sm:text-lg md:text-xl font-bold text-emerald-600 dark:text-emerald-400 truncate">
+          <p className="text-sm sm:text-base md:text-lg font-bold text-emerald-600 dark:text-emerald-400 truncate">
             {formatCurrency(totalCollectedIncome)}
           </p>
-          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 sm:mt-3 overflow-hidden">
+          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 overflow-hidden">
             <div className="w-full h-full bg-emerald-500" style={{ width: `${collectionPercentage}%` }}></div>
           </div>
         </div>
 
         {/* Total Outstanding Due */}
-        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
+        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 shadow-xs">
           <div className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-1 truncate">
             {t.briefDueLbl}
           </div>
-          <p className="text-sm sm:text-lg md:text-xl font-bold text-rose-600 dark:text-rose-400 truncate">
+          <p className="text-sm sm:text-base md:text-lg font-bold text-rose-600 dark:text-rose-400 truncate">
             {formatCurrency(totalOutstandingDue)}
           </p>
-          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 sm:mt-3 overflow-hidden">
+          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 overflow-hidden">
             <div className="w-full h-full bg-rose-500"></div>
           </div>
         </div>
 
         {/* Total Operating Expenses */}
-        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
+        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 shadow-xs">
           <div className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-1 truncate">
             {t.briefExpLbl}
           </div>
-          <p className="text-sm sm:text-lg md:text-xl font-bold text-slate-900 dark:text-white truncate">
+          <p className="text-sm sm:text-base md:text-lg font-bold text-slate-900 dark:text-white truncate">
             {formatCurrency(totalExpenses)}
           </p>
-          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 sm:mt-3 overflow-hidden">
+          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 overflow-hidden">
             <div className="w-full h-full bg-amber-500"></div>
           </div>
         </div>
 
+        {/* Total Rental Expenses */}
+        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 shadow-xs">
+          <div className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-1 truncate">
+            {t.briefRentalExpLbl}
+          </div>
+          <p className="text-sm sm:text-base md:text-lg font-bold text-amber-600 dark:text-amber-400 truncate">
+            {formatCurrency(totalRentalExpenses)}
+          </p>
+          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 overflow-hidden">
+            <div className="w-full h-full bg-amber-600"></div>
+          </div>
+        </div>
+
         {/* Total Shop Dues */}
-        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
+        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 shadow-xs">
           <div className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-1 truncate">
             {t.briefDokLbl}
           </div>
-          <p className="text-sm sm:text-lg md:text-xl font-bold text-slate-900 dark:text-white truncate">
+          <p className="text-sm sm:text-base md:text-lg font-bold text-slate-900 dark:text-white truncate">
             {formatCurrency(totalShopDues)}
           </p>
-          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 sm:mt-3 overflow-hidden">
+          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 overflow-hidden">
             <div className="w-full h-full bg-orange-500"></div>
           </div>
         </div>
 
         {/* Total Entries Count */}
-        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
+        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-3.5 shadow-xs">
           <div className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-1 truncate">
             {t.briefEntriesLbl}
           </div>
-          <p className="text-sm sm:text-lg md:text-xl font-bold text-slate-900 dark:text-white truncate">
+          <p className="text-sm sm:text-base md:text-lg font-bold text-slate-900 dark:text-white truncate">
             {totalEntriesCount}
           </p>
-          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 sm:mt-3 overflow-hidden">
+          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 overflow-hidden">
             <div className="w-full h-full bg-blue-500"></div>
           </div>
         </div>

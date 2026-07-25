@@ -8,6 +8,7 @@ import {
   Banknote, 
   AlertTriangle, 
   Receipt, 
+  Wallet,
   Store, 
   LineChart 
 } from 'lucide-react';
@@ -32,13 +33,14 @@ export const TabBar: React.FC<TabBarProps> = ({
   const t = getTranslation(language);
 
   const tabs: { id: TabType; label: string; icon: React.ReactNode; badge?: number | string }[] = [
-    { id: 'brief', label: t.tabBrief, icon: <BarChart3 className="w-4 h-4" /> },
-    { id: 'rooms', label: t.tabRooms, icon: <DoorClosed className="w-4 h-4" />, badge: totalRoomsCount },
-    { id: 'tenants', label: t.tabTenants, icon: <Users className="w-4 h-4" />, badge: totalTenantsCount },
+    { id: 'expense', label: t.tabExpense, icon: <Receipt className="w-4 h-4" /> },
+    { id: 'rentalExpense', label: t.tabRentalExpense, icon: <Wallet className="w-4 h-4" /> },
+    { id: 'dokan', label: t.tabDokan, icon: <Store className="w-4 h-4" /> },
     { id: 'rent', label: t.tabRent, icon: <Banknote className="w-4 h-4" /> },
     { id: 'unpaid', label: t.tabUnpaid, icon: <AlertTriangle className="w-4 h-4" />, badge: unpaidCount > 0 ? unpaidCount : undefined },
-    { id: 'expense', label: t.tabExpense, icon: <Receipt className="w-4 h-4" /> },
-    { id: 'dokan', label: t.tabDokan, icon: <Store className="w-4 h-4" /> },
+    { id: 'rooms', label: t.tabRooms, icon: <DoorClosed className="w-4 h-4" />, badge: totalRoomsCount },
+    { id: 'tenants', label: t.tabTenants, icon: <Users className="w-4 h-4" />, badge: totalTenantsCount },
+    { id: 'brief', label: t.tabBrief, icon: <BarChart3 className="w-4 h-4" /> },
     { id: 'analytics', label: t.tabAnalytics, icon: <LineChart className="w-4 h-4" /> },
   ];
 

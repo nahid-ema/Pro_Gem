@@ -1,5 +1,5 @@
-import { Room, Tenant, RentRecord, Expense, ShopDue, BackupData } from '../types';
-import { initialRooms, initialTenants, initialRentRecords, initialExpenses, initialShopDues } from '../data/sampleData';
+import { Room, Tenant, RentRecord, Expense, RentalExpense, ShopDue, BackupData } from '../types';
+import { initialRooms, initialTenants, initialRentRecords, initialExpenses, initialRentalExpenses, initialShopDues } from '../data/sampleData';
 import { db } from './firebase';
 import { collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, writeBatch, getDocs } from 'firebase/firestore';
 
@@ -8,6 +8,7 @@ const STORAGE_KEYS = {
   TENANTS: 'nk_tenants_v3',
   RENTS: 'nk_rents_v3',
   EXPENSES: 'nk_expenses_v3',
+  RENTAL_EXPENSES: 'nk_rental_expenses_v1',
   DOKAN: 'nk_dokan_v3',
   THEME: 'nk_theme_v2',
   LANG: 'nk_lang_v2',
@@ -41,6 +42,7 @@ export function loadInitialData() {
   const tenants = safeGetItem<Tenant[]>(STORAGE_KEYS.TENANTS, initialTenants);
   const rents = safeGetItem<RentRecord[]>(STORAGE_KEYS.RENTS, initialRentRecords);
   const expenses = safeGetItem<Expense[]>(STORAGE_KEYS.EXPENSES, initialExpenses);
+  const rentalExpenses = safeGetItem<RentalExpense[]>(STORAGE_KEYS.RENTAL_EXPENSES, initialRentalExpenses);
   const dokan = safeGetItem<ShopDue[]>(STORAGE_KEYS.DOKAN, initialShopDues);
 
   return {
@@ -48,6 +50,7 @@ export function loadInitialData() {
     tenants: Array.isArray(tenants) ? tenants : initialTenants,
     rents: Array.isArray(rents) ? rents : initialRentRecords,
     expenses: Array.isArray(expenses) ? expenses : initialExpenses,
+    rentalExpenses: Array.isArray(rentalExpenses) ? rentalExpenses : initialRentalExpenses,
     dokan: Array.isArray(dokan) ? dokan : initialShopDues,
   };
 }
@@ -57,13 +60,15 @@ export function exportBackupJSON(
   tenants: Tenant[],
   rents: RentRecord[],
   expenses: Expense[],
-  dokan: ShopDue[]
+  dokan: ShopDue[],
+  rentalExpenses?: RentalExpense[]
 ) {
   const backup: BackupData = {
     rooms,
     tenants,
     rents,
     expenses,
+    rentalExpenses,
     dokanBaki: dokan,
     exportDate: new Date().toISOString(),
     version: '2.0-react'
@@ -91,12 +96,14 @@ export function validateAndMergeBackup(
   currentTenants: Tenant[],
   currentRents: RentRecord[],
   currentExpenses: Expense[],
-  currentDokan: ShopDue[]
+  currentDokan: ShopDue[],
+  currentRentalExpenses: RentalExpense[] = []
 ): {
   mergedRooms: Room[];
   mergedTenants: Tenant[];
   mergedRents: RentRecord[];
   mergedExpenses: Expense[];
+  mergedRentalExpenses: RentalExpense[];
   mergedDokan: ShopDue[];
   addedCount: number;
   updatedCount: number;
@@ -296,11 +303,46 @@ export function validateAndMergeBackup(
     }
   });
 
+  // 6. Merge Rental Expenses
+  const importedRentalExpenses = Array.isArray(importedData.rentalExpenses)
+    ? importedData.rentalExpenses
+    : (Array.isArray(importedData.RentalExpenses) ? importedData.RentalExpenses : []);
+
+  const newRentalExpenses = [...currentRentalExpenses];
+  importedRentalExpenses.forEach((rex: any) => {
+    if (!rex) return;
+    totalImportedCount++;
+    const date = String(rex.date || '').trim();
+    const desc = String(rex.desc || '').trim();
+    const amount = Number(rex.amount) || 0;
+    if (!date || !desc) return;
+
+    const existingIdx = newRentalExpenses.findIndex((x) =>
+      safeIdMatch(x.id, rex.id) || (x.date === date && x.desc.trim().toLowerCase() === desc.toLowerCase() && x.amount === amount)
+    );
+
+    const rexObj: RentalExpense = {
+      id: rex.id || (existingIdx !== -1 ? newRentalExpenses[existingIdx].id : `rex-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`),
+      date,
+      desc,
+      amount,
+    };
+
+    if (existingIdx !== -1) {
+      newRentalExpenses[existingIdx] = rexObj;
+      updatedCount++;
+    } else {
+      newRentalExpenses.push(rexObj);
+      addedCount++;
+    }
+  });
+
   return {
     mergedRooms: newRooms,
     mergedTenants: newTenants,
     mergedRents: newRents,
     mergedExpenses: newExpenses,
+    mergedRentalExpenses: newRentalExpenses,
     mergedDokan: newDokan,
     addedCount,
     updatedCount,

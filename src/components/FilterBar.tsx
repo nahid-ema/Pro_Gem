@@ -16,6 +16,7 @@ import {
   Banknote,
   AlertTriangle,
   Receipt,
+  Wallet,
   Store,
   LineChart
 } from 'lucide-react';
@@ -68,13 +69,14 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   }, []);
 
   const navItems: { id: TabType; labelEn: string; labelBn: string; icon: React.ReactNode }[] = [
-    { id: 'brief', labelEn: 'Summary', labelBn: 'সারসংক্ষেপ', icon: <BarChart3 className="w-4 h-4 text-[#e0533c]" /> },
-    { id: 'rooms', labelEn: 'Rooms', labelBn: 'রুমসমূহ', icon: <DoorClosed className="w-4 h-4 text-blue-500" /> },
-    { id: 'tenants', labelEn: 'Tenants', labelBn: 'ভাড়াটিয়া', icon: <Users className="w-4 h-4 text-emerald-500" /> },
+    { id: 'expense', labelEn: 'Bajar Khoroch', labelBn: 'বাজার খরচ', icon: <Receipt className="w-4 h-4 text-purple-500" /> },
+    { id: 'rentalExpense', labelEn: 'Rental Expense', labelBn: 'ভাড়া বাড়ি খরচ', icon: <Wallet className="w-4 h-4 text-amber-600" /> },
+    { id: 'dokan', labelEn: 'Shop Dues', labelBn: 'দোকান বাকি', icon: <Store className="w-4 h-4 text-orange-500" /> },
     { id: 'rent', labelEn: 'Rent Collection', labelBn: 'ভাড়া আদায়', icon: <Banknote className="w-4 h-4 text-amber-500" /> },
     { id: 'unpaid', labelEn: 'Unpaid Dues', labelBn: 'বকেয়া হিসাব', icon: <AlertTriangle className="w-4 h-4 text-rose-500" /> },
-    { id: 'expense', labelEn: 'Expenses', labelBn: 'খরচসমূহ', icon: <Receipt className="w-4 h-4 text-purple-500" /> },
-    { id: 'dokan', labelEn: 'Shop Dues', labelBn: 'দোকান বাকি', icon: <Store className="w-4 h-4 text-orange-500" /> },
+    { id: 'rooms', labelEn: 'Rooms', labelBn: 'রুমসমূহ', icon: <DoorClosed className="w-4 h-4 text-blue-500" /> },
+    { id: 'tenants', labelEn: 'Tenants', labelBn: 'ভাড়াটিয়া', icon: <Users className="w-4 h-4 text-emerald-500" /> },
+    { id: 'brief', labelEn: 'Summary', labelBn: 'সারসংক্ষেপ', icon: <BarChart3 className="w-4 h-4 text-[#e0533c]" /> },
     { id: 'analytics', labelEn: 'Analytics', labelBn: 'অ্যানালিটিক্স', icon: <LineChart className="w-4 h-4 text-indigo-500" /> },
   ];
 

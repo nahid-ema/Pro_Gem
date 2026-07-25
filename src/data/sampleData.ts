@@ -1,4 +1,4 @@
-import { Room, Tenant, RentRecord, Expense, ShopDue } from '../types';
+import { Room, Tenant, RentRecord, Expense, RentalExpense, ShopDue } from '../types';
 
 export const initialRooms: Room[] = [
   { id: 'rm-1', roomNo: 'A4', rentAmount: 10570, gasBill: 1080, waterBill: 250, wasteBill: 100, meterNo: '0' },
@@ -204,4 +204,9 @@ export const initialShopDues: ShopDue[] = [
   { id: 'dk-17', date: '2026-07-20', amount: 50, desc: 'সাইফুল', shopName: 'সাইফুল দোকান' },
   { id: 'dk-18', date: '2026-06-20', amount: 20, desc: 'সাইফুল', shopName: 'সাইফুল দোকান' },
   { id: 'dk-19', date: '2026-06-25', amount: 10, desc: 'সাইফুল', shopName: 'সাইফুল দোকান' },
+];
+
+export const initialRentalExpenses: RentalExpense[] = [
+  { id: 'rex-1', date: '2026-07-02', desc: 'হোস্টিং প্রপার্টি ট্যাক্স / হোল্ডিং ট্যাক্স', amount: 3500 },
+  { id: 'rex-2', date: '2026-07-10', desc: 'রেন্টাল এগ্রিমেন্ট স্ট্যাম্প ও প্রসেসিং ফি', amount: 1200 },
 ];

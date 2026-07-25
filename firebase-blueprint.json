@@ -44,6 +44,17 @@
         "amount": { "type": "number" }
       }
     },
+    "RentalExpense": {
+      "title": "Rental Expense Entity",
+      "description": "Represents a rental property expense entry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "desc": { "type": "string" },
+        "amount": { "type": "number" },
+        "date": { "type": "string" }
+      }
+    },
     "DokanDue": {
       "title": "Dokan Due Entity",
       "description": "Represents shop due record",
@@ -80,6 +91,10 @@
     "/expenses/{expenseId}": {
       "schema": { "$ref": "#/entities/Expense" },
       "description": "Collection of expenses"
+    },
+    "/rentalExpenses/{rentalExpenseId}": {
+      "schema": { "$ref": "#/entities/RentalExpense" },
+      "description": "Collection of rental expenses"
     },
     "/dokanBaki/{dueId}": {
       "schema": { "$ref": "#/entities/DokanDue" },

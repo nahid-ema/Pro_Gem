@@ -1,5 +1,5 @@
 import React from 'react';
-import { RentRecord, Expense, ShopDue, Language } from '../types';
+import { RentRecord, Expense, RentalExpense, ShopDue, Language } from '../types';
 import { getTranslation } from '../data/translations';
 import { 
   BarChart, 
@@ -18,6 +18,7 @@ import { LineChart as LineChartIcon, TrendingUp, PieChart as PieChartIcon } from
 interface AnalyticsChartsProps {
   rents: RentRecord[];
   expenses: Expense[];
+  rentalExpenses?: RentalExpense[];
   dokanDues: ShopDue[];
   language: Language;
 }
@@ -25,6 +26,7 @@ interface AnalyticsChartsProps {
 export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
   rents = [],
   expenses = [],
+  rentalExpenses = [],
   dokanDues = [],
   language,
 }) => {
@@ -32,6 +34,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
 
   const safeRents = Array.isArray(rents) ? rents : [];
   const safeExpenses = Array.isArray(expenses) ? expenses : [];
+  const safeRentalExpenses = Array.isArray(rentalExpenses) ? rentalExpenses : [];
   const safeDokanDues = Array.isArray(dokanDues) ? dokanDues : [];
 
   // Group by Month (Jan-Dec) for current year
