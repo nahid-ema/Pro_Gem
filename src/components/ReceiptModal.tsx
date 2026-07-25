@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { RentRecord, Language } from '../types';
 import { getTranslation } from '../data/translations';
 import { Printer, X, CheckCircle2, MessageSquare, Copy, Check, ShieldCheck, Home } from 'lucide-react';
@@ -59,7 +60,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
   const isFullyPaid = rentRecord.due <= 0;
   const isPartiallyPaid = rentRecord.paid > 0 && rentRecord.due > 0;
 
-  return (
+  return createPortal(
     <div id="receiptModalOverlay" className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn overflow-y-auto">
       <div id="receiptModalCard" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-lg w-full p-4 sm:p-6 shadow-2xl relative overflow-hidden my-auto">
         
@@ -276,7 +277,9 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
 
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
+
 

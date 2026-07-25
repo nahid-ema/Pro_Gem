@@ -116,15 +116,9 @@
     print-color-adjust: exact !important;
   }
 
-  /* When receipt modal is open, strictly hide all main application components */
-  body.receipt-modal-active #root > *:not(#receiptModalOverlay),
-  body:has(#receiptModalOverlay) #root > *:not(#receiptModalOverlay),
-  body.receipt-modal-active main,
-  body:has(#receiptModalOverlay) main,
-  body.receipt-modal-active header,
-  body:has(#receiptModalOverlay) header,
-  body.receipt-modal-active nav,
-  body:has(#receiptModalOverlay) nav {
+  /* When receipt modal is active, completely hide #root (the entire app content behind the portal) */
+  body.receipt-modal-active #root,
+  body:has(#receiptModalOverlay) #root {
     display: none !important;
   }
 
