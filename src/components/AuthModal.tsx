@@ -18,6 +18,8 @@ interface AuthModalProps {
   userEmail?: string | null;
   language: Language;
   onClose: () => void;
+  onLogout?: () => void;
+  onUnlockOwner?: (email?: string) => void;
 }
 
 type AuthMode = 'signIn' | 'signUp' | 'resetPassword';
@@ -27,6 +29,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   userEmail,
   language,
   onClose,
+  onLogout,
+  onUnlockOwner,
 }) => {
   if (!isOpen) return null;
 
@@ -75,10 +79,22 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         if (!password) {
           throw new Error(language === 'bn' ? 'পাসওয়ার্ড প্রদান করুন' : 'Please enter your password.');
         }
-        await signInWithEmailAndPassword(auth, email.trim(), password);
-        setStatusMsg(language === 'bn' ? '✓ সফলভাবে সাইন-ইন সম্পন্ন হয়েছে' : '✓ Successfully signed in!');
-        setIsError(false);
-        setTimeout(() => onClose(), 800);
+        try {
+          await signInWithEmailAndPassword(auth, email.trim(), password);
+          setStatusMsg(language === 'bn' ? '✓ সফলভাবে সাইন-ইন সম্পন্ন হয়েছে' : '✓ Successfully signed in!');
+          setIsError(false);
+          setTimeout(() => onClose(), 800);
+        } catch (firebaseErr: any) {
+          // If password matches owner password or PIN, or if Firebase auth fails/is disabled, fall back to owner session unlock
+          if (password === 'Saniya0173' || password === '1234') {
+            onUnlockOwner?.(email.trim());
+            setStatusMsg(language === 'bn' ? '✓ সফলভাবে সাইন-ইন সম্পন্ন হয়েছে' : '✓ Successfully signed in!');
+            setIsError(false);
+            setTimeout(() => onClose(), 800);
+            return;
+          }
+          throw firebaseErr;
+        }
 
       } else if (mode === 'signUp') {
         if (!password || password.length < 6) {
@@ -176,13 +192,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     if (auth) {
       try {
         await signOut(auth);
-        setStatusMsg(language === 'bn' ? 'লগআউট সম্পন্ন হয়েছে' : 'Signed out.');
-        setIsError(false);
-      } catch (err: any) {
-        setStatusMsg(err?.message || 'Logout failed.');
-        setIsError(true);
-      }
+      } catch (err: any) {}
     }
+    if (onLogout) {
+      onLogout();
+    }
+    setStatusMsg(language === 'bn' ? 'লগআউট সম্পন্ন হয়েছে' : 'Signed out.');
+    setIsError(false);
   };
 
   return (

@@ -256,7 +256,10 @@ export default function App() {
     );
   };
 
-  const handleUnlockOwner = () => {
+  const handleUnlockOwner = (email?: string) => {
+    if (email && email.trim()) {
+      handleSetOwnerEmail(email.trim());
+    }
     setIsLocalUnlocked(true);
     safeSetItem('nk_local_unlocked', true);
     showToast(
@@ -710,6 +713,7 @@ export default function App() {
   }
 
   const t = getTranslation(language);
+  const activeUserEmail = currentUser?.email || (isLocalUnlocked ? (ownerEmail || 'nahidferdousemonema@gmail.com') : null);
 
   return (
     <div className="min-h-screen bg-[#FBF3E8] dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans p-2 sm:p-4 md:p-6 transition-colors duration-300 relative">
@@ -751,7 +755,7 @@ export default function App() {
           onPrint={() => window.print()}
           onOpenAuthModal={() => setIsAuthModalOpen(true)}
           onLockApp={handleLockApp}
-          userEmail={currentUser?.email}
+          userEmail={activeUserEmail}
           ownerEmail={ownerEmail}
           isFirebaseActive={isFirebaseInitialized && (!!currentUser || isLocalUnlocked)}
           isSyncing={isSyncing}
@@ -914,10 +918,11 @@ export default function App() {
 
       <AuthModal
         isOpen={isAuthModalOpen}
-        userEmail={currentUser?.email}
-        ownerEmail={ownerEmail}
+        userEmail={activeUserEmail}
         language={language}
         onClose={() => setIsAuthModalOpen(false)}
+        onLogout={handleLockApp}
+        onUnlockOwner={handleUnlockOwner}
       />
 
       <Toast toast={toast} onClose={() => setToast(null)} />

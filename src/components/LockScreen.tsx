@@ -23,7 +23,7 @@ import {
 interface LockScreenProps {
   language: Language;
   ownerEmail: string;
-  onUnlockOwner: () => void;
+  onUnlockOwner: (email?: string) => void;
 }
 
 export const LockScreen: React.FC<LockScreenProps> = ({
@@ -84,7 +84,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({
     setInfoMsg(isBn ? '✓ সফলভাবে মালিক হিসেবে সাইন-ইন করা হয়েছে!' : '✓ Owner signed in successfully!');
     setTimeout(() => {
       setIsLoading(false);
-      onUnlockOwner();
+      onUnlockOwner(trimmedEmail);
     }, 400);
   };
 
