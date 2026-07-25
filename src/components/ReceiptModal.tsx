@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { RentRecord, Language } from '../types';
 import { getTranslation } from '../data/translations';
-import { Printer, X, CheckCircle2 } from 'lucide-react';
+import { Printer, X, CheckCircle2, MessageSquare, Copy, Check, ShieldCheck, Home } from 'lucide-react';
 
 interface ReceiptModalProps {
   rentRecord: RentRecord | null;
@@ -14,6 +14,18 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
   language,
   onClose,
 }) => {
+  const [copied, setCopied] = useState(false);
+
+  // Add print isolation hook
+  useEffect(() => {
+    if (rentRecord) {
+      document.body.classList.add('receipt-modal-active');
+    }
+    return () => {
+      document.body.classList.remove('receipt-modal-active');
+    };
+  }, [rentRecord]);
+
   if (!rentRecord) return null;
 
   const t = getTranslation(language);
@@ -24,113 +36,247 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
     window.print();
   };
 
+  const handleShareWhatsApp = () => {
+    const cleanPhone = rentRecord.phone.replace(/[^0-9]/g, '');
+    const phoneWithCode = cleanPhone.startsWith('88') ? cleanPhone : `88${cleanPhone}`;
+    const message = language === 'bn'
+      ? `*নাহিদ কুটির — ভাড়া পরিশোধের রসিদ*\n\nরসিদ নং: #NK-${rentRecord.id.substring(0, 8).toUpperCase()}\nতারিখ: ${rentRecord.date}\nভাড়াটিয়া: ${rentRecord.tenant}\nরুম: ${rentRecord.room}\n\nমোট ভাড়া: ৳${rentRecord.rent.toLocaleString()}\nজমা দেওয়া হয়েছে: ৳${rentRecord.paid.toLocaleString()}\nঅবশিষ্ট বকেয়া: ৳${rentRecord.due.toLocaleString()}\n\nনাহিদ কুটিরে থাকার জন্য ধন্যবাদ!`
+      : `*Nahid Kutir — Rent Payment Receipt*\n\nReceipt No: #NK-${rentRecord.id.substring(0, 8).toUpperCase()}\nDate: ${rentRecord.date}\nTenant: ${rentRecord.tenant}\nRoom: ${rentRecord.room}\n\nTotal Rent: ৳${rentRecord.rent.toLocaleString()}\nPaid Amount: ৳${rentRecord.paid.toLocaleString()}\nRemaining Due: ৳${rentRecord.due.toLocaleString()}\n\nThank you for staying at Nahid Kutir!`;
+    
+    window.open(`https://wa.me/${phoneWithCode}?text=${encodeURIComponent(message)}`, '_blank');
+  };
+
+  const handleCopyReceipt = () => {
+    const summary = language === 'bn'
+      ? `নাহিদ কুটির রসিদ (#NK-${rentRecord.id.substring(0, 8).toUpperCase()})\nতারিখ: ${rentRecord.date}\nভাড়াটিয়া: ${rentRecord.tenant} (রুম ${rentRecord.room})\nজমা: ৳${rentRecord.paid.toLocaleString()} | বকেয়া: ৳${rentRecord.due.toLocaleString()}`
+      : `Nahid Kutir Receipt (#NK-${rentRecord.id.substring(0, 8).toUpperCase()})\nDate: ${rentRecord.date}\nTenant: ${rentRecord.tenant} (Room ${rentRecord.room})\nPaid: ৳${rentRecord.paid.toLocaleString()} | Due: ৳${rentRecord.due.toLocaleString()}`;
+    
+    navigator.clipboard.writeText(summary);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const isFullyPaid = rentRecord.due <= 0;
+  const isPartiallyPaid = rentRecord.paid > 0 && rentRecord.due > 0;
+
   return (
-    <div id="receiptModalOverlay" className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-fadeIn">
-      <div id="receiptModalCard" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl max-w-lg w-full p-6 shadow-xl relative overflow-hidden">
-        {/* Modal Controls */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800 no-print">
-          <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-            {t.receiptTitle}
-          </h3>
-          <div className="flex items-center gap-2">
+    <div id="receiptModalOverlay" className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn overflow-y-auto">
+      <div id="receiptModalCard" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-lg w-full p-4 sm:p-6 shadow-2xl relative overflow-hidden my-auto">
+        
+        {/* Modal Controls Bar (Screen Only - Hidden in Print) */}
+        <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-slate-100 dark:border-slate-800 no-print gap-2">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-[#e0533c]" />
+            <h3 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+              {t.receiptTitle}
+            </h3>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            {/* Print Button */}
             <button
               onClick={handlePrintReceipt}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-sm transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#e0533c] hover:bg-[#cb422d] text-white text-xs font-bold shadow-xs transition-all cursor-pointer active:scale-95"
+              title={language === 'bn' ? 'রসিদ প্রিন্ট করুন' : 'Print Receipt'}
             >
               <Printer className="w-3.5 h-3.5" />
               <span>{t.printBtn}</span>
             </button>
+
+            {/* WhatsApp Share Button */}
+            <button
+              onClick={handleShareWhatsApp}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition-all cursor-pointer active:scale-95"
+              title={language === 'bn' ? 'হোয়াটসঅ্যাপে পাঠান' : 'Share on WhatsApp'}
+            >
+              <MessageSquare className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">WhatsApp</span>
+            </button>
+
+            {/* Copy Button */}
+            <button
+              onClick={handleCopyReceipt}
+              className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors cursor-pointer"
+              title={language === 'bn' ? 'কপি করুন' : 'Copy Summary'}
+            >
+              {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+            </button>
+
+            {/* Close Button */}
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-white transition-colors"
+              className="p-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
         </div>
 
-        {/* RECEIPT BODY (Printable) */}
-        <div className="py-6 space-y-6 text-slate-900 dark:text-slate-100" id="receiptContent">
-          {/* Header */}
-          <div className="text-center border-b pb-4 border-slate-100 dark:border-slate-800">
-            <div className="w-10 h-10 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-xl mx-auto mb-2 shadow-sm">
-              🏠
+        {/* PRINTABLE RECEIPT CONTENT CONTAINER */}
+        <div className="py-4 sm:py-5 space-y-5 text-slate-900 dark:text-slate-100" id="receiptContent">
+          
+          {/* 1. Header & Brand Title */}
+          <div className="text-center border-b pb-4 border-slate-200 dark:border-slate-800 relative">
+            <div className="inline-flex items-center justify-center w-11 h-11 rounded-2xl bg-[#e0533c]/10 dark:bg-[#e0533c]/20 text-[#e0533c] border border-[#e0533c]/30 mb-2 shadow-2xs">
+              <Home className="w-5 h-5" />
             </div>
-            <h2 className="text-lg font-bold tracking-tight">{t.receiptHeader}</h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400">{t.receiptAddress}</p>
+            <h2 className="text-base sm:text-lg font-black tracking-tight text-slate-900 dark:text-white">
+              {t.receiptHeader}
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+              {t.receiptAddress}
+            </p>
+            <div className="mt-2 inline-block px-3 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">
+              {language === 'bn' ? 'অফিসিয়াল ভাড়া জমার রসিদ' : 'Official Rent Payment Receipt'}
+            </div>
           </div>
 
-          {/* Key Identifiers */}
-          <div className="grid grid-cols-2 gap-4 bg-slate-50 dark:bg-slate-800/60 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700/60 text-xs">
+          {/* 2. Key Receipt Identifiers & Status Stamp */}
+          <div className="grid grid-cols-2 gap-3 bg-slate-50 dark:bg-slate-800/60 p-3 sm:p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 text-xs">
             <div>
-              <span className="text-slate-500 dark:text-slate-400 font-bold block uppercase tracking-wider text-[10px]">
+              <span className="text-slate-400 dark:text-slate-500 font-bold block uppercase tracking-wider text-[10px]">
                 {t.receiptDate}
               </span>
-              <span className="font-bold font-mono text-sm">{rentRecord.date}</span>
+              <span className="font-bold font-mono text-sm text-slate-800 dark:text-slate-100">{rentRecord.date}</span>
             </div>
+            
             <div className="text-right">
-              <span className="text-slate-500 dark:text-slate-400 font-bold block uppercase tracking-wider text-[10px]">
+              <span className="text-slate-400 dark:text-slate-500 font-bold block uppercase tracking-wider text-[10px]">
                 {t.receiptNo}
               </span>
-              <span className="font-mono font-bold text-sm text-indigo-600 dark:text-indigo-400">
+              <span className="font-mono font-bold text-sm text-[#e0533c]">
                 #NK-{rentRecord.id.substring(0, 8).toUpperCase()}
               </span>
             </div>
           </div>
 
-          {/* Details Table */}
-          <div className="space-y-2 text-xs">
-            <div className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
-              <span className="text-slate-500 dark:text-slate-400 font-semibold">{t.receivedFrom}:</span>
-              <span className="font-bold text-sm">{rentRecord.tenant}</span>
+          {/* 3. Tenant & Room Details Grid */}
+          <div className="grid grid-cols-2 gap-3 text-xs bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200/60 dark:border-slate-800">
+            <div>
+              <span className="text-slate-400 dark:text-slate-500 text-[11px] block font-semibold">{t.receivedFrom}</span>
+              <span className="font-black text-sm text-slate-900 dark:text-white block mt-0.5">{rentRecord.tenant}</span>
+              {rentRecord.phone && (
+                <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 block">{rentRecord.phone}</span>
+              )}
             </div>
 
-            <div className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
-              <span className="text-slate-500 dark:text-slate-400 font-semibold">{t.roomAssigned}:</span>
-              <span className="font-bold text-slate-800 dark:text-slate-200">{t.roomText} {rentRecord.room}</span>
-            </div>
-
-            <div className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800">
-              <span className="text-slate-500 dark:text-slate-400 font-semibold">{t.totalRentDue}:</span>
-              <span className="font-bold">{formatCurrency(rentRecord.rent)}</span>
-            </div>
-
-            <div className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800 text-emerald-600 dark:text-emerald-400">
-              <span className="font-bold">{t.paidAmountText}:</span>
-              <span className="font-bold text-base">{formatCurrency(rentRecord.paid)}</span>
-            </div>
-
-            <div className="flex justify-between py-2 border-b border-slate-100 dark:border-slate-800 text-rose-600">
-              <span className="font-bold">{t.remainingDueText}:</span>
-              <span className="font-bold text-base">{formatCurrency(rentRecord.due)}</span>
+            <div className="text-right">
+              <span className="text-slate-400 dark:text-slate-500 text-[11px] block font-semibold">{t.roomAssigned}</span>
+              <span className="font-black text-sm text-[#e0533c] block mt-0.5">{t.roomText} {rentRecord.room}</span>
             </div>
           </div>
 
-          {/* Note / Status */}
-          <div className="flex items-center justify-between text-xs bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
-            <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-bold">
-              <span>{rentRecord.due <= 0 ? t.paidStatus : `${t.dueStatus} ${formatCurrency(rentRecord.due)}`}</span>
+          {/* 4. Payment Breakdown Table */}
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+            <table className="w-full text-xs text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold border-b border-slate-200 dark:border-slate-700">
+                  <th className="p-2.5">{language === 'bn' ? 'বিবরণ' : 'Description'}</th>
+                  <th className="p-2.5 text-right">{language === 'bn' ? 'পরিমাণ' : 'Amount'}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                <tr>
+                  <td className="p-2.5 font-semibold text-slate-700 dark:text-slate-300">
+                    {t.totalRentDue} ({t.roomText} {rentRecord.room})
+                  </td>
+                  <td className="p-2.5 text-right font-bold text-slate-900 dark:text-white">
+                    {formatCurrency(rentRecord.rent)}
+                  </td>
+                </tr>
+
+                <tr className="bg-emerald-50/60 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-300">
+                  <td className="p-2.5 font-bold flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <span>{t.paidAmountText}</span>
+                  </td>
+                  <td className="p-2.5 text-right font-black text-sm text-emerald-600 dark:text-emerald-400">
+                    {formatCurrency(rentRecord.paid)}
+                  </td>
+                </tr>
+
+                <tr className={rentRecord.due > 0 ? "bg-rose-50/60 dark:bg-rose-950/20 text-rose-800 dark:text-rose-300" : ""}>
+                  <td className="p-2.5 font-bold">
+                    {t.remainingDueText}
+                  </td>
+                  <td className={`p-2.5 text-right font-black text-sm ${rentRecord.due > 0 ? 'text-rose-600' : 'text-slate-500 dark:text-slate-400'}`}>
+                    {formatCurrency(rentRecord.due)}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* 5. Payment Remarks / Status Stamp Box */}
+          <div className="flex items-center justify-between text-xs bg-slate-50 dark:bg-slate-800/60 p-3 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
+            <div>
+              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                {language === 'bn' ? 'পরিশোধের অবস্থা' : 'Payment Status'}
+              </div>
+              <div className="mt-0.5 font-extrabold flex items-center gap-1.5">
+                {isFullyPaid && (
+                  <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    {language === 'bn' ? 'সম্পূর্ণ পরিশোধিত (PAID)' : 'PAID IN FULL'}
+                  </span>
+                )}
+                {isPartiallyPaid && (
+                  <span className="text-amber-600 dark:text-amber-400">
+                    {language === 'bn' ? `আংশিক জমা (বকেয়া ৳${rentRecord.due.toLocaleString()})` : `PARTIAL PAYMENT (Due ৳${rentRecord.due.toLocaleString()})`}
+                  </span>
+                )}
+                {!isFullyPaid && !isPartiallyPaid && (
+                  <span className="text-rose-600">
+                    {language === 'bn' ? 'পরিশোধ করা হয়নি (UNPAID)' : 'UNPAID'}
+                  </span>
+                )}
+              </div>
             </div>
+
             {rentRecord.note && (
-              <span className="text-slate-500 italic">"{rentRecord.note}"</span>
+              <div className="text-right max-w-[180px]">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                  {language === 'bn' ? 'নোট / মন্তব্য' : 'Note'}
+                </div>
+                <div className="text-slate-600 dark:text-slate-300 font-medium italic truncate">
+                  "{rentRecord.note}"
+                </div>
+              </div>
             )}
           </div>
 
-          <p className="text-center text-[11px] text-slate-400 font-medium italic">
+          {/* 6. Thank You Footer Message */}
+          <p className="text-center text-xs text-slate-500 dark:text-slate-400 font-semibold italic pt-1">
             "{t.thankYouMsg}"
           </p>
 
-          {/* Signatures */}
-          <div className="pt-8 flex justify-between text-[11px] font-bold text-slate-500 dark:text-slate-400">
-            <div className="text-center border-t border-slate-300 dark:border-slate-700 pt-1 w-32">
+          {/* 7. Official Signatures Section */}
+          <div className="pt-6 sm:pt-8 flex justify-between items-end text-[11px] font-bold text-slate-600 dark:text-slate-400">
+            <div className="text-center border-t-2 border-slate-300 dark:border-slate-700 pt-1.5 w-32">
+              <ShieldCheck className="w-4 h-4 mx-auto text-slate-400 mb-0.5 no-print" />
               {t.signatureLandlord}
             </div>
-            <div className="text-center border-t border-slate-300 dark:border-slate-700 pt-1 w-32">
+            
+            {/* System Stamp Motif */}
+            <div className="text-center opacity-80 pointer-events-none">
+              <div className="w-12 h-12 rounded-full border-2 border-dashed border-[#e0533c] flex items-center justify-center mx-auto text-[9px] font-black text-[#e0533c] uppercase rotate-[-12deg] p-1">
+                {language === 'bn' ? 'যাচাইকৃত' : 'VERIFIED'}
+              </div>
+            </div>
+
+            <div className="text-center border-t-2 border-slate-300 dark:border-slate-700 pt-1.5 w-32">
               {t.signatureTenant}
             </div>
           </div>
+
+          {/* Computer Generated Notice */}
+          <div className="text-[9px] text-center text-slate-400 dark:text-slate-500 font-mono pt-2 border-t border-slate-100 dark:border-slate-800/80">
+            {language === 'bn' ? 'কম্পিউটার থেকে স্বয়ংক্রিয়ভাবে প্রস্তুতকৃত রসিদ। কোনো স্বাক্ষরের প্রয়োজন নেই।' : 'Computer generated payment record. Valid without physical seal.'}
+          </div>
+
         </div>
       </div>
     </div>
   );
 };
+

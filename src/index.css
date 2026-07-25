@@ -99,7 +99,7 @@
 /* Print & PDF Report Optimization Styles - Pure Data Report */
 @media print {
   @page {
-    margin: 12mm 15mm;
+    margin: 10mm 12mm;
     size: auto;
   }
 
@@ -116,7 +116,19 @@
     print-color-adjust: exact !important;
   }
 
-  /* Hide UI interface elements: buttons, inputs, selects, textareas, forms, nav, web header, toasts */
+  /* When receipt modal is open, strictly hide all main application components */
+  body.receipt-modal-active #root > *:not(#receiptModalOverlay),
+  body:has(#receiptModalOverlay) #root > *:not(#receiptModalOverlay),
+  body.receipt-modal-active main,
+  body:has(#receiptModalOverlay) main,
+  body.receipt-modal-active header,
+  body:has(#receiptModalOverlay) header,
+  body.receipt-modal-active nav,
+  body:has(#receiptModalOverlay) nav {
+    display: none !important;
+  }
+
+  /* Hide UI interface controls: buttons, inputs, selects, textareas, forms, web header, toasts */
   .no-print,
   button,
   input,
@@ -135,11 +147,46 @@
     display: block !important;
   }
 
+  /* Position receipt overlay cleanly for printing */
+  #receiptModalOverlay {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 100% !important;
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
+    z-index: 99999 !important;
+    overflow: visible !important;
+  }
+
+  #receiptModalCard {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    background: #ffffff !important;
+  }
+
+  #receiptContent {
+    border: 2px solid #334155 !important;
+    border-radius: 12px !important;
+    padding: 24px !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    max-width: 680px !important;
+    margin: 0 auto !important;
+  }
+
   /* Strip UI card shadows, dark mode slate fills, rounded shapes, and background effects */
   div, section, main, article {
     box-shadow: none !important;
-    border-radius: 0 !important;
-    background: transparent !important;
     backdrop-filter: none !important;
     filter: none !important;
   }
@@ -182,32 +229,6 @@
   /* Hide Action header/cells in tables */
   th.no-print, td.no-print {
     display: none !important;
-  }
-
-  /* Handle Receipt Modal when active */
-  #receiptModalOverlay {
-    position: static !important;
-    background: transparent !important;
-    backdrop-filter: none !important;
-    padding: 0 !important;
-    display: block !important;
-  }
-
-  #receiptModalCard {
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    max-width: 100% !important;
-    width: 100% !important;
-    background: #ffffff !important;
-  }
-
-  #receiptContent {
-    border: 1px solid #cbd5e1 !important;
-    border-radius: 6px !important;
-    padding: 20px !important;
-    background: #ffffff !important;
-    color: #0f172a !important;
   }
 
   /* Ensure legible dark text colors for print output */
