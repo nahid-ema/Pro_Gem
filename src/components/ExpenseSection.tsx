@@ -15,6 +15,30 @@ interface ExpenseSectionProps {
   onDeleteExpense: (id: string) => void;
 }
 
+export const formatCategory = (cat: string | undefined, lang: Language) => {
+  if (!cat) return lang === 'bn' ? 'সাধারণ' : 'General';
+  if (lang === 'bn') {
+    if (cat === 'General') return 'সাধারণ';
+    if (cat === 'Maintenance & Repair') return 'রক্ষণাবেক্ষণ ও মেরামত';
+    if (cat === 'Utilities & Bills') return 'ইউটিলিটি ও বিল';
+    if (cat === 'Painting & Renovation') return 'রং ও ডেকোরেশন';
+    if (cat === 'Plumbing & Sanitary') return 'প্লাম্বিং ও সেনেটারি';
+    if (cat === 'Electrical & Supplies') return 'ইলেকট্রিক ও সরঞ্জাম';
+    if (cat === 'Groceries & Household') return 'বাজার ও কেনাকাটা';
+    if (cat === 'Service Charge') return 'সার্ভিস চার্জ';
+  } else {
+    if (cat === 'সাধারণ') return 'General';
+    if (cat === 'রক্ষণাবেক্ষণ ও মেরামত') return 'Maintenance & Repair';
+    if (cat === 'ইউটিলিটি ও বিল') return 'Utilities & Bills';
+    if (cat === 'রং ও ডেকোরেশন') return 'Painting & Renovation';
+    if (cat === 'প্লাম্বিং ও সেনেটারি') return 'Plumbing & Sanitary';
+    if (cat === 'ইলেকট্রিক ও সরঞ্জাম') return 'Electrical & Supplies';
+    if (cat === 'বাজার ও কেনাকাটা') return 'Groceries & Household';
+    if (cat === 'সার্ভিস চার্জ') return 'Service Charge';
+  }
+  return cat;
+};
+
 export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
   expenses,
   language,
@@ -81,7 +105,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
     setDesc(ex.desc);
     setAmount(String(ex.amount));
     
-    const cat = ex.category || predefinedCategories[0];
+    const cat = formatCategory(ex.category, language) || predefinedCategories[0];
     if (predefinedCategories.includes(cat)) {
       setCategory(cat);
       setCustomCategory('');
@@ -116,26 +140,30 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
 
   const safeExpenses = Array.isArray(expenses) ? expenses : [];
 
-  // Get list of all existing unique categories for filter tabs
+  // Filter expenses by active time period (selectedYear and selectedMonth) and search query
+  const periodExpenses = safeExpenses.filter((ex) => {
+    if (!ex || !ex.date) return false;
+    const parts = ex.date.split('-');
+    const matchY = selectedYear === 'all' || parts[0] === selectedYear;
+    const matchM = selectedMonth === 'all' || parts[1] === selectedMonth;
+
+    if (!matchY || !matchM) return false;
+
+    const formattedCat = formatCategory(ex.category, language);
+    return matchesQuery(searchQuery, [ex.desc, ex.amount, ex.date, ex.category, formattedCat]);
+  });
+
+  // Get list of unique categories actually present in the filtered time period
   const existingCategories = Array.from(
-    new Set(safeExpenses.map((ex) => ex.category || 'General').filter(Boolean))
+    new Set(periodExpenses.map((ex) => formatCategory(ex.category, language)).filter(Boolean))
   );
 
-  const filteredExpenses = safeExpenses
+  // Filter expenses by selected category pill
+  const filteredExpenses = periodExpenses
     .filter((ex) => {
-      if (!ex || !ex.date) return false;
-      const parts = ex.date.split('-');
-      const matchY = selectedYear === 'all' || parts[0] === selectedYear;
-      const matchM = selectedMonth === 'all' || parts[1] === selectedMonth;
-
-      if (!matchY || !matchM) return false;
-
-      const exCategory = ex.category || 'General';
-      if (selectedCategoryFilter !== 'all' && exCategory !== selectedCategoryFilter) {
-        return false;
-      }
-
-      return matchesQuery(searchQuery, [ex.desc, ex.amount, ex.date, ex.category]);
+      if (selectedCategoryFilter === 'all') return true;
+      const formattedCat = formatCategory(ex.category, language);
+      return formattedCat === selectedCategoryFilter;
     })
     .sort((a, b) => {
       const dateCmp = (b.date || '').localeCompare(a.date || '');
@@ -292,7 +320,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
           </button>
 
           {existingCategories.map((cat) => {
-            const count = safeExpenses.filter((e) => (e.category || 'General') === cat).length;
+            const count = periodExpenses.filter((e) => formatCategory(e.category, language) === cat).length;
             return (
               <button
                 key={cat}
@@ -341,7 +369,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
                   <td className="p-3 whitespace-nowrap">
                     <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/50">
                       <Tag className="w-3 h-3 text-indigo-500" />
-                      {ex.category || 'General'}
+                      {formatCategory(ex.category, language)}
                     </span>
                   </td>
                   <td className="p-3 font-bold text-slate-900 dark:text-white">{ex.desc}</td>

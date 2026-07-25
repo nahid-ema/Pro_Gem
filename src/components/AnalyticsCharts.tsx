@@ -1,6 +1,7 @@
 import React from 'react';
 import { RentRecord, Expense, ShopDue, Language } from '../types';
 import { getTranslation } from '../data/translations';
+import { formatCategory } from './ExpenseSection';
 import { 
   BarChart, 
   Bar, 
@@ -119,7 +120,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
   // Calculate Expense Categories Breakdown (respecting active filter)
   const categoryMap = new Map<string, number>();
   filteredExpenses.forEach((ex) => {
-    const cat = ex.category || 'General';
+    const cat = formatCategory(ex.category, language);
     const prev = categoryMap.get(cat) || 0;
     categoryMap.set(cat, prev + (ex.amount || 0));
   });
