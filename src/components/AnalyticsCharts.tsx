@@ -20,6 +20,8 @@ interface AnalyticsChartsProps {
   expenses: Expense[];
   dokanDues: ShopDue[];
   language: Language;
+  selectedYear?: string;
+  selectedMonth?: string;
 }
 
 export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
@@ -27,6 +29,8 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
   expenses = [],
   dokanDues = [],
   language,
+  selectedYear = 'all',
+  selectedMonth = 'all',
 }) => {
   const t = getTranslation(language);
 
@@ -34,9 +38,35 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
   const safeExpenses = Array.isArray(expenses) ? expenses : [];
   const safeDokanDues = Array.isArray(dokanDues) ? dokanDues : [];
 
-  // Group by Month (Jan-Dec) for current year
-  const currentYear = new Date().getFullYear();
+  // Determine active year for monthly comparison bar chart
+  const activeYear = selectedYear !== 'all' ? selectedYear : String(new Date().getFullYear());
 
+  // Filter records based on selectedYear and selectedMonth for overall distribution pie charts
+  const filteredRents = safeRents.filter((r) => {
+    if (!r || !r.date) return false;
+    const [y, m] = r.date.split('-');
+    const matchY = selectedYear === 'all' || y === selectedYear;
+    const matchM = selectedMonth === 'all' || m === selectedMonth;
+    return matchY && matchM;
+  });
+
+  const filteredExpenses = safeExpenses.filter((ex) => {
+    if (!ex || !ex.date) return false;
+    const [y, m] = ex.date.split('-');
+    const matchY = selectedYear === 'all' || y === selectedYear;
+    const matchM = selectedMonth === 'all' || m === selectedMonth;
+    return matchY && matchM;
+  });
+
+  const filteredDokanDues = safeDokanDues.filter((dk) => {
+    if (!dk || !dk.date) return false;
+    const [y, m] = dk.date.split('-');
+    const matchY = selectedYear === 'all' || y === selectedYear;
+    const matchM = selectedMonth === 'all' || m === selectedMonth;
+    return matchY && matchM;
+  });
+
+  // Group by Month (Jan-Dec) for activeYear
   const monthlyData = (t.months || []).map((monthName, idx) => {
     const monthKey = String(idx + 1).padStart(2, '0');
 
@@ -44,7 +74,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
     const monthRents = safeRents.filter((r) => {
       if (!r || !r.date) return false;
       const [y, m] = r.date.split('-');
-      return y === String(currentYear) && m === monthKey;
+      return y === activeYear && m === monthKey;
     });
 
     const income = monthRents.reduce((acc, r) => acc + (r.paid || 0), 0);
@@ -54,14 +84,14 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
     const monthExp = safeExpenses.filter((ex) => {
       if (!ex || !ex.date) return false;
       const [y, m] = ex.date.split('-');
-      return y === String(currentYear) && m === monthKey;
+      return y === activeYear && m === monthKey;
     }).reduce((acc, ex) => acc + (ex.amount || 0), 0);
 
     // Filter shop dues
     const monthDok = safeDokanDues.filter((dk) => {
       if (!dk || !dk.date) return false;
       const [y, m] = dk.date.split('-');
-      return y === String(currentYear) && m === monthKey;
+      return y === activeYear && m === monthKey;
     }).reduce((acc, dk) => acc + (dk.amount || 0), 0);
 
     return {
@@ -73,11 +103,11 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
     };
   });
 
-  // Calculate Distribution Pie Chart
-  const totalIncome = safeRents.reduce((acc, r) => acc + (r.paid || 0), 0);
-  const totalExpenses = safeExpenses.reduce((acc, ex) => acc + (ex.amount || 0), 0);
-  const totalShopDues = safeDokanDues.reduce((acc, dk) => acc + (dk.amount || 0), 0);
-  const totalDue = safeRents.reduce((acc, r) => acc + (r.due || 0), 0);
+  // Calculate Distribution Pie Chart (respecting active filter)
+  const totalIncome = filteredRents.reduce((acc, r) => acc + (r.paid || 0), 0);
+  const totalExpenses = filteredExpenses.reduce((acc, ex) => acc + (ex.amount || 0), 0);
+  const totalShopDues = filteredDokanDues.reduce((acc, dk) => acc + (dk.amount || 0), 0);
+  const totalDue = filteredRents.reduce((acc, r) => acc + (r.due || 0), 0);
 
   const pieData = [
     { name: language === 'bn' ? 'আদায়কৃত টাকা' : 'Collected Income', value: totalIncome, color: '#10b981' },
@@ -86,9 +116,9 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
     { name: language === 'bn' ? 'দোকান বাকি' : 'Shop Credit Dues', value: totalShopDues, color: '#f59e0b' },
   ].filter(item => item.value > 0);
 
-  // Calculate Expense Categories Breakdown
+  // Calculate Expense Categories Breakdown (respecting active filter)
   const categoryMap = new Map<string, number>();
-  safeExpenses.forEach((ex) => {
+  filteredExpenses.forEach((ex) => {
     const cat = ex.category || 'General';
     const prev = categoryMap.get(cat) || 0;
     categoryMap.set(cat, prev + (ex.amount || 0));
@@ -107,6 +137,9 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
 
   const formatCurrency = (val: number) => `${t.currencySymbol}${val.toLocaleString()}`;
 
+  // Format label for active period display
+  const periodLabel = `${selectedYear !== 'all' ? selectedYear : (language === 'bn' ? 'সকল বছর' : 'All Years')} ${selectedMonth !== 'all' ? (t.months ? t.months[parseInt(selectedMonth, 10) - 1] : selectedMonth) : ''}`.trim();
+
   return (
     <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl md:rounded-3xl p-5 md:p-6 mb-6 shadow-sm space-y-6">
       {/* Title */}
@@ -119,7 +152,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
             {t.analyticsTitle}
           </h3>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            {t.analyticsSubtitle} ({currentYear})
+            {t.analyticsSubtitle} ({periodLabel})
           </p>
         </div>
       </div>
@@ -130,7 +163,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
           <div className="flex items-center gap-2 mb-3">
             <TrendingUp className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
             <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
-              {t.chartIncomeVsExpense} ({currentYear})
+              {t.chartIncomeVsExpense} ({activeYear})
             </h4>
           </div>
 

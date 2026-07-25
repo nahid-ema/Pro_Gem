@@ -897,6 +897,8 @@ export default function App() {
               expenses={expenses}
               dokanDues={dokanDues}
               language={language}
+              selectedYear={selectedYear}
+              selectedMonth={selectedMonth}
             />
           )}
         </main>

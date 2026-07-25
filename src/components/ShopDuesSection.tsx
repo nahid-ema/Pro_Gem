@@ -97,7 +97,12 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
 
   const totalDokanSum = filteredDokan.reduce((acc, dk) => acc + (dk.amount || 0), 0);
 
-  const formatCurrency = (val: number) => `${t.currencySymbol}${val.toLocaleString()}`;
+  const formatCurrency = (val: number) => {
+    if (val < 0) {
+      return `-${t.currencySymbol}${Math.abs(val).toLocaleString()}`;
+    }
+    return `${t.currencySymbol}${val.toLocaleString()}`;
+  };
 
   return (
     <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl md:rounded-3xl p-5 md:p-6 mb-6 shadow-sm">
@@ -157,8 +162,8 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">{t.thDokAmt} *</label>
               <input
                 type="number"
+                step="any"
                 required
-                min="0"
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder={t.dokanAmtPh}
@@ -208,7 +213,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
                 <tr key={dk.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                   <td className="p-3 font-mono text-xs text-slate-500">{dk.date}</td>
                   <td className="p-3 font-bold text-slate-900 dark:text-white">{dk.desc}</td>
-                  <td className="p-3 font-bold text-amber-600 dark:text-amber-400">
+                  <td className={`p-3 font-bold ${dk.amount < 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}`}>
                     {formatCurrency(dk.amount)}
                   </td>
                   <td className="p-3 no-print text-right">
