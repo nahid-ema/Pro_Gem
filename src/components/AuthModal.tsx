@@ -106,8 +106,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       let errMsg = err?.message || 'Authentication error occurred.';
       if (err?.code === 'auth/operation-not-allowed') {
         errMsg = language === 'bn' 
-          ? '⚠️ ফায়ারবেস কনসোলে এই লগইন প্রোভাইডার চালু করা নেই। Firebase Console -> Authentication -> Sign-in Method এ গিয়ে এটি এনাবল (Enable) করুন।' 
-          : '⚠️ This sign-in method is disabled in your Firebase Console. Please go to Firebase Console -> Authentication -> Sign-in method and enable it.';
+          ? '⚠️ ফায়ারবেসে "Email/Password" সাইন-ইন বন্ধ আছে। নিচে "গুগল দিয়ে প্রবেশ করুন" বাটনে ক্লিক করে লগইন করুন, অথবা Firebase Console এ Email/Password এনাবল করুন।' 
+          : '⚠️ Email/Password sign-in is disabled in Firebase. Please click "Continue with Google" below for instant sign-in, or enable Email/Password in your Firebase Console.';
       } else if (err?.code === 'auth/unauthorized-domain') {
         errMsg = language === 'bn'
           ? '⚠️ এই ডোমেইনটি ফায়ারবেসে Authorized Domains এ যুক্ত নেই। Firebase Console -> Authentication -> Settings -> Authorized domains এ গিয়ে "run.app" বা বর্তমান ডোমেইন এড করুন।'
@@ -152,7 +152,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         }
       }
       setIsError(true);
-      if (err.code === 'auth/unauthorized-domain') {
+      if (err.code === 'auth/operation-not-allowed') {
+        setStatusMsg(
+          language === 'bn'
+            ? '⚠️ ফায়ারবেস কনসোলে গুগল সাইন-ইন প্রোভাইডার চালু (Enable) করা নেই। Firebase Console -> Authentication -> Sign-in method এ গিয়ে Google নির্বাচন করে এনাবল করুন।'
+            : '⚠️ Google sign-in is disabled in your Firebase Console. Please go to Firebase Console -> Authentication -> Sign-in method and enable Google.'
+        );
+      } else if (err.code === 'auth/unauthorized-domain') {
         setStatusMsg(
           language === 'bn'
             ? '⚠️ এই ডোমেনটি ফায়ারবেসে অনুমোদিত নয়। মোবাইল ব্যবহারকারীরা Security PIN ব্যবহার করুন।'
@@ -394,6 +400,21 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               </svg>
               <span>{language === 'bn' ? 'গুগল দিয়ে প্রবেশ করুন' : 'Continue with Google'}</span>
             </button>
+
+            <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-2">
+                {language === 'bn'
+                  ? '💡 টিপস: ফায়ারবেস লগইন ছাড়া সিকিউরিটি পিন (ডিফল্ট: 1234) দিয়েও সম্পূর্ণ অ্যাপ নিরাপদ রাখতে পারেন।'
+                  : '💡 Note: If Firebase Auth is not enabled by the project owner, you can use the built-in Master Security PIN (Default: 1234) for full access.'}
+              </p>
+              <button
+                type="button"
+                onClick={onClose}
+                className="w-full py-2 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-xs cursor-pointer transition-colors"
+              >
+                {language === 'bn' ? 'সিকিউরিটি পিন দিয়ে চালু রাখুন' : 'Continue with Security PIN'}
+              </button>
+            </div>
           </div>
         )}
       </div>
