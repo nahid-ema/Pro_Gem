@@ -69,7 +69,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   }, []);
 
   const navItems: { id: TabType; labelEn: string; labelBn: string; icon: React.ReactNode }[] = [
-    { id: 'expense', labelEn: 'Bajar Khoroch', labelBn: 'বাজার খরচ', icon: <Receipt className="w-4 h-4 text-purple-500" /> },
+    { id: 'expense', labelEn: 'Expenses', labelBn: 'খরচ', icon: <Receipt className="w-4 h-4 text-purple-500" /> },
     { id: 'rentalExpense', labelEn: 'Rental Expense', labelBn: 'ভাড়া বাড়ি খরচ', icon: <Wallet className="w-4 h-4 text-amber-600" /> },
     { id: 'dokan', labelEn: 'Shop Dues', labelBn: 'দোকান বাকি', icon: <Store className="w-4 h-4 text-orange-500" /> },
     { id: 'rent', labelEn: 'Rent Collection', labelBn: 'ভাড়া আদায়', icon: <Banknote className="w-4 h-4 text-amber-500" /> },

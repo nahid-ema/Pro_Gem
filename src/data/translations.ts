@@ -20,7 +20,7 @@ export const translations = {
     tabTenants: "ভাড়াটিয়া",
     tabRent: "ভাড়া আদায়",
     tabUnpaid: "অনাদায়ী",
-    tabExpense: "বাজার খরচ",
+    tabExpense: "খরচ",
     tabRentalExpense: "ভাড়া বাড়ি খরচ",
     tabDokan: "দোকান বাকি",
     tabAnalytics: "অ্যানালিটিক্স",
@@ -30,7 +30,7 @@ export const translations = {
     briefRentLbl: "মোট আনুমানিক ভাড়া",
     briefIncomeLbl: "মোট সংগৃহীত আদায়",
     briefDueLbl: "মোট অবশিষ্ট বকেয়া",
-    briefExpLbl: "মোট বাজার খরচ",
+    briefExpLbl: "মোট খরচ",
     briefRentalExpLbl: "মোট ভাড়া বাড়ি খরচ",
     briefDokLbl: "মোট দোকান বাকি",
     briefEntriesLbl: "মোট লেনদেন এন্ট্রি",
@@ -111,7 +111,7 @@ export const translations = {
     quickPay: "দ্রুত জমা",
 
     // Expense Section
-    expenseTitle: "বাজার খরচ",
+    expenseTitle: "খরচ",
     expenseSubtitle: "বাজার খরচ, ঘর রক্ষণাবেক্ষণ ও দৈনন্দিন খরচের হিসাব",
     expDescPh: "খরচের বিবরণ (যেমন: পানির পাম্প মেরামত)",
     expAmtPh: "খরচের পরিমাণ (টাকা)",
@@ -219,7 +219,7 @@ export const translations = {
     tabTenants: "Tenants",
     tabRent: "Rent Collection",
     tabUnpaid: "Unpaid Dues",
-    tabExpense: "Bajar Khoroch",
+    tabExpense: "Expenses",
     tabRentalExpense: "Rental Expenses",
     tabDokan: "Shop Dues",
     tabAnalytics: "Analytics",
@@ -229,7 +229,7 @@ export const translations = {
     briefRentLbl: "Total Estimated Rent",
     briefIncomeLbl: "Total Collected Income",
     briefDueLbl: "Total Outstanding Due",
-    briefExpLbl: "Total Bajar Khoroch",
+    briefExpLbl: "Total Expenses",
     briefRentalExpLbl: "Total Rental Expenses",
     briefDokLbl: "Total Shop Credit Dues",
     briefEntriesLbl: "Total Transaction Records",
@@ -310,7 +310,7 @@ export const translations = {
     quickPay: "Quick Pay",
 
     // Expense Section
-    expenseTitle: "Bajar Khoroch",
+    expenseTitle: "Expenses",
     expenseSubtitle: "Daily market shopping, household maintenance, and daily expenses",
     expDescPh: "Expense description (e.g. Water pump motor repair)",
     expAmtPh: "Amount (BDT)",
