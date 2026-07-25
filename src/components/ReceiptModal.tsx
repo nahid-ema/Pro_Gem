@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { RentRecord, Language } from '../types';
+import { RentRecord, Room, Language } from '../types';
 import { getTranslation } from '../data/translations';
-import { Printer, X, CheckCircle2, MessageSquare, Copy, Check, ShieldCheck, Home } from 'lucide-react';
+import { Printer, X, CheckCircle2, MessageSquare, Copy, Check, ShieldCheck, Home, Receipt } from 'lucide-react';
 
 interface ReceiptModalProps {
   rentRecord: RentRecord | null;
+  rooms?: Room[];
   language: Language;
   onClose: () => void;
 }
 
 export const ReceiptModal: React.FC<ReceiptModalProps> = ({
   rentRecord,
+  rooms = [],
   language,
   onClose,
 }) => {
@@ -33,6 +35,24 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
 
   const formatCurrency = (val: number) => `${t.currencySymbol}${val.toLocaleString()}`;
 
+  // Find matching room details for breakdown
+  const matchedRoom = rooms.find(
+    (r) => String(r.roomNo).trim().toLowerCase() === String(rentRecord.room).trim().toLowerCase()
+  );
+
+  const gasBill = matchedRoom ? (matchedRoom.gasBill || 0) : 0;
+  const waterBill = matchedRoom ? (matchedRoom.waterBill || 0) : 0;
+  const wasteBill = matchedRoom ? (matchedRoom.wasteBill || 0) : 0;
+  const utilitySum = gasBill + waterBill + wasteBill;
+
+  let houseRent = matchedRoom ? (matchedRoom.rentAmount || 0) : rentRecord.rent;
+  if (matchedRoom && utilitySum > 0 && rentRecord.rent >= utilitySum) {
+    houseRent = rentRecord.rent - utilitySum;
+  }
+
+  const hasBillBreakdown = matchedRoom && utilitySum > 0;
+  const totalBillPackage = rentRecord.rent;
+
   const handlePrintReceipt = () => {
     window.print();
   };
@@ -40,17 +60,32 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
   const handleShareWhatsApp = () => {
     const cleanPhone = rentRecord.phone.replace(/[^0-9]/g, '');
     const phoneWithCode = cleanPhone.startsWith('88') ? cleanPhone : `88${cleanPhone}`;
+    
+    let breakdownText = '';
+    if (hasBillBreakdown) {
+      breakdownText = language === 'bn'
+        ? `\n\n*বিলের বিস্তারিত বিবরণ:*\n• বাসা ভাড়া: ৳${houseRent.toLocaleString()}\n• গ্যাস বিল: ৳${gasBill.toLocaleString()}\n• পানির বিল: ৳${waterBill.toLocaleString()}\n• ময়লার বিল: ৳${wasteBill.toLocaleString()}`
+        : `\n\n*Bill Breakdown:*\n• House Rent: ৳${houseRent.toLocaleString()}\n• Gas Bill: ৳${gasBill.toLocaleString()}\n• Water Bill: ৳${waterBill.toLocaleString()}\n• Waste Bill: ৳${wasteBill.toLocaleString()}`;
+    }
+
     const message = language === 'bn'
-      ? `*নাহিদ কুটির — ভাড়া পরিশোধের রসিদ*\n\nরসিদ নং: #NK-${rentRecord.id.substring(0, 8).toUpperCase()}\nতারিখ: ${rentRecord.date}\nভাড়াটিয়া: ${rentRecord.tenant}\nরুম: ${rentRecord.room}\n\nমোট ভাড়া: ৳${rentRecord.rent.toLocaleString()}\nজমা দেওয়া হয়েছে: ৳${rentRecord.paid.toLocaleString()}\nঅবশিষ্ট বকেয়া: ৳${rentRecord.due.toLocaleString()}\n\nনাহিদ কুটিরে থাকার জন্য ধন্যবাদ!`
-      : `*Nahid Kutir — Rent Payment Receipt*\n\nReceipt No: #NK-${rentRecord.id.substring(0, 8).toUpperCase()}\nDate: ${rentRecord.date}\nTenant: ${rentRecord.tenant}\nRoom: ${rentRecord.room}\n\nTotal Rent: ৳${rentRecord.rent.toLocaleString()}\nPaid Amount: ৳${rentRecord.paid.toLocaleString()}\nRemaining Due: ৳${rentRecord.due.toLocaleString()}\n\nThank you for staying at Nahid Kutir!`;
+      ? `*নাহিদ কুটির — ভাড়া পরিশোধের রসিদ*\n\nরসিদ নং: #NK-${rentRecord.id.substring(0, 8).toUpperCase()}\nতারিখ: ${rentRecord.date}\nভাড়াটিয়া: ${rentRecord.tenant}\nরুম: ${rentRecord.room}${breakdownText}\n\n------------------------------\nমোট পাওনা: ৳${totalBillPackage.toLocaleString()}\nজমা দেওয়া হয়েছে: ৳${rentRecord.paid.toLocaleString()}\nঅবশিষ্ট বকেয়া: ৳${rentRecord.due.toLocaleString()}\n\nনাহিদ কুটিরে থাকার জন্য ধন্যবাদ!`
+      : `*Nahid Kutir — Rent Payment Receipt*\n\nReceipt No: #NK-${rentRecord.id.substring(0, 8).toUpperCase()}\nDate: ${rentRecord.date}\nTenant: ${rentRecord.tenant}\nRoom: ${rentRecord.room}${breakdownText}\n\n------------------------------\nTotal Payable: ৳${totalBillPackage.toLocaleString()}\nPaid Amount: ৳${rentRecord.paid.toLocaleString()}\nRemaining Due: ৳${rentRecord.due.toLocaleString()}\n\nThank you for staying at Nahid Kutir!`;
     
     window.open(`https://wa.me/${phoneWithCode}?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   const handleCopyReceipt = () => {
+    let breakdownText = '';
+    if (hasBillBreakdown) {
+      breakdownText = language === 'bn'
+        ? ` | ভাড়া: ৳${houseRent.toLocaleString()}, গ্যাস: ৳${gasBill.toLocaleString()}, পানি: ৳${waterBill.toLocaleString()}, ময়লা: ৳${wasteBill.toLocaleString()}`
+        : ` | Rent: ৳${houseRent.toLocaleString()}, Gas: ৳${gasBill.toLocaleString()}, Water: ৳${waterBill.toLocaleString()}, Waste: ৳${wasteBill.toLocaleString()}`;
+    }
+
     const summary = language === 'bn'
-      ? `নাহিদ কুটির রসিদ (#NK-${rentRecord.id.substring(0, 8).toUpperCase()})\nতারিখ: ${rentRecord.date}\nভাড়াটিয়া: ${rentRecord.tenant} (রুম ${rentRecord.room})\nজমা: ৳${rentRecord.paid.toLocaleString()} | বকেয়া: ৳${rentRecord.due.toLocaleString()}`
-      : `Nahid Kutir Receipt (#NK-${rentRecord.id.substring(0, 8).toUpperCase()})\nDate: ${rentRecord.date}\nTenant: ${rentRecord.tenant} (Room ${rentRecord.room})\nPaid: ৳${rentRecord.paid.toLocaleString()} | Due: ৳${rentRecord.due.toLocaleString()}`;
+      ? `নাহিদ কুটির রসিদ (#NK-${rentRecord.id.substring(0, 8).toUpperCase()})\nতারিখ: ${rentRecord.date}\nভাড়াটিয়া: ${rentRecord.tenant} (রুম ${rentRecord.room})${breakdownText}\nজমা: ৳${rentRecord.paid.toLocaleString()} | বকেয়া: ৳${rentRecord.due.toLocaleString()}`
+      : `Nahid Kutir Receipt (#NK-${rentRecord.id.substring(0, 8).toUpperCase()})\nDate: ${rentRecord.date}\nTenant: ${rentRecord.tenant} (Room ${rentRecord.room})${breakdownText}\nPaid: ৳${rentRecord.paid.toLocaleString()} | Due: ৳${rentRecord.due.toLocaleString()}`;
     
     navigator.clipboard.writeText(summary);
     setCopied(true);
@@ -114,11 +149,11 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
         </div>
 
         {/* PRINTABLE RECEIPT CONTENT CONTAINER */}
-        <div className="py-4 sm:py-5 space-y-5 text-slate-900 dark:text-slate-100" id="receiptContent">
+        <div className="py-4 sm:py-5 space-y-4 text-slate-900 dark:text-slate-100" id="receiptContent">
           
           {/* 1. Header & Brand Title */}
-          <div className="text-center border-b pb-4 border-slate-200 dark:border-slate-800 relative">
-            <div className="inline-flex items-center justify-center w-11 h-11 rounded-2xl bg-[#e0533c]/10 dark:bg-[#e0533c]/20 text-[#e0533c] border border-[#e0533c]/30 mb-2 shadow-2xs">
+          <div className="text-center border-b pb-3 border-slate-200 dark:border-slate-800 relative">
+            <div className="inline-flex items-center justify-center w-10 h-10 rounded-2xl bg-[#e0533c]/10 dark:bg-[#e0533c]/20 text-[#e0533c] border border-[#e0533c]/30 mb-1.5 shadow-2xs">
               <Home className="w-5 h-5" />
             </div>
             <h2 className="text-base sm:text-lg font-black tracking-tight text-slate-900 dark:text-white">
@@ -127,7 +162,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
             <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
               {t.receiptAddress}
             </p>
-            <div className="mt-2 inline-block px-3 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">
+            <div className="mt-1.5 inline-block px-3 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">
               {language === 'bn' ? 'অফিসিয়াল ভাড়া জমার রসিদ' : 'Official Rent Payment Receipt'}
             </div>
           </div>
@@ -167,40 +202,91 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
             </div>
           </div>
 
-          {/* 4. Payment Breakdown Table */}
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+          {/* 4. Itemized Payment Breakdown Table */}
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-2xs">
+            <div className="bg-slate-100 dark:bg-slate-800/90 px-3 py-1.5 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between text-[11px] font-bold text-slate-700 dark:text-slate-300">
+              <span className="flex items-center gap-1">
+                <Receipt className="w-3.5 h-3.5 text-[#e0533c]" />
+                {language === 'bn' ? 'বিলের বিস্তারিত বিবরণ' : 'Itemized Bill Breakdown'}
+              </span>
+              <span>{language === 'bn' ? 'টাকা (TK)' : 'Amount (TK)'}</span>
+            </div>
+
             <table className="w-full text-xs text-left border-collapse">
-              <thead>
-                <tr className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold border-b border-slate-200 dark:border-slate-700">
-                  <th className="p-2.5">{language === 'bn' ? 'বিবরণ' : 'Description'}</th>
-                  <th className="p-2.5 text-right">{language === 'bn' ? 'পরিমাণ' : 'Amount'}</th>
-                </tr>
-              </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                {/* 1. House Rent Line */}
                 <tr>
-                  <td className="p-2.5 font-semibold text-slate-700 dark:text-slate-300">
-                    {t.totalRentDue} ({t.roomText} {rentRecord.room})
+                  <td className="p-2.5 font-medium text-slate-700 dark:text-slate-300">
+                    {language === 'bn' ? '১. মূল ঘর ভাড়া (House Rent)' : '1. House Rent'}
                   </td>
-                  <td className="p-2.5 text-right font-bold text-slate-900 dark:text-white">
-                    {formatCurrency(rentRecord.rent)}
+                  <td className="p-2.5 text-right font-bold text-slate-900 dark:text-white font-mono">
+                    {formatCurrency(houseRent)}
                   </td>
                 </tr>
 
-                <tr className="bg-emerald-50/60 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-300">
+                {/* 2. Gas Bill Line */}
+                {gasBill > 0 && (
+                  <tr>
+                    <td className="p-2.5 font-medium text-slate-700 dark:text-slate-300">
+                      {language === 'bn' ? '২. গ্যাস বিল (Gas Bill)' : '2. Gas Bill'}
+                    </td>
+                    <td className="p-2.5 text-right font-bold text-slate-900 dark:text-white font-mono">
+                      {formatCurrency(gasBill)}
+                    </td>
+                  </tr>
+                )}
+
+                {/* 3. Water Bill Line */}
+                {waterBill > 0 && (
+                  <tr>
+                    <td className="p-2.5 font-medium text-slate-700 dark:text-slate-300">
+                      {language === 'bn' ? '৩. পানির বিল (Water Bill)' : '3. Water Bill'}
+                    </td>
+                    <td className="p-2.5 text-right font-bold text-slate-900 dark:text-white font-mono">
+                      {formatCurrency(waterBill)}
+                    </td>
+                  </tr>
+                )}
+
+                {/* 4. Waste Bill Line */}
+                {wasteBill > 0 && (
+                  <tr>
+                    <td className="p-2.5 font-medium text-slate-700 dark:text-slate-300">
+                      {language === 'bn' ? '৪. ময়লার বিল (Waste Bill)' : '4. Waste Bill'}
+                    </td>
+                    <td className="p-2.5 text-right font-bold text-slate-900 dark:text-white font-mono">
+                      {formatCurrency(wasteBill)}
+                    </td>
+                  </tr>
+                )}
+
+                {/* Total Bill Package Line */}
+                <tr className="bg-slate-100/70 dark:bg-slate-800/60 font-bold border-t border-slate-200 dark:border-slate-700">
+                  <td className="p-2.5 text-slate-900 dark:text-white font-bold">
+                    {language === 'bn' ? 'সর্বমোট পাওনা (Total Payable Rent)' : 'Total Payable Rent'}
+                  </td>
+                  <td className="p-2.5 text-right font-black text-slate-900 dark:text-white text-sm font-mono">
+                    {formatCurrency(totalBillPackage)}
+                  </td>
+                </tr>
+
+                {/* Paid Amount Line */}
+                <tr className="bg-emerald-50/70 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-300">
                   <td className="p-2.5 font-bold flex items-center gap-1.5">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                     <span>{t.paidAmountText}</span>
                   </td>
-                  <td className="p-2.5 text-right font-black text-sm text-emerald-600 dark:text-emerald-400">
+                  <td className="p-2.5 text-right font-black text-sm text-emerald-600 dark:text-emerald-400 font-mono">
                     {formatCurrency(rentRecord.paid)}
                   </td>
                 </tr>
 
-                <tr className={rentRecord.due > 0 ? "bg-rose-50/60 dark:bg-rose-950/20 text-rose-800 dark:text-rose-300" : ""}>
+                {/* Remaining Due Line */}
+                <tr className={rentRecord.due > 0 ? "bg-rose-50/70 dark:bg-rose-950/20 text-rose-800 dark:text-rose-300" : ""}>
                   <td className="p-2.5 font-bold">
                     {t.remainingDueText}
                   </td>
-                  <td className={`p-2.5 text-right font-black text-sm ${rentRecord.due > 0 ? 'text-rose-600' : 'text-slate-500 dark:text-slate-400'}`}>
+                  <td className={`p-2.5 text-right font-black text-sm font-mono ${rentRecord.due > 0 ? 'text-rose-600' : 'text-slate-500 dark:text-slate-400'}`}>
                     {formatCurrency(rentRecord.due)}
                   </td>
                 </tr>
@@ -247,12 +333,12 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           </div>
 
           {/* 6. Thank You Footer Message */}
-          <p className="text-center text-xs text-slate-500 dark:text-slate-400 font-semibold italic pt-1">
+          <p className="text-center text-xs text-slate-500 dark:text-slate-400 font-semibold italic pt-0.5">
             "{t.thankYouMsg}"
           </p>
 
           {/* 7. Official Signatures Section */}
-          <div className="pt-6 sm:pt-8 flex justify-between items-end text-[11px] font-bold text-slate-600 dark:text-slate-400">
+          <div className="pt-4 sm:pt-6 flex justify-between items-end text-[11px] font-bold text-slate-600 dark:text-slate-400">
             <div className="text-center border-t-2 border-slate-300 dark:border-slate-700 pt-1.5 w-32">
               <ShieldCheck className="w-4 h-4 mx-auto text-slate-400 mb-0.5 no-print" />
               {t.signatureLandlord}
@@ -260,7 +346,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
             
             {/* System Stamp Motif */}
             <div className="text-center opacity-80 pointer-events-none">
-              <div className="w-12 h-12 rounded-full border-2 border-dashed border-[#e0533c] flex items-center justify-center mx-auto text-[9px] font-black text-[#e0533c] uppercase rotate-[-12deg] p-1">
+              <div className="w-11 h-11 rounded-full border-2 border-dashed border-[#e0533c] flex items-center justify-center mx-auto text-[8px] font-black text-[#e0533c] uppercase rotate-[-12deg] p-1">
                 {language === 'bn' ? 'যাচাইকৃত' : 'VERIFIED'}
               </div>
             </div>
@@ -271,7 +357,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           </div>
 
           {/* Computer Generated Notice */}
-          <div className="text-[9px] text-center text-slate-400 dark:text-slate-500 font-mono pt-2 border-t border-slate-100 dark:border-slate-800/80">
+          <div className="text-[9px] text-center text-slate-400 dark:text-slate-500 font-mono pt-1.5 border-t border-slate-100 dark:border-slate-800/80">
             {language === 'bn' ? 'কম্পিউটার থেকে স্বয়ংক্রিয়ভাবে প্রস্তুতকৃত রসিদ। কোনো স্বাক্ষরের প্রয়োজন নেই।' : 'Computer generated payment record. Valid without physical seal.'}
           </div>
 
@@ -281,5 +367,6 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
     document.body
   );
 };
+
 
 

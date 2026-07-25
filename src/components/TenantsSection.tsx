@@ -189,7 +189,7 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
             </button>
             <button
               type="submit"
-              className="px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow-sm transition-colors"
+              className="px-4 py-1.5 rounded-lg bg-[#e0533c] hover:bg-[#cb422d] text-white font-semibold text-xs shadow-sm transition-colors cursor-pointer"
             >
               {editingId ? t.tenantUpdateBtn : t.tenantSubmitBtn}
             </button>

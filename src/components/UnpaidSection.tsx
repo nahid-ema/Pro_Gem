@@ -155,7 +155,7 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
 
                       <button
                         onClick={() => onQuickPay(item)}
-                        className="flex items-center gap-1 px-3 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs shadow-sm transition-colors"
+                        className="flex items-center gap-1 px-3 py-1 rounded-lg bg-[#e0533c] hover:bg-[#cb422d] text-white font-semibold text-xs shadow-sm transition-colors cursor-pointer"
                       >
                         <DollarSign className="w-3.5 h-3.5" />
                         <span>{t.quickPay}</span>

@@ -905,6 +905,7 @@ export default function App() {
       {/* Modals & Toasts */}
       <ReceiptModal
         rentRecord={receiptRecord}
+        rooms={rooms}
         language={language}
         onClose={() => setReceiptRecord(null)}
       />
