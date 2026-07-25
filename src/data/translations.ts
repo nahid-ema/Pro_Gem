@@ -166,8 +166,8 @@ export const translations = {
     
     // Receipt Modal
     receiptTitle: "ভাড়া জমার রসিদ",
-    receiptHeader: "নাহিদ কুটির — ইকো লাক্সারি এপার্টমেন্টস",
-    receiptAddress: "আবাসিক এলাকা, ঢাকা, বাংলাদেশ",
+    receiptHeader: "নাহিদ কুটির",
+    receiptAddress: "আবাসিক এলাকা, টঙ্গী, ঢাকা, বাংলাদেশ",
     receiptDate: "জমার তারিখ",
     receiptNo: "রসিদ নং",
     receivedFrom: "গ্রাহক / ভাড়াটিয়া",
@@ -350,8 +350,8 @@ export const translations = {
 
     // Receipt Modal
     receiptTitle: "Rent Payment Receipt",
-    receiptHeader: "Nahid Kutir — Eco Luxury Apartments",
-    receiptAddress: "Residential Area, Dhaka, Bangladesh",
+    receiptHeader: "Nahid Kutir",
+    receiptAddress: "Residential Area, Tongi, Dhaka, Bangladesh",
     receiptDate: "Payment Date",
     receiptNo: "Receipt No",
     receivedFrom: "Received From",
