@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { RentRecord, Tenant, Room, Language } from '../types';
 import { getTranslation } from '../data/translations';
 import { Banknote, Plus, Edit2, Trash2, MessageSquare, Receipt, CheckCircle2, AlertTriangle } from 'lucide-react';
@@ -12,6 +12,9 @@ interface RentSectionProps {
   searchQuery: string;
   selectedYear: string;
   selectedMonth: string;
+  initialTenantId?: string | null;
+  initialDueAmount?: number | null;
+  onClearQuickPay?: () => void;
   onAddRent: (rent: Omit<RentRecord, 'id'>) => void;
   onUpdateRent: (id: string, rent: Omit<RentRecord, 'id'>) => void;
   onDeleteRent: (id: string) => void;
@@ -26,6 +29,9 @@ export const RentSection: React.FC<RentSectionProps> = ({
   searchQuery,
   selectedYear,
   selectedMonth,
+  initialTenantId,
+  initialDueAmount,
+  onClearQuickPay,
   onAddRent,
   onUpdateRent,
   onDeleteRent,
@@ -80,6 +86,17 @@ export const RentSection: React.FC<RentSectionProps> = ({
       }
     }
   };
+
+  useEffect(() => {
+    if (initialTenantId) {
+      setIsFormOpen(true);
+      handleTenantSelect(initialTenantId);
+      if (initialDueAmount !== undefined && initialDueAmount !== null && initialDueAmount > 0) {
+        setPaid(String(initialDueAmount));
+      }
+      onClearQuickPay?.();
+    }
+  }, [initialTenantId]);
 
   const resetForm = () => {
     setEditingId(null);

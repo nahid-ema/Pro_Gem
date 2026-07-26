@@ -74,6 +74,8 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [receiptRecord, setReceiptRecord] = useState<RentRecord | null>(null);
+  const [quickPayTenantId, setQuickPayTenantId] = useState<string | null>(null);
+  const [quickPayDueAmount, setQuickPayDueAmount] = useState<number | null>(null);
   const [toast, setToast] = useState<ToastMessage | null>(null);
 
   const showToast = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
@@ -299,48 +301,38 @@ export default function App() {
     if (!db || !isFirebaseInitialized) return;
 
     const unsubRooms = onSnapshot(collection(db, 'rooms'), (snap) => {
-      if (!snap.empty) {
-        const items: Room[] = [];
-        snap.forEach((docSnap) => items.push({ id: docSnap.id, ...docSnap.data() } as Room));
-        items.sort((a, b) => (a.roomNo || '').localeCompare(b.roomNo || '', undefined, { numeric: true }));
-        setRooms(items);
-      }
+      const items: Room[] = [];
+      snap.forEach((docSnap) => items.push({ id: docSnap.id, ...docSnap.data() } as Room));
+      items.sort((a, b) => (a.roomNo || '').localeCompare(b.roomNo || '', undefined, { numeric: true }));
+      setRooms(items);
     }, () => {});
 
     const unsubTenants = onSnapshot(collection(db, 'tenants'), (snap) => {
-      if (!snap.empty) {
-        const items: Tenant[] = [];
-        snap.forEach((docSnap) => items.push({ id: docSnap.id, ...docSnap.data() } as Tenant));
-        items.sort((a, b) => (a.room || '').localeCompare(b.room || '', undefined, { numeric: true }));
-        setTenants(items);
-      }
+      const items: Tenant[] = [];
+      snap.forEach((docSnap) => items.push({ id: docSnap.id, ...docSnap.data() } as Tenant));
+      items.sort((a, b) => (a.room || '').localeCompare(b.room || '', undefined, { numeric: true }));
+      setTenants(items);
     }, () => {});
 
     const unsubRents = onSnapshot(collection(db, 'rents'), (snap) => {
-      if (!snap.empty) {
-        const items: RentRecord[] = [];
-        snap.forEach((docSnap) => items.push({ id: docSnap.id, ...docSnap.data() } as RentRecord));
-        items.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-        setRents(items);
-      }
+      const items: RentRecord[] = [];
+      snap.forEach((docSnap) => items.push({ id: docSnap.id, ...docSnap.data() } as RentRecord));
+      items.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+      setRents(items);
     }, () => {});
 
     const unsubExp = onSnapshot(collection(db, 'expenses'), (snap) => {
-      if (!snap.empty) {
-        const items: Expense[] = [];
-        snap.forEach((docSnap) => items.push({ id: docSnap.id, ...docSnap.data() } as Expense));
-        items.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-        setExpenses(items);
-      }
+      const items: Expense[] = [];
+      snap.forEach((docSnap) => items.push({ id: docSnap.id, ...docSnap.data() } as Expense));
+      items.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+      setExpenses(items);
     }, () => {});
 
     const unsubDok = onSnapshot(collection(db, 'dokanBaki'), (snap) => {
-      if (!snap.empty) {
-        const items: ShopDue[] = [];
-        snap.forEach((docSnap) => items.push({ id: docSnap.id, ...docSnap.data() } as ShopDue));
-        items.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-        setDokanDues(items);
-      }
+      const items: ShopDue[] = [];
+      snap.forEach((docSnap) => items.push({ id: docSnap.id, ...docSnap.data() } as ShopDue));
+      items.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+      setDokanDues(items);
     }, () => {});
 
     return () => {
@@ -614,6 +606,8 @@ export default function App() {
   };
 
   const handleQuickPay = (item: UnpaidTenantItem) => {
+    setQuickPayTenantId(item.tenant.id);
+    setQuickPayDueAmount(item.estimatedDue);
     setActiveTab('rent');
     showToast(
       language === 'bn'
@@ -847,6 +841,12 @@ export default function App() {
               searchQuery={searchQuery}
               selectedYear={selectedYear}
               selectedMonth={selectedMonth}
+              initialTenantId={quickPayTenantId}
+              initialDueAmount={quickPayDueAmount}
+              onClearQuickPay={() => {
+                setQuickPayTenantId(null);
+                setQuickPayDueAmount(null);
+              }}
               onAddRent={handleAddRent}
               onUpdateRent={handleUpdateRent}
               onDeleteRent={handleDeleteRent}
