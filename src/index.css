@@ -25,10 +25,20 @@
   }
 }
 
-/* Mobile Screen Density & Touch Optimization */
+/* Mobile & Desktop Screen Density & Font Scaling */
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 1024px) {
+  html {
+    font-size: 13.5px; /* Compact, sleek font scaling for desktop full screen mode */
+  }
+}
+
 @media (max-width: 639px) {
   html {
-    font-size: 13.5px;
+    font-size: 13.5px; /* Compact mobile feel */
   }
 
   body {
