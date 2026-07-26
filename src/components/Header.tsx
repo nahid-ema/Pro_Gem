@@ -29,8 +29,10 @@ import {
   AlertTriangle,
   Receipt,
   Store,
-  LineChart
+  LineChart,
+  Smartphone
 } from 'lucide-react';
+import { AndroidInstallModal } from './AndroidInstallModal';
 
 interface HeaderProps {
   language: Language;
@@ -94,6 +96,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isQuickNavOpen, setIsQuickNavOpen] = useState(false);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [isAndroidModalOpen, setIsAndroidModalOpen] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -213,8 +216,21 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Right Actions: Quick Navigation Button + Menu Dropdown side by side */}
+        {/* Right Actions: Android App + Quick Navigation + Menu Dropdown side by side */}
         <div className="flex items-center gap-2 no-print shrink-0">
+          
+          {/* Android App Button */}
+          <button
+            type="button"
+            onClick={() => setIsAndroidModalOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm font-semibold transition-all cursor-pointer shrink-0 shadow-2xs active:scale-95"
+            title={language === 'bn' ? 'অ্যান্ড্রয়েড মোবাইল অ্যাপ ইনস্টল করুন' : 'Install Android App'}
+          >
+            <Smartphone className="w-4 h-4 text-[#e0533c] shrink-0" />
+            <span className="hidden md:inline">{language === 'bn' ? 'অ্যান্ড্রয়েড অ্যাপ' : 'Android App'}</span>
+            <span className="inline md:hidden text-[11px] px-1.5 py-0.5 rounded-md bg-[#e0533c]/15 text-[#e0533c] font-bold uppercase">App</span>
+          </button>
+
           {/* Quick Navigation Button */}
           <div className="relative shrink-0" ref={quickNavRef}>
             <button
@@ -404,6 +420,19 @@ export const Header: React.FC<HeaderProps> = ({
                       <span className="text-[10px] text-slate-400 font-bold">⇄</span>
                     </button>
                   </div>
+
+                  {/* Android App Action */}
+                  <button
+                    type="button"
+                    onClick={() => { setIsMenuOpen(false); setIsAndroidModalOpen(true); }}
+                    className="w-full text-left px-3 py-2 rounded-xl bg-gradient-to-r from-[#e0533c]/10 to-amber-500/10 hover:from-[#e0533c]/20 hover:to-amber-500/20 flex items-center justify-between text-slate-800 dark:text-slate-100 font-bold transition-colors cursor-pointer border border-[#e0533c]/20"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Smartphone className="w-4 h-4 text-[#e0533c]" />
+                      <span>{language === 'bn' ? 'অ্যান্ড্রয়েড অ্যাপ ইনস্টল' : 'Install Android App'}</span>
+                    </div>
+                    <span className="text-[10px] bg-[#e0533c] text-white px-2 py-0.5 rounded-full font-extrabold uppercase">APK / PWA</span>
+                  </button>
 
                   {/* Print Action */}
                   <button
@@ -613,6 +642,13 @@ export const Header: React.FC<HeaderProps> = ({
           )}
         </div>
       </div>
+
+      {/* Android Install Modal */}
+      <AndroidInstallModal
+        isOpen={isAndroidModalOpen}
+        onClose={() => setIsAndroidModalOpen(false)}
+        language={language}
+      />
     </header>
   );
 };

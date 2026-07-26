@@ -1,0 +1,19 @@
+{
+  "short_name": "নাহিদ কুটির",
+  "name": "নাহিদ কুটির (Nahid Kutir)",
+  "description": "Property & Rent Management App for Nahid Kutir",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#0f172a",
+  "theme_color": "#e0533c",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/"
+}
