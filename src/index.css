@@ -32,7 +32,13 @@ html {
 
 @media (min-width: 1024px) {
   html {
-    font-size: 13.5px; /* Compact, sleek font scaling for desktop full screen mode */
+    font-size: 14px; /* Balanced desktop scaling */
+  }
+}
+
+@media (min-width: 1600px) {
+  html {
+    font-size: 14.5px; /* Clean scaling for high resolution full screen desktop monitors */
   }
 }
 
