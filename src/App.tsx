@@ -24,7 +24,6 @@ import { collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, setDoc, getD
 
 import { Header } from './components/Header';
 import { TabBar } from './components/TabBar';
-import { FilterBar } from './components/FilterBar';
 import { BriefDashboard } from './components/BriefDashboard';
 import { RoomsSection } from './components/RoomsSection';
 import { TenantsSection } from './components/TenantsSection';
@@ -734,7 +733,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* Header */}
+        {/* Header containing Branding, Menu, Date Picker, Quick Nav, and Search */}
         <Header
           language={language}
           theme={theme}
@@ -754,17 +753,10 @@ export default function App() {
           isFirebaseActive={isFirebaseInitialized && (!!currentUser || isLocalUnlocked)}
           isSyncing={isSyncing}
           lastCloudBackupTime={lastCloudBackupTime}
-        />
-
-        {/* Global Filter Bar */}
-        <FilterBar
           selectedYear={selectedYear}
           selectedMonth={selectedMonth}
           searchQuery={searchQuery}
           availableYears={availableYears}
-          language={language}
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
           onYearChange={setSelectedYear}
           onMonthChange={setSelectedMonth}
           onSearchChange={setSearchQuery}
