@@ -481,7 +481,6 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           top: '0',
           left: '-9999px',
           width: '794px',
-          height: '1123px',
           backgroundColor: '#ffffff',
           color: '#0f172a',
           padding: '40px',
@@ -495,9 +494,6 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           border: '2px solid #334155',
           borderRadius: '16px',
           padding: '40px 48px',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
           boxSizing: 'border-box'
         }}>
           {/* Document Header */}

@@ -261,7 +261,21 @@ export async function generateElementPDF({
     format: 'a4',
   });
 
-  pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
+  // Calculate rendering size proportional to canvas aspect ratio
+  let renderWidth = pdfWidth;
+  let renderHeight = (canvas.height * renderWidth) / canvas.width;
+
+  // Scale down if it somehow exceeds A4 height
+  if (renderHeight > pdfHeight) {
+    renderHeight = pdfHeight;
+    renderWidth = (canvas.width * renderHeight) / canvas.height;
+  }
+
+  // Draw exactly at natural size without stretch, pinned to top
+  const xPos = (pdfWidth - renderWidth) / 2;
+  const yPos = 0;
+
+  pdf.addImage(imgData, 'JPEG', xPos, yPos, renderWidth, renderHeight, undefined, 'FAST');
 
   const blob = pdf.output('blob');
   const file = new File([blob], filename, { type: 'application/pdf' });
