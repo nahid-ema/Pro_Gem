@@ -6,6 +6,68 @@ export interface PDFGenerateOptions {
   filename?: string;
 }
 
+/**
+ * Converts OKLCH (L C H [/ A]) to RGB/RGBA string
+ */
+function oklchToRgb(lStr: string, cStr: string, hStr: string, aStr?: string): string {
+  let L = parseFloat(lStr);
+  if (lStr.endsWith('%')) L = L / 100;
+
+  let C = parseFloat(cStr);
+  if (cStr.endsWith('%')) C = C / 100;
+
+  let H = parseFloat(hStr);
+  if (hStr.endsWith('deg')) H = parseFloat(hStr);
+  else if (hStr.endsWith('rad')) H = (parseFloat(hStr) * 180) / Math.PI;
+  else if (hStr.endsWith('turn')) H = parseFloat(hStr) * 360;
+
+  if (isNaN(H)) H = 0;
+
+  const hRad = (H * Math.PI) / 180;
+  const a = C * Math.cos(hRad);
+  const b = C * Math.sin(hRad);
+
+  return oklabToRgbValues(L, a, b, aStr);
+}
+
+/**
+ * Converts OKLAB (L a b [/ A]) to RGB/RGBA string
+ */
+function oklabToRgbValues(L: number, a: number, b: number, aStr?: string): string {
+  const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+  const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+  const s_ = L - 0.0894841775 * a - 0.1291980554 * b;
+
+  const l = l_ * l_ * l_;
+  const m = m_ * m_ * m_;
+  const s = s_ * s_ * s_;
+
+  const rLin = +4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s;
+  const gLin = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s;
+  const bLin = -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s;
+
+  const toSrgb = (c: number) => {
+    const clamped = Math.max(0, Math.min(1, c));
+    const val = clamped >= 0.0031308 ? 1.055 * Math.pow(clamped, 1 / 2.4) - 0.055 : 12.92 * clamped;
+    return Math.round(Math.max(0, Math.min(255, val * 255)));
+  };
+
+  const r = toSrgb(rLin);
+  const g = toSrgb(gLin);
+  const bVal = toSrgb(bLin);
+
+  if (aStr !== undefined && aStr !== null && aStr !== '') {
+    let alpha = parseFloat(aStr);
+    if (aStr.endsWith('%')) alpha = alpha / 100;
+    if (isNaN(alpha)) alpha = 1;
+    return `rgba(${r}, ${g}, ${bVal}, ${alpha})`;
+  }
+
+  return `rgb(${r}, ${g}, ${bVal})`;
+}
+
+const OKLCH_REGEX = /oklch\(\s*([\d.%]+)\s+([\d.%]+)\s+([-\d.degdegturnrad]+)(?:\s*\/\s*([\d.%]+))?\s*\)/gi;
+const OKLAB_REGEX = /oklab\(\s*([\d.%]+)\s+([-\d.%]+)\s+([-\d.%]+)(?:\s*\/\s*([\d.%]+))?\s*\)/gi;
 const COLOR_FUNC_REGEX = /(?:oklch|oklab|color-mix|color|light-dark)\((?:[^()]+|\((?:[^()]+|\([^()]*\))*\))*\)/gi;
 
 let canvasCtx: CanvasRenderingContext2D | null = null;
@@ -18,28 +80,42 @@ function getCanvasCtx(): CanvasRenderingContext2D | null {
 }
 
 /**
- * Converts any unsupported CSS color substring (oklch, oklab, color-mix, etc.) into standard browser-supported color strings (#rrggbb or rgba)
+ * Converts any unsupported CSS color substring into standard browser-supported color strings
  */
 export function convertUnsupportedColors(cssValue: string): string {
   if (!cssValue || typeof cssValue !== 'string') return cssValue;
   if (!/(?:oklch|oklab|color-mix|color|light-dark)/i.test(cssValue)) return cssValue;
 
-  const ctx = getCanvasCtx();
-  if (!ctx) return cssValue;
+  let converted = cssValue.replace(OKLCH_REGEX, (_, l, c, h, a) => oklchToRgb(l, c, h, a));
+  converted = converted.replace(OKLAB_REGEX, (_, l, aVal, bVal, alpha) =>
+    oklabToRgbValues(
+      parseFloat(l) > 1 ? parseFloat(l) / 100 : parseFloat(l),
+      parseFloat(aVal),
+      parseFloat(bVal),
+      alpha
+    )
+  );
 
-  return cssValue.replace(COLOR_FUNC_REGEX, (match) => {
-    try {
-      ctx.fillStyle = '#000000'; // reset
-      ctx.fillStyle = match;
-      const converted = ctx.fillStyle;
-      if (converted && converted !== match) {
-        return converted;
-      }
-    } catch {
-      // fallback if canvas parsing fails
+  if (/(?:oklch|oklab|color-mix|color|light-dark)/i.test(converted)) {
+    const ctx = getCanvasCtx();
+    if (ctx) {
+      converted = converted.replace(COLOR_FUNC_REGEX, (match) => {
+        try {
+          ctx.fillStyle = '#000000';
+          ctx.fillStyle = match;
+          const parsed = ctx.fillStyle;
+          if (parsed && parsed !== match && parsed !== '#000000') {
+            return parsed;
+          }
+        } catch {
+          // Ignore canvas parse errors
+        }
+        return 'rgb(15, 23, 42)';
+      });
     }
-    return 'rgb(0, 0, 0)';
-  });
+  }
+
+  return converted;
 }
 
 /**
@@ -62,6 +138,26 @@ export async function generateElementPDF({
     logging: false,
     windowWidth: 800, // Standardized canvas width for consistent A4 output
     onclone: (clonedDoc, clonedElement) => {
+      // 0. Force Light Mode on cloned document so PDF is always clean white paper style
+      clonedDoc.documentElement.classList.remove('dark');
+      clonedDoc.body.classList.remove('dark');
+
+      let current: HTMLElement | null = clonedElement;
+      while (current) {
+        current.classList.remove('dark');
+        current = current.parentElement;
+      }
+
+      clonedElement.querySelectorAll('*').forEach((el) => {
+        el.classList.remove('dark');
+      });
+
+      // Force white background and dark text on the receipt container
+      clonedElement.style.backgroundColor = '#ffffff';
+      clonedElement.style.color = '#0f172a';
+      clonedElement.style.padding = '24px';
+      clonedElement.style.borderRadius = '16px';
+
       // 1. Sanitize all <style> tags in cloned document
       const styleTags = clonedDoc.querySelectorAll('style');
       styleTags.forEach((styleTag) => {
@@ -129,13 +225,9 @@ export async function generateElementPDF({
           if (compStyle) {
             colorProps.forEach((prop) => {
               const val = compStyle.getPropertyValue(prop);
-              if (val) {
-                if (/(?:oklch|oklab|color-mix|color|light-dark)/i.test(val)) {
-                  const converted = convertUnsupportedColors(val);
-                  node.style.setProperty(prop, converted, 'important');
-                } else if (val.startsWith('rgb')) {
-                  node.style.setProperty(prop, val, 'important');
-                }
+              if (val && /(?:oklch|oklab|color-mix|color|light-dark)/i.test(val)) {
+                const converted = convertUnsupportedColors(val);
+                node.style.setProperty(prop, converted, 'important');
               }
             });
           }
@@ -178,50 +270,74 @@ export async function shareOrDownloadPDF({
   title = 'Payment Receipt',
   text = 'Nahid Kutir Payment Receipt PDF',
 }: PDFGenerateOptions & { phone?: string; title?: string; text?: string }): Promise<'shared' | 'downloaded'> {
-  const { blob, file, downloadUrl } = await generateElementPDF({ elementId, filename });
-
   // Clean phone number format for WhatsApp
   let cleanPhone = phone.replace(/[^0-9]/g, '');
-  if (cleanPhone && !cleanPhone.startsWith('88')) {
+  if (cleanPhone && !cleanPhone.startsWith('88') && cleanPhone.length === 11) {
     cleanPhone = `88${cleanPhone}`;
   }
 
   // Check if native Web Share API supports file sharing (mobile / Android / PWA)
-  if (
-    navigator.canShare &&
-    navigator.canShare({ files: [file] }) &&
-    navigator.share
-  ) {
-    try {
-      await navigator.share({
-        title,
-        text,
-        files: [file],
-      });
-      return 'shared';
-    } catch (err: any) {
-      // If user cancelled share sheet, return downloaded or handle gracefully
-      if (err.name === 'AbortError') {
-        return 'downloaded';
+  const isMobileShareSupported =
+    typeof navigator !== 'undefined' &&
+    Boolean(navigator.canShare) &&
+    Boolean(navigator.share) &&
+    navigator.canShare({ files: [new File([], 'test.pdf', { type: 'application/pdf' })] });
+
+  // If on desktop (no native file sharing), pre-open blank popup window synchronously BEFORE async operation
+  let waWindow: Window | null = null;
+  if (!isMobileShareSupported) {
+    waWindow = window.open('about:blank', '_blank');
+  }
+
+  try {
+    const { blob, file, downloadUrl } = await generateElementPDF({ elementId, filename });
+
+    // Try Mobile Native Share first
+    if (isMobileShareSupported && navigator.share) {
+      if (waWindow) {
+        waWindow.close();
+        waWindow = null;
+      }
+      try {
+        await navigator.share({
+          title,
+          text,
+          files: [file],
+        });
+        return 'shared';
+      } catch (err: any) {
+        if (err.name === 'AbortError') {
+          return 'downloaded';
+        }
       }
     }
+
+    // Fallback for Desktop / Browsers without Native File Share API:
+    // 1. Trigger direct PDF file download
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // 2. Direct to WhatsApp chat with instructions
+    const waInstruction = `${text}\n\n📎 (পিডিএফ রসিদ ফাইলটি আপনার ডাউনলোডে সেভ হয়েছে, দয়া করে অ্যাটাচ করুন)`;
+    const waUrl = cleanPhone
+      ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(waInstruction)}`
+      : `https://api.whatsapp.com/send?text=${encodeURIComponent(waInstruction)}`;
+
+    if (waWindow && !waWindow.closed) {
+      waWindow.location.href = waUrl;
+    } else {
+      window.open(waUrl, '_blank');
+    }
+
+    return 'downloaded';
+  } catch (error) {
+    if (waWindow && !waWindow.closed) {
+      waWindow.close();
+    }
+    throw error;
   }
-
-  // Fallback for Desktop / Browsers without File Share API:
-  // 1. Trigger direct PDF file download
-  const link = document.createElement('a');
-  link.href = downloadUrl;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-
-  // 2. Open WhatsApp chat with pre-filled message
-  if (cleanPhone) {
-    const waMessage = `${text}\n\n📎 (পিডিএফ ফাইলটি আপনার ডিভাইসে ডাউনলোড হয়েছে, দয়া করে সাথে পাঠালিন/সংযুক্ত করুন)`;
-    window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(waMessage)}`, '_blank');
-  }
-
-  return 'downloaded';
 }
-
