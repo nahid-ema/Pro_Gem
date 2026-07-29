@@ -1,5 +1,11 @@
 import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
-import { getFirestore, Firestore } from 'firebase/firestore';
+import { 
+  getFirestore, 
+  initializeFirestore, 
+  persistentLocalCache, 
+  persistentMultipleTabManager,
+  Firestore 
+} from 'firebase/firestore';
 import { getAuth, Auth } from 'firebase/auth';
 import firebaseConfig from '../../firebase-applet-config.json';
 
@@ -15,7 +21,17 @@ try {
   } else {
     app = getApps()[0];
   }
-  db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+  
+  const dbId = firebaseConfig.firestoreDatabaseId || '(default)';
+  try {
+    db = initializeFirestore(app, {
+      experimentalAutoDetectLongPolling: true,
+      localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
+    }, dbId);
+  } catch (_e) {
+    db = getFirestore(app, dbId);
+  }
+
   auth = getAuth(app);
   isFirebaseInitialized = true;
 } catch (err: any) {
@@ -24,4 +40,5 @@ try {
 }
 
 export { app, db, auth, isFirebaseInitialized, initErrorMessage };
+
 
