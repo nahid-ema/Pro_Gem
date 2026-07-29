@@ -248,13 +248,13 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
             <div className="inline-flex items-center justify-center w-10 h-10 rounded-2xl bg-[#e0533c]/10 text-[#e0533c] border border-[#e0533c]/30 mb-1.5 shadow-2xs">
               <Home className="w-5 h-5" />
             </div>
-            <h2 className="text-base sm:text-lg font-black tracking-tight text-slate-900">
+            <h2 className="text-base sm:text-lg font-black text-slate-900">
               {t.receiptHeader}
             </h2>
             <p className="text-xs text-slate-500 font-medium">
               {t.receiptAddress}
             </p>
-            <div className="mt-1.5 inline-block px-3 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-[10px] font-bold text-slate-700 uppercase tracking-widest">
+            <div className="mt-1.5 inline-block px-3 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-[10px] font-bold text-slate-700 uppercase">
               {language === 'bn' ? 'অফিসিয়াল ভাড়া জমার রসিদ' : 'Official Rent Payment Receipt'}
             </div>
           </div>
@@ -262,14 +262,14 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           {/* 2. Key Receipt Identifiers & Status Stamp */}
           <div className="grid grid-cols-2 gap-3 bg-slate-50 p-3 sm:p-3.5 rounded-2xl border border-slate-200/80 text-xs">
             <div>
-              <span className="text-slate-400 font-bold block uppercase tracking-wider text-[10px]">
+              <span className="text-slate-400 font-bold block uppercase text-[10px]">
                 {t.receiptDate}
               </span>
               <span className="font-bold font-mono text-sm text-slate-900">{rentRecord.date}</span>
             </div>
             
             <div className="text-right">
-              <span className="text-slate-400 font-bold block uppercase tracking-wider text-[10px]">
+              <span className="text-slate-400 font-bold block uppercase text-[10px]">
                 {t.receiptNo}
               </span>
               <span className="font-mono font-bold text-sm text-[#e0533c]">
@@ -389,7 +389,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           {/* 5. Payment Remarks / Status Stamp Box */}
           <div className="flex items-center justify-between text-xs bg-slate-50 p-3 rounded-2xl border border-slate-200/80">
             <div>
-              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              <div className="text-[10px] font-bold uppercase text-slate-400">
                 {language === 'bn' ? 'পরিশোধের অবস্থা' : 'Payment Status'}
               </div>
               <div className="mt-0.5 font-extrabold flex items-center gap-1.5">
@@ -414,7 +414,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
 
             {rentRecord.note && (
               <div className="text-right max-w-[180px]">
-                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <div className="text-[10px] font-bold uppercase text-slate-400">
                   {language === 'bn' ? 'নোট / মন্তব্য' : 'Note'}
                 </div>
                 <div className="text-slate-600 font-medium italic truncate">
