@@ -1,6 +1,6 @@
 {
   "name": "Nahid Kutir",
-  "description": "Comprehensive Bengali & English property management system for rooms, tenants, rent collections, unpaid dues, expenses, and shop dues with WhatsApp reminders and PDF exports.",
+  "description": "Comprehensive Bengali & English property management system for rooms, tenants, rent collections, unpaid dues, expenses, and shop dues with instant WhatsApp reminders, printable official receipts, and real-time database sync.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
