@@ -252,17 +252,30 @@ export async function generateElementPDF({
 
   const imgData = canvas.toDataURL('image/jpeg', 0.90);
 
-  // Set PDF dimensions to match receipt canvas proportions perfectly with 0 blank space margins
-  const pdfWidth = 210; // Standard 210mm width (A4 width)
-  const pdfHeight = Number(((canvas.height * pdfWidth) / canvas.width).toFixed(2));
+  const pdfWidth = 210; // A4 width
+  const pdfHeight = 297; // A4 height
 
   const pdf = new jsPDF({
-    orientation: pdfWidth > pdfHeight ? 'landscape' : 'portrait',
+    orientation: 'portrait',
     unit: 'mm',
-    format: [pdfWidth, pdfHeight],
+    format: 'a4',
   });
 
-  pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
+  // Calculate rendering size
+  let renderWidth = pdfWidth;
+  let renderHeight = (canvas.height * renderWidth) / canvas.width;
+
+  // Scale down if it somehow exceeds A4 height
+  if (renderHeight > pdfHeight) {
+    renderHeight = pdfHeight;
+    renderWidth = (canvas.width * renderHeight) / canvas.height;
+  }
+
+  // Center horizontally, push to top (no gaps around it)
+  const xPos = (pdfWidth - renderWidth) / 2;
+  const yPos = 0;
+
+  pdf.addImage(imgData, 'JPEG', xPos, yPos, renderWidth, renderHeight, undefined, 'FAST');
 
   const blob = pdf.output('blob');
   const file = new File([blob], filename, { type: 'application/pdf' });

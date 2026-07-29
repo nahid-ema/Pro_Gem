@@ -481,6 +481,9 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           top: '0',
           left: '-9999px',
           width: '794px',
+          minHeight: '1123px', /* Exact A4 aspect ratio height for 794px width */
+          display: 'flex',
+          flexDirection: 'column',
           backgroundColor: '#ffffff',
           color: '#0f172a',
           padding: '32px 36px',
@@ -490,7 +493,8 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           pointerEvents: 'none',
         }}
       >
-        {/* Document Header */}
+        <div style={{ flex: '1 0 auto' }}>
+          {/* Document Header */}
         <div style={{ textAlign: 'center', borderBottom: '2px solid #cbd5e1', paddingBottom: '16px', marginBottom: '20px' }}>
           <div style={{ display: 'inline-block', width: '44px', height: '44px', lineHeight: '42px', borderRadius: '12px', backgroundColor: '#fef2f2', border: '1px solid #fecaca', textAlign: 'center', marginBottom: '8px' }}>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e0533c" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
@@ -609,7 +613,9 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
             </tr>
           </tbody>
         </table>
+        </div>
 
+        <div style={{ marginTop: 'auto', paddingTop: '20px' }}>
         {/* Thank you */}
         <p style={{ textAlign: 'center', fontSize: '13px', color: '#64748b', fontWeight: '600', fontStyle: 'italic', margin: '0 0 28px 0', lineHeight: '1.4' }}>
           "{t.thankYouMsg}"
@@ -641,6 +647,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
         {/* Disclaimer */}
         <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '12px', textAlign: 'center', fontSize: '10px', color: '#94a3b8', fontFamily: 'system-ui, sans-serif' }}>
           {language === 'bn' ? 'কম্পিউটার থেকে স্বয়ংক্রিয়ভাবে প্রস্তুতকৃত রসিদ। কোনো স্বাক্ষরের প্রয়োজন নেই।' : 'Computer generated payment record. Valid without physical seal.'}
+        </div>
         </div>
       </div>
     </div>,
