@@ -155,8 +155,10 @@ export async function generateElementPDF({
       // Force white background and dark text on the receipt container
       clonedElement.style.backgroundColor = '#ffffff';
       clonedElement.style.color = '#0f172a';
-      clonedElement.style.padding = '24px';
-      clonedElement.style.borderRadius = '16px';
+      if (!clonedElement.style.padding) {
+        clonedElement.style.padding = '24px';
+      }
+      clonedElement.style.borderRadius = '0px';
 
       // 1. Sanitize all <style> tags in cloned document
       const styleTags = clonedDoc.querySelectorAll('style');
