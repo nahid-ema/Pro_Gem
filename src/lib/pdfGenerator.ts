@@ -163,7 +163,7 @@ export async function generateElementPDF({
       clonedElement.style.top = '0';
       clonedElement.style.width = '794px';
       if (!clonedElement.style.padding) {
-        clonedElement.style.padding = '32px 36px';
+        clonedElement.style.padding = '32px 16px';
       }
       clonedElement.style.borderRadius = '0px';
 
@@ -253,29 +253,15 @@ export async function generateElementPDF({
   const imgData = canvas.toDataURL('image/jpeg', 0.90);
 
   const pdfWidth = 210; // A4 width
-  const pdfHeight = 297; // A4 height
+  const pdfHeight = Number(((canvas.height * pdfWidth) / canvas.width).toFixed(2));
 
   const pdf = new jsPDF({
-    orientation: 'portrait',
+    orientation: pdfWidth > pdfHeight ? 'landscape' : 'portrait',
     unit: 'mm',
-    format: 'a4',
+    format: [pdfWidth, pdfHeight],
   });
 
-  // Calculate rendering size
-  let renderWidth = pdfWidth;
-  let renderHeight = (canvas.height * renderWidth) / canvas.width;
-
-  // Scale down if it somehow exceeds A4 height
-  if (renderHeight > pdfHeight) {
-    renderHeight = pdfHeight;
-    renderWidth = (canvas.width * renderHeight) / canvas.height;
-  }
-
-  // Center horizontally, push to top (no gaps around it)
-  const xPos = (pdfWidth - renderWidth) / 2;
-  const yPos = 0;
-
-  pdf.addImage(imgData, 'JPEG', xPos, yPos, renderWidth, renderHeight, undefined, 'FAST');
+  pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
 
   const blob = pdf.output('blob');
   const file = new File([blob], filename, { type: 'application/pdf' });
