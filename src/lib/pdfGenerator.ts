@@ -136,7 +136,7 @@ export async function generateElementPDF({
     useCORS: true,
     backgroundColor: '#ffffff',
     logging: false,
-    windowWidth: 800, // Standardized canvas width for consistent A4 output
+    windowWidth: 794, // Standardized A4 canvas width (794px)
     onclone: (clonedDoc, clonedElement) => {
       // 0. Force Light Mode on cloned document so PDF is always clean white paper style
       clonedDoc.documentElement.classList.remove('dark');
@@ -161,8 +161,9 @@ export async function generateElementPDF({
       clonedElement.style.position = 'relative';
       clonedElement.style.left = '0';
       clonedElement.style.top = '0';
+      clonedElement.style.width = '794px';
       if (!clonedElement.style.padding) {
-        clonedElement.style.padding = '24px';
+        clonedElement.style.padding = '36px 40px';
       }
       clonedElement.style.borderRadius = '0px';
 
@@ -259,11 +260,11 @@ export async function generateElementPDF({
   const pageWidth = 210; // A4 width in mm
   const pageHeight = 297; // A4 height in mm
 
-  const marginX = 10; // 10mm side margins (190mm printable width)
-  const marginY = 12; // 12mm top margin
+  const marginX = 8; // 8mm side margins (194mm printable width)
+  const marginY = 8; // 8mm top & bottom margin
 
-  const maxPdfWidth = pageWidth - marginX * 2; // 190mm
-  const maxPdfHeight = pageHeight - marginY * 2; // 273mm
+  const maxPdfWidth = pageWidth - marginX * 2; // 194mm
+  const maxPdfHeight = pageHeight - marginY * 2; // 281mm
 
   let renderWidth = maxPdfWidth;
   let renderHeight = (canvas.height * renderWidth) / canvas.width;
@@ -274,9 +275,9 @@ export async function generateElementPDF({
     renderWidth = (canvas.width * renderHeight) / canvas.height;
   }
 
-  // Position nicely from top margin (12mm) instead of centering vertically
+  // Center the image horizontally and vertically on the page
   const xPos = (pageWidth - renderWidth) / 2;
-  const yPos = marginY;
+  const yPos = (pageHeight - renderHeight) / 2;
 
   pdf.addImage(imgData, 'JPEG', xPos, yPos, renderWidth, renderHeight, undefined, 'FAST');
 

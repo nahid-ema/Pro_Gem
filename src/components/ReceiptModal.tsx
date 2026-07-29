@@ -483,7 +483,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           width: '794px',
           backgroundColor: '#ffffff',
           color: '#0f172a',
-          padding: '36px 40px',
+          padding: '44px 48px',
           boxSizing: 'border-box',
           fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif',
           zIndex: -9999,
@@ -491,119 +491,119 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
         }}
       >
         {/* Document Header */}
-        <div style={{ textAlign: 'center', borderBottom: '2px solid #cbd5e1', paddingBottom: '16px', marginBottom: '20px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '44px', height: '44px', borderRadius: '12px', backgroundColor: '#fef2f2', border: '1px solid #fecaca', marginBottom: '8px' }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e0533c" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-              <polyline points="9 22 9 12 15 12 15 22"/>
+        <div style={{ textAlign: 'center', borderBottom: '2px solid #cbd5e1', paddingBottom: '18px', marginBottom: '22px' }}>
+          <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: '#fef2f2', border: '1px solid #fecaca', margin: '0 auto 10px auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#e0533c" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ width: '26px', height: '26px', display: 'block' }}>
+              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="none" stroke="#e0533c" strokeWidth="2.5" />
+              <polyline points="9 22 9 12 15 12 15 22" fill="none" stroke="#e0533c" strokeWidth="2.5" />
             </svg>
           </div>
-          <h1 style={{ fontSize: '22px', fontWeight: '900', color: '#0f172a', margin: '4px 0 2px 0' }}>
+          <h1 style={{ fontSize: '24px', fontWeight: '900', color: '#0f172a', margin: '0 0 4px 0', lineHeight: '1.3' }}>
             {language === 'bn' ? 'নাহিদ কুটির' : 'Nahid Kutir'}
           </h1>
-          <p style={{ fontSize: '12px', color: '#64748b', margin: '0 0 8px 0', fontWeight: '500', wordSpacing: '0.05em' }}>
+          <p style={{ fontSize: '13px', color: '#64748b', margin: '0 0 10px 0', fontWeight: '500', lineHeight: '1.4' }}>
             {language === 'bn' ? 'আবাসিক এলাকা, টঙ্গী, ঢাকা, বাংলাদেশ' : 'Residential Area, Tongi, Dhaka, Bangladesh'}
           </p>
-          <span style={{ display: 'inline-block', padding: '4px 16px', backgroundColor: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '20px', fontSize: '11px', fontWeight: '800', color: '#334155', textTransform: 'uppercase' }}>
+          <span style={{ display: 'inline-block', padding: '5px 20px', backgroundColor: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '20px', fontSize: '11px', fontWeight: '800', color: '#334155', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
             {language === 'bn' ? 'অফিসিয়াল ভাড়া জমার রসিদ' : 'OFFICIAL RENT PAYMENT RECEIPT'}
           </span>
         </div>
 
         {/* Receipt Identifiers */}
-        <table style={{ width: '100%', marginBottom: '16px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px', borderCollapse: 'separate' }}>
+        <table style={{ width: '100%', marginBottom: '18px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '14px 16px', borderCollapse: 'separate' }}>
           <tbody>
             <tr>
               <td style={{ width: '50%', verticalAlign: 'top' }}>
-                <span style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '700', textTransform: 'uppercase', display: 'block' }}>{t.receiptDate}</span>
-                <span style={{ fontSize: '14px', fontWeight: '800', color: '#0f172a', fontFamily: 'monospace' }}>{rentRecord.date}</span>
+                <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '700', textTransform: 'uppercase', display: 'block', lineHeight: '1.3' }}>{t.receiptDate}</span>
+                <span style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a', fontFamily: 'monospace', display: 'block', marginTop: '3px' }}>{rentRecord.date}</span>
               </td>
               <td style={{ width: '50%', textAlign: 'right', verticalAlign: 'top' }}>
-                <span style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '700', textTransform: 'uppercase', display: 'block' }}>{t.receiptNo}</span>
-                <span style={{ fontSize: '14px', fontWeight: '800', color: '#e0533c', fontFamily: 'monospace' }}>#NK-{rentRecord.id.substring(0, 8).toUpperCase()}</span>
+                <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '700', textTransform: 'uppercase', display: 'block', lineHeight: '1.3' }}>{t.receiptNo}</span>
+                <span style={{ fontSize: '15px', fontWeight: '800', color: '#e0533c', fontFamily: 'monospace', display: 'block', marginTop: '3px' }}>#NK-{rentRecord.id.substring(0, 8).toUpperCase()}</span>
               </td>
             </tr>
           </tbody>
         </table>
 
         {/* Tenant & Room Info */}
-        <table style={{ width: '100%', marginBottom: '20px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px', borderCollapse: 'separate' }}>
+        <table style={{ width: '100%', marginBottom: '22px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '14px 16px', borderCollapse: 'separate' }}>
           <tbody>
             <tr>
               <td style={{ width: '60%', verticalAlign: 'top' }}>
-                <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '600', display: 'block' }}>{t.receivedFrom}</span>
-                <span style={{ fontSize: '15px', fontWeight: '900', color: '#0f172a', display: 'block', marginTop: '2px' }}>{rentRecord.tenant}</span>
-                {rentRecord.phone && <span style={{ fontSize: '12px', color: '#64748b', fontFamily: 'monospace', display: 'block', marginTop: '2px' }}>{rentRecord.phone}</span>}
+                <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '600', display: 'block', lineHeight: '1.3' }}>{t.receivedFrom}</span>
+                <span style={{ fontSize: '16px', fontWeight: '900', color: '#0f172a', display: 'block', marginTop: '3px', lineHeight: '1.3' }}>{rentRecord.tenant}</span>
+                {rentRecord.phone && <span style={{ fontSize: '12px', color: '#64748b', fontFamily: 'monospace', display: 'block', marginTop: '3px' }}>{rentRecord.phone}</span>}
               </td>
               <td style={{ width: '40%', textAlign: 'right', verticalAlign: 'top' }}>
-                <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '600', display: 'block' }}>{t.roomAssigned}</span>
-                <span style={{ fontSize: '15px', fontWeight: '900', color: '#e0533c', display: 'block', marginTop: '2px' }}>{t.roomText} {rentRecord.room}</span>
+                <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '600', display: 'block', lineHeight: '1.3' }}>{t.roomAssigned}</span>
+                <span style={{ fontSize: '16px', fontWeight: '900', color: '#e0533c', display: 'block', marginTop: '3px', lineHeight: '1.3' }}>{t.roomText} {rentRecord.room}</span>
               </td>
             </tr>
           </tbody>
         </table>
 
         {/* Itemized Table */}
-        <div style={{ border: '1px solid #cbd5e1', borderRadius: '8px', overflow: 'hidden', marginBottom: '20px' }}>
+        <div style={{ border: '1px solid #cbd5e1', borderRadius: '8px', overflow: 'hidden', marginBottom: '22px' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
             <thead>
               <tr style={{ backgroundColor: '#f1f5f9', borderBottom: '1px solid #cbd5e1', color: '#334155', fontWeight: '800', textAlign: 'left' }}>
-                <th style={{ padding: '10px 14px' }}>{language === 'bn' ? 'বিলের বিবরণ' : 'Bill Description'}</th>
-                <th style={{ padding: '10px 14px', textAlign: 'right' }}>{language === 'bn' ? 'টাকা (TK)' : 'Amount (TK)'}</th>
+                <th style={{ padding: '12px 16px' }}>{language === 'bn' ? 'বিলের বিবরণ' : 'Bill Description'}</th>
+                <th style={{ padding: '12px 16px', textAlign: 'right' }}>{language === 'bn' ? 'টাকা (TK)' : 'Amount (TK)'}</th>
               </tr>
             </thead>
             <tbody>
               <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-                <td style={{ padding: '10px 14px', color: '#334155', fontWeight: '600' }}>{language === 'bn' ? '১. মূল ঘর ভাড়া (House Rent)' : '1. House Rent'}</td>
-                <td style={{ padding: '10px 14px', textAlign: 'right', fontWeight: '800', color: '#0f172a', fontFamily: 'monospace' }}>{formatCurrency(houseRent)}</td>
+                <td style={{ padding: '11px 16px', color: '#334155', fontWeight: '600' }}>{language === 'bn' ? '১. মূল ঘর ভাড়া (House Rent)' : '1. House Rent'}</td>
+                <td style={{ padding: '11px 16px', textAlign: 'right', fontWeight: '800', color: '#0f172a', fontFamily: 'monospace' }}>{formatCurrency(houseRent)}</td>
               </tr>
               {gasBill > 0 && (
                 <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-                  <td style={{ padding: '10px 14px', color: '#334155', fontWeight: '600' }}>{language === 'bn' ? '২. গ্যাস বিল (Gas Bill)' : '2. Gas Bill'}</td>
-                  <td style={{ padding: '10px 14px', textAlign: 'right', fontWeight: '800', color: '#0f172a', fontFamily: 'monospace' }}>{formatCurrency(gasBill)}</td>
+                  <td style={{ padding: '11px 16px', color: '#334155', fontWeight: '600' }}>{language === 'bn' ? '২. গ্যাস বিল (Gas Bill)' : '2. Gas Bill'}</td>
+                  <td style={{ padding: '11px 16px', textAlign: 'right', fontWeight: '800', color: '#0f172a', fontFamily: 'monospace' }}>{formatCurrency(gasBill)}</td>
                 </tr>
               )}
               {waterBill > 0 && (
                 <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-                  <td style={{ padding: '10px 14px', color: '#334155', fontWeight: '600' }}>{language === 'bn' ? '৩. পানির বিল (Water Bill)' : '3. Water Bill'}</td>
-                  <td style={{ padding: '10px 14px', textAlign: 'right', fontWeight: '800', color: '#0f172a', fontFamily: 'monospace' }}>{formatCurrency(waterBill)}</td>
+                  <td style={{ padding: '11px 16px', color: '#334155', fontWeight: '600' }}>{language === 'bn' ? '৩. পানির বিল (Water Bill)' : '3. Water Bill'}</td>
+                  <td style={{ padding: '11px 16px', textAlign: 'right', fontWeight: '800', color: '#0f172a', fontFamily: 'monospace' }}>{formatCurrency(waterBill)}</td>
                 </tr>
               )}
               {wasteBill > 0 && (
                 <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-                  <td style={{ padding: '10px 14px', color: '#334155', fontWeight: '600' }}>{language === 'bn' ? '৪. ময়লার বিল (Waste Bill)' : '4. Waste Bill'}</td>
-                  <td style={{ padding: '10px 14px', textAlign: 'right', fontWeight: '800', color: '#0f172a', fontFamily: 'monospace' }}>{formatCurrency(wasteBill)}</td>
+                  <td style={{ padding: '11px 16px', color: '#334155', fontWeight: '600' }}>{language === 'bn' ? '৪. ময়লার বিল (Waste Bill)' : '4. Waste Bill'}</td>
+                  <td style={{ padding: '11px 16px', textAlign: 'right', fontWeight: '800', color: '#0f172a', fontFamily: 'monospace' }}>{formatCurrency(wasteBill)}</td>
                 </tr>
               )}
               <tr style={{ backgroundColor: '#f8fafc', borderTop: '2px solid #cbd5e1', fontWeight: '800' }}>
-                <td style={{ padding: '12px 14px', color: '#0f172a' }}>{language === 'bn' ? 'সর্বমোট পাওনা (Total Payable)' : 'Total Payable'}</td>
-                <td style={{ padding: '12px 14px', textAlign: 'right', fontSize: '15px', color: '#0f172a', fontFamily: 'monospace' }}>{formatCurrency(totalBillPackage)}</td>
+                <td style={{ padding: '13px 16px', color: '#0f172a' }}>{language === 'bn' ? 'সর্বমোট পাওনা (Total Payable)' : 'Total Payable'}</td>
+                <td style={{ padding: '13px 16px', textAlign: 'right', fontSize: '15px', color: '#0f172a', fontFamily: 'monospace' }}>{formatCurrency(totalBillPackage)}</td>
               </tr>
               <tr style={{ backgroundColor: '#f0fdf4', borderTop: '1px solid #bbf7d0', color: '#166534', fontWeight: '800' }}>
-                <td style={{ padding: '12px 14px' }}>✔ {t.paidAmountText}</td>
-                <td style={{ padding: '12px 14px', textAlign: 'right', fontSize: '15px', color: '#15803d', fontFamily: 'monospace' }}>{formatCurrency(rentRecord.paid)}</td>
+                <td style={{ padding: '13px 16px' }}>✔ {t.paidAmountText}</td>
+                <td style={{ padding: '13px 16px', textAlign: 'right', fontSize: '15px', color: '#15803d', fontFamily: 'monospace' }}>{formatCurrency(rentRecord.paid)}</td>
               </tr>
               <tr style={{ backgroundColor: rentRecord.due > 0 ? '#fff1f2' : '#ffffff', borderTop: '1px solid #e2e8f0', color: rentRecord.due > 0 ? '#9f1239' : '#64748b', fontWeight: '800' }}>
-                <td style={{ padding: '12px 14px' }}>{t.remainingDueText}</td>
-                <td style={{ padding: '12px 14px', textAlign: 'right', fontSize: '15px', fontFamily: 'monospace' }}>{formatCurrency(rentRecord.due)}</td>
+                <td style={{ padding: '13px 16px' }}>{t.remainingDueText}</td>
+                <td style={{ padding: '13px 16px', textAlign: 'right', fontSize: '15px', fontFamily: 'monospace' }}>{formatCurrency(rentRecord.due)}</td>
               </tr>
             </tbody>
           </table>
         </div>
 
         {/* Payment Status Box */}
-        <table style={{ width: '100%', marginBottom: '24px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px', borderCollapse: 'separate' }}>
+        <table style={{ width: '100%', marginBottom: '24px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '14px 16px', borderCollapse: 'separate' }}>
           <tbody>
             <tr>
               <td style={{ verticalAlign: 'top' }}>
-                <span style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '700', textTransform: 'uppercase', display: 'block' }}>{language === 'bn' ? 'পরিশোধের অবস্থা' : 'Payment Status'}</span>
-                <span style={{ fontSize: '14px', fontWeight: '900', marginTop: '4px', display: 'block', color: isFullyPaid ? '#15803d' : isPartiallyPaid ? '#d97706' : '#dc2626' }}>
+                <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '700', textTransform: 'uppercase', display: 'block', lineHeight: '1.3' }}>{language === 'bn' ? 'পরিশোধের অবস্থা' : 'Payment Status'}</span>
+                <span style={{ fontSize: '15px', fontWeight: '900', marginTop: '4px', display: 'block', color: isFullyPaid ? '#15803d' : isPartiallyPaid ? '#d97706' : '#dc2626', lineHeight: '1.3' }}>
                   {isFullyPaid ? (language === 'bn' ? '✔ সম্পূর্ণ পরিশোধিত (PAID IN FULL)' : '✔ PAID IN FULL') : isPartiallyPaid ? (language === 'bn' ? `আংশিক জমা (বকেয়া ৳${rentRecord.due.toLocaleString()})` : `PARTIAL PAYMENT (Due ৳${rentRecord.due.toLocaleString()})`) : (language === 'bn' ? 'পরিশোধ করা হয়নি (UNPAID)' : 'UNPAID')}
                 </span>
               </td>
               {rentRecord.note && (
-                <td style={{ textAlign: 'right', verticalAlign: 'top', maxWidth: '200px' }}>
-                  <span style={{ fontSize: '10px', color: '#94a3b8', fontWeight: '700', textTransform: 'uppercase', display: 'block' }}>{language === 'bn' ? 'নোট / মন্তব্য' : 'Note'}</span>
-                  <span style={{ fontSize: '12px', color: '#475569', fontStyle: 'italic', display: 'block', marginTop: '2px' }}>"{rentRecord.note}"</span>
+                <td style={{ textAlign: 'right', verticalAlign: 'top', maxWidth: '220px' }}>
+                  <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '700', textTransform: 'uppercase', display: 'block', lineHeight: '1.3' }}>{language === 'bn' ? 'নোট / মন্তব্য' : 'Note'}</span>
+                  <span style={{ fontSize: '12px', color: '#475569', fontStyle: 'italic', display: 'block', marginTop: '3px', lineHeight: '1.3' }}>"{rentRecord.note}"</span>
                 </td>
               )}
             </tr>
@@ -611,26 +611,26 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
         </table>
 
         {/* Thank you */}
-        <p style={{ textAlign: 'center', fontSize: '13px', color: '#64748b', fontWeight: '600', fontStyle: 'italic', margin: '0 0 24px 0' }}>
+        <p style={{ textAlign: 'center', fontSize: '13px', color: '#64748b', fontWeight: '600', fontStyle: 'italic', margin: '0 0 28px 0', lineHeight: '1.4' }}>
           "{t.thankYouMsg}"
         </p>
 
         {/* Signatures */}
-        <table style={{ width: '100%', marginTop: '30px', marginBottom: '20px' }}>
+        <table style={{ width: '100%', marginTop: '32px', marginBottom: '22px' }}>
           <tbody>
             <tr>
               <td style={{ width: '33%', textAlign: 'center', verticalAlign: 'bottom' }}>
-                <div style={{ borderTop: '2px solid #cbd5e1', paddingTop: '6px', fontSize: '12px', fontWeight: '700', color: '#475569' }}>
+                <div style={{ borderTop: '2px solid #cbd5e1', paddingTop: '8px', fontSize: '12px', fontWeight: '700', color: '#475569' }}>
                   {t.signatureLandlord}
                 </div>
               </td>
               <td style={{ width: '34%', textAlign: 'center', verticalAlign: 'middle' }}>
-                <div style={{ width: '50px', height: '50px', borderRadius: '50%', border: '2px dashed #e0533c', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: '900', color: '#e0533c', textTransform: 'uppercase', transform: 'rotate(-12deg)', padding: '2px' }}>
+                <div style={{ width: '52px', height: '52px', borderRadius: '50%', border: '2px dashed #e0533c', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: '900', color: '#e0533c', textTransform: 'uppercase', transform: 'rotate(-12deg)', padding: '2px' }}>
                   {language === 'bn' ? 'যাচাইকৃত' : 'VERIFIED'}
                 </div>
               </td>
               <td style={{ width: '33%', textAlign: 'center', verticalAlign: 'bottom' }}>
-                <div style={{ borderTop: '2px solid #cbd5e1', paddingTop: '6px', fontSize: '12px', fontWeight: '700', color: '#475569' }}>
+                <div style={{ borderTop: '2px solid #cbd5e1', paddingTop: '8px', fontSize: '12px', fontWeight: '700', color: '#475569' }}>
                   {t.signatureTenant}
                 </div>
               </td>
@@ -639,7 +639,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
         </table>
 
         {/* Disclaimer */}
-        <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '10px', textAlign: 'center', fontSize: '10px', color: '#94a3b8', fontFamily: 'system-ui, sans-serif', wordSpacing: '0.05em' }}>
+        <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '12px', textAlign: 'center', fontSize: '10px', color: '#94a3b8', fontFamily: 'system-ui, sans-serif' }}>
           {language === 'bn' ? 'কম্পিউটার থেকে স্বয়ংক্রিয়ভাবে প্রস্তুতকৃত রসিদ। কোনো স্বাক্ষরের প্রয়োজন নেই।' : 'Computer generated payment record. Valid without physical seal.'}
         </div>
       </div>
