@@ -480,10 +480,10 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           position: 'fixed',
           top: '0',
           left: '-9999px',
-          width: '720px',
+          width: '794px',
           backgroundColor: '#ffffff',
           color: '#0f172a',
-          padding: '36px',
+          padding: '36px 40px',
           boxSizing: 'border-box',
           fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif',
           zIndex: -9999,
@@ -492,8 +492,11 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
       >
         {/* Document Header */}
         <div style={{ textAlign: 'center', borderBottom: '2px solid #cbd5e1', paddingBottom: '16px', marginBottom: '20px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '44px', height: '44px', borderRadius: '12px', backgroundColor: '#fef2f2', color: '#e0533c', border: '1px solid #fecaca', marginBottom: '8px' }}>
-            <Home style={{ width: '24px', height: '24px' }} />
+          <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '44px', height: '44px', borderRadius: '12px', backgroundColor: '#fef2f2', border: '1px solid #fecaca', marginBottom: '8px' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e0533c" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
           </div>
           <h1 style={{ fontSize: '22px', fontWeight: '900', color: '#0f172a', margin: '4px 0 2px 0' }}>
             {language === 'bn' ? 'নাহিদ কুটির' : 'Nahid Kutir'}

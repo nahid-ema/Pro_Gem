@@ -259,11 +259,11 @@ export async function generateElementPDF({
   const pageWidth = 210; // A4 width in mm
   const pageHeight = 297; // A4 height in mm
 
-  const marginX = 15; // 15mm margins
-  const marginY = 15; // 15mm margins
+  const marginX = 10; // 10mm side margins (190mm printable width)
+  const marginY = 12; // 12mm top margin
 
-  const maxPdfWidth = pageWidth - marginX * 2; // 180mm
-  const maxPdfHeight = pageHeight - marginY * 2; // 267mm
+  const maxPdfWidth = pageWidth - marginX * 2; // 190mm
+  const maxPdfHeight = pageHeight - marginY * 2; // 273mm
 
   let renderWidth = maxPdfWidth;
   let renderHeight = (canvas.height * renderWidth) / canvas.width;
@@ -274,9 +274,9 @@ export async function generateElementPDF({
     renderWidth = (canvas.width * renderHeight) / canvas.height;
   }
 
-  // Center the image horizontally and vertically on the A4 page
+  // Position nicely from top margin (12mm) instead of centering vertically
   const xPos = (pageWidth - renderWidth) / 2;
-  const yPos = (pageHeight - renderHeight) / 2;
+  const yPos = marginY;
 
   pdf.addImage(imgData, 'JPEG', xPos, yPos, renderWidth, renderHeight, undefined, 'FAST');
 
