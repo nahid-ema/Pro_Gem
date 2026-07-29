@@ -223,11 +223,6 @@ export async function generateElementPDF({
 
       allClonedElements.forEach((node) => {
         if (node instanceof HTMLElement || node instanceof SVGElement) {
-          if (node instanceof HTMLElement) {
-            node.style.letterSpacing = 'normal';
-            node.style.wordSpacing = 'normal';
-          }
-
           const compStyle = clonedDoc.defaultView?.getComputedStyle(node);
           if (compStyle) {
             colorProps.forEach((prop) => {

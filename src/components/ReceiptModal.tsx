@@ -187,6 +187,17 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
               <span>{language === 'bn' ? 'পিডিএফ হোয়াটসঅ্যাপ' : 'PDF WhatsApp'}</span>
             </button>
 
+            {/* Download PDF Button */}
+            <button
+              onClick={handleDownloadPdf}
+              disabled={isGeneratingPdf}
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-xs font-bold shadow-xs transition-all cursor-pointer active:scale-95"
+              title={language === 'bn' ? 'পিডিএফ ডাউনলোড করুন' : 'Download PDF'}
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">PDF</span>
+            </button>
+
             {/* Print Button */}
             <button
               onClick={handlePrintReceipt}
@@ -467,15 +478,16 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
         id="receiptPdfDocument"
         style={{
           position: 'fixed',
-          left: '-9999px',
           top: '0',
+          left: '0',
           width: '720px',
           backgroundColor: '#ffffff',
           color: '#0f172a',
           padding: '36px',
           boxSizing: 'border-box',
-          fontFamily: 'sans-serif',
+          fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif',
           zIndex: -9999,
+          opacity: 0,
           pointerEvents: 'none',
         }}
       >
@@ -487,11 +499,11 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           <h1 style={{ fontSize: '22px', fontWeight: '900', color: '#0f172a', margin: '4px 0 2px 0' }}>
             {language === 'bn' ? 'নাহিদ কুটির' : 'Nahid Kutir'}
           </h1>
-          <p style={{ fontSize: '12px', color: '#64748b', margin: '0 0 8px 0', fontWeight: '500' }}>
-            {t.receiptAddress}
+          <p style={{ fontSize: '12px', color: '#64748b', margin: '0 0 8px 0', fontWeight: '500', wordSpacing: '0.05em' }}>
+            {language === 'bn' ? 'আবাসিক এলাকা, টঙ্গী, ঢাকা, বাংলাদেশ' : 'Residential Area, Tongi, Dhaka, Bangladesh'}
           </p>
           <span style={{ display: 'inline-block', padding: '4px 16px', backgroundColor: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '20px', fontSize: '11px', fontWeight: '800', color: '#334155', textTransform: 'uppercase' }}>
-            {language === 'bn' ? 'অফিসিয়াল ভাড়া জমার রসিদ' : 'Official Rent Payment Receipt'}
+            {language === 'bn' ? 'অফিসিয়াল ভাড়া জমার রসিদ' : 'OFFICIAL RENT PAYMENT RECEIPT'}
           </span>
         </div>
 
@@ -625,7 +637,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
         </table>
 
         {/* Disclaimer */}
-        <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '10px', textAlign: 'center', fontSize: '10px', color: '#94a3b8', fontFamily: 'monospace' }}>
+        <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '10px', textAlign: 'center', fontSize: '10px', color: '#94a3b8', fontFamily: 'system-ui, sans-serif', wordSpacing: '0.05em' }}>
           {language === 'bn' ? 'কম্পিউটার থেকে স্বয়ংক্রিয়ভাবে প্রস্তুতকৃত রসিদ। কোনো স্বাক্ষরের প্রয়োজন নেই।' : 'Computer generated payment record. Valid without physical seal.'}
         </div>
       </div>
