@@ -479,7 +479,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
         style={{
           position: 'fixed',
           top: '0',
-          left: '0',
+          left: '-9999px',
           width: '720px',
           backgroundColor: '#ffffff',
           color: '#0f172a',
@@ -487,7 +487,6 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           boxSizing: 'border-box',
           fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif',
           zIndex: -9999,
-          opacity: 0,
           pointerEvents: 'none',
         }}
       >

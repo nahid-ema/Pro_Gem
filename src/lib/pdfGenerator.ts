@@ -152,9 +152,15 @@ export async function generateElementPDF({
         el.classList.remove('dark');
       });
 
-      // Force white background and dark text on the receipt container
+      // Force white background, dark text, full opacity, and visible position on cloned element
       clonedElement.style.backgroundColor = '#ffffff';
       clonedElement.style.color = '#0f172a';
+      clonedElement.style.opacity = '1';
+      clonedElement.style.visibility = 'visible';
+      clonedElement.style.display = 'block';
+      clonedElement.style.position = 'relative';
+      clonedElement.style.left = '0';
+      clonedElement.style.top = '0';
       if (!clonedElement.style.padding) {
         clonedElement.style.padding = '24px';
       }
@@ -243,7 +249,7 @@ export async function generateElementPDF({
     },
   });
 
-  const imgData = canvas.toDataURL('image/png', 1.0);
+  const imgData = canvas.toDataURL('image/jpeg', 0.85);
   const pdf = new jsPDF({
     orientation: 'portrait',
     unit: 'mm',
@@ -253,7 +259,7 @@ export async function generateElementPDF({
   const pdfWidth = 190; // 210mm - 20mm total margins
   const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-  pdf.addImage(imgData, 'PNG', 10, 10, pdfWidth, pdfHeight);
+  pdf.addImage(imgData, 'JPEG', 10, 10, pdfWidth, pdfHeight, undefined, 'FAST');
 
   const blob = pdf.output('blob');
   const file = new File([blob], filename, { type: 'application/pdf' });
