@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { RentRecord, Room, Language } from '../types';
 import { getTranslation } from '../data/translations';
-import { Printer, X, CheckCircle2, MessageSquare, Copy, Check, ShieldCheck, Home, Receipt, FileText, Download, Loader2, Share2 } from 'lucide-react';
-import { generateElementPDF, shareOrDownloadPDF } from '../lib/pdfGenerator';
+import { Printer, X, CheckCircle2, MessageSquare, Copy, Check, ShieldCheck, Home, FileText } from 'lucide-react';
 
 interface ReceiptModalProps {
   rentRecord: RentRecord | null;
@@ -19,8 +18,6 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
   onClose,
 }) => {
   const [copied, setCopied] = useState(false);
-  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
-  const [pdfStatusMsg, setPdfStatusMsg] = useState<string | null>(null);
 
   // Add print isolation hook
   useEffect(() => {
@@ -58,70 +55,6 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
 
   const handlePrintReceipt = () => {
     window.print();
-  };
-
-  const handleSharePdfWhatsApp = async () => {
-    if (!rentRecord || isGeneratingPdf) return;
-    setIsGeneratingPdf(true);
-    setPdfStatusMsg(null);
-    try {
-      const receiptNo = rentRecord.id.substring(0, 8).toUpperCase();
-      const filename = `Nahid_Kutir_Receipt_NK-${receiptNo}.pdf`;
-      const title = language === 'bn' ? 'নাহিদ কুটির — ভাড়া পরিশোধের রসিদ' : 'Nahid Kutir Rent Receipt';
-      const text = language === 'bn'
-        ? `*নাহিদ কুটির — ভাড়া পরিশোধের পিডিএফ রসিদ*\nরসিদ নং: #NK-${receiptNo}\nতারিখ: ${rentRecord.date}\nভাড়াটিয়া: ${rentRecord.tenant} (রুম: ${rentRecord.room})\nজমা: ৳${rentRecord.paid.toLocaleString()} | বকেয়া: ৳${rentRecord.due.toLocaleString()}`
-        : `*Nahid Kutir — Rent Payment PDF Receipt*\nReceipt No: #NK-${receiptNo}\nDate: ${rentRecord.date}\nTenant: ${rentRecord.tenant} (Room: ${rentRecord.room})\nPaid: ৳${rentRecord.paid.toLocaleString()} | Due: ৳${rentRecord.due.toLocaleString()}`;
-
-      const res = await shareOrDownloadPDF({
-        elementId: 'receiptPdfDocument',
-        filename,
-        phone: rentRecord.phone,
-        title,
-        text,
-      });
-
-      if (res === 'downloaded') {
-        setPdfStatusMsg(
-          language === 'bn'
-            ? 'পিডিএফ ফাইল ডাউনলোড হয়েছে এবং হোয়াটসঅ্যাপ ওপেন করা হয়েছে। চ্যাটে পেপারক্লিপ (📎) চাপ দিয়ে পিডিএফ ফাইলটি সংযুক্ত করুন।'
-            : 'PDF receipt downloaded and WhatsApp opened! Please attach the downloaded PDF file in WhatsApp chat.'
-        );
-      } else {
-        setPdfStatusMsg(
-          language === 'bn' ? 'পিডিএফ রসিদ সফলভাবে শেয়ার করা হয়েছে!' : 'PDF receipt shared successfully!'
-        );
-      }
-    } catch (error) {
-      console.error('Error generating PDF:', error);
-      alert(language === 'bn' ? 'পিডিএফ তৈরি করতে সমস্যা হয়েছে।' : 'Failed to generate PDF receipt.');
-    } finally {
-      setIsGeneratingPdf(false);
-    }
-  };
-
-  const handleDownloadPdf = async () => {
-    if (!rentRecord || isGeneratingPdf) return;
-    setIsGeneratingPdf(true);
-    try {
-      const receiptNo = rentRecord.id.substring(0, 8).toUpperCase();
-      const filename = `Nahid_Kutir_Receipt_NK-${receiptNo}.pdf`;
-      const { downloadUrl } = await generateElementPDF({
-        elementId: 'receiptPdfDocument',
-        filename,
-      });
-
-      const a = document.createElement('a');
-      a.href = downloadUrl;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    } catch (error) {
-      console.error('Error downloading PDF:', error);
-      alert(language === 'bn' ? 'পিডিএফ ডাউনলোড করতে সমস্যা হয়েছে।' : 'Failed to download PDF receipt.');
-    } finally {
-      setIsGeneratingPdf(false);
-    }
   };
 
   const handleShareWhatsApp = () => {
@@ -176,28 +109,6 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           </div>
 
           <div className="flex items-center gap-1.5 flex-wrap">
-            {/* WhatsApp PDF Button (Primary) */}
-            <button
-              onClick={handleSharePdfWhatsApp}
-              disabled={isGeneratingPdf}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-xs font-bold shadow-xs transition-all cursor-pointer active:scale-95"
-              title={language === 'bn' ? 'হোয়াটসঅ্যাপে পিডিএফ রসিদ পাঠান' : 'Share PDF on WhatsApp'}
-            >
-              {isGeneratingPdf ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <FileText className="w-3.5 h-3.5" />}
-              <span>{language === 'bn' ? 'পিডিএফ হোয়াটসঅ্যাপ' : 'PDF WhatsApp'}</span>
-            </button>
-
-            {/* Download PDF Button */}
-            <button
-              onClick={handleDownloadPdf}
-              disabled={isGeneratingPdf}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-xs font-bold shadow-xs transition-all cursor-pointer active:scale-95"
-              title={language === 'bn' ? 'পিডিএফ ডাউনলোড করুন' : 'Download PDF'}
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">PDF</span>
-            </button>
-
             {/* Print Button */}
             <button
               onClick={handlePrintReceipt}
@@ -298,7 +209,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           <div className="rounded-2xl border border-slate-200 overflow-hidden shadow-2xs bg-white">
             <div className="bg-slate-100 px-3 py-1.5 border-b border-slate-200 flex items-center justify-between text-[11px] font-bold text-slate-700">
               <span className="flex items-center gap-1">
-                <Receipt className="w-3.5 h-3.5 text-[#e0533c]" />
+                <FileText className="w-3.5 h-3.5 text-[#e0533c]" />
                 {language === 'bn' ? 'বিলের বিস্তারিত বিবরণ' : 'Itemized Bill Breakdown'}
               </span>
               <span>{language === 'bn' ? 'টাকা (TK)' : 'Amount (TK)'}</span>
@@ -450,203 +361,6 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
 
           {/* Computer Generated Notice */}
           <div className="text-[9px] text-center text-slate-400 font-mono pt-1.5 border-t border-slate-100">
-            {language === 'bn' ? 'কম্পিউটার থেকে স্বয়ংক্রিয়ভাবে প্রস্তুতকৃত রসিদ। কোনো স্বাক্ষরের প্রয়োজন নেই।' : 'Computer generated payment record. Valid without physical seal.'}
-          </div>
-
-        </div>
-
-        {/* PDF Status Alert Banner */}
-        {pdfStatusMsg && (
-          <div className="no-print mt-3 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-800 dark:text-emerald-300 text-xs font-semibold flex items-start gap-2 animate-fadeIn">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-            <div className="flex-1">
-              <p>{pdfStatusMsg}</p>
-            </div>
-            <button
-              onClick={() => setPdfStatusMsg(null)}
-              className="text-emerald-600 hover:text-emerald-800 dark:text-emerald-400 p-0.5"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        )}
-
-      </div>
-
-      {/* STANDALONE OFF-SCREEN PDF DOCUMENT TEMPLATE (NOT TOUCHED BY UI MODAL STYLES) */}
-      <div
-        id="receiptPdfDocument"
-        style={{
-          position: 'fixed',
-          top: '0',
-          left: '-9999px',
-          width: '794px',
-          backgroundColor: '#ffffff',
-          color: '#0f172a',
-          padding: '28px',
-          boxSizing: 'border-box',
-          fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif',
-          zIndex: -9999,
-          pointerEvents: 'none',
-        }}
-      >
-        <div style={{
-          border: '2px solid #334155',
-          borderRadius: '16px',
-          padding: '32px 36px',
-          boxSizing: 'border-box',
-          backgroundColor: '#ffffff'
-        }}>
-          {/* Document Header */}
-          <div style={{ textAlign: 'center', borderBottom: '2px solid #cbd5e1', paddingBottom: '16px', marginBottom: '20px' }}>
-            <div style={{ display: 'inline-block', width: '44px', height: '44px', lineHeight: '42px', borderRadius: '12px', backgroundColor: '#fef2f2', border: '1px solid #fecaca', textAlign: 'center', marginBottom: '8px' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e0533c" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="none" stroke="#e0533c" strokeWidth="2.5" />
-                <polyline points="9 22 9 12 15 12 15 22" fill="none" stroke="#e0533c" strokeWidth="2.5" />
-              </svg>
-            </div>
-            <h1 style={{ fontSize: '24px', fontWeight: '900', color: '#0f172a', margin: '0 0 4px 0', lineHeight: '1.3' }}>
-              {language === 'bn' ? 'নাহিদ কুটির' : 'Nahid Kutir'}
-            </h1>
-            <p style={{ fontSize: '13px', color: '#64748b', margin: '0 0 10px 0', fontWeight: '500', lineHeight: '1.4' }}>
-              {language === 'bn' ? 'আবাসিক এলাকা, টঙ্গী, ঢাকা, বাংলাদেশ' : 'Residential Area, Tongi, Dhaka, Bangladesh'}
-            </p>
-            <span style={{ display: 'inline-block', padding: '5px 20px', backgroundColor: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '20px', fontSize: '11px', fontWeight: '800', color: '#334155', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-              {language === 'bn' ? 'অফিসিয়াল ভাড়া জমার রসিদ' : 'OFFICIAL RENT PAYMENT RECEIPT'}
-            </span>
-          </div>
-
-          {/* Receipt Identifiers */}
-          <table style={{ width: '100%', marginBottom: '18px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '14px 16px', borderCollapse: 'separate' }}>
-            <tbody>
-              <tr>
-                <td style={{ width: '50%', verticalAlign: 'top' }}>
-                  <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '700', textTransform: 'uppercase', display: 'block', lineHeight: '1.3' }}>{t.receiptDate}</span>
-                  <span style={{ fontSize: '15px', fontWeight: '800', color: '#0f172a', fontFamily: 'monospace', display: 'block', marginTop: '3px' }}>{rentRecord.date}</span>
-                </td>
-                <td style={{ width: '50%', textAlign: 'right', verticalAlign: 'top' }}>
-                  <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '700', textTransform: 'uppercase', display: 'block', lineHeight: '1.3' }}>{t.receiptNo}</span>
-                  <span style={{ fontSize: '15px', fontWeight: '800', color: '#e0533c', fontFamily: 'monospace', display: 'block', marginTop: '3px' }}>#NK-{rentRecord.id.substring(0, 8).toUpperCase()}</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          {/* Tenant & Room Info */}
-          <table style={{ width: '100%', marginBottom: '22px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '14px 16px', borderCollapse: 'separate' }}>
-            <tbody>
-              <tr>
-                <td style={{ width: '60%', verticalAlign: 'top' }}>
-                  <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '600', display: 'block', lineHeight: '1.3' }}>{t.receivedFrom}</span>
-                  <span style={{ fontSize: '16px', fontWeight: '900', color: '#0f172a', display: 'block', marginTop: '3px', lineHeight: '1.3' }}>{rentRecord.tenant}</span>
-                  {rentRecord.phone && <span style={{ fontSize: '12px', color: '#64748b', fontFamily: 'monospace', display: 'block', marginTop: '3px' }}>{rentRecord.phone}</span>}
-                </td>
-                <td style={{ width: '40%', textAlign: 'right', verticalAlign: 'top' }}>
-                  <span style={{ fontSize: '11px', color: '#64748b', fontWeight: '600', display: 'block', lineHeight: '1.3' }}>{t.roomAssigned}</span>
-                  <span style={{ fontSize: '16px', fontWeight: '900', color: '#e0533c', display: 'block', marginTop: '3px', lineHeight: '1.3' }}>{t.roomText} {rentRecord.room}</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          {/* Itemized Table */}
-          <div style={{ border: '1px solid #cbd5e1', borderRadius: '8px', overflow: 'hidden', marginBottom: '22px' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-              <thead>
-                <tr style={{ backgroundColor: '#f1f5f9', borderBottom: '1px solid #cbd5e1', color: '#334155', fontWeight: '800', textAlign: 'left' }}>
-                  <th style={{ padding: '12px 16px' }}>{language === 'bn' ? 'বিলের বিবরণ' : 'Bill Description'}</th>
-                  <th style={{ padding: '12px 16px', textAlign: 'right' }}>{language === 'bn' ? 'টাকা (TK)' : 'Amount (TK)'}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-                  <td style={{ padding: '11px 16px', color: '#334155', fontWeight: '600' }}>{language === 'bn' ? '১. মূল ঘর ভাড়া (House Rent)' : '1. House Rent'}</td>
-                  <td style={{ padding: '11px 16px', textAlign: 'right', fontWeight: '800', color: '#0f172a', fontFamily: 'monospace' }}>{formatCurrency(houseRent)}</td>
-                </tr>
-                {gasBill > 0 && (
-                  <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-                    <td style={{ padding: '11px 16px', color: '#334155', fontWeight: '600' }}>{language === 'bn' ? '২. গ্যাস বিল (Gas Bill)' : '2. Gas Bill'}</td>
-                    <td style={{ padding: '11px 16px', textAlign: 'right', fontWeight: '800', color: '#0f172a', fontFamily: 'monospace' }}>{formatCurrency(gasBill)}</td>
-                  </tr>
-                )}
-                {waterBill > 0 && (
-                  <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-                    <td style={{ padding: '11px 16px', color: '#334155', fontWeight: '600' }}>{language === 'bn' ? '৩. পানির বিল (Water Bill)' : '3. Water Bill'}</td>
-                    <td style={{ padding: '11px 16px', textAlign: 'right', fontWeight: '800', color: '#0f172a', fontFamily: 'monospace' }}>{formatCurrency(waterBill)}</td>
-                  </tr>
-                )}
-                {wasteBill > 0 && (
-                  <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-                    <td style={{ padding: '11px 16px', color: '#334155', fontWeight: '600' }}>{language === 'bn' ? '৪. ময়লার বিল (Waste Bill)' : '4. Waste Bill'}</td>
-                    <td style={{ padding: '11px 16px', textAlign: 'right', fontWeight: '800', color: '#0f172a', fontFamily: 'monospace' }}>{formatCurrency(wasteBill)}</td>
-                  </tr>
-                )}
-                <tr style={{ backgroundColor: '#f8fafc', borderTop: '2px solid #cbd5e1', fontWeight: '800' }}>
-                  <td style={{ padding: '13px 16px', color: '#0f172a' }}>{language === 'bn' ? 'সর্বমোট পাওনা (Total Payable)' : 'Total Payable'}</td>
-                  <td style={{ padding: '13px 16px', textAlign: 'right', fontSize: '15px', color: '#0f172a', fontFamily: 'monospace' }}>{formatCurrency(totalBillPackage)}</td>
-                </tr>
-                <tr style={{ backgroundColor: '#f0fdf4', borderTop: '1px solid #bbf7d0', color: '#166534', fontWeight: '800' }}>
-                  <td style={{ padding: '13px 16px' }}>✔ {t.paidAmountText}</td>
-                  <td style={{ padding: '13px 16px', textAlign: 'right', fontSize: '15px', color: '#15803d', fontFamily: 'monospace' }}>{formatCurrency(rentRecord.paid)}</td>
-                </tr>
-                <tr style={{ backgroundColor: rentRecord.due > 0 ? '#fff1f2' : '#ffffff', borderTop: '1px solid #e2e8f0', color: rentRecord.due > 0 ? '#9f1239' : '#64748b', fontWeight: '800' }}>
-                  <td style={{ padding: '13px 16px' }}>{t.remainingDueText}</td>
-                  <td style={{ padding: '13px 16px', textAlign: 'right', fontSize: '15px', fontFamily: 'monospace' }}>{formatCurrency(rentRecord.due)}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          {/* Payment Status Box */}
-          <table style={{ width: '100%', marginBottom: '24px', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '14px 16px', borderCollapse: 'separate' }}>
-            <tbody>
-              <tr>
-                <td style={{ verticalAlign: 'top' }}>
-                  <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '700', textTransform: 'uppercase', display: 'block', lineHeight: '1.3' }}>{language === 'bn' ? 'পরিশোধের অবস্থা' : 'Payment Status'}</span>
-                  <span style={{ fontSize: '15px', fontWeight: '900', marginTop: '4px', display: 'block', color: isFullyPaid ? '#15803d' : isPartiallyPaid ? '#d97706' : '#dc2626', lineHeight: '1.3' }}>
-                    {isFullyPaid ? (language === 'bn' ? '✔ সম্পূর্ণ পরিশোধিত (PAID IN FULL)' : '✔ PAID IN FULL') : isPartiallyPaid ? (language === 'bn' ? `আংশিক জমা (বকেয়া ৳${rentRecord.due.toLocaleString()})` : `PARTIAL PAYMENT (Due ৳${rentRecord.due.toLocaleString()})`) : (language === 'bn' ? 'পরিশোধ করা হয়নি (UNPAID)' : 'UNPAID')}
-                  </span>
-                </td>
-                {rentRecord.note && (
-                  <td style={{ textAlign: 'right', verticalAlign: 'top', maxWidth: '220px' }}>
-                    <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: '700', textTransform: 'uppercase', display: 'block', lineHeight: '1.3' }}>{language === 'bn' ? 'নোট / মন্তব্য' : 'Note'}</span>
-                    <span style={{ fontSize: '12px', color: '#475569', fontStyle: 'italic', display: 'block', marginTop: '3px', lineHeight: '1.3' }}>"{rentRecord.note}"</span>
-                  </td>
-                )}
-              </tr>
-            </tbody>
-          </table>
-
-          {/* Thank you */}
-          <p style={{ textAlign: 'center', fontSize: '13px', color: '#64748b', fontWeight: '600', fontStyle: 'italic', margin: '0 0 24px 0', lineHeight: '1.4' }}>
-            "{t.thankYouMsg}"
-          </p>
-
-          {/* Signatures */}
-          <table style={{ width: '100%', marginTop: '24px', marginBottom: '20px' }}>
-            <tbody>
-              <tr>
-                <td style={{ width: '33%', textAlign: 'center', verticalAlign: 'bottom' }}>
-                  <div style={{ borderTop: '2px solid #cbd5e1', paddingTop: '8px', fontSize: '12px', fontWeight: '700', color: '#475569' }}>
-                    {t.signatureLandlord}
-                  </div>
-                </td>
-                <td style={{ width: '34%', textAlign: 'center', verticalAlign: 'middle' }}>
-                  <div style={{ width: '52px', height: '52px', borderRadius: '50%', border: '2px dashed #e0533c', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '9px', fontWeight: '900', color: '#e0533c', textTransform: 'uppercase', transform: 'rotate(-12deg)', padding: '2px' }}>
-                    {language === 'bn' ? 'যাচাইকৃত' : 'VERIFIED'}
-                  </div>
-                </td>
-                <td style={{ width: '33%', textAlign: 'center', verticalAlign: 'bottom' }}>
-                  <div style={{ borderTop: '2px solid #cbd5e1', paddingTop: '8px', fontSize: '12px', fontWeight: '700', color: '#475569' }}>
-                    {t.signatureTenant}
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          {/* Disclaimer */}
-          <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '12px', textAlign: 'center', fontSize: '10px', color: '#94a3b8', fontFamily: 'system-ui, sans-serif' }}>
             {language === 'bn' ? 'কম্পিউটার থেকে স্বয়ংক্রিয়ভাবে প্রস্তুতকৃত রসিদ। কোনো স্বাক্ষরের প্রয়োজন নেই।' : 'Computer generated payment record. Valid without physical seal.'}
           </div>
         </div>

@@ -161,10 +161,11 @@ export async function generateElementPDF({
       clonedElement.style.position = 'relative';
       clonedElement.style.left = '0';
       clonedElement.style.top = '0';
-      clonedElement.style.width = '794px';
-      if (!clonedElement.style.padding) {
-        clonedElement.style.padding = '32px 16px';
+      clonedElement.style.width = clonedElement.style.width || '794px';
+      if (!clonedElement.style.height) {
+        clonedElement.style.height = '1123px';
       }
+      clonedElement.style.boxSizing = 'border-box';
       clonedElement.style.borderRadius = '0px';
 
       // 1. Sanitize all <style> tags in cloned document
