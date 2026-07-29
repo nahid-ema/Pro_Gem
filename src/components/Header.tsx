@@ -29,8 +29,10 @@ import {
   AlertTriangle,
   Receipt,
   Store,
-  LineChart
+  LineChart,
+  Smartphone
 } from 'lucide-react';
+import { AndroidInstallModal } from './AndroidInstallModal';
 
 interface HeaderProps {
   language: Language;
@@ -94,6 +96,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isQuickNavOpen, setIsQuickNavOpen] = useState(false);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [isAndroidModalOpen, setIsAndroidModalOpen] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -406,6 +409,19 @@ export const Header: React.FC<HeaderProps> = ({
                     </button>
                   </div>
 
+                  {/* Android App Action */}
+                  <button
+                    type="button"
+                    onClick={() => { setIsMenuOpen(false); setIsAndroidModalOpen(true); }}
+                    className="w-full text-left px-3 py-2 rounded-xl bg-gradient-to-r from-[#e0533c]/10 to-amber-500/10 hover:from-[#e0533c]/20 hover:to-amber-500/20 flex items-center justify-between text-slate-800 dark:text-slate-100 font-bold transition-colors cursor-pointer border border-[#e0533c]/20"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Smartphone className="w-4 h-4 text-[#e0533c]" />
+                      <span>{language === 'bn' ? 'অ্যান্ড্রয়েড অ্যাপ ইনস্টল' : 'Install Android App'}</span>
+                    </div>
+                    <span className="text-[10px] bg-[#e0533c] text-white px-2 py-0.5 rounded-full font-extrabold uppercase">APK / PWA</span>
+                  </button>
+
                   {/* Print Action */}
                   <button
                     type="button"
@@ -614,6 +630,13 @@ export const Header: React.FC<HeaderProps> = ({
           )}
         </div>
       </div>
+
+      {/* Android Install Modal */}
+      <AndroidInstallModal
+        isOpen={isAndroidModalOpen}
+        onClose={() => setIsAndroidModalOpen(false)}
+        language={language}
+      />
     </header>
   );
 };

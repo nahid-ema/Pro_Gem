@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { RentRecord, Room, Language } from '../types';
 import { getTranslation } from '../data/translations';
-import { Printer, X, CheckCircle2, MessageSquare, Copy, Check, ShieldCheck, Home, Receipt } from 'lucide-react';
+import { Printer, X, CheckCircle2, MessageSquare, Copy, Check, ShieldCheck, Home, Receipt, FileText, Download, Loader2, Share2 } from 'lucide-react';
+import { generateElementPDF, shareOrDownloadPDF } from '../lib/pdfGenerator';
 
 interface ReceiptModalProps {
   rentRecord: RentRecord | null;
@@ -18,6 +19,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
   onClose,
 }) => {
   const [copied, setCopied] = useState(false);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
 
   // Add print isolation hook
   useEffect(() => {
@@ -55,6 +57,57 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
 
   const handlePrintReceipt = () => {
     window.print();
+  };
+
+  const handleSharePdfWhatsApp = async () => {
+    if (!rentRecord || isGeneratingPdf) return;
+    setIsGeneratingPdf(true);
+    try {
+      const receiptNo = rentRecord.id.substring(0, 8).toUpperCase();
+      const filename = `Nahid_Kutir_Receipt_NK-${receiptNo}.pdf`;
+      const title = language === 'bn' ? 'নাহিদ কুটির — ভাড়া পরিশোধের রসিদ' : 'Nahid Kutir Rent Receipt';
+      const text = language === 'bn'
+        ? `*নাহিদ কুটির — ভাড়া পরিশোধের পিডিএফ রসিদ*\nরসিদ নং: #NK-${receiptNo}\nতারিখ: ${rentRecord.date}\nভাড়াটিয়া: ${rentRecord.tenant} (রুম: ${rentRecord.room})\nজমা: ৳${rentRecord.paid.toLocaleString()} | বকেয়া: ৳${rentRecord.due.toLocaleString()}`
+        : `*Nahid Kutir — Rent Payment PDF Receipt*\nReceipt No: #NK-${receiptNo}\nDate: ${rentRecord.date}\nTenant: ${rentRecord.tenant} (Room: ${rentRecord.room})\nPaid: ৳${rentRecord.paid.toLocaleString()} | Due: ৳${rentRecord.due.toLocaleString()}`;
+
+      await shareOrDownloadPDF({
+        elementId: 'receiptContent',
+        filename,
+        phone: rentRecord.phone,
+        title,
+        text,
+      });
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert(language === 'bn' ? 'পিডিএফ তৈরি করতে সমস্যা হয়েছে।' : 'Failed to generate PDF receipt.');
+    } finally {
+      setIsGeneratingPdf(false);
+    }
+  };
+
+  const handleDownloadPdf = async () => {
+    if (!rentRecord || isGeneratingPdf) return;
+    setIsGeneratingPdf(true);
+    try {
+      const receiptNo = rentRecord.id.substring(0, 8).toUpperCase();
+      const filename = `Nahid_Kutir_Receipt_NK-${receiptNo}.pdf`;
+      const { downloadUrl } = await generateElementPDF({
+        elementId: 'receiptContent',
+        filename,
+      });
+
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Error downloading PDF:', error);
+      alert(language === 'bn' ? 'পিডিএফ ডাউনলোড করতে সমস্যা হয়েছে।' : 'Failed to download PDF receipt.');
+    } finally {
+      setIsGeneratingPdf(false);
+    }
   };
 
   const handleShareWhatsApp = () => {
@@ -100,7 +153,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
       <div id="receiptModalCard" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-lg w-full p-4 sm:p-6 shadow-2xl relative overflow-hidden my-auto">
         
         {/* Modal Controls Bar (Screen Only - Hidden in Print) */}
-        <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-slate-100 dark:border-slate-800 no-print gap-2">
+        <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-slate-100 dark:border-slate-800 no-print gap-1.5 flex-wrap">
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-[#e0533c]" />
             <h3 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
@@ -108,25 +161,46 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
             </h3>
           </div>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {/* WhatsApp PDF Button (Primary) */}
+            <button
+              onClick={handleSharePdfWhatsApp}
+              disabled={isGeneratingPdf}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white text-xs font-bold shadow-xs transition-all cursor-pointer active:scale-95"
+              title={language === 'bn' ? 'হোয়াটসঅ্যাপে পিডিএফ রসিদ পাঠান' : 'Share PDF on WhatsApp'}
+            >
+              {isGeneratingPdf ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <FileText className="w-3.5 h-3.5" />}
+              <span>{language === 'bn' ? 'পিডিএফ হোয়াটসঅ্যাপ' : 'PDF WhatsApp'}</span>
+            </button>
+
+            {/* Download PDF Button */}
+            <button
+              onClick={handleDownloadPdf}
+              disabled={isGeneratingPdf}
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-xs font-bold shadow-xs transition-all cursor-pointer active:scale-95"
+              title={language === 'bn' ? 'পিডিএফ ডাউনলোড করুন' : 'Download PDF'}
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">PDF</span>
+            </button>
+
             {/* Print Button */}
             <button
               onClick={handlePrintReceipt}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#e0533c] hover:bg-[#cb422d] text-white text-xs font-bold shadow-xs transition-all cursor-pointer active:scale-95"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition-all cursor-pointer"
               title={language === 'bn' ? 'রসিদ প্রিন্ট করুন' : 'Print Receipt'}
             >
               <Printer className="w-3.5 h-3.5" />
-              <span>{t.printBtn}</span>
+              <span className="hidden md:inline">{t.printBtn}</span>
             </button>
 
-            {/* WhatsApp Share Button */}
+            {/* WhatsApp Text Message Button */}
             <button
               onClick={handleShareWhatsApp}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition-all cursor-pointer active:scale-95"
-              title={language === 'bn' ? 'হোয়াটসঅ্যাপে পাঠান' : 'Share on WhatsApp'}
+              className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors cursor-pointer"
+              title={language === 'bn' ? 'টেক্সট মেসেজ পাঠান' : 'Text WhatsApp'}
             >
-              <MessageSquare className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">WhatsApp</span>
+              <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
             </button>
 
             {/* Copy Button */}
@@ -361,6 +435,54 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
             {language === 'bn' ? 'কম্পিউটার থেকে স্বয়ংক্রিয়ভাবে প্রস্তুতকৃত রসিদ। কোনো স্বাক্ষরের প্রয়োজন নেই।' : 'Computer generated payment record. Valid without physical seal.'}
           </div>
 
+        </div>
+
+        {/* Interactive PDF WhatsApp Action Banner (Screen Only) */}
+        <div className="no-print pt-3 mt-3 border-t border-slate-200/80 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 p-3 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-3 shadow-2xs">
+          <div className="flex items-center gap-2.5 text-left w-full sm:w-auto">
+            <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/20">
+              <FileText className="w-4 h-4" />
+            </div>
+            <div>
+              <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                {language === 'bn' ? 'পিডিএফ রসিদ হোয়াটসঅ্যাপে পাঠান' : 'Send PDF Receipt via WhatsApp'}
+              </h4>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                {language === 'bn' ? 'সরাসরি ডিজিটাল পিডিএফ রসিদ তৈরি ও শেয়ার করুন' : 'Generate & share digital PDF directly on WhatsApp'}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 w-full sm:w-auto">
+            <button
+              type="button"
+              onClick={handleSharePdfWhatsApp}
+              disabled={isGeneratingPdf}
+              className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition-all active:scale-95 cursor-pointer disabled:opacity-50"
+            >
+              {isGeneratingPdf ? (
+                <>
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  <span>{language === 'bn' ? 'পিডিএফ তৈরি হচ্ছে...' : 'Generating PDF...'}</span>
+                </>
+              ) : (
+                <>
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span>{language === 'bn' ? 'পিডিএফ হোয়াটসঅ্যাপ করুন' : 'WhatsApp PDF'}</span>
+                </>
+              )}
+            </button>
+
+            <button
+              type="button"
+              onClick={handleDownloadPdf}
+              disabled={isGeneratingPdf}
+              className="p-2 rounded-xl bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 text-xs font-bold transition-all cursor-pointer"
+              title={language === 'bn' ? 'পিডিএফ ফাইল ডাউনলোড' : 'Download PDF File'}
+            >
+              <Download className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
     </div>,
