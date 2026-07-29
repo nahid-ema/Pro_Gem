@@ -6,7 +6,7 @@ export interface PDFGenerateOptions {
   filename?: string;
 }
 
-const OKLCH_REGEX = /oklch\([^)]+\)/gi;
+const COLOR_FUNC_REGEX = /(?:oklch|oklab|color-mix|color|light-dark)\((?:[^()]+|\((?:[^()]+|\([^()]*\))*\))*\)/gi;
 
 let canvasCtx: CanvasRenderingContext2D | null = null;
 function getCanvasCtx(): CanvasRenderingContext2D | null {
@@ -18,17 +18,16 @@ function getCanvasCtx(): CanvasRenderingContext2D | null {
 }
 
 /**
- * Converts any oklch(...) CSS color substring into a standard browser-supported color string (#rrggbb or rgba)
+ * Converts any unsupported CSS color substring (oklch, oklab, color-mix, etc.) into standard browser-supported color strings (#rrggbb or rgba)
  */
-export function convertOklchColorString(cssValue: string): string {
-  if (!cssValue || typeof cssValue !== 'string' || !cssValue.includes('oklch')) {
-    return cssValue;
-  }
+export function convertUnsupportedColors(cssValue: string): string {
+  if (!cssValue || typeof cssValue !== 'string') return cssValue;
+  if (!/(?:oklch|oklab|color-mix|color|light-dark)/i.test(cssValue)) return cssValue;
 
   const ctx = getCanvasCtx();
   if (!ctx) return cssValue;
 
-  return cssValue.replace(OKLCH_REGEX, (match) => {
+  return cssValue.replace(COLOR_FUNC_REGEX, (match) => {
     try {
       ctx.fillStyle = '#000000'; // reset
       ctx.fillStyle = match;
@@ -66,38 +65,49 @@ export async function generateElementPDF({
       // 1. Sanitize all <style> tags in cloned document
       const styleTags = clonedDoc.querySelectorAll('style');
       styleTags.forEach((styleTag) => {
-        if (styleTag.textContent && styleTag.textContent.includes('oklch')) {
-          styleTag.textContent = convertOklchColorString(styleTag.textContent);
+        if (styleTag.textContent && /(?:oklch|oklab|color-mix|color|light-dark)/i.test(styleTag.textContent)) {
+          styleTag.textContent = convertUnsupportedColors(styleTag.textContent);
         }
       });
 
-      // 2. Sanitize CSS Rules in document stylesheets
+      // 2. Sanitize active CSSStyleSheets in cloned document
       try {
         Array.from(clonedDoc.styleSheets).forEach((sheet) => {
           try {
             const rules = Array.from(sheet.cssRules || []);
-            rules.forEach((rule) => {
-              if (rule instanceof CSSStyleRule && rule.cssText.includes('oklch')) {
-                for (let i = 0; i < rule.style.length; i++) {
-                  const propName = rule.style[i];
-                  const propVal = rule.style.getPropertyValue(propName);
-                  if (propVal && propVal.includes('oklch')) {
-                    const converted = convertOklchColorString(propVal);
-                    rule.style.setProperty(propName, converted, rule.style.getPropertyPriority(propName));
+            for (let i = rules.length - 1; i >= 0; i--) {
+              const rule = rules[i];
+              if (rule.cssText && /(?:oklch|oklab|color-mix|color|light-dark)/i.test(rule.cssText)) {
+                if (rule instanceof CSSStyleRule) {
+                  for (let j = 0; j < rule.style.length; j++) {
+                    const propName = rule.style[j];
+                    const propVal = rule.style.getPropertyValue(propName);
+                    if (propVal && /(?:oklch|oklab|color-mix|color|light-dark)/i.test(propVal)) {
+                      const converted = convertUnsupportedColors(propVal);
+                      rule.style.setProperty(propName, converted, rule.style.getPropertyPriority(propName));
+                    }
+                  }
+                } else {
+                  const sanitizedText = convertUnsupportedColors(rule.cssText);
+                  try {
+                    sheet.deleteRule(i);
+                    sheet.insertRule(sanitizedText, i);
+                  } catch {
+                    // Ignore insert failures
                   }
                 }
               }
-            });
+            }
           } catch {
-            // Ignore CORS stylesheet errors
+            // Ignore cross-origin stylesheet access errors
           }
         });
       } catch {
         // Ignore stylesheet access errors
       }
 
-      // 3. Sanitize computed & inline styles on all cloned elements
-      const propsToFix = [
+      // 3. Compute explicit resolved styles for all cloned elements
+      const colorProps = [
         'color',
         'background-color',
         'border-color',
@@ -109,8 +119,6 @@ export async function generateElementPDF({
         'box-shadow',
         'fill',
         'stroke',
-        'background-image',
-        'background',
       ];
 
       const allClonedElements = [clonedElement, ...Array.from(clonedElement.querySelectorAll('*'))];
@@ -119,18 +127,22 @@ export async function generateElementPDF({
         if (node instanceof HTMLElement || node instanceof SVGElement) {
           const compStyle = clonedDoc.defaultView?.getComputedStyle(node);
           if (compStyle) {
-            propsToFix.forEach((prop) => {
+            colorProps.forEach((prop) => {
               const val = compStyle.getPropertyValue(prop);
-              if (val && val.includes('oklch')) {
-                const converted = convertOklchColorString(val);
-                node.style.setProperty(prop, converted, 'important');
+              if (val) {
+                if (/(?:oklch|oklab|color-mix|color|light-dark)/i.test(val)) {
+                  const converted = convertUnsupportedColors(val);
+                  node.style.setProperty(prop, converted, 'important');
+                } else if (val.startsWith('rgb')) {
+                  node.style.setProperty(prop, val, 'important');
+                }
               }
             });
           }
 
           const styleAttr = node.getAttribute('style');
-          if (styleAttr && styleAttr.includes('oklch')) {
-            node.setAttribute('style', convertOklchColorString(styleAttr));
+          if (styleAttr && /(?:oklch|oklab|color-mix|color|light-dark)/i.test(styleAttr)) {
+            node.setAttribute('style', convertUnsupportedColors(styleAttr));
           }
         }
       });
