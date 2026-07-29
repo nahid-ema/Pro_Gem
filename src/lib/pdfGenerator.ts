@@ -276,25 +276,45 @@ export async function shareOrDownloadPDF({
     cleanPhone = `88${cleanPhone}`;
   }
 
-  // Check if native Web Share API supports file sharing (mobile / Android / PWA)
+  // Pre-open popup window synchronously BEFORE async operation to avoid browser popup blockers
+  let waWindow: Window | null = null;
   const isMobileShareSupported =
     typeof navigator !== 'undefined' &&
     Boolean(navigator.canShare) &&
     Boolean(navigator.share) &&
     navigator.canShare({ files: [new File([], 'test.pdf', { type: 'application/pdf' })] });
 
-  // If on desktop (no native file sharing), pre-open blank popup window synchronously BEFORE async operation
-  let waWindow: Window | null = null;
-  if (!isMobileShareSupported) {
+  // If a specific tenant phone is provided OR native share is not available, open standard WhatsApp popup window
+  if (cleanPhone || !isMobileShareSupported) {
     waWindow = window.open('about:blank', '_blank');
   }
 
   try {
-    const { blob, file, downloadUrl } = await generateElementPDF({ elementId, filename });
+    const { file, downloadUrl } = await generateElementPDF({ elementId, filename });
 
-    // Try Mobile Native Share first
+    // 1. If tenant phone number is provided -> Download PDF + Open WhatsApp chat with THAT tenant number!
+    if (cleanPhone) {
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`;
+
+      if (waWindow && !waWindow.closed) {
+        waWindow.location.href = waUrl;
+      } else {
+        window.open(waUrl, '_blank');
+      }
+
+      return 'downloaded';
+    }
+
+    // 2. If no phone number is provided, try Mobile Native Share Sheet if available
     if (isMobileShareSupported && navigator.share) {
-      if (waWindow) {
+      if (waWindow && !waWindow.closed) {
         waWindow.close();
         waWindow = null;
       }
@@ -312,8 +332,7 @@ export async function shareOrDownloadPDF({
       }
     }
 
-    // Fallback for Desktop / Browsers without Native File Share API:
-    // 1. Trigger direct PDF file download
+    // 3. Fallback: Download PDF and open general WhatsApp share link
     const link = document.createElement('a');
     link.href = downloadUrl;
     link.download = filename;
@@ -321,11 +340,7 @@ export async function shareOrDownloadPDF({
     link.click();
     document.body.removeChild(link);
 
-    // 2. Direct to WhatsApp chat with instructions
-    const waInstruction = `${text}\n\n📎 (পিডিএফ রসিদ ফাইলটি আপনার ডাউনলোডে সেভ হয়েছে, দয়া করে অ্যাটাচ করুন)`;
-    const waUrl = cleanPhone
-      ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(waInstruction)}`
-      : `https://api.whatsapp.com/send?text=${encodeURIComponent(waInstruction)}`;
+    const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
 
     if (waWindow && !waWindow.closed) {
       waWindow.location.href = waUrl;

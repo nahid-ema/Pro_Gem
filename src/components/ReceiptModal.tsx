@@ -237,35 +237,39 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
         </div>
 
         {/* PRINTABLE RECEIPT CONTENT CONTAINER */}
-        <div className="py-4 sm:py-5 space-y-4 text-slate-900 dark:text-slate-100" id="receiptContent">
+        <div
+          className="py-4 sm:py-5 px-3 sm:px-4 space-y-4 text-slate-900 bg-white rounded-2xl border border-slate-200/80 shadow-2xs"
+          id="receiptContent"
+          style={{ colorScheme: 'light' }}
+        >
           
           {/* 1. Header & Brand Title */}
-          <div className="text-center border-b pb-3 border-slate-200 dark:border-slate-800 relative">
-            <div className="inline-flex items-center justify-center w-10 h-10 rounded-2xl bg-[#e0533c]/10 dark:bg-[#e0533c]/20 text-[#e0533c] border border-[#e0533c]/30 mb-1.5 shadow-2xs">
+          <div className="text-center border-b pb-3 border-slate-200 relative">
+            <div className="inline-flex items-center justify-center w-10 h-10 rounded-2xl bg-[#e0533c]/10 text-[#e0533c] border border-[#e0533c]/30 mb-1.5 shadow-2xs">
               <Home className="w-5 h-5" />
             </div>
-            <h2 className="text-base sm:text-lg font-black tracking-tight text-slate-900 dark:text-white">
+            <h2 className="text-base sm:text-lg font-black tracking-tight text-slate-900">
               {t.receiptHeader}
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+            <p className="text-xs text-slate-500 font-medium">
               {t.receiptAddress}
             </p>
-            <div className="mt-1.5 inline-block px-3 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[10px] font-bold text-slate-600 dark:text-slate-300 uppercase tracking-widest">
+            <div className="mt-1.5 inline-block px-3 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-[10px] font-bold text-slate-700 uppercase tracking-widest">
               {language === 'bn' ? 'অফিসিয়াল ভাড়া জমার রসিদ' : 'Official Rent Payment Receipt'}
             </div>
           </div>
 
           {/* 2. Key Receipt Identifiers & Status Stamp */}
-          <div className="grid grid-cols-2 gap-3 bg-slate-50 dark:bg-slate-800/60 p-3 sm:p-3.5 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 text-xs">
+          <div className="grid grid-cols-2 gap-3 bg-slate-50 p-3 sm:p-3.5 rounded-2xl border border-slate-200/80 text-xs">
             <div>
-              <span className="text-slate-400 dark:text-slate-500 font-bold block uppercase tracking-wider text-[10px]">
+              <span className="text-slate-400 font-bold block uppercase tracking-wider text-[10px]">
                 {t.receiptDate}
               </span>
-              <span className="font-bold font-mono text-sm text-slate-800 dark:text-slate-100">{rentRecord.date}</span>
+              <span className="font-bold font-mono text-sm text-slate-900">{rentRecord.date}</span>
             </div>
             
             <div className="text-right">
-              <span className="text-slate-400 dark:text-slate-500 font-bold block uppercase tracking-wider text-[10px]">
+              <span className="text-slate-400 font-bold block uppercase tracking-wider text-[10px]">
                 {t.receiptNo}
               </span>
               <span className="font-mono font-bold text-sm text-[#e0533c]">
@@ -275,24 +279,24 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           </div>
 
           {/* 3. Tenant & Room Details Grid */}
-          <div className="grid grid-cols-2 gap-3 text-xs bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200/60 dark:border-slate-800">
+          <div className="grid grid-cols-2 gap-3 text-xs bg-slate-50/60 p-3 rounded-xl border border-slate-200/60">
             <div>
-              <span className="text-slate-400 dark:text-slate-500 text-[11px] block font-semibold">{t.receivedFrom}</span>
-              <span className="font-black text-sm text-slate-900 dark:text-white block mt-0.5">{rentRecord.tenant}</span>
+              <span className="text-slate-400 text-[11px] block font-semibold">{t.receivedFrom}</span>
+              <span className="font-black text-sm text-slate-900 block mt-0.5">{rentRecord.tenant}</span>
               {rentRecord.phone && (
-                <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 block">{rentRecord.phone}</span>
+                <span className="text-[11px] font-mono text-slate-500 block">{rentRecord.phone}</span>
               )}
             </div>
 
             <div className="text-right">
-              <span className="text-slate-400 dark:text-slate-500 text-[11px] block font-semibold">{t.roomAssigned}</span>
+              <span className="text-slate-400 text-[11px] block font-semibold">{t.roomAssigned}</span>
               <span className="font-black text-sm text-[#e0533c] block mt-0.5">{t.roomText} {rentRecord.room}</span>
             </div>
           </div>
 
           {/* 4. Itemized Payment Breakdown Table */}
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-2xs">
-            <div className="bg-slate-100 dark:bg-slate-800/90 px-3 py-1.5 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between text-[11px] font-bold text-slate-700 dark:text-slate-300">
+          <div className="rounded-2xl border border-slate-200 overflow-hidden shadow-2xs bg-white">
+            <div className="bg-slate-100 px-3 py-1.5 border-b border-slate-200 flex items-center justify-between text-[11px] font-bold text-slate-700">
               <span className="flex items-center gap-1">
                 <Receipt className="w-3.5 h-3.5 text-[#e0533c]" />
                 {language === 'bn' ? 'বিলের বিস্তারিত বিবরণ' : 'Itemized Bill Breakdown'}
@@ -300,14 +304,14 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
               <span>{language === 'bn' ? 'টাকা (TK)' : 'Amount (TK)'}</span>
             </div>
 
-            <table className="w-full text-xs text-left border-collapse">
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+            <table className="w-full text-xs text-left border-collapse bg-white">
+              <tbody className="divide-y divide-slate-100">
                 {/* 1. House Rent Line */}
                 <tr>
-                  <td className="p-2.5 font-medium text-slate-700 dark:text-slate-300">
+                  <td className="p-2.5 font-medium text-slate-700">
                     {language === 'bn' ? '১. মূল ঘর ভাড়া (House Rent)' : '1. House Rent'}
                   </td>
-                  <td className="p-2.5 text-right font-bold text-slate-900 dark:text-white font-mono">
+                  <td className="p-2.5 text-right font-bold text-slate-900 font-mono">
                     {formatCurrency(houseRent)}
                   </td>
                 </tr>
@@ -315,10 +319,10 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
                 {/* 2. Gas Bill Line */}
                 {gasBill > 0 && (
                   <tr>
-                    <td className="p-2.5 font-medium text-slate-700 dark:text-slate-300">
+                    <td className="p-2.5 font-medium text-slate-700">
                       {language === 'bn' ? '২. গ্যাস বিল (Gas Bill)' : '2. Gas Bill'}
                     </td>
-                    <td className="p-2.5 text-right font-bold text-slate-900 dark:text-white font-mono">
+                    <td className="p-2.5 text-right font-bold text-slate-900 font-mono">
                       {formatCurrency(gasBill)}
                     </td>
                   </tr>
@@ -327,10 +331,10 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
                 {/* 3. Water Bill Line */}
                 {waterBill > 0 && (
                   <tr>
-                    <td className="p-2.5 font-medium text-slate-700 dark:text-slate-300">
+                    <td className="p-2.5 font-medium text-slate-700">
                       {language === 'bn' ? '৩. পানির বিল (Water Bill)' : '3. Water Bill'}
                     </td>
-                    <td className="p-2.5 text-right font-bold text-slate-900 dark:text-white font-mono">
+                    <td className="p-2.5 text-right font-bold text-slate-900 font-mono">
                       {formatCurrency(waterBill)}
                     </td>
                   </tr>
@@ -339,42 +343,42 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
                 {/* 4. Waste Bill Line */}
                 {wasteBill > 0 && (
                   <tr>
-                    <td className="p-2.5 font-medium text-slate-700 dark:text-slate-300">
+                    <td className="p-2.5 font-medium text-slate-700">
                       {language === 'bn' ? '৪. ময়লার বিল (Waste Bill)' : '4. Waste Bill'}
                     </td>
-                    <td className="p-2.5 text-right font-bold text-slate-900 dark:text-white font-mono">
+                    <td className="p-2.5 text-right font-bold text-slate-900 font-mono">
                       {formatCurrency(wasteBill)}
                     </td>
                   </tr>
                 )}
 
                 {/* Total Bill Package Line */}
-                <tr className="bg-slate-100/70 dark:bg-slate-800/60 font-bold border-t border-slate-200 dark:border-slate-700">
-                  <td className="p-2.5 text-slate-900 dark:text-white font-bold">
+                <tr className="bg-slate-100/80 font-bold border-t border-slate-200">
+                  <td className="p-2.5 text-slate-900 font-bold">
                     {language === 'bn' ? 'সর্বমোট পাওনা (Total Payable Rent)' : 'Total Payable Rent'}
                   </td>
-                  <td className="p-2.5 text-right font-black text-slate-900 dark:text-white text-sm font-mono">
+                  <td className="p-2.5 text-right font-black text-slate-900 text-sm font-mono">
                     {formatCurrency(totalBillPackage)}
                   </td>
                 </tr>
 
                 {/* Paid Amount Line */}
-                <tr className="bg-emerald-50/70 dark:bg-emerald-950/20 text-emerald-800 dark:text-emerald-300">
-                  <td className="p-2.5 font-bold flex items-center gap-1.5">
+                <tr className="bg-emerald-50 text-emerald-900 border-t border-emerald-100">
+                  <td className="p-2.5 font-bold flex items-center gap-1.5 text-emerald-800">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                     <span>{t.paidAmountText}</span>
                   </td>
-                  <td className="p-2.5 text-right font-black text-sm text-emerald-600 dark:text-emerald-400 font-mono">
+                  <td className="p-2.5 text-right font-black text-sm text-emerald-600 font-mono">
                     {formatCurrency(rentRecord.paid)}
                   </td>
                 </tr>
 
                 {/* Remaining Due Line */}
-                <tr className={rentRecord.due > 0 ? "bg-rose-50/70 dark:bg-rose-950/20 text-rose-800 dark:text-rose-300" : ""}>
-                  <td className="p-2.5 font-bold">
+                <tr className={rentRecord.due > 0 ? "bg-rose-50 text-rose-900 border-t border-rose-100" : "bg-white"}>
+                  <td className="p-2.5 font-bold text-slate-700">
                     {t.remainingDueText}
                   </td>
-                  <td className={`p-2.5 text-right font-black text-sm font-mono ${rentRecord.due > 0 ? 'text-rose-600' : 'text-slate-500 dark:text-slate-400'}`}>
+                  <td className={`p-2.5 text-right font-black text-sm font-mono ${rentRecord.due > 0 ? 'text-rose-600' : 'text-slate-500'}`}>
                     {formatCurrency(rentRecord.due)}
                   </td>
                 </tr>
@@ -383,20 +387,20 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           </div>
 
           {/* 5. Payment Remarks / Status Stamp Box */}
-          <div className="flex items-center justify-between text-xs bg-slate-50 dark:bg-slate-800/60 p-3 rounded-2xl border border-slate-200/80 dark:border-slate-700/80">
+          <div className="flex items-center justify-between text-xs bg-slate-50 p-3 rounded-2xl border border-slate-200/80">
             <div>
-              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                 {language === 'bn' ? 'পরিশোধের অবস্থা' : 'Payment Status'}
               </div>
               <div className="mt-0.5 font-extrabold flex items-center gap-1.5">
                 {isFullyPaid && (
-                  <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                  <span className="text-emerald-600 flex items-center gap-1">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     {language === 'bn' ? 'সম্পূর্ণ পরিশোধিত (PAID)' : 'PAID IN FULL'}
                   </span>
                 )}
                 {isPartiallyPaid && (
-                  <span className="text-amber-600 dark:text-amber-400">
+                  <span className="text-amber-600">
                     {language === 'bn' ? `আংশিক জমা (বকেয়া ৳${rentRecord.due.toLocaleString()})` : `PARTIAL PAYMENT (Due ৳${rentRecord.due.toLocaleString()})`}
                   </span>
                 )}
@@ -410,10 +414,10 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
 
             {rentRecord.note && (
               <div className="text-right max-w-[180px]">
-                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                   {language === 'bn' ? 'নোট / মন্তব্য' : 'Note'}
                 </div>
-                <div className="text-slate-600 dark:text-slate-300 font-medium italic truncate">
+                <div className="text-slate-600 font-medium italic truncate">
                   "{rentRecord.note}"
                 </div>
               </div>
@@ -421,13 +425,13 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           </div>
 
           {/* 6. Thank You Footer Message */}
-          <p className="text-center text-xs text-slate-500 dark:text-slate-400 font-semibold italic pt-0.5">
+          <p className="text-center text-xs text-slate-500 font-semibold italic pt-0.5">
             "{t.thankYouMsg}"
           </p>
 
           {/* 7. Official Signatures Section */}
-          <div className="pt-4 sm:pt-6 flex justify-between items-end text-[11px] font-bold text-slate-600 dark:text-slate-400">
-            <div className="text-center border-t-2 border-slate-300 dark:border-slate-700 pt-1.5 w-32">
+          <div className="pt-4 sm:pt-6 flex justify-between items-end text-[11px] font-bold text-slate-600">
+            <div className="text-center border-t-2 border-slate-300 pt-1.5 w-32">
               <ShieldCheck className="w-4 h-4 mx-auto text-slate-400 mb-0.5 no-print" />
               {t.signatureLandlord}
             </div>
@@ -439,13 +443,13 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
               </div>
             </div>
 
-            <div className="text-center border-t-2 border-slate-300 dark:border-slate-700 pt-1.5 w-32">
+            <div className="text-center border-t-2 border-slate-300 pt-1.5 w-32">
               {t.signatureTenant}
             </div>
           </div>
 
           {/* Computer Generated Notice */}
-          <div className="text-[9px] text-center text-slate-400 dark:text-slate-500 font-mono pt-1.5 border-t border-slate-100 dark:border-slate-800/80">
+          <div className="text-[9px] text-center text-slate-400 font-mono pt-1.5 border-t border-slate-100">
             {language === 'bn' ? 'কম্পিউটার থেকে স্বয়ংক্রিয়ভাবে প্রস্তুতকৃত রসিদ। কোনো স্বাক্ষরের প্রয়োজন নেই।' : 'Computer generated payment record. Valid without physical seal.'}
           </div>
 
