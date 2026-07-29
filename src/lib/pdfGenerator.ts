@@ -253,12 +253,12 @@ export async function generateElementPDF({
   const imgData = canvas.toDataURL('image/jpeg', 0.90);
 
   const pdfWidth = 210; // A4 width
-  const pdfHeight = Number(((canvas.height * pdfWidth) / canvas.width).toFixed(2));
+  const pdfHeight = 297; // A4 height
 
   const pdf = new jsPDF({
-    orientation: pdfWidth > pdfHeight ? 'landscape' : 'portrait',
+    orientation: 'portrait',
     unit: 'mm',
-    format: [pdfWidth, pdfHeight],
+    format: 'a4',
   });
 
   pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');

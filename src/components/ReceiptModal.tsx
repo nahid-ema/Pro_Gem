@@ -481,16 +481,25 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           top: '0',
           left: '-9999px',
           width: '794px',
+          height: '1123px',
           backgroundColor: '#ffffff',
           color: '#0f172a',
-          padding: '32px 16px',
+          padding: '40px',
           boxSizing: 'border-box',
           fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif',
           zIndex: -9999,
           pointerEvents: 'none',
         }}
       >
-        <div>
+        <div style={{
+          border: '2px solid #334155',
+          borderRadius: '16px',
+          padding: '40px 48px',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          boxSizing: 'border-box'
+        }}>
           {/* Document Header */}
         <div style={{ textAlign: 'center', borderBottom: '2px solid #cbd5e1', paddingBottom: '16px', marginBottom: '20px' }}>
           <div style={{ display: 'inline-block', width: '44px', height: '44px', lineHeight: '42px', borderRadius: '12px', backgroundColor: '#fef2f2', border: '1px solid #fecaca', textAlign: 'center', marginBottom: '8px' }}>
@@ -610,9 +619,8 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
             </tr>
           </tbody>
         </table>
-        </div>
 
-        <div style={{ marginTop: '20px', paddingTop: '10px' }}>
+        <div style={{ marginTop: 'auto', paddingTop: '20px' }}>
         {/* Thank you */}
         <p style={{ textAlign: 'center', fontSize: '13px', color: '#64748b', fontWeight: '600', fontStyle: 'italic', margin: '0 0 28px 0', lineHeight: '1.4' }}>
           "{t.thankYouMsg}"
@@ -647,6 +655,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
         </div>
         </div>
       </div>
+    </div>
     </div>,
     document.body
   );
