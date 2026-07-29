@@ -96,6 +96,25 @@ export default function App() {
       document.body.classList.remove('dark-theme');
     }
     safeSetItem(STORAGE_KEYS.THEME, theme);
+
+    // Ensure clean light-mode print rendering during PDF export/printing
+    const handleBeforePrint = () => {
+      document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark-theme');
+    };
+    const handleAfterPrint = () => {
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.body.classList.add('dark-theme');
+      }
+    };
+
+    window.addEventListener('beforeprint', handleBeforePrint);
+    window.addEventListener('afterprint', handleAfterPrint);
+    return () => {
+      window.removeEventListener('beforeprint', handleBeforePrint);
+      window.removeEventListener('afterprint', handleAfterPrint);
+    };
   }, [theme]);
 
   // Save language preference

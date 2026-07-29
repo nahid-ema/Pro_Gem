@@ -120,7 +120,8 @@ html {
   }
 
   /* Reset body and enforce white background and dark high-contrast text */
-  html, body {
+  html, body, #root, main, section, article {
+    background-color: #ffffff !important;
     background: #ffffff !important;
     color: #0f172a !important;
     font-size: 11pt !important;
@@ -130,6 +131,21 @@ html {
     padding: 0 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+  }
+
+  /* Override dark mode background rules during print */
+  .dark,
+  .dark *,
+  .dark *::before,
+  .dark *::after {
+    background-color: transparent !important;
+    background: transparent !important;
+    color: #0f172a !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    backdrop-filter: none !important;
+    filter: none !important;
   }
 
   /* When receipt modal is active, completely hide #root (the entire app content behind the portal) */
@@ -201,6 +217,15 @@ html {
     filter: none !important;
   }
 
+  /* Summary cards and containers in print */
+  .bg-slate-50, .bg-amber-50, .bg-emerald-50, .bg-slate-100,
+  .dark .bg-slate-800, .dark .bg-slate-900, .dark .bg-slate-950,
+  .dark .bg-slate-800\/50, .dark .bg-amber-950\/20, .dark .bg-emerald-950\/20 {
+    background-color: #f8fafc !important;
+    background: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+  }
+
   /* Tables formatting for crisp report display */
   table {
     width: 100% !important;
@@ -208,19 +233,20 @@ html {
     margin-top: 10px !important;
     margin-bottom: 20px !important;
     page-break-inside: auto !important;
+    background-color: #ffffff !important;
+    background: #ffffff !important;
   }
 
   tr {
     page-break-inside: avoid !important;
     page-break-after: auto !important;
+    background-color: #ffffff !important;
+    background: #ffffff !important;
   }
 
-  thead {
-    display: table-header-group !important;
-  }
-
-  th {
-    background-color: #f8fafc !important;
+  thead, thead tr, thead th, th {
+    background-color: #f1f5f9 !important;
+    background: #f1f5f9 !important;
     color: #0f172a !important;
     font-weight: 700 !important;
     border: 1px solid #cbd5e1 !important;
@@ -234,6 +260,19 @@ html {
     padding: 7px 10px !important;
     font-size: 9.5pt !important;
     color: #0f172a !important;
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+  }
+
+  /* Badges inside table cells (room badges, status chips, etc) */
+  td span,
+  td div,
+  td font,
+  tr span {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
   }
 
   /* Hide Action header/cells in tables */
@@ -247,12 +286,30 @@ html {
     text-shadow: none !important;
   }
 
-  .text-emerald-600, .text-emerald-700, .text-emerald-800 {
+  .text-emerald-600, .text-emerald-700, .text-emerald-800,
+  .dark .text-emerald-300, .dark .text-emerald-400 {
     color: #047857 !important;
   }
 
-  .text-rose-600, .text-rose-700, .text-rose-800 {
+  .text-rose-600, .text-rose-700, .text-rose-800,
+  .dark .text-rose-300, .dark .text-rose-400,
+  .text-[#e0533c], .dark .text-[#f87171] {
     color: #be123c !important;
+  }
+
+  .text-amber-600, .text-amber-700, .text-amber-800,
+  .dark .text-amber-300, .dark .text-amber-400 {
+    color: #b45309 !important;
+  }
+
+  .text-slate-400, .text-slate-500, .text-slate-600,
+  .dark .text-slate-300, .dark .text-slate-400 {
+    color: #475569 !important;
+  }
+
+  .text-slate-700, .text-slate-800, .text-slate-900,
+  .dark .text-slate-100, .dark .text-slate-200, .dark .text-white {
+    color: #0f172a !important;
   }
 
   /* Remove max-height scrolling restrictions in print */
