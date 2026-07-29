@@ -163,7 +163,7 @@ export async function generateElementPDF({
       clonedElement.style.top = '0';
       clonedElement.style.width = '794px';
       if (!clonedElement.style.padding) {
-        clonedElement.style.padding = '36px 40px';
+        clonedElement.style.padding = '32px 36px';
       }
       clonedElement.style.borderRadius = '0px';
 
@@ -250,36 +250,19 @@ export async function generateElementPDF({
     },
   });
 
-  const imgData = canvas.toDataURL('image/jpeg', 0.85);
+  const imgData = canvas.toDataURL('image/jpeg', 0.90);
+
+  // Set PDF dimensions to match receipt canvas proportions perfectly with 0 blank space margins
+  const pdfWidth = 210; // Standard 210mm width (A4 width)
+  const pdfHeight = Number(((canvas.height * pdfWidth) / canvas.width).toFixed(2));
+
   const pdf = new jsPDF({
-    orientation: 'portrait',
+    orientation: pdfWidth > pdfHeight ? 'landscape' : 'portrait',
     unit: 'mm',
-    format: 'a4',
+    format: [pdfWidth, pdfHeight],
   });
 
-  const pageWidth = 210; // A4 width in mm
-  const pageHeight = 297; // A4 height in mm
-
-  const marginX = 8; // 8mm side margins (194mm printable width)
-  const marginY = 8; // 8mm top & bottom margin
-
-  const maxPdfWidth = pageWidth - marginX * 2; // 194mm
-  const maxPdfHeight = pageHeight - marginY * 2; // 281mm
-
-  let renderWidth = maxPdfWidth;
-  let renderHeight = (canvas.height * renderWidth) / canvas.width;
-
-  // Scale down if height exceeds single A4 page printable height
-  if (renderHeight > maxPdfHeight) {
-    renderHeight = maxPdfHeight;
-    renderWidth = (canvas.width * renderHeight) / canvas.height;
-  }
-
-  // Center the image horizontally and vertically on the page
-  const xPos = (pageWidth - renderWidth) / 2;
-  const yPos = (pageHeight - renderHeight) / 2;
-
-  pdf.addImage(imgData, 'JPEG', xPos, yPos, renderWidth, renderHeight, undefined, 'FAST');
+  pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST');
 
   const blob = pdf.output('blob');
   const file = new File([blob], filename, { type: 'application/pdf' });

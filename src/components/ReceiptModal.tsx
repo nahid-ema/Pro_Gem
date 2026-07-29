@@ -483,7 +483,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           width: '794px',
           backgroundColor: '#ffffff',
           color: '#0f172a',
-          padding: '44px 48px',
+          padding: '32px 36px',
           boxSizing: 'border-box',
           fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif',
           zIndex: -9999,
@@ -491,9 +491,9 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
         }}
       >
         {/* Document Header */}
-        <div style={{ textAlign: 'center', borderBottom: '2px solid #cbd5e1', paddingBottom: '18px', marginBottom: '22px' }}>
-          <div style={{ width: '48px', height: '48px', borderRadius: '12px', backgroundColor: '#fef2f2', border: '1px solid #fecaca', margin: '0 auto 10px auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#e0533c" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ width: '26px', height: '26px', display: 'block' }}>
+        <div style={{ textAlign: 'center', borderBottom: '2px solid #cbd5e1', paddingBottom: '16px', marginBottom: '20px' }}>
+          <div style={{ display: 'inline-block', width: '44px', height: '44px', lineHeight: '42px', borderRadius: '12px', backgroundColor: '#fef2f2', border: '1px solid #fecaca', textAlign: 'center', marginBottom: '8px' }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e0533c" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
               <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="none" stroke="#e0533c" strokeWidth="2.5" />
               <polyline points="9 22 9 12 15 12 15 22" fill="none" stroke="#e0533c" strokeWidth="2.5" />
             </svg>
