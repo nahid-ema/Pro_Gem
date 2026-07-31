@@ -97,12 +97,12 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
 
   return createPortal(
     <div id="receiptModalOverlay" className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn overflow-y-auto">
-      <div id="receiptModalCard" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-lg w-full p-4 sm:p-6 shadow-2xl relative overflow-hidden my-auto">
+      <div id="receiptModalCard" className="bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 border border-[#E8E6E1] dark:border-[#333333] rounded-3xl max-w-lg w-full p-4 sm:p-6 shadow-2xl relative overflow-hidden my-auto">
         
         {/* Modal Controls Bar (Screen Only - Hidden in Print) */}
         <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-slate-100 dark:border-slate-800 no-print gap-1.5 flex-wrap">
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[#e0533c]" />
+            <span className="w-2 h-2 rounded-full bg-[#F4C542]" />
             <h3 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
               {t.receiptTitle}
             </h3>
@@ -112,7 +112,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
             {/* Print Button */}
             <button
               onClick={handlePrintReceipt}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition-all cursor-pointer"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-[#F2F0EB] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition-all cursor-pointer"
               title={language === 'bn' ? 'রসিদ প্রিন্ট করুন' : 'Print Receipt'}
             >
               <Printer className="w-3.5 h-3.5" />
@@ -122,7 +122,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
             {/* WhatsApp Text Message Button */}
             <button
               onClick={handleShareWhatsApp}
-              className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors cursor-pointer"
+              className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-[#F2F0EB] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors cursor-pointer"
               title={language === 'bn' ? 'টেক্সট মেসেজ পাঠান' : 'Text WhatsApp'}
             >
               <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
@@ -131,7 +131,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
             {/* Copy Button */}
             <button
               onClick={handleCopyReceipt}
-              className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors cursor-pointer"
+              className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-[#F2F0EB] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors cursor-pointer"
               title={language === 'bn' ? 'কপি করুন' : 'Copy Summary'}
             >
               {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
@@ -140,7 +140,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
             {/* Close Button */}
             <button
               onClick={onClose}
-              className="p-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors cursor-pointer"
+              className="p-1.5 rounded-xl bg-[#F2F0EB] dark:bg-[#2A2A2A] text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -156,7 +156,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           
           {/* 1. Header & Brand Title */}
           <div className="text-center border-b pb-3 border-slate-200 relative">
-            <div className="inline-flex items-center justify-center w-10 h-10 rounded-2xl bg-[#e0533c]/10 text-[#e0533c] border border-[#e0533c]/30 mb-1.5 shadow-2xs">
+            <div className="inline-flex items-center justify-center w-10 h-10 rounded-2xl bg-[#F4C542]/10 text-[#F4C542] border border-[#F4C542]/30 mb-1.5 shadow-2xs">
               <Home className="w-5 h-5" />
             </div>
             <h2 className="text-base sm:text-lg font-black text-slate-900">
@@ -183,7 +183,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
               <span className="text-slate-400 font-bold block uppercase text-[10px]">
                 {t.receiptNo}
               </span>
-              <span className="font-mono font-bold text-sm text-[#e0533c]">
+              <span className="font-mono font-bold text-sm text-[#F4C542]">
                 #NK-{rentRecord.id.substring(0, 8).toUpperCase()}
               </span>
             </div>
@@ -201,7 +201,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
 
             <div className="text-right">
               <span className="text-slate-400 text-[11px] block font-semibold">{t.roomAssigned}</span>
-              <span className="font-black text-sm text-[#e0533c] block mt-0.5">{t.roomText} {rentRecord.room}</span>
+              <span className="font-black text-sm text-[#F4C542] block mt-0.5">{t.roomText} {rentRecord.room}</span>
             </div>
           </div>
 
@@ -209,7 +209,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           <div className="rounded-2xl border border-slate-200 overflow-hidden shadow-2xs bg-white">
             <div className="bg-slate-100 px-3 py-1.5 border-b border-slate-200 flex items-center justify-between text-[11px] font-bold text-slate-700">
               <span className="flex items-center gap-1">
-                <FileText className="w-3.5 h-3.5 text-[#e0533c]" />
+                <FileText className="w-3.5 h-3.5 text-[#F4C542]" />
                 {language === 'bn' ? 'বিলের বিস্তারিত বিবরণ' : 'Itemized Bill Breakdown'}
               </span>
               <span>{language === 'bn' ? 'টাকা (TK)' : 'Amount (TK)'}</span>
@@ -349,7 +349,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
             
             {/* System Stamp Motif */}
             <div className="text-center opacity-80 pointer-events-none">
-              <div className="w-11 h-11 rounded-full border-2 border-dashed border-[#e0533c] flex items-center justify-center mx-auto text-[8px] font-black text-[#e0533c] uppercase rotate-[-12deg] p-1">
+              <div className="w-11 h-11 rounded-full border-2 border-dashed border-[#F4C542] flex items-center justify-center mx-auto text-[8px] font-black text-[#F4C542] uppercase rotate-[-12deg] p-1">
                 {language === 'bn' ? 'যাচাইকৃত' : 'VERIFIED'}
               </div>
             </div>

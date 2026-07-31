@@ -55,11 +55,11 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
     : '';
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-3.5 sm:p-5 md:p-6 mb-4 sm:mb-6 shadow-sm relative overflow-hidden">
+    <div className="bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 border border-[#E8E6E1] dark:border-[#333333] rounded-3xl p-3.5 sm:p-5 md:p-6 mb-4 sm:mb-6 shadow-sm relative overflow-hidden">
       {/* Header Title & Period indicator */}
       <div className="flex items-center justify-between gap-2 mb-4 sm:mb-5 pb-3 sm:pb-4 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-[#fdf0ed] dark:bg-slate-800 text-[#e0533c] dark:text-[#f87171] flex items-center justify-center font-bold text-sm sm:text-base shrink-0">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-[#F4C542]/10 text-[#F4C542] dark:text-[#F4C542] flex items-center justify-center font-bold text-sm sm:text-base shrink-0">
             <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div className="min-w-0">
@@ -86,9 +86,9 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
 
       {/* Collection Progress Bar */}
       <div className="mb-4 sm:mb-6">
-        <div className="w-full h-1.5 sm:h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+        <div className="w-full h-1.5 sm:h-2 bg-[#F2F0EB] dark:bg-[#2A2A2A] rounded-full overflow-hidden">
           <div
-            className="h-full bg-[#e0533c] rounded-full transition-all duration-500 ease-out"
+            className="h-full bg-[#F4C542] rounded-full transition-all duration-500 ease-out"
             style={{ width: `${collectionPercentage}%` }}
           />
         </div>
@@ -97,7 +97,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
       {/* 6 Key Stat Cards Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-5">
         {/* Total Rent Expected */}
-        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
+        <div className="bg-white/50 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
           <div className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-1 truncate">
             {t.briefRentLbl}
           </div>
@@ -105,12 +105,12 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
             {formatCurrency(totalExpectedRent)}
           </p>
           <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 sm:mt-3 overflow-hidden">
-            <div className="w-full h-full bg-[#e0533c]"></div>
+            <div className="w-full h-full bg-[#F4C542]"></div>
           </div>
         </div>
 
         {/* Total Collected Income */}
-        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
+        <div className="bg-white/50 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
           <div className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-1 truncate">
             {t.briefIncomeLbl}
           </div>
@@ -123,7 +123,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
         </div>
 
         {/* Total Outstanding Due */}
-        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
+        <div className="bg-white/50 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
           <div className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-1 truncate">
             {t.briefDueLbl}
           </div>
@@ -136,7 +136,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
         </div>
 
         {/* Total Operating Expenses */}
-        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
+        <div className="bg-white/50 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
           <div className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-1 truncate">
             {t.briefExpLbl}
           </div>
@@ -149,7 +149,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
         </div>
 
         {/* Total Shop Dues */}
-        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
+        <div className="bg-white/50 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
           <div className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-1 truncate">
             {t.briefDokLbl}
           </div>
@@ -162,7 +162,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
         </div>
 
         {/* Total Entries Count */}
-        <div className="bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
+        <div className="bg-white/50 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
           <div className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-1 truncate">
             {t.briefEntriesLbl}
           </div>
@@ -183,7 +183,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
       }`}>
         <div className="flex items-center gap-3 text-center sm:text-left">
           <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 font-bold text-base ${
-            isNetPositive ? 'bg-[#e0533c] text-white' : 'bg-rose-500 text-white'
+            isNetPositive ? 'bg-[#F4C542] text-slate-900' : 'bg-rose-500 text-white'
           }`}>
             {isNetPositive ? <TrendingUp className="w-5 h-5" /> : <TrendingDown className="w-5 h-5" />}
           </div>

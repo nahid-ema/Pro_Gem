@@ -203,16 +203,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+      <div className="bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 border border-[#E8E6E1] dark:border-[#333333] rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors cursor-pointer"
+          className="absolute right-4 top-4 p-2 rounded-full bg-[#F2F0EB] dark:bg-[#2A2A2A] text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors cursor-pointer"
         >
           <X className="w-4 h-4" />
         </button>
 
         <div className="text-center mb-6">
-          <div className="w-12 h-12 rounded-2xl bg-[#e0533c] text-white flex items-center justify-center font-black text-xl mx-auto mb-3 shadow-md">
+          <div className="w-12 h-12 rounded-2xl bg-[#F4C542] text-slate-900 flex items-center justify-center font-black text-xl mx-auto mb-3 shadow-md">
             🏠
           </div>
           <h3 className="text-lg font-bold text-slate-900 dark:text-white">
@@ -230,7 +230,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold block mb-1">
                 {language === 'bn' ? 'বর্তমান কানেক্টেড ইউজার:' : 'Currently signed in as:'}
               </span>
-              <p className="text-sm font-bold font-mono text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-800 py-1.5 px-3 rounded-full inline-block">
+              <p className="text-sm font-bold font-mono text-slate-900 dark:text-white bg-[#F2F0EB] dark:bg-[#2A2A2A] py-1.5 px-3 rounded-full inline-block">
                 {userEmail}
               </p>
             </div>
@@ -246,14 +246,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         ) : (
           <div>
             {/* Tab selection for Sign In / Sign Up / Reset */}
-            <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-full mb-5 text-xs font-semibold">
+            <div className="flex bg-[#F2F0EB] dark:bg-[#2A2A2A] p-1 rounded-full mb-5 text-xs font-semibold">
               <button
                 type="button"
                 onClick={() => switchMode('signIn')}
                 className={`flex-1 py-1.5 rounded-full transition-all cursor-pointer ${
                   mode === 'signIn'
-                    ? 'bg-white dark:bg-slate-900 text-[#e0533c] shadow-xs font-bold'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                    ? 'bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 text-[#F4C542] shadow-xs font-bold'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 {language === 'bn' ? 'লগইন' : 'Sign In'}
@@ -263,8 +263,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 onClick={() => switchMode('signUp')}
                 className={`flex-1 py-1.5 rounded-full transition-all cursor-pointer ${
                   mode === 'signUp'
-                    ? 'bg-white dark:bg-slate-900 text-[#e0533c] shadow-xs font-bold'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
+                    ? 'bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 text-[#F4C542] shadow-xs font-bold'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 {language === 'bn' ? 'রেজিস্টার' : 'Register'}
@@ -284,7 +284,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="user@example.com"
-                    className="w-full pl-10 pr-3 py-2 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e0533c]"
+                    className="w-full pl-10 pr-3 py-2 rounded-full border border-[#E8E6E1] dark:border-[#333333] bg-slate-50 dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#F4C542]"
                   />
                 </div>
               </div>
@@ -299,7 +299,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       <button
                         type="button"
                         onClick={() => switchMode('resetPassword')}
-                        className="text-[11px] font-semibold text-[#e0533c] hover:underline cursor-pointer"
+                        className="text-[11px] font-semibold text-[#F4C542] hover:underline cursor-pointer"
                       >
                         {language === 'bn' ? 'পাসওয়ার্ড ভুলে গেছেন?' : 'Forgot Password?'}
                       </button>
@@ -313,7 +313,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full pl-10 pr-3 py-2 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e0533c]"
+                      className="w-full pl-10 pr-3 py-2 rounded-full border border-[#E8E6E1] dark:border-[#333333] bg-slate-50 dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#F4C542]"
                     />
                   </div>
                 </div>
@@ -332,7 +332,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full pl-10 pr-3 py-2 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#e0533c]"
+                      className="w-full pl-10 pr-3 py-2 rounded-full border border-[#E8E6E1] dark:border-[#333333] bg-slate-50 dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#F4C542]"
                     />
                   </div>
                 </div>
@@ -352,7 +352,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-2.5 rounded-full bg-[#e0533c] hover:bg-[#cb422d] text-white font-semibold text-xs md:text-sm shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+                className="w-full py-2.5 rounded-full bg-[#282A2C] dark:bg-[#F4C542] text-white dark:text-slate-900 hover:bg-[#1A1C1D] dark:hover:bg-[#E3B431] font-semibold text-xs md:text-sm shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
               >
                 {mode === 'signIn' && <LogIn className="w-4 h-4" />}
                 {mode === 'signUp' && <UserPlus className="w-4 h-4" />}
@@ -381,10 +381,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
             <div className="relative my-4">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-200 dark:border-slate-800"></div>
+                <div className="w-full border-t border-[#E8E6E1] dark:border-[#333333]"></div>
               </div>
               <div className="relative flex justify-center text-[10px] uppercase font-bold text-slate-400">
-                <span className="bg-white dark:bg-slate-900 px-2">
+                <span className="bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 px-2">
                   {language === 'bn' ? 'অথবা' : 'OR'}
                 </span>
               </div>
@@ -394,7 +394,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               type="button"
               onClick={handleGoogleSignIn}
               disabled={isLoading}
-              className="w-full py-2.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 font-semibold text-xs shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-2.5 rounded-full bg-[#F2F0EB] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 font-semibold text-xs shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24">
                 <path
@@ -426,7 +426,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="w-full py-2 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-xs cursor-pointer transition-colors"
+                className="w-full py-2 rounded-full border border-[#E8E6E1] dark:border-[#333333] bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-xs cursor-pointer transition-colors"
               >
                 {language === 'bn' ? 'সিকিউরিটি পিন দিয়ে চালু রাখুন' : 'Continue with Security PIN'}
               </button>

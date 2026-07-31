@@ -68,7 +68,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   }, []);
 
   const navItems: { id: TabType; labelEn: string; labelBn: string; icon: React.ReactNode }[] = [
-    { id: 'brief', labelEn: 'Summary', labelBn: 'সারসংক্ষেপ', icon: <BarChart3 className="w-4 h-4 text-[#e0533c]" /> },
+    { id: 'brief', labelEn: 'Summary', labelBn: 'সারসংক্ষেপ', icon: <BarChart3 className="w-4 h-4 text-[#F4C542]" /> },
     { id: 'rooms', labelEn: 'Rooms', labelBn: 'রুমসমূহ', icon: <DoorClosed className="w-4 h-4 text-blue-500" /> },
     { id: 'tenants', labelEn: 'Tenants', labelBn: 'ভাড়াটিয়া', icon: <Users className="w-4 h-4 text-emerald-500" /> },
     { id: 'rent', labelEn: 'Rent Collection', labelBn: 'ভাড়া আদায়', icon: <Banknote className="w-4 h-4 text-amber-500" /> },
@@ -143,7 +143,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-3 sm:p-4 mb-3 sm:mb-5 shadow-sm flex flex-col gap-3 no-print relative">
+    <div className="bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 border border-[#E8E6E1] dark:border-[#333333] rounded-3xl p-3 sm:p-4 mb-3 sm:mb-5 shadow-sm flex flex-col gap-3 no-print relative">
       {/* Top Row: Search & Filters (Single Date Selector & Quick Nav) */}
       <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-2.5">
         
@@ -155,23 +155,23 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             <button
               type="button"
               onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
-              className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 text-xs font-bold transition-all cursor-pointer shrink-0 shadow-2xs active:scale-95"
+              className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F2F0EB] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-[#E8E6E1] dark:border-[#333333] text-xs font-bold transition-all cursor-pointer shrink-0 shadow-2xs active:scale-95"
             >
-              <Calendar className="w-3.5 h-3.5 text-[#e0533c] shrink-0" />
+              <Calendar className="w-3.5 h-3.5 text-[#F4C542] shrink-0" />
               <span>{getSelectedDateLabel()}</span>
               <ChevronDown className={`w-3.5 h-3.5 text-slate-400 shrink-0 transition-transform duration-200 ${isDatePickerOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {/* Date Selection Popover Dropdown */}
             {isDatePickerOpen && (
-              <div className="absolute left-0 mt-2 w-64 sm:w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl z-50 p-3 space-y-3 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute left-0 mt-2 w-64 sm:w-72 bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 border border-[#E8E6E1] dark:border-[#333333] rounded-2xl shadow-xl z-50 p-3 space-y-3 animate-in fade-in zoom-in-95 duration-150">
                 
                 {/* Header & Quick Action Buttons */}
                 <div className="flex items-center justify-between gap-1.5 pb-2 border-b border-slate-100 dark:border-slate-800">
                   <button
                     type="button"
                     onClick={handleThisMonth}
-                    className="flex-1 px-2 py-1 rounded-xl bg-[#e0533c]/10 text-[#e0533c] hover:bg-[#e0533c]/20 text-[11px] font-bold transition-colors cursor-pointer text-center"
+                    className="flex-1 px-2 py-1 rounded-xl bg-[#F4C542]/10 text-[#F4C542] hover:bg-[#F4C542]/20 text-[11px] font-bold transition-colors cursor-pointer text-center"
                   >
                     {language === 'bn' ? 'চলতি মাস' : 'This Month'}
                   </button>
@@ -179,7 +179,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                   <button
                     type="button"
                     onClick={handleAllTime}
-                    className="flex-1 px-2 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-[11px] font-bold transition-colors cursor-pointer text-center"
+                    className="flex-1 px-2 py-1 rounded-xl bg-[#F2F0EB] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-[11px] font-bold transition-colors cursor-pointer text-center"
                   >
                     {language === 'bn' ? 'সকল সময়' : 'All Time'}
                   </button>
@@ -218,7 +218,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                   <select
                     value={selectedYear}
                     onChange={(e) => onYearChange(e.target.value)}
-                    className="flex-1 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-1 text-xs font-bold text-slate-800 dark:text-slate-100 focus:outline-none cursor-pointer"
+                    className="flex-1 bg-[#F2F0EB] dark:bg-[#2A2A2A] border border-[#E8E6E1] dark:border-[#333333] rounded-xl px-2.5 py-1 text-xs font-bold text-slate-800 dark:text-slate-100 focus:outline-none cursor-pointer"
                   >
                     <option value="all" className="dark:bg-slate-900">{t.yearAllOpt}</option>
                     {(availableYears || []).map((yr) => (
@@ -240,8 +240,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                       onClick={() => { onMonthChange('all'); setIsDatePickerOpen(false); }}
                       className={`py-1 px-1.5 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
                         selectedMonth === 'all'
-                          ? 'bg-[#e0533c] text-white shadow-xs'
-                          : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                          ? 'bg-[#F4C542] text-slate-900 shadow-xs'
+                          : 'bg-[#F2F0EB] dark:bg-[#2A2A2A] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                       }`}
                     >
                       {t.monthAllOpt}
@@ -262,8 +262,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                           }}
                           className={`py-1 px-1.5 rounded-lg text-[11px] font-semibold truncate transition-all cursor-pointer ${
                             isSelected
-                              ? 'bg-[#e0533c] text-white font-bold shadow-xs'
-                              : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                              ? 'bg-[#F4C542] text-slate-900 font-bold shadow-xs'
+                              : 'bg-[#F2F0EB] dark:bg-[#2A2A2A] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                           }`}
                         >
                           {m}
@@ -282,7 +282,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             <button
               type="button"
               onClick={() => setIsQuickNavOpen(!isQuickNavOpen)}
-              className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-[#e0533c]/10 hover:bg-[#e0533c]/20 text-[#e0533c] border border-[#e0533c]/30 text-xs font-bold transition-all cursor-pointer shrink-0 shadow-2xs active:scale-95"
+              className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F4C542]/10 hover:bg-[#F4C542]/20 text-[#F4C542] border border-[#F4C542]/30 text-xs font-bold transition-all cursor-pointer shrink-0 shadow-2xs active:scale-95"
             >
               <Compass className="w-3.5 h-3.5 shrink-0" />
               <span>{language === 'bn' ? 'দ্রুত নেভিগেশন' : 'Quick Navigation'}</span>
@@ -290,7 +290,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             </button>
 
             {isQuickNavOpen && (
-              <div className="absolute left-0 mt-2 w-52 sm:w-56 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl z-50 p-1.5 space-y-0.5 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute left-0 mt-2 w-52 sm:w-56 bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 border border-[#E8E6E1] dark:border-[#333333] rounded-2xl shadow-xl z-50 p-1.5 space-y-0.5 animate-in fade-in zoom-in-95 duration-150">
                 <div className="px-3 py-1.5 text-[10px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase border-b border-slate-100 dark:border-slate-800 mb-1">
                   {language === 'bn' ? 'দ্রুত নেভিগেশন' : 'Quick Navigation'}
                 </div>
@@ -306,7 +306,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                       }}
                       className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-left transition-colors cursor-pointer ${
                         isActive
-                          ? 'bg-[#e0533c] text-white shadow-xs'
+                          ? 'bg-[#F4C542] text-slate-900 shadow-xs'
                           : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
                       }`}
                     >
@@ -331,7 +331,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder={t.searchPlaceholder}
-              className="w-full pl-9 pr-7 py-1.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#e0533c] transition-all"
+              className="w-full pl-9 pr-7 py-1.5 bg-[#F2F0EB] dark:bg-[#2A2A2A] border border-[#E8E6E1] dark:border-[#333333] rounded-full text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#F4C542] transition-all"
             />
             {searchQuery && (
               <button
@@ -346,7 +346,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
           <button
             type="button"
-            className="flex items-center gap-1.5 bg-[#e0533c] hover:bg-[#cb422d] text-white px-3.5 py-1.5 rounded-full text-xs font-bold shrink-0 transition-colors shadow-xs cursor-pointer active:scale-95"
+            className="flex items-center gap-1.5 bg-[#282A2C] dark:bg-[#F4C542] text-white dark:text-slate-900 hover:bg-[#1A1C1D] dark:hover:bg-[#E3B431] px-3.5 py-1.5 rounded-full text-xs font-bold shrink-0 transition-colors shadow-xs cursor-pointer active:scale-95"
           >
             <Search className="w-3.5 h-3.5" />
             <span>{language === 'bn' ? 'খুঁজুন' : 'Search'}</span>

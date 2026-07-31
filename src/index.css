@@ -15,9 +15,9 @@
 
 @layer base {
   :root {
-    --accent-coral: #e0533c;
-    --accent-coral-hover: #cb422d;
-    --accent-coral-light: #fdf0ed;
+    --accent-coral: #F4C542;
+    --accent-coral-hover: #E3B431;
+    --accent-coral-light: #EBE7E0;
   }
 
   *, ::before, ::after, html, body, button, input, select, textarea {
@@ -63,23 +63,23 @@ html {
 }
 
 .bg-coral {
-  background-color: #e0533c;
+  background-color: #F4C542;
 }
 
 .bg-coral:hover {
-  background-color: #cb422d;
+  background-color: #E3B431;
 }
 
 .text-coral {
-  color: #e0533c;
+  color: #F4C542;
 }
 
 .border-coral {
-  border-color: #e0533c;
+  border-color: #F4C542;
 }
 
 .bg-coral-light {
-  background-color: #fdf0ed;
+  background-color: #EBE7E0;
 }
 
 @layer utilities {
@@ -292,9 +292,12 @@ html {
   }
 
   .text-rose-600, .text-rose-700, .text-rose-800,
-  .dark .text-rose-300, .dark .text-rose-400,
-  .text-[#e0533c], .dark .text-[#f87171] {
+  .dark .text-rose-300, .dark .text-rose-400 {
     color: #be123c !important;
+  }
+
+  .text-\[\#F4C542\], .dark .text-\[\#F4C542\] {
+    color: #4d7c0f !important; /* Darker green for print contrast */
   }
 
   .text-amber-600, .text-amber-700, .text-amber-800,

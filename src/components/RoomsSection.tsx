@@ -117,11 +117,11 @@ export const RoomsSection: React.FC<RoomsSectionProps> = ({
   const formatCurrency = (val: number) => `${t.currencySymbol}${val.toLocaleString()}`;
 
   return (
-    <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl md:rounded-3xl p-5 md:p-6 mb-6 shadow-sm">
+    <div className="bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 border border-[#E8E6E1] dark:border-[#333333] rounded-2xl md:rounded-3xl p-5 md:p-6 mb-6 shadow-sm">
       {/* Title */}
       <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-2xl bg-[#fdf0ed] dark:bg-slate-800 text-[#e0533c] dark:text-[#f87171] flex items-center justify-center font-bold text-base">
+          <div className="w-9 h-9 rounded-2xl bg-[#F4C542]/10 text-[#F4C542] dark:text-[#F4C542] flex items-center justify-center font-bold text-base">
             <DoorClosed className="w-4 h-4" />
           </div>
           <div>
@@ -136,7 +136,7 @@ export const RoomsSection: React.FC<RoomsSectionProps> = ({
 
         <button
           onClick={() => setIsFormOpen(!isFormOpen)}
-          className="no-print flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#e0533c] hover:bg-[#cb422d] text-white font-semibold text-xs transition-colors shadow-sm cursor-pointer"
+          className="no-print flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#282A2C] dark:bg-[#F4C542] text-white dark:text-slate-900 hover:bg-[#1A1C1D] dark:hover:bg-[#E3B431] font-semibold text-xs transition-colors shadow-sm cursor-pointer"
         >
           <Plus className={`w-4 h-4 transition-transform ${isFormOpen ? 'rotate-45' : ''}`} />
           <span className="hidden sm:inline">{editingId ? t.roomUpdateBtn : t.roomToggleLabel}</span>
@@ -145,7 +145,7 @@ export const RoomsSection: React.FC<RoomsSectionProps> = ({
 
       {/* Expandable Add/Edit Form */}
       {isFormOpen && (
-        <form onSubmit={handleSubmit} className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700/80 rounded-xl p-4 mb-5 space-y-4 no-print animate-fadeIn">
+        <form onSubmit={handleSubmit} className="bg-[#F9F9F8] dark:bg-[#222222] border border-[#E8E6E1] dark:border-[#333333]/80 rounded-xl p-4 mb-5 space-y-4 no-print animate-fadeIn">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">{t.thRoomNo} *</label>
@@ -220,7 +220,7 @@ export const RoomsSection: React.FC<RoomsSectionProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-slate-700">
+          <div className="flex items-center justify-between pt-2 border-t border-[#E8E6E1] dark:border-[#333333]">
             <div className="text-xs font-bold text-slate-900 dark:text-white">
               {t.thTotalRoomBill}: {formatCurrency(currentPackageSum)}
             </div>
@@ -235,7 +235,7 @@ export const RoomsSection: React.FC<RoomsSectionProps> = ({
               </button>
               <button
                 type="submit"
-                className="px-4 py-1.5 rounded-lg bg-[#e0533c] hover:bg-[#cb422d] text-white font-semibold text-xs shadow-sm transition-colors cursor-pointer"
+                className="px-4 py-1.5 rounded-lg bg-[#282A2C] dark:bg-[#F4C542] text-white dark:text-slate-900 hover:bg-[#1A1C1D] dark:hover:bg-[#E3B431] font-semibold text-xs shadow-sm transition-colors cursor-pointer"
               >
                 {editingId ? t.roomUpdateBtn : t.roomSubmitBtn}
               </button>
@@ -245,10 +245,10 @@ export const RoomsSection: React.FC<RoomsSectionProps> = ({
       )}
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800">
+      <div className="overflow-x-auto rounded-xl border border-[#E8E6E1] dark:border-[#333333]">
         <table className="w-full text-left text-xs md:text-sm border-collapse">
           <thead>
-            <tr className="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 uppercase text-[11px] font-bold tracking-wider border-b border-slate-200 dark:border-slate-800">
+            <tr className="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 uppercase text-[11px] font-bold tracking-wider border-b border-[#E8E6E1] dark:border-[#333333]">
               <th className="p-3">{t.thRoomNo}</th>
               <th className="p-3">{t.thRentAmt}</th>
               <th className="p-3">{t.thGasBill}</th>
@@ -281,7 +281,7 @@ export const RoomsSection: React.FC<RoomsSectionProps> = ({
                     <td className="p-3 font-bold text-slate-900 dark:text-white">
                       {formatCurrency(pkg)}
                     </td>
-                    <td className="p-3 font-mono text-slate-500">{rm.meterNo || '-'}</td>
+                    <td className="p-3 font-mono text-slate-500 dark:text-slate-400">{rm.meterNo || '-'}</td>
                     <td className="p-3 no-print text-right">
                       <div className="flex items-center justify-end gap-1.5">
                         <button
@@ -311,7 +311,7 @@ export const RoomsSection: React.FC<RoomsSectionProps> = ({
           {/* Column Summary Footer */}
           {rooms.length > 0 && (
             <tfoot>
-              <tr className="bg-slate-50 dark:bg-slate-800/90 font-bold text-slate-900 dark:text-white border-t border-slate-200 dark:border-slate-800">
+              <tr className="bg-slate-50 dark:bg-slate-800/90 font-bold text-slate-900 dark:text-white border-t border-[#E8E6E1] dark:border-[#333333]">
                 <td className="p-3">{t.totalRow} ({rooms.length})</td>
                 <td className="p-3">{formatCurrency(totalRent)}</td>
                 <td className="p-3">{formatCurrency(totalGas)}</td>

@@ -43,7 +43,7 @@ export const TabBar: React.FC<TabBarProps> = ({
   ];
 
   return (
-    <nav className="tab-bar flex gap-2 overflow-x-auto pb-2 mb-5 border-b border-slate-200 dark:border-slate-800 scrollbar-none no-print">
+    <nav className="tab-bar flex gap-2 overflow-x-auto pb-2 mb-5 border-b border-[#E8E6E1] dark:border-[#333333] scrollbar-none no-print">
       {tabs.map((tab) => {
         const isActive = activeTab === tab.id;
         const isUnpaidTab = tab.id === 'unpaid' && unpaidCount > 0;
@@ -54,8 +54,8 @@ export const TabBar: React.FC<TabBarProps> = ({
             onClick={() => onTabChange(tab.id)}
             className={`flex items-center gap-2 px-3.5 py-2 rounded-lg font-semibold text-xs md:text-sm whitespace-nowrap transition-colors border shrink-0 ${
               isActive
-                ? 'bg-[#e0533c] text-white border-[#e0533c] shadow-xs'
-                : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800'
+                ? 'bg-[#282A2C] dark:bg-[#F4C542] text-white dark:text-slate-900 border-[#282A2C] dark:border-[#F4C542] shadow-xs'
+                : 'bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 text-slate-700 dark:text-slate-300 border-[#E8E6E1] dark:border-[#333333] hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
             <span className={isActive ? 'text-white' : 'text-slate-500 dark:text-slate-400'}>
@@ -69,8 +69,8 @@ export const TabBar: React.FC<TabBarProps> = ({
                   isUnpaidTab
                     ? 'bg-rose-500 text-white animate-pulse'
                     : isActive
-                    ? 'bg-white/20 text-white'
-                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                    ? 'bg-white/20 text-white dark:bg-black/10 dark:text-slate-900'
+                    : 'bg-[#F2F0EB] dark:bg-[#2A2A2A] text-slate-600 dark:text-slate-400'
                 }`}
               >
                 {tab.badge}

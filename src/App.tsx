@@ -728,13 +728,13 @@ export default function App() {
   const activeUserEmail = currentUser?.email || (isLocalUnlocked ? (ownerEmail || 'nahidferdousemonema@gmail.com') : null);
 
   return (
-    <div className="min-h-screen bg-[#FBF3E8] dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans p-2 sm:p-4 md:p-6 transition-colors duration-300 relative">
+    <div className="min-h-screen bg-gradient-to-br from-[#FAFAF7] to-[#F3E7C9] dark:from-[#262626] dark:to-[#111111] text-slate-900 dark:text-slate-100 font-sans p-2 sm:p-4 md:p-6 transition-colors duration-300 relative">
       <div className="w-full max-w-[1720px] 2xl:max-w-[1860px] mx-auto space-y-3 sm:space-y-4">
         {/* Printable Document Report Header (Only visible on PDF / Print) */}
         <div className="hidden print:block mb-6 pb-4 border-b-2 border-slate-900">
           <div className="flex justify-between items-start">
             <div>
-              <h1 className="text-xl font-bold text-slate-900">
+              <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
                 {t.appName}
               </h1>
               <p className="text-xs text-slate-600 mt-1">
