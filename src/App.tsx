@@ -957,6 +957,7 @@ export default function App() {
         rooms={rooms}
         language={language}
         onClose={() => setReceiptRecord(null)}
+        showToast={showToast}
       />
 
       <AuthModal

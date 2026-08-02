@@ -10,6 +10,7 @@ interface ReceiptModalProps {
   rooms?: Room[];
   language: Language;
   onClose: () => void;
+  showToast?: (msg: string, type?: 'success' | 'error' | 'info') => void;
 }
 
 export const ReceiptModal: React.FC<ReceiptModalProps> = ({
@@ -17,6 +18,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
   rooms = [],
   language,
   onClose,
+  showToast,
 }) => {
   const [copied, setCopied] = useState(false);
 
@@ -55,7 +57,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
   const totalBillPackage = rentRecord.rent;
 
   const handlePrintReceipt = () => {
-    triggerPrint(language, rentRecord.id);
+    triggerPrint(language, rentRecord.id, showToast);
   };
 
   const handleShareWhatsApp = () => {
