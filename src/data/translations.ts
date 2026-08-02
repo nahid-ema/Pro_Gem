@@ -32,7 +32,7 @@ export const translations = {
     briefExpLbl: "মোট পরিচালনা খরচ",
     briefDokLbl: "মোট দোকান বাকি",
     briefEntriesLbl: "মোট লেনদেন এন্ট্রি",
-    briefNetLbl: "নেট ক্যাশফ্লো পজিশন (আদায় − খরচ − দোকান বাকি)",
+    briefNetLbl: "নেট ক্যাশফ্লো পজিশন (আদায় − খরচ)",
     collectionProgress: "ভাড়া সংগ্রহের অগ্রগতি",
 
     // Room Section
@@ -222,7 +222,7 @@ export const translations = {
     briefExpLbl: "Total Operating Expenses",
     briefDokLbl: "Total Shop Credit Dues",
     briefEntriesLbl: "Total Transaction Records",
-    briefNetLbl: "Net Cashflow Position (Income − Expense − Shop Dues)",
+    briefNetLbl: "Net Cashflow Position (Income − Expense)",
     collectionProgress: "Rent Collection Efficiency",
 
     // Room Section

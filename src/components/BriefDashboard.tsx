@@ -39,7 +39,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
 }) => {
   const t = getTranslation(language);
 
-  const netCashFlow = totalCollectedIncome - totalExpenses - totalShopDues;
+  const netCashFlow = totalCollectedIncome - totalExpenses;
   const isNetPositive = netCashFlow >= 0;
 
   const collectionPercentage = totalExpectedRent > 0 
