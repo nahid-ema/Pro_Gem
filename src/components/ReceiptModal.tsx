@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { RentRecord, Room, Language } from '../types';
 import { getTranslation } from '../data/translations';
+import { triggerPrint } from '../lib/printHelper';
 import { Printer, X, CheckCircle2, MessageSquare, Copy, Check, ShieldCheck, Home, FileText } from 'lucide-react';
 
 interface ReceiptModalProps {
@@ -54,7 +55,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
   const totalBillPackage = rentRecord.rent;
 
   const handlePrintReceipt = () => {
-    window.print();
+    triggerPrint(language, rentRecord.id);
   };
 
   const handleShareWhatsApp = () => {

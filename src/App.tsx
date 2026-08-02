@@ -38,6 +38,7 @@ import { LockScreen } from './components/LockScreen';
 import { Toast, ToastMessage } from './components/Toast';
 import { getTranslation } from './data/translations';
 import { initialRooms, initialTenants, initialRentRecords, initialExpenses, initialShopDues } from './data/sampleData';
+import { triggerPrint } from './lib/printHelper';
 
 export default function App() {
   // Application Settings State
@@ -138,6 +139,37 @@ export default function App() {
   useEffect(() => { safeSetItem(STORAGE_KEYS.RENTS, rents); }, [rents]);
   useEffect(() => { safeSetItem(STORAGE_KEYS.EXPENSES, expenses); }, [expenses]);
   useEffect(() => { safeSetItem(STORAGE_KEYS.DOKAN, dokanDues); }, [dokanDues]);
+
+  // Handle auto-print if opened via iframe workaround
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('print') === 'true') {
+      const receiptId = params.get('receiptId');
+      if (receiptId) {
+        // Need to wait until data is fully loaded and then find the receipt.
+        // We will do that in another useEffect that depends on rents array.
+      } else {
+        setTimeout(() => {
+          window.print();
+        }, 1500);
+      }
+    }
+  }, []);
+
+  // Handle auto-print for receipt specifically once data is loaded
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('print') === 'true' && params.get('receiptId') && rents.length > 0) {
+      const receiptId = params.get('receiptId');
+      const record = rents.find(r => r.id === receiptId);
+      if (record) {
+        setReceiptRecord(record);
+        setTimeout(() => {
+          window.print();
+        }, 1500);
+      }
+    }
+  }, [rents]);
 
   // Auth Listener
   useEffect(() => {
@@ -764,7 +796,7 @@ export default function App() {
           onTriggerRestore={handleTriggerRestore}
           onFirebaseCloudBackup={handleFirebaseCloudBackup}
           onFirebaseCloudRestore={handleFirebaseCloudRestore}
-          onPrint={() => window.print()}
+          onPrint={() => triggerPrint(language, undefined, showToast)}
           onOpenAuthModal={() => setIsAuthModalOpen(true)}
           onLockApp={handleLockApp}
           userEmail={activeUserEmail}
