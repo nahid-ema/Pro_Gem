@@ -3,6 +3,7 @@ import { Expense, Language } from '../types';
 import { getTranslation } from '../data/translations';
 import { Receipt, Plus, Edit2, Trash2, Tag, Filter } from 'lucide-react';
 import { matchesQuery } from '../lib/search';
+import { autoDetectCategory } from '../lib/autoCategory';
 
 interface ExpenseSectionProps {
   expenses: Expense[];
@@ -88,6 +89,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
   const [category, setCategory] = useState(predefinedCategories[0]);
   const [customCategory, setCustomCategory] = useState('');
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>('all');
+  const [userManuallySelectedCategory, setUserManuallySelectedCategory] = useState(false);
 
   const resetForm = () => {
     setEditingId(null);
@@ -96,7 +98,26 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
     setAmount('');
     setCategory(predefinedCategories[0]);
     setCustomCategory('');
+    setUserManuallySelectedCategory(false);
     setIsFormOpen(false);
+  };
+
+  const handleDescChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newDesc = e.target.value;
+    setDesc(newDesc);
+    
+    if (!userManuallySelectedCategory) {
+      const detected = autoDetectCategory(newDesc, language);
+      if (detected) {
+        if (predefinedCategories.includes(detected)) {
+          setCategory(detected);
+          setCustomCategory('');
+        } else {
+          setCategory('CUSTOM');
+          setCustomCategory(detected);
+        }
+      }
+    }
   };
 
   const handleEditClick = (ex: Expense) => {
@@ -104,6 +125,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
     setDate(ex.date);
     setDesc(ex.desc);
     setAmount(String(ex.amount));
+    setUserManuallySelectedCategory(true);
     
     const cat = formatCategory(ex.category, language) || predefinedCategories[0];
     if (predefinedCategories.includes(cat)) {
@@ -225,7 +247,10 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
               </label>
               <select
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={(e) => {
+                  setCategory(e.target.value);
+                  setUserManuallySelectedCategory(true);
+                }}
                 className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 font-medium"
               >
                 {predefinedCategories.map((catOption) => (
@@ -261,7 +286,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
                 type="text"
                 required
                 value={desc}
-                onChange={(e) => setDesc(e.target.value)}
+                onChange={handleDescChange}
                 placeholder={t.expDescPh}
                 className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
