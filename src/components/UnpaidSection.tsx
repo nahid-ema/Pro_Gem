@@ -117,7 +117,7 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
                 <th className="p-3">{t.thUnpaidName}</th>
                 <th className="p-3">{t.thUnpaidPhone}</th>
                 <th className="p-3">{t.thUnpaidAmount}</th>
-                <th className="p-3 no-print text-right">যোগাযোগ ও জমা</th>
+                <th className="p-3 no-print text-right">{t.thUnpaidAction || 'যোগাযোগ ও জমা'}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 font-medium text-slate-800 dark:text-slate-200">

@@ -3,7 +3,8 @@ import { createPortal } from 'react-dom';
 import { RentRecord, Room, Language } from '../types';
 import { getTranslation } from '../data/translations';
 import { triggerPrint } from '../lib/printHelper';
-import { Printer, X, CheckCircle2, MessageSquare, Copy, Check, ShieldCheck, Home, FileText } from 'lucide-react';
+import { Logo } from './Logo';
+import { Printer, X, CheckCircle2, MessageSquare, Copy, Check, ShieldCheck, FileText } from 'lucide-react';
 
 interface ReceiptModalProps {
   rentRecord: RentRecord | null;
@@ -159,8 +160,8 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           
           {/* 1. Header & Brand Title */}
           <div className="text-center border-b pb-3 border-slate-200 relative">
-            <div className="inline-flex items-center justify-center w-10 h-10 rounded-2xl bg-[#F4C542]/10 text-[#F4C542] border border-[#F4C542]/30 mb-1.5 shadow-2xs">
-              <Home className="w-5 h-5" />
+            <div className="mb-1.5 flex justify-center">
+              <Logo className="w-12 h-12" />
             </div>
             <h2 className="text-base sm:text-lg font-black text-slate-900">
               {t.receiptHeader}

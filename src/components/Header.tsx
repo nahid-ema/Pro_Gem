@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Language, Theme, TabType } from '../types';
 import { getTranslation } from '../data/translations';
+import { Logo } from './Logo';
 import { 
   Building2, 
   Menu, 
@@ -199,10 +200,8 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Left: Branding & Sync Status */}
         <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
           <div className="min-w-0">
-            <h1 className="text-lg sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white truncate flex items-center gap-2">
-              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-[#F4C542] rounded-xl flex items-center justify-center shrink-0">
-                <div className="w-3 h-3 sm:w-4 sm:h-4 bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 rounded-sm rotate-45"></div>
-              </div>
+            <h1 className="text-lg sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white truncate flex items-center gap-2.5">
+              <Logo />
               {t.appName}
             </h1>
           </div>

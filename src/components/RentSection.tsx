@@ -319,12 +319,12 @@ export const RentSection: React.FC<RentSectionProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">নোট / বিবরণ</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">{t.rentNote || 'নোট / বিবরণ'}</label>
               <input
                 type="text"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                placeholder="যেমন: বিকাশে প্রাপ্ত"
+                placeholder={t.rentNotePh || 'যেমন: বিকাশে প্রাপ্ত'}
                 className="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>

@@ -36,6 +36,7 @@ import { ReceiptModal } from './components/ReceiptModal';
 import { AuthModal } from './components/AuthModal';
 import { LockScreen } from './components/LockScreen';
 import { Toast, ToastMessage } from './components/Toast';
+import { Logo } from './components/Logo';
 import { getTranslation } from './data/translations';
 import { initialRooms, initialTenants, initialRentRecords, initialExpenses, initialShopDues } from './data/sampleData';
 import { triggerPrint } from './lib/printHelper';
@@ -765,13 +766,16 @@ export default function App() {
         {/* Printable Document Report Header (Only visible on PDF / Print) */}
         <div className="hidden print:block mb-6 pb-4 border-b-2 border-slate-900">
           <div className="flex justify-between items-start">
-            <div>
-              <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
-                {t.appName}
-              </h1>
-              <p className="text-xs text-slate-600 mt-1">
-                {language === 'bn' ? 'মালিকানা ব্যবস্থাপনা ও হিসাব রিপোর্ট' : 'Property Management & Financial Statement'}
-              </p>
+            <div className="flex items-center gap-3">
+              <Logo className="w-12 h-12" />
+              <div>
+                <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+                  {t.appName}
+                </h1>
+                <p className="text-xs text-slate-600 mt-1">
+                  {language === 'bn' ? 'মালিকানা ব্যবস্থাপনা ও হিসাব রিপোর্ট' : 'Property Management & Financial Statement'}
+                </p>
+              </div>
             </div>
             <div className="text-right text-xs text-slate-600">
               <p><strong>{language === 'bn' ? 'তারিখ:' : 'Date:'}</strong> {new Date().toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
