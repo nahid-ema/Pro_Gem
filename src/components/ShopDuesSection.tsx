@@ -211,7 +211,9 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
             ) : (
               filteredDokan.map((dk) => (
                 <tr key={dk.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="p-3 font-mono text-xs text-slate-500 dark:text-slate-400">{dk.date}</td>
+                  <td className="p-3 font-mono text-xs text-slate-500 dark:text-slate-400">
+                    {dk.date ? dk.date.split('-')[2] : ''}
+                  </td>
                   <td className="p-3 font-bold text-slate-900 dark:text-white">{dk.desc}</td>
                   <td className={`p-3 font-bold ${dk.amount < 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}`}>
                     {formatCurrency(dk.amount)}
