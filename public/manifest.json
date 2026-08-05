@@ -4,7 +4,7 @@
   "description": "Property & Rent Management App for Nahid Kutir",
   "icons": [
     {
-      "src": "/icon.svg",
+      "src": "/logo.png",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
