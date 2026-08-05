@@ -195,7 +195,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="header-section no-print bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 border-none rounded-3xl p-3.5 sm:p-5 mb-4 shadow-xl shadow-slate-200/50 dark:shadow-none text-slate-800 dark:text-slate-100 relative z-50">
-      <div className="text-center text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-400 mb-3 tracking-wide">
+      <div className="text-center text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200 mb-3 tracking-wide">
         لَا إِلَٰهَ إِلَّا ٱللَّٰهُ مُحَمَّدٌ رَسُولُ ٱللَّٰهِ
       </div>
       {/* Row 1: App Name & Status (Left) + Nav Button & Menu Button (Right) */}
