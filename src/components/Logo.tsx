@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-export const Logo: React.FC<{ className?: string }> = ({ className = "w-8 h-8 sm:w-10 sm:h-10 shrink-0" }) => (
-  <svg viewBox="0 0 200 200" className={className} xmlns="http://www.w3.org/2000/svg">
+export const Logo: React.FC<{ className?: string }> = ({ className = "w-8 h-8 sm:w-10 sm:h-10 shrink-0" }) => {
+  const [imgError, setImgError] = useState(false);
+
+  if (!imgError) {
+    return (
+      <img 
+        src="/logo.png" 
+        alt="Nahid Kutir Logo" 
+        className={`${className} object-contain`} 
+        onError={() => setImgError(true)} 
+      />
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 200 200" className={className} xmlns="http://www.w3.org/2000/svg">
     <path d="M 100 180 C 40 180, 20 120, 20 90 C 20 50, 50 30, 80 20" stroke="#1c3e3a" strokeWidth="4" strokeLinecap="round" fill="none" />
     <path d="M 100 20 C 160 20, 180 80, 180 110 C 180 150, 150 170, 120 180" stroke="#d59d57" strokeWidth="4" strokeLinecap="round" fill="none" />
     <path d="M 30 110 C 20 100, 15 90, 30 90 C 40 90, 45 100, 30 110" fill="#698574" stroke="#1c3e3a" strokeWidth="3" />
@@ -27,3 +41,4 @@ export const Logo: React.FC<{ className?: string }> = ({ className = "w-8 h-8 sm
     <path d="M 40 155 C 80 155, 100 170, 140 170 C 150 170, 160 165, 165 160" stroke="#d59d57" strokeWidth="3" strokeLinecap="round" fill="none" />
   </svg>
 );
+};
