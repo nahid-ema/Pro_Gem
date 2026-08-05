@@ -374,7 +374,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
                 return (
                   <tr key={rt.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                     <td className="p-3 font-mono text-xs text-slate-500 dark:text-slate-400">
-                      {rt.date ? rt.date.split('-')[2] : ''}
+                      {rt.date}
                     </td>
                     <td className="p-3">
                       <div className="font-bold text-slate-900 dark:text-white">

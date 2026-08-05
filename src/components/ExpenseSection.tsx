@@ -390,9 +390,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
             ) : (
               filteredExpenses.map((ex) => (
                 <tr key={ex.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="p-3 font-mono text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
-                    {ex.date ? ex.date.split('-')[2] : ''}
-                  </td>
+                  <td className="p-3 font-mono text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">{ex.date}</td>
                   <td className="p-3 whitespace-nowrap">
                     <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/50">
                       <Tag className="w-3 h-3 text-indigo-500" />
