@@ -178,8 +178,8 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
       {/* Net Position Banner */}
       <div className={`p-4 md:p-5 rounded-2xl md:rounded-3xl border flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm ${
         isNetPositive 
-          ? 'bg-slate-900 text-white border-slate-800' 
-          : 'bg-rose-950/90 text-white border-rose-800'
+          ? 'bg-slate-100/90 dark:bg-slate-900 text-slate-900 dark:text-white border-slate-200 dark:border-slate-800' 
+          : 'bg-rose-50 dark:bg-rose-950/90 text-rose-900 dark:text-white border-rose-200 dark:border-rose-800'
       }`}>
         <div className="flex items-center gap-3 text-center sm:text-left">
           <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 font-bold text-base ${
@@ -200,7 +200,9 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
           </div>
         </div>
 
-        <div className="text-xl md:text-2xl font-bold font-mono tracking-tight shrink-0 text-emerald-400">
+        <div className={`text-xl md:text-2xl font-bold font-mono tracking-tight shrink-0 ${
+          isNetPositive ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
+        }`}>
           {formatCurrency(netCashFlow)}
         </div>
       </div>

@@ -121,7 +121,7 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
               <button
                 type="button"
                 onClick={handleInstallClick}
-                className="w-full py-2.5 px-4 bg-[#282A2C] dark:bg-[#F4C542] text-white dark:text-slate-900 hover:bg-[#1A1C1D] dark:hover:bg-[#E3B431] font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                className="w-full py-2.5 px-4 bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
               >
                 <Download className="w-4 h-4" />
                 <span>{isBn ? 'অ্যান্ড্রয়েড অ্যাপ ইনস্টল করুন' : 'Install Android App Now'}</span>

@@ -175,7 +175,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-[#282A2C] dark:bg-[#F4C542] text-white dark:text-slate-900 hover:bg-[#1A1C1D] dark:hover:bg-[#E3B431] py-3.5 rounded-2xl font-bold text-xs shadow-lg shadow-[#F4C542]/25 transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 mt-2"
+            className="w-full bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] py-3.5 rounded-2xl font-bold text-xs shadow-lg shadow-[#F4C542]/25 transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 mt-2"
           >
             {isLoading ? (
               <RefreshCw className="w-4 h-4 animate-spin" />

@@ -124,7 +124,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
 
         <button
           onClick={() => setIsFormOpen(!isFormOpen)}
-          className="no-print flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#282A2C] dark:bg-[#F4C542] text-white dark:text-slate-900 hover:bg-[#1A1C1D] dark:hover:bg-[#E3B431] font-semibold text-xs transition-colors shadow-sm cursor-pointer"
+          className="no-print flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] font-bold text-xs transition-colors shadow-sm cursor-pointer"
         >
           <Plus className={`w-4 h-4 transition-transform ${isFormOpen ? 'rotate-45' : ''}`} />
           <span className="hidden sm:inline">{editingId ? t.dokanUpdateBtn : t.dokanToggleLabel}</span>
@@ -182,7 +182,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
             </button>
             <button
               type="submit"
-              className="px-4 py-1.5 rounded-lg bg-[#282A2C] dark:bg-[#F4C542] text-white dark:text-slate-900 hover:bg-[#1A1C1D] dark:hover:bg-[#E3B431] font-semibold text-xs shadow-sm transition-colors cursor-pointer"
+              className="px-4 py-1.5 rounded-lg bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] font-bold text-xs shadow-sm transition-colors cursor-pointer"
             >
               {editingId ? t.dokanUpdateBtn : t.dokanSubmitBtn}
             </button>

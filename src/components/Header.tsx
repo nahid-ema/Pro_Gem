@@ -273,7 +273,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="flex items-center gap-2 bg-[#282A2C] dark:bg-[#F4C542] text-white dark:text-slate-900 hover:bg-[#1A1C1D] dark:hover:bg-[#E3B431] px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all shadow-md active:scale-95 cursor-pointer"
+              className="flex items-center gap-2 bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-all shadow-md active:scale-95 cursor-pointer"
             >
               <Menu className="w-4 h-4" />
               <span>{language === 'bn' ? 'মেনু' : 'Menu'}</span>
@@ -335,7 +335,7 @@ export const Header: React.FC<HeaderProps> = ({
                     <button
                       type="button"
                       onClick={() => { setIsMenuOpen(false); onFirebaseCloudRestore(); }}
-                      className="flex items-center justify-center gap-1.5 bg-[#F2F0EB] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 py-2 px-2.5 rounded-xl font-bold text-xs transition-colors cursor-pointer border border-slate-200/80 dark:border-slate-700/80"
+                      className="flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 py-2 px-2.5 rounded-xl font-bold text-xs transition-colors cursor-pointer border border-slate-200/80 dark:border-slate-700/80"
                     >
                       <CloudDownload className="w-3.5 h-3.5 text-indigo-500" />
                       <span>{language === 'bn' ? 'রিস্টোর করুন' : 'Cloud Restore'}</span>
@@ -352,7 +352,7 @@ export const Header: React.FC<HeaderProps> = ({
                     <button
                       type="button"
                       onClick={() => { setIsMenuOpen(false); onTriggerBackup(); }}
-                      className="flex items-center justify-center gap-1.5 bg-[#F2F0EB] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-100 py-1.5 px-2 rounded-xl font-medium text-xs transition-colors cursor-pointer"
+                      className="flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-100 py-1.5 px-2 rounded-xl font-medium text-xs transition-colors cursor-pointer"
                     >
                       <Download className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
                       <span>{t.backupBtn}</span>
@@ -361,7 +361,7 @@ export const Header: React.FC<HeaderProps> = ({
                     <button
                       type="button"
                       onClick={() => { setIsMenuOpen(false); fileInputRef.current?.click(); }}
-                      className="flex items-center justify-center gap-1.5 bg-[#F2F0EB] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-100 py-1.5 px-2 rounded-xl font-medium text-xs transition-colors cursor-pointer"
+                      className="flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-100 py-1.5 px-2 rounded-xl font-medium text-xs transition-colors cursor-pointer"
                     >
                       <Upload className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
                       <span>{t.restoreBtn}</span>
@@ -387,7 +387,7 @@ export const Header: React.FC<HeaderProps> = ({
                     <button
                       type="button"
                       onClick={() => { onLanguageToggle(); }}
-                      className="flex items-center justify-between bg-[#F2F0EB] dark:bg-[#2A2A2A]/80 p-2 rounded-xl border border-[#E8E6E1] dark:border-[#333333] cursor-pointer hover:bg-slate-200/70 dark:hover:bg-slate-700/80 transition-colors"
+                      className="flex items-center justify-between bg-slate-100 dark:bg-[#2A2A2A]/80 p-2 rounded-xl border border-slate-200/80 dark:border-[#333333] cursor-pointer hover:bg-slate-200/70 dark:hover:bg-slate-700/80 transition-colors"
                     >
                       <div className="flex items-center gap-1.5 text-slate-800 dark:text-slate-100 font-medium">
                         <Globe className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
@@ -400,7 +400,7 @@ export const Header: React.FC<HeaderProps> = ({
                     <button
                       type="button"
                       onClick={() => { onThemeToggle(); }}
-                      className="flex items-center justify-between bg-[#F2F0EB] dark:bg-[#2A2A2A]/80 p-2 rounded-xl border border-[#E8E6E1] dark:border-[#333333] cursor-pointer hover:bg-slate-200/70 dark:hover:bg-slate-700/80 transition-colors"
+                      className="flex items-center justify-between bg-slate-100 dark:bg-[#2A2A2A]/80 p-2 rounded-xl border border-slate-200/80 dark:border-[#333333] cursor-pointer hover:bg-slate-200/70 dark:hover:bg-slate-700/80 transition-colors"
                     >
                       <div className="flex items-center gap-1.5 text-slate-800 dark:text-slate-100 font-medium">
                         {theme === 'dark' ? (
@@ -418,7 +418,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <button
                     type="button"
                     onClick={() => { setIsMenuOpen(false); onPrint(); }}
-                    className="w-full text-left px-3 py-2 rounded-xl bg-[#F2F0EB] dark:bg-[#2A2A2A]/80 hover:bg-slate-200/70 dark:hover:bg-slate-700/80 flex items-center justify-between text-slate-700 dark:text-slate-100 font-medium transition-colors cursor-pointer border border-[#E8E6E1] dark:border-[#333333]"
+                    className="w-full text-left px-3 py-2 rounded-xl bg-slate-100 dark:bg-[#2A2A2A]/80 hover:bg-slate-200/70 dark:hover:bg-slate-700/80 flex items-center justify-between text-slate-700 dark:text-slate-100 font-medium transition-colors cursor-pointer border border-slate-200/80 dark:border-[#333333]"
                   >
                     <div className="flex items-center gap-2">
                       <Printer className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
@@ -479,7 +479,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             type="button"
             onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
-            className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-full bg-[#F2F0EB] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-[#E8E6E1] dark:border-[#333333] text-xs font-bold transition-all cursor-pointer shrink-0 shadow-2xs active:scale-95"
+            className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-full bg-slate-100 dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200/80 dark:border-[#333333] text-xs font-bold transition-all cursor-pointer shrink-0 shadow-2xs active:scale-95"
           >
             <Calendar className="w-4 h-4 text-[#F4C542] shrink-0" />
             <span>{getSelectedDateLabel()}</span>
@@ -488,7 +488,7 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Date Selection Popover Dropdown */}
           {isDatePickerOpen && (
-            <div className="absolute left-0 mt-2 w-64 sm:w-72 bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 border border-[#E8E6E1] dark:border-[#333333] rounded-2xl shadow-xl z-50 p-3 space-y-3 animate-in fade-in zoom-in-95 duration-150">
+            <div className="absolute left-0 mt-2 w-64 sm:w-72 bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 border border-slate-200 dark:border-[#333333] rounded-2xl shadow-xl z-50 p-3 space-y-3 animate-in fade-in zoom-in-95 duration-150">
               
               {/* Header & Quick Action Buttons */}
               <div className="flex items-center justify-between gap-1.5 pb-2 border-b border-slate-100 dark:border-slate-800">
@@ -503,7 +503,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   type="button"
                   onClick={handleAllTime}
-                  className="flex-1 px-2 py-1 rounded-xl bg-[#F2F0EB] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-[11px] font-bold transition-colors cursor-pointer text-center"
+                  className="flex-1 px-2 py-1 rounded-xl bg-slate-100 dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-[11px] font-bold transition-colors cursor-pointer text-center"
                 >
                   {language === 'bn' ? 'সকল সময়' : 'All Time'}
                 </button>
@@ -542,7 +542,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <select
                   value={selectedYear}
                   onChange={(e) => onYearChange(e.target.value)}
-                  className="flex-1 bg-[#F2F0EB] dark:bg-[#2A2A2A] border border-[#E8E6E1] dark:border-[#333333] rounded-xl px-2.5 py-1 text-xs font-bold text-slate-800 dark:text-slate-100 focus:outline-none cursor-pointer"
+                  className="flex-1 bg-slate-100 dark:bg-[#2A2A2A] border border-slate-200/80 dark:border-[#333333] rounded-xl px-2.5 py-1 text-xs font-bold text-slate-800 dark:text-slate-100 focus:outline-none cursor-pointer"
                 >
                   <option value="all" className="dark:bg-slate-900">{t.yearAllOpt}</option>
                   {(availableYears || []).map((yr) => (
@@ -565,7 +565,7 @@ export const Header: React.FC<HeaderProps> = ({
                     className={`py-1 px-1.5 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
                       selectedMonth === 'all'
                         ? 'bg-[#F4C542] text-slate-900 shadow-xs'
-                        : 'bg-[#F2F0EB] dark:bg-[#2A2A2A] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                        : 'bg-slate-100 dark:bg-[#2A2A2A] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                     }`}
                   >
                     {t.monthAllOpt}
@@ -587,7 +587,7 @@ export const Header: React.FC<HeaderProps> = ({
                         className={`py-1 px-1.5 rounded-lg text-[11px] font-semibold truncate transition-all cursor-pointer ${
                           isSelected
                             ? 'bg-[#F4C542] text-slate-900 font-bold shadow-xs'
-                            : 'bg-[#F2F0EB] dark:bg-[#2A2A2A] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                            : 'bg-slate-100 dark:bg-[#2A2A2A] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                         }`}
                       >
                         {m}
@@ -609,7 +609,7 @@ export const Header: React.FC<HeaderProps> = ({
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder={t.searchPlaceholder}
-            className="w-full pl-10 pr-8 py-2 bg-[#F2F0EB] dark:bg-[#2A2A2A] rounded-full text-xs sm:text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#F4C542] transition-all border-none"
+            className="w-full pl-10 pr-8 py-2 bg-slate-100 dark:bg-[#2A2A2A] border border-slate-200/80 dark:border-none rounded-full text-xs sm:text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#F4C542] transition-all"
           />
           {searchQuery && (
             <button

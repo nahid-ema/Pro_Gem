@@ -124,7 +124,7 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
               {safeUnpaidItems.map((item) => (
                 <tr key={item.tenant.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                   <td className="p-3">
-                    <span className="inline-block px-2.5 py-0.5 rounded-md bg-[#F2F0EB] dark:bg-[#2A2A2A] text-slate-700 dark:text-slate-300 font-semibold text-xs border border-[#E8E6E1] dark:border-[#333333]">
+                    <span className="inline-block px-2.5 py-0.5 rounded-md bg-slate-100 dark:bg-[#2A2A2A] text-slate-700 dark:text-slate-300 font-semibold text-xs border border-slate-200/80 dark:border-[#333333]">
                       {t.roomText}: {item.tenant.room}
                     </span>
                   </td>
@@ -139,7 +139,7 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
                     <div className="flex items-center justify-end gap-1.5">
                       <button
                         onClick={() => sendSms(item)}
-                        className="p-1.5 rounded-lg bg-[#F2F0EB] dark:bg-[#2A2A2A] text-slate-600 dark:text-slate-400 hover:bg-slate-200 transition-colors"
+                        className="p-1.5 rounded-lg bg-slate-100 dark:bg-[#2A2A2A] text-slate-600 dark:text-slate-400 hover:bg-slate-200 transition-colors"
                         title={t.actionSms}
                       >
                         <PhoneCall className="w-3.5 h-3.5" />
@@ -155,7 +155,7 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
 
                       <button
                         onClick={() => onQuickPay(item)}
-                        className="flex items-center gap-1 px-3 py-1 rounded-lg bg-[#282A2C] dark:bg-[#F4C542] text-white dark:text-slate-900 hover:bg-[#1A1C1D] dark:hover:bg-[#E3B431] font-semibold text-xs shadow-sm transition-colors cursor-pointer"
+                        className="flex items-center gap-1 px-3 py-1 rounded-lg bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] font-bold text-xs shadow-sm transition-colors cursor-pointer"
                       >
                         <DollarSign className="w-3.5 h-3.5" />
                         <span>{t.quickPay}</span>
