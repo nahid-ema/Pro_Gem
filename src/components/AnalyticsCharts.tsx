@@ -145,7 +145,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
       {/* Title */}
       <div className="flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
         <div className="w-9 h-9 rounded-2xl bg-[#F4C542]/10 text-[#F4C542] dark:text-[#F4C542] flex items-center justify-center font-bold text-base">
-          <i className="fi fi-br-chart-line-up text-base" />
+          <i className="fi fi-sr-chart-line-up text-base" />
         </div>
         <div>
           <h3 className="text-base md:text-lg font-semibold text-slate-900 dark:text-white">
@@ -161,7 +161,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
         {/* Monthly Income vs Expense Bar Chart */}
         <div className="bg-[#F9F9F8] dark:bg-[#222222] border border-[#E8E6E1] dark:border-[#333333] rounded-xl p-4">
           <div className="flex items-center gap-2 mb-3">
-            <i className="fi fi-br-arrow-trend-up text-base text-indigo-600 dark:text-indigo-400" />
+            <i className="fi fi-sr-arrow-trend-up text-base text-indigo-600 dark:text-indigo-400" />
             <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
               {t.chartIncomeVsExpense} ({activeYear})
             </h4>
@@ -170,7 +170,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={monthlyData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <i className="fi fi-br-cross" Axis dataKey="month" tick={{ fontSize: 10 }} />
+                <i className="fi fi-sr-cross" Axis dataKey="month" tick={{ fontSize: 10 }} />
                 <YAxis tick={{ fontSize: 10 }} />
                 <Tooltip
                   contentStyle={{
@@ -193,7 +193,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
         {/* Financial Breakdown Pie Chart */}
         <div className="bg-[#F9F9F8] dark:bg-[#222222] border border-[#E8E6E1] dark:border-[#333333] rounded-xl p-4 flex flex-col justify-between">
           <div className="flex items-center gap-2 mb-3">
-            <i className="fi fi-br-chart-pie text-base text-indigo-600 dark:text-indigo-400" />
+            <i className="fi fi-sr-chart-pie text-base text-indigo-600 dark:text-indigo-400" />
             <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
               {language === 'bn' ? 'অর্থসংস্থানের সার্বিক বন্টন' : 'Overall Financial Breakdown'}
             </h4>
@@ -237,7 +237,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
         <div className="bg-[#F9F9F8] dark:bg-[#222222] border border-[#E8E6E1] dark:border-[#333333] rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <i className="fi fi-br-chart-pie text-base text-[#F4C542]" />
+              <i className="fi fi-sr-chart-pie text-base text-[#F4C542]" />
               <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
                 {t.chartExpenseCategories} ({language === 'bn' ? 'খাতভিত্তিক খরচ' : 'Expense Category Breakdown'})
               </h4>

@@ -123,7 +123,7 @@ export const RoomsSection: React.FC<RoomsSectionProps> = ({
       <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-2xl bg-[#F4C542]/10 text-[#F4C542] dark:text-[#F4C542] flex items-center justify-center font-bold text-base">
-            <i className="fi fi-br-door-closed" />
+            <i className="fi fi-sr-door-closed" />
           </div>
           <div>
             <h3 className="text-base md:text-lg font-semibold text-slate-900 dark:text-white">
@@ -139,7 +139,7 @@ export const RoomsSection: React.FC<RoomsSectionProps> = ({
           onClick={() => setIsFormOpen(!isFormOpen)}
           className="no-print flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] font-bold text-xs transition-colors shadow-sm cursor-pointer"
         >
-          <i className={`fi fi-br-add transition-transform ${isFormOpen ? 'rotate-45' : ''}`} />
+          <i className={`fi fi-sr-add transition-transform ${isFormOpen ? 'rotate-45' : ''}`} />
           <span className="hidden sm:inline">{editingId ? t.roomUpdateBtn : t.roomToggleLabel}</span>
         </button>
       </div>
@@ -281,7 +281,7 @@ export const RoomsSection: React.FC<RoomsSectionProps> = ({
                       <div className="mt-0.5">
                         {assignedTenant ? (
                           <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-200/80 dark:border-emerald-800/80">
-                            <i className="fi fi-br-user w-2.5 h-2.5" />
+                            <i className="fi fi-sr-user w-2.5 h-2.5" />
                             <span className="truncate max-w-[90px]">{assignedTenant.name}</span>
                           </span>
                         ) : (
@@ -306,7 +306,7 @@ export const RoomsSection: React.FC<RoomsSectionProps> = ({
                           className="p-1.5 rounded-lg text-slate-600 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                           title={t.edit}
                         >
-                          <i className="fi fi-br-edit text-sm" />
+                          <i className="fi fi-sr-edit text-sm" />
                         </button>
                         <button
                           onClick={() => {
@@ -315,7 +315,7 @@ export const RoomsSection: React.FC<RoomsSectionProps> = ({
                           className="p-1.5 rounded-lg text-slate-600 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                           title={t.delete}
                         >
-                          <i className="fi fi-br-trash text-sm" />
+                          <i className="fi fi-sr-trash text-sm" />
                         </button>
                       </div>
                     </td>

@@ -29,9 +29,9 @@ export const Toast: React.FC<ToastProps> = ({ toast, onClose }) => {
   };
 
   const icons = {
-    success: <i className="fi fi-br-check-circle text-lg shrink-0" />,
-    error: <i className="fi fi-br-info text-lg shrink-0" />,
-    info: <i className="fi fi-br-info text-lg shrink-0" />,
+    success: <i className="fi fi-sr-check-circle text-lg shrink-0" />,
+    error: <i className="fi fi-sr-info text-lg shrink-0" />,
+    info: <i className="fi fi-sr-info text-lg shrink-0" />,
   };
 
   return (
@@ -40,7 +40,7 @@ export const Toast: React.FC<ToastProps> = ({ toast, onClose }) => {
         {icons[toast.type]}
         <span className="flex-1">{toast.message}</span>
         <button onClick={onClose} className="opacity-80 hover:opacity-100 p-0.5">
-          <i className="fi fi-br-cross" />
+          <i className="fi fi-sr-cross" />
         </button>
       </div>
     </div>

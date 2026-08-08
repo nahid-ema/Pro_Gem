@@ -22,14 +22,14 @@ export const TabBar: React.FC<TabBarProps> = ({
   const t = getTranslation(language);
 
   const tabs: { id: TabType; label: string; icon: React.ReactNode; badge?: number | string }[] = [
-    { id: 'brief', label: t.tabBrief, icon: <i className="fi fi-br-chart-histogram text-sm" /> },
-    { id: 'rooms', label: t.tabRooms, icon: <i className="fi fi-br-door-closed text-sm" />, badge: totalRoomsCount },
-    { id: 'tenants', label: t.tabTenants, icon: <i className="fi fi-br-users text-sm" />, badge: totalTenantsCount },
-    { id: 'rent', label: t.tabRent, icon: <i className="fi fi-br-money-bill-wave text-sm" /> },
-    { id: 'unpaid', label: t.tabUnpaid, icon: <i className="fi fi-br-triangle-warning text-sm" />, badge: unpaidCount > 0 ? unpaidCount : undefined },
-    { id: 'expense', label: t.tabExpense, icon: <i className="fi fi-br-receipt text-sm" /> },
-    { id: 'dokan', label: t.tabDokan, icon: <i className="fi fi-br-shop text-sm" /> },
-    { id: 'analytics', label: t.tabAnalytics, icon: <i className="fi fi-br-chart-line-up text-sm" /> },
+    { id: 'brief', label: t.tabBrief, icon: <i className="fi fi-sr-chart-histogram text-sm" /> },
+    { id: 'rooms', label: t.tabRooms, icon: <i className="fi fi-sr-door-closed text-sm" />, badge: totalRoomsCount },
+    { id: 'tenants', label: t.tabTenants, icon: <i className="fi fi-sr-users text-sm" />, badge: totalTenantsCount },
+    { id: 'rent', label: t.tabRent, icon: <i className="fi fi-sr-money-bill-wave text-sm" /> },
+    { id: 'unpaid', label: t.tabUnpaid, icon: <i className="fi fi-sr-triangle-warning text-sm" />, badge: unpaidCount > 0 ? unpaidCount : undefined },
+    { id: 'expense', label: t.tabExpense, icon: <i className="fi fi-sr-receipt text-sm" /> },
+    { id: 'dokan', label: t.tabDokan, icon: <i className="fi fi-sr-shop text-sm" /> },
+    { id: 'analytics', label: t.tabAnalytics, icon: <i className="fi fi-sr-chart-line-up text-sm" /> },
   ];
 
   return (

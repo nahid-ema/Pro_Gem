@@ -90,14 +90,14 @@ export const Header: React.FC<HeaderProps> = ({
   }, []);
 
   const navItems: { id: TabType; labelEn: string; labelBn: string; icon: React.ReactNode }[] = [
-    { id: 'brief', labelEn: 'Summary', labelBn: 'সারসংক্ষেপ', icon: <i className="fi fi-br-chart-histogram text-base text-[#F4C542]" /> },
-    { id: 'rooms', labelEn: 'Rooms', labelBn: 'রুমসমূহ', icon: <i className="fi fi-br-door-closed text-base text-blue-500" /> },
-    { id: 'tenants', labelEn: 'Tenants', labelBn: 'ভাড়াটিয়া', icon: <i className="fi fi-br-users text-base text-emerald-500" /> },
-    { id: 'rent', labelEn: 'Rent Collection', labelBn: 'ভাড়া আদায়', icon: <i className="fi fi-br-money-bill-wave text-base text-amber-500" /> },
-    { id: 'unpaid', labelEn: 'Unpaid Dues', labelBn: 'বকেয়া হিসাব', icon: <i className="fi fi-br-triangle-warning text-base text-rose-500" /> },
-    { id: 'expense', labelEn: 'Expenses', labelBn: 'খরচসমূহ', icon: <i className="fi fi-br-receipt text-base text-purple-500" /> },
-    { id: 'dokan', labelEn: 'Shop Dues', labelBn: 'দোকান বাকি', icon: <i className="fi fi-br-shop text-base text-orange-500" /> },
-    { id: 'analytics', labelEn: 'Analytics', labelBn: 'অ্যানালিটিক্স', icon: <i className="fi fi-br-chart-line-up text-base text-indigo-500" /> },
+    { id: 'brief', labelEn: 'Summary', labelBn: 'সারসংক্ষেপ', icon: <i className="fi fi-sr-chart-histogram text-base text-[#F4C542]" /> },
+    { id: 'rooms', labelEn: 'Rooms', labelBn: 'রুমসমূহ', icon: <i className="fi fi-sr-door-closed text-base text-blue-500" /> },
+    { id: 'tenants', labelEn: 'Tenants', labelBn: 'ভাড়াটিয়া', icon: <i className="fi fi-sr-users text-base text-emerald-500" /> },
+    { id: 'rent', labelEn: 'Rent Collection', labelBn: 'ভাড়া আদায়', icon: <i className="fi fi-sr-money-bill-wave text-base text-amber-500" /> },
+    { id: 'unpaid', labelEn: 'Unpaid Dues', labelBn: 'বকেয়া হিসাব', icon: <i className="fi fi-sr-triangle-warning text-base text-rose-500" /> },
+    { id: 'expense', labelEn: 'Expenses', labelBn: 'খরচসমূহ', icon: <i className="fi fi-sr-receipt text-base text-purple-500" /> },
+    { id: 'dokan', labelEn: 'Shop Dues', labelBn: 'দোকান বাকি', icon: <i className="fi fi-sr-shop text-base text-orange-500" /> },
+    { id: 'analytics', labelEn: 'Analytics', labelBn: 'অ্যানালিটিক্স', icon: <i className="fi fi-sr-chart-line-up text-base text-indigo-500" /> },
   ];
 
   const handlePrevMonth = () => {
@@ -200,10 +200,10 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => setIsQuickNavOpen(!isQuickNavOpen)}
               className="flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-full bg-[#F4C542]/10 hover:bg-[#F4C542]/20 text-[#F4C542] border border-[#F4C542]/30 text-xs sm:text-sm font-semibold transition-all cursor-pointer shrink-0 shadow-xs active:scale-95"
             >
-              <i className="fi fi-br-globe text-base shrink-0" />
+              <i className="fi fi-sr-compass text-base shrink-0" />
               <span className="hidden xs:inline sm:inline">{language === 'bn' ? 'দ্রুত নেভিগেশন' : 'Quick Navigation'}</span>
               <span className="inline xs:hidden sm:hidden">{language === 'bn' ? 'নেভিগেশন' : 'Nav'}</span>
-              <i className={`fi fi-br-angle-down text-sm shrink-0 transition-transform duration-200 ${isQuickNavOpen ? 'rotate-180' : ''}`} />
+              <i className={`fi fi-sr-angle-down text-sm shrink-0 transition-transform duration-200 ${isQuickNavOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {isQuickNavOpen && (
@@ -244,9 +244,9 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="flex items-center gap-2 bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] px-4 py-2 rounded-full text-xs sm:text-sm font-bold transition-all shadow-md active:scale-95 cursor-pointer"
             >
-              <i className="fi fi-br-menu-burger text-base" />
+              <i className="fi fi-sr-menu-burger text-base" />
               <span>{language === 'bn' ? 'মেনু' : 'Menu'}</span>
-              <i className={`fi fi-br-angle-down text-sm transition-transform duration-200 ${isMenuOpen ? 'rotate-180' : ''}`} />
+              <i className={`fi fi-sr-angle-down text-sm transition-transform duration-200 ${isMenuOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {/* Dropdown Menu */}
@@ -267,7 +267,7 @@ export const Header: React.FC<HeaderProps> = ({
                     <div className="min-w-0">
                       <div className="font-bold text-xs text-slate-800 dark:text-slate-100 flex items-center gap-1.5 truncate">
                         <span>{isFirebaseActive ? (language === 'bn' ? 'অনলাইন সিন্ক সক্রিয়' : 'Online Sync Active') : t.offlineMode}</span>
-                        {isSyncing && <i className="fi fi-br-refresh text-xs animate-spin text-emerald-500 shrink-0" />}
+                        {isSyncing && <i className="fi fi-sr-refresh text-xs animate-spin text-emerald-500 shrink-0" />}
                       </div>
                       <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
                         {isFirebaseActive 
@@ -287,7 +287,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <div className="px-3.5 py-2.5 space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400 flex items-center gap-1">
-                      <i className="fi fi-br-cloud-upload-alt text-sm text-emerald-500" />
+                      <i className="fi fi-sr-cloud-upload-alt text-sm text-emerald-500" />
                       <span>{language === 'bn' ? 'ক্লাউড ব্যাকআপ ও রিস্টোর' : 'Cloud Backup & Sync'}</span>
                     </div>
                   </div>
@@ -298,7 +298,7 @@ export const Header: React.FC<HeaderProps> = ({
                       onClick={() => { setIsMenuOpen(false); onFirebaseCloudBackup(); }}
                       className="flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white py-2 px-2.5 rounded-xl font-bold text-xs transition-colors cursor-pointer"
                     >
-                      <i className="fi fi-br-cloud-upload-alt text-sm" />
+                      <i className="fi fi-sr-cloud-upload-alt text-sm" />
                       <span>{language === 'bn' ? 'ব্যাকআপ নিন' : 'Cloud Backup'}</span>
                     </button>
                     <button
@@ -306,7 +306,7 @@ export const Header: React.FC<HeaderProps> = ({
                       onClick={() => { setIsMenuOpen(false); onFirebaseCloudRestore(); }}
                       className="flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 py-2 px-2.5 rounded-xl font-bold text-xs transition-colors cursor-pointer border border-slate-200/80 dark:border-slate-700/80"
                     >
-                      <i className="fi fi-br-cloud-download-alt text-sm text-indigo-500" />
+                      <i className="fi fi-sr-cloud-download-alt text-sm text-indigo-500" />
                       <span>{language === 'bn' ? 'রিস্টোর করুন' : 'Cloud Restore'}</span>
                     </button>
                   </div>
@@ -323,7 +323,7 @@ export const Header: React.FC<HeaderProps> = ({
                       onClick={() => { setIsMenuOpen(false); onTriggerBackup(); }}
                       className="flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-100 py-1.5 px-2 rounded-xl font-medium text-xs transition-colors cursor-pointer"
                     >
-                      <i className="fi fi-br-download text-sm text-sky-600 dark:text-sky-400" />
+                      <i className="fi fi-sr-download text-sm text-sky-600 dark:text-sky-400" />
                       <span>{t.backupBtn}</span>
                     </button>
 
@@ -332,7 +332,7 @@ export const Header: React.FC<HeaderProps> = ({
                       onClick={() => { setIsMenuOpen(false); fileInputRef.current?.click(); }}
                       className="flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-100 py-1.5 px-2 rounded-xl font-medium text-xs transition-colors cursor-pointer"
                     >
-                      <i className="fi fi-br-upload text-sm text-teal-600 dark:text-teal-400" />
+                      <i className="fi fi-sr-upload text-sm text-teal-600 dark:text-teal-400" />
                       <span>{t.restoreBtn}</span>
                     </button>
                     <input
@@ -359,7 +359,7 @@ export const Header: React.FC<HeaderProps> = ({
                       className="flex items-center justify-between bg-slate-100 dark:bg-[#2A2A2A]/80 p-2 rounded-xl border border-slate-200/80 dark:border-[#333333] cursor-pointer hover:bg-slate-200/70 dark:hover:bg-slate-700/80 transition-colors"
                     >
                       <div className="flex items-center gap-1.5 text-slate-800 dark:text-slate-100 font-medium">
-                        <i className="fi fi-br-globe text-sm text-indigo-600 dark:text-indigo-400" />
+                        <i className="fi fi-sr-globe text-sm text-indigo-600 dark:text-indigo-400" />
                         <span className="text-[11px]">{language === 'bn' ? 'বাংলা' : 'English'}</span>
                       </div>
                       <span className="text-[10px] text-slate-400 font-bold">⇄</span>
@@ -373,9 +373,9 @@ export const Header: React.FC<HeaderProps> = ({
                     >
                       <div className="flex items-center gap-1.5 text-slate-800 dark:text-slate-100 font-medium">
                         {theme === 'dark' ? (
-                          <i className="fi fi-br-moon text-sm text-indigo-400" />
+                          <i className="fi fi-sr-moon text-sm text-indigo-400" />
                         ) : (
-                          <i className="fi fi-br-sun text-sm text-amber-500" />
+                          <i className="fi fi-sr-sun text-sm text-amber-500" />
                         )}
                         <span className="text-[11px]">{theme === 'dark' ? 'Dark' : 'Light'}</span>
                       </div>
@@ -390,7 +390,7 @@ export const Header: React.FC<HeaderProps> = ({
                     className="w-full text-left px-3 py-2 rounded-xl bg-slate-100 dark:bg-[#2A2A2A]/80 hover:bg-slate-200/70 dark:hover:bg-slate-700/80 flex items-center justify-between text-slate-700 dark:text-slate-100 font-medium transition-colors cursor-pointer border border-slate-200/80 dark:border-[#333333]"
                   >
                     <div className="flex items-center gap-2">
-                      <i className="fi fi-br-print text-base text-emerald-600 dark:text-emerald-400" />
+                      <i className="fi fi-sr-print text-base text-emerald-600 dark:text-emerald-400" />
                       <span>{t.printBtn}</span>
                     </div>
                   </button>
@@ -400,7 +400,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <div className="px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900/90 space-y-1.5">
                   <div className="flex items-center justify-between">
                     <span className="font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1 text-[11px]">
-                      <i className="fi fi-br-shield-check text-sm text-emerald-500" />
+                      <i className="fi fi-sr-shield-check text-sm text-emerald-500" />
                       {language === 'bn' ? 'মালিক অ্যাকাউন্ট:' : 'Owner Status:'}
                     </span>
                     <button
@@ -427,7 +427,7 @@ export const Header: React.FC<HeaderProps> = ({
                       onClick={() => { setIsMenuOpen(false); onLockApp(); }}
                       className="w-full mt-1.5 py-1.5 px-3 rounded-full bg-[#F4C542]/10 hover:bg-[#F4C542]/20 text-[#F4C542] font-bold text-[11px] transition-colors flex items-center justify-center gap-1.5 cursor-pointer border border-[#F4C542]/30"
                     >
-                      <i className="fi fi-br-lock text-xs" />
+                      <i className="fi fi-sr-lock text-xs" />
                       <span>{language === 'bn' ? 'ওয়েবসাইট লক করুন (লগআউট)' : 'Lock Website (Log Out)'}</span>
                     </button>
                   )}
@@ -450,9 +450,9 @@ export const Header: React.FC<HeaderProps> = ({
             onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
             className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-full bg-slate-100 dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200/80 dark:border-[#333333] text-xs font-bold transition-all cursor-pointer shrink-0 shadow-2xs active:scale-95"
           >
-            <i className="fi fi-br-calendar text-base text-[#F4C542] shrink-0" />
+            <i className="fi fi-sr-calendar text-base text-[#F4C542] shrink-0" />
             <span>{getSelectedDateLabel()}</span>
-            <i className={`fi fi-br-angle-down text-sm text-slate-400 shrink-0 transition-transform duration-200 ${isDatePickerOpen ? 'rotate-180' : ''}`} />
+            <i className={`fi fi-sr-angle-down text-sm text-slate-400 shrink-0 transition-transform duration-200 ${isDatePickerOpen ? 'rotate-180' : ''}`} />
           </button>
 
           {/* Date Selection Popover Dropdown */}
@@ -486,7 +486,7 @@ export const Header: React.FC<HeaderProps> = ({
                   title={language === 'bn' ? 'পূর্ববর্তী মাস' : 'Previous Month'}
                   className="p-1 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-100 transition-colors cursor-pointer"
                 >
-                  <i className="fi fi-br-angle-left text-base" />
+                  <i className="fi fi-sr-angle-left text-base" />
                 </button>
 
                 <span className="text-xs font-bold text-slate-800 dark:text-slate-100">
@@ -499,7 +499,7 @@ export const Header: React.FC<HeaderProps> = ({
                   title={language === 'bn' ? 'পরবর্তী মাস' : 'Next Month'}
                   className="p-1 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-100 transition-colors cursor-pointer"
                 >
-                  <i className="fi fi-br-angle-right text-base" />
+                  <i className="fi fi-sr-angle-right text-base" />
                 </button>
               </div>
 
@@ -572,7 +572,7 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Search Input Box right next to Date Selector */}
         <div className="relative flex-1">
-          <i className="fi fi-br-search text-base absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <i className="fi fi-sr-search text-base absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
             value={searchQuery}
@@ -586,7 +586,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => onSearchChange('')}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-200 cursor-pointer"
             >
-              <i className="fi fi-br-cross text-base" />
+              <i className="fi fi-sr-cross text-base" />
             </button>
           )}
         </div>

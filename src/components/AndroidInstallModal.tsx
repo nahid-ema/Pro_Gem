@@ -58,7 +58,7 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
         <div className="p-5 bg-gradient-to-r from-[#F4C542] to-[#D49D1A] text-white flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
             <div className="p-2.5 bg-white/15 backdrop-blur-md rounded-2xl border border-white/20">
-              <i className="fi fi-br-smartphone text-2xl text-white" />
+              <i className="fi fi-sr-smartphone text-2xl text-white" />
             </div>
             <div>
               <h3 className="font-extrabold text-base sm:text-lg leading-snug">
@@ -74,7 +74,7 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
             onClick={onClose}
             className="p-1.5 rounded-full hover:bg-white/20 transition-colors text-white cursor-pointer"
           >
-            <i className="fi fi-br-cross text-lg" />
+            <i className="fi fi-sr-cross text-lg" />
           </button>
         </div>
 
@@ -84,7 +84,7 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
           {/* 1. Status Banner */}
           {isInstalled ? (
             <div className="p-3.5 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800/80 rounded-2xl flex items-center gap-3">
-              <i className="fi fi-br-check-circle text-2xl text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <i className="fi fi-sr-check-circle text-2xl text-emerald-600 dark:text-emerald-400 shrink-0" />
               <div>
                 <div className="font-bold text-emerald-900 dark:text-emerald-200">
                   {isBn ? 'অ্যাপটি ইতিমধ্যেই ইনস্টল করা আছে!' : 'App Already Installed!'}
@@ -96,7 +96,7 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
             </div>
           ) : installSuccess ? (
             <div className="p-3.5 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800/80 rounded-2xl flex items-center gap-3">
-              <i className="fi fi-br-check-circle text-2xl text-emerald-600 dark:text-emerald-400 shrink-0" />
+              <i className="fi fi-sr-check-circle text-2xl text-emerald-600 dark:text-emerald-400 shrink-0" />
               <div>
                 <div className="font-bold text-emerald-900 dark:text-emerald-200">
                   {isBn ? 'ইনস্টলেশন সফল হয়েছে!' : 'Installation Successful!'}
@@ -109,7 +109,7 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
           ) : deferredPrompt ? (
             <div className="p-4 bg-gradient-to-br from-[#F4C542]/10 to-amber-500/10 border border-[#F4C542]/30 rounded-2xl space-y-3">
               <div className="flex items-center gap-2 text-[#F4C542] font-bold text-sm">
-                <i className="fi fi-br-bolt text-base fill-[#F4C542]" />
+                <i className="fi fi-sr-bolt text-base fill-[#F4C542]" />
                 <span>{isBn ? 'এক-ক্লিকে সরাসরি ইনস্টল করুন' : '1-Click Direct Installation Ready'}</span>
               </div>
               <p className="text-xs text-slate-600 dark:text-slate-400">
@@ -122,7 +122,7 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
                 onClick={handleInstallClick}
                 className="w-full py-2.5 px-4 bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95"
               >
-                <i className="fi fi-br-download text-base" />
+                <i className="fi fi-sr-download text-base" />
                 <span>{isBn ? 'অ্যান্ড্রয়েড অ্যাপ ইনস্টল করুন' : 'Install Android App Now'}</span>
               </button>
             </div>
@@ -131,7 +131,7 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
           {/* 2. Manual Installation Guide for Android Chrome */}
           <div className="space-y-3">
             <h4 className="font-bold text-slate-900 dark:text-white flex items-center gap-2 text-xs uppercase tracking-wider text-[#F4C542]">
-              <i className="fi fi-br-smartphone text-base" />
+              <i className="fi fi-sr-smartphone text-base" />
               <span>{isBn ? 'অ্যান্ড্রয়েড ফোনে কীভাবে ইনস্টল করবেন (৩ ধাপ):' : 'How to Install on Android (3 Steps):'}</span>
             </h4>
 
@@ -144,7 +144,7 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
                 <div className="space-y-1">
                   <div className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
                     <span>{isBn ? 'ক্রোম ব্রাউজারের থ্রি-ডট মেনুতে চাপুন' : 'Tap Browser Menu (3 Dots)'}</span>
-                    <i className="fi fi-br-menu-dots-vertical text-base text-slate-500 dark:text-slate-400 inline" />
+                    <i className="fi fi-sr-menu-dots-vertical text-base text-slate-500 dark:text-slate-400 inline" />
                   </div>
                   <p className="text-slate-500 dark:text-slate-400 text-xs">
                     {isBn 
@@ -162,7 +162,7 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
                 <div className="space-y-1">
                   <div className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
                     <span>{isBn ? '"Add to Home Screen" বা "Install app" চাপুন' : 'Select "Add to Home Screen" or "Install App"'}</span>
-                    <i className="fi fi-br-square-plus text-base text-[#F4C542] inline" />
+                    <i className="fi fi-sr-square-plus text-base text-[#F4C542] inline" />
                   </div>
                   <p className="text-slate-500 dark:text-slate-400 text-xs">
                     {isBn 
@@ -180,7 +180,7 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
                 <div className="space-y-1">
                   <div className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
                     <span>{isBn ? 'ইনস্টল নিশ্চিত করুন' : 'Confirm Installation'}</span>
-                    <i className="fi fi-br-check-circle text-base text-emerald-500 inline" />
+                    <i className="fi fi-sr-check-circle text-base text-emerald-500 inline" />
                   </div>
                   <p className="text-slate-500 dark:text-slate-400 text-xs">
                     {isBn 
@@ -195,7 +195,7 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
           {/* 3. Features of Android App */}
           <div className="p-3.5 bg-[#F2F0EB] dark:bg-[#2A2A2A]/80 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 space-y-2">
             <div className="font-bold text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-              <i className="fi fi-br-shield-check text-base text-emerald-500" />
+              <i className="fi fi-sr-shield-check text-base text-emerald-500" />
               <span>{isBn ? 'অ্যান্ড্রয়েড অ্যাপের সুবিধাসমূহ:' : 'Android App Features:'}</span>
             </div>
             <ul className="grid grid-cols-1 gap-1.5 text-xs text-slate-600 dark:text-slate-400">
@@ -221,7 +221,7 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
           {/* 4. Play Store APK Info Box */}
           <div className="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 rounded-2xl space-y-1 text-xs">
             <div className="font-bold text-amber-900 dark:text-amber-300 flex items-center gap-1.5">
-              <i className="fi fi-br-up-right-from-square text-sm" />
+              <i className="fi fi-sr-up-right-from-square text-sm" />
               <span>{isBn ? 'এপিকে (.APK) ফাইল বানাতে চান?' : 'Need a Standalone .APK File?'}</span>
             </div>
             <p className="text-amber-800 dark:text-amber-300/90 text-[11px] leading-relaxed">
