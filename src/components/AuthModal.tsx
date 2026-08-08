@@ -224,7 +224,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
         {userEmail ? (
           <div className="bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 rounded-2xl p-5 text-center space-y-4">
-            <i className="fi fi-sr-check-circle w-10 h-10 text-emerald-500 mx-auto" />
+            <i className="fi fi-sr-check-circle text-4xl text-emerald-500 mx-auto" />
             <div>
               <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold block mb-1">
                 {language === 'bn' ? 'বর্তমান কানেক্টেড ইউজার:' : 'Currently signed in as:'}

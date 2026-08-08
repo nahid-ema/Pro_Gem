@@ -48,7 +48,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
       <div className="flex items-center justify-between gap-2 mb-4 sm:mb-5 pb-3 sm:pb-4 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-[#F4C542]/10 text-[#F4C542] dark:text-[#F4C542] flex items-center justify-center font-bold text-sm sm:text-base shrink-0">
-            <i className="fi fi-sr-chart-histogram text-base sm:w-5 sm:h-5" />
+            <i className="fi fi-sr-chart-histogram text-base sm:text-lg" />
           </div>
           <div className="min-w-0">
             <h3 className="text-sm sm:text-base md:text-lg font-semibold text-slate-900 dark:text-white tracking-tight truncate">
@@ -65,7 +65,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
 
         {/* Collection Efficiency Gauge Badge */}
         <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-500/20 text-emerald-800 dark:text-emerald-300 px-2.5 sm:px-3.5 py-1.5 rounded-full shrink-0 text-xs font-semibold">
-          <i className="fi fi-sr-check-circle text-sm sm:w-4 sm:h-4 text-emerald-500 shrink-0" />
+          <i className="fi fi-sr-check-circle text-sm sm:text-base text-emerald-500 shrink-0" />
           <span className="hidden sm:inline">{t.collectionProgress}:</span>
           <span className="sm:hidden">{language === 'bn' ? 'আদায় অগ্রগতি:' : 'Collection:'}</span>
           <span className="font-bold text-emerald-600 dark:text-emerald-400">{collectionPercentage}%</span>

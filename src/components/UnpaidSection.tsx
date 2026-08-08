@@ -90,7 +90,7 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
         <div className="p-3.5 sm:p-4 bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-500/20 rounded-2xl flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-xs">
-              <i className="fi fi-sr-check-circle text-base sm:w-5 sm:h-5" />
+              <i className="fi fi-sr-check-circle text-base sm:text-lg" />
             </div>
             <div>
               <h4 className="text-xs sm:text-sm font-bold text-emerald-800 dark:text-emerald-300">

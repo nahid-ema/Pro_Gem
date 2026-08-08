@@ -119,7 +119,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({
               {isBn ? 'ইমেইল এড্রেস (Email Address)' : 'Email Address'}
             </label>
             <div className="relative">
-              <i className="fi fi-sr-envelope text-base text-slate-400 absolute left-3.5 top-3.5" />
+              <i className="fi fi-sr-envelope text-base text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="email"
                 required
@@ -136,7 +136,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({
               {isBn ? 'পাসওয়ার্ড (Password)' : 'Password'}
             </label>
             <div className="relative">
-              <i className="fi fi-sr-key text-base text-slate-400 absolute left-3.5 top-3.5" />
+              <i className="fi fi-sr-key text-base text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type={showPassword ? 'text' : 'password'}
                 required
@@ -148,7 +148,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-200 text-xs cursor-pointer"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 text-xs cursor-pointer flex items-center justify-center"
               >
                 {showPassword ? <i className="fi fi-sr-eye-crossed text-base text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors" /> : <i className="fi fi-sr-eye text-base text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors" />}
               </button>

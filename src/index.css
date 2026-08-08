@@ -23,6 +23,44 @@
   html, body, button, input, select, textarea {
     font-family: 'Google Sans', 'Product Sans', 'Google Sans Text', 'Plus Jakarta Sans', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif;
   }
+
+  /* Universal Flaticon Icons Vertical Alignment & Centering */
+  .fi,
+  i[class^="fi-"],
+  i[class*=" fi-"],
+  span[class^="fi-"],
+  span[class*=" fi-"] {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    vertical-align: middle !important;
+    line-height: 1 !important;
+    height: 1em;
+    width: 1em;
+    flex-shrink: 0;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .fi::before,
+  i[class^="fi-"]::before,
+  i[class*=" fi-"]::before,
+  span[class^="fi-"]::before,
+  span[class*=" fi-"]::before {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+    vertical-align: middle !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
 }
 
 /* Mobile & Desktop Screen Density & Font Scaling */

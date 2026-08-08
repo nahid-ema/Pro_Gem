@@ -281,7 +281,7 @@ export const RoomsSection: React.FC<RoomsSectionProps> = ({
                       <div className="mt-0.5">
                         {assignedTenant ? (
                           <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-200/80 dark:border-emerald-800/80">
-                            <i className="fi fi-sr-user w-2.5 h-2.5" />
+                            <i className="fi fi-sr-user text-[10px]" />
                             <span className="truncate max-w-[90px]">{assignedTenant.name}</span>
                           </span>
                         ) : (
