@@ -857,6 +857,7 @@ export default function App() {
           {activeTab === 'rooms' && (
             <RoomsSection
               rooms={rooms}
+              tenants={tenants}
               language={language}
               searchQuery={searchQuery}
               onAddRoom={handleAddRoom}

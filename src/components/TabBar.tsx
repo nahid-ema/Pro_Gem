@@ -52,10 +52,10 @@ export const TabBar: React.FC<TabBarProps> = ({
           <button
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-lg font-semibold text-xs md:text-sm whitespace-nowrap transition-all border shrink-0 ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl font-bold text-xs md:text-sm whitespace-nowrap transition-all border shrink-0 cursor-pointer active:scale-95 ${
               isActive
                 ? 'bg-[#F4C542] text-slate-900 border-[#F4C542] shadow-sm font-bold'
-                : 'bg-white/90 backdrop-blur-xl dark:bg-[#1A1A1A]/80 text-slate-700 dark:text-slate-300 border-slate-200/80 dark:border-[#333333] hover:bg-slate-100 dark:hover:bg-slate-800'
+                : 'bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 text-slate-700 dark:text-slate-300 border-slate-200/80 dark:border-[#333333] hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
             <span className={isActive ? 'text-slate-900' : 'text-slate-500 dark:text-slate-400'}>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { RentRecord, Tenant, Room, Language } from '../types';
 import { getTranslation } from '../data/translations';
-import { Banknote, Plus, Edit2, Trash2, MessageSquare, Receipt, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { Banknote, Plus, Edit2, Trash2, MessageSquare, Receipt, CheckCircle2, AlertTriangle, Download } from 'lucide-react';
 import { matchesQuery } from '../lib/search';
 
 interface RentSectionProps {
@@ -47,6 +47,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = useState<'all' | 'paid' | 'due'>('all');
 
   const [date, setDate] = useState(todayStr());
   const [selectedTenantId, setSelectedTenantId] = useState('');
@@ -170,6 +171,9 @@ export const RentSection: React.FC<RentSectionProps> = ({
 
       if (!matchY || !matchM) return false;
 
+      if (statusFilter === 'paid' && rt.due > 0) return false;
+      if (statusFilter === 'due' && rt.due <= 0) return false;
+
       return matchesQuery(searchQuery, [
         rt.tenant,
         rt.room,
@@ -225,6 +229,40 @@ export const RentSection: React.FC<RentSectionProps> = ({
         >
           <Plus className={`w-4 h-4 transition-transform ${isFormOpen ? 'rotate-45' : ''}`} />
           <span className="hidden sm:inline">{editingId ? t.rentUpdateBtn : t.rentToggleLabel}</span>
+        </button>
+      </div>
+
+      {/* Filter Pills Bar */}
+      <div className="flex items-center gap-1.5 mb-4 overflow-x-auto pb-1 no-print">
+        <button
+          onClick={() => setStatusFilter('all')}
+          className={`px-3 py-1 rounded-full text-xs font-semibold transition-all shrink-0 cursor-pointer ${
+            statusFilter === 'all'
+              ? 'bg-[#F4C542] text-slate-900 font-bold shadow-xs'
+              : 'bg-slate-100 dark:bg-[#2A2A2A] text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+          }`}
+        >
+          {language === 'bn' ? 'সকল লেনদেন' : 'All Transactions'}
+        </button>
+        <button
+          onClick={() => setStatusFilter('paid')}
+          className={`px-3 py-1 rounded-full text-xs font-semibold transition-all shrink-0 cursor-pointer ${
+            statusFilter === 'paid'
+              ? 'bg-emerald-500 text-white font-bold shadow-xs'
+              : 'bg-slate-100 dark:bg-[#2A2A2A] text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+          }`}
+        >
+          {language === 'bn' ? 'পরিশোধিত' : 'Fully Paid'}
+        </button>
+        <button
+          onClick={() => setStatusFilter('due')}
+          className={`px-3 py-1 rounded-full text-xs font-semibold transition-all shrink-0 cursor-pointer ${
+            statusFilter === 'due'
+              ? 'bg-rose-500 text-white font-bold shadow-xs'
+              : 'bg-slate-100 dark:bg-[#2A2A2A] text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+          }`}
+        >
+          {language === 'bn' ? 'বকেয়া আছে' : 'Has Due'}
         </button>
       </div>
 

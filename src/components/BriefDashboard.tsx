@@ -95,81 +95,111 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
       </div>
 
       {/* 6 Key Stat Cards Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3.5 mb-4 sm:mb-5">
         {/* Total Rent Expected */}
-        <div className="bg-white/50 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
-          <div className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-1 truncate">
-            {t.briefRentLbl}
+        <div className="hover-lift bg-white/60 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-2xl p-3 sm:p-4 shadow-2xs">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider truncate">
+              {t.briefRentLbl}
+            </span>
+            <div className="w-5 h-5 rounded-lg bg-[#F4C542]/20 text-[#F4C542] flex items-center justify-center shrink-0">
+              <Wallet className="w-3 h-3" />
+            </div>
           </div>
-          <p className="text-sm sm:text-lg md:text-xl font-bold text-slate-900 dark:text-white truncate">
+          <p className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white truncate">
             {formatCurrency(totalExpectedRent)}
           </p>
-          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 sm:mt-3 overflow-hidden">
+          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-full mt-2 sm:mt-3 overflow-hidden">
             <div className="w-full h-full bg-[#F4C542]"></div>
           </div>
         </div>
 
         {/* Total Collected Income */}
-        <div className="bg-white/50 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
-          <div className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-1 truncate">
-            {t.briefIncomeLbl}
+        <div className="hover-lift bg-white/60 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-2xl p-3 sm:p-4 shadow-2xs">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider truncate">
+              {t.briefIncomeLbl}
+            </span>
+            <div className="w-5 h-5 rounded-lg bg-emerald-500/20 text-emerald-500 flex items-center justify-center shrink-0">
+              <TrendingUp className="w-3 h-3" />
+            </div>
           </div>
-          <p className="text-sm sm:text-lg md:text-xl font-bold text-emerald-600 dark:text-emerald-400 truncate">
+          <p className="text-sm sm:text-lg font-bold text-emerald-600 dark:text-emerald-400 truncate">
             {formatCurrency(totalCollectedIncome)}
           </p>
-          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 sm:mt-3 overflow-hidden">
-            <div className="w-full h-full bg-emerald-500" style={{ width: `${collectionPercentage}%` }}></div>
+          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-full mt-2 sm:mt-3 overflow-hidden">
+            <div className="h-full bg-emerald-500" style={{ width: `${collectionPercentage}%` }}></div>
           </div>
         </div>
 
         {/* Total Outstanding Due */}
-        <div className="bg-white/50 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
-          <div className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-1 truncate">
-            {t.briefDueLbl}
+        <div className="hover-lift bg-white/60 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-2xl p-3 sm:p-4 shadow-2xs">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider truncate">
+              {t.briefDueLbl}
+            </span>
+            <div className="w-5 h-5 rounded-lg bg-rose-500/20 text-rose-500 flex items-center justify-center shrink-0">
+              <AlertCircle className="w-3 h-3" />
+            </div>
           </div>
-          <p className="text-sm sm:text-lg md:text-xl font-bold text-rose-600 dark:text-rose-400 truncate">
+          <p className="text-sm sm:text-lg font-bold text-rose-600 dark:text-rose-400 truncate">
             {formatCurrency(totalOutstandingDue)}
           </p>
-          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 sm:mt-3 overflow-hidden">
+          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-full mt-2 sm:mt-3 overflow-hidden">
             <div className="w-full h-full bg-rose-500"></div>
           </div>
         </div>
 
         {/* Total Operating Expenses */}
-        <div className="bg-white/50 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
-          <div className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-1 truncate">
-            {t.briefExpLbl}
+        <div className="hover-lift bg-white/60 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-2xl p-3 sm:p-4 shadow-2xs">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider truncate">
+              {t.briefExpLbl}
+            </span>
+            <div className="w-5 h-5 rounded-lg bg-purple-500/20 text-purple-500 flex items-center justify-center shrink-0">
+              <Receipt className="w-3 h-3" />
+            </div>
           </div>
-          <p className="text-sm sm:text-lg md:text-xl font-bold text-slate-900 dark:text-white truncate">
+          <p className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white truncate">
             {formatCurrency(totalExpenses)}
           </p>
-          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 sm:mt-3 overflow-hidden">
-            <div className="w-full h-full bg-amber-500"></div>
+          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-full mt-2 sm:mt-3 overflow-hidden">
+            <div className="w-full h-full bg-purple-500"></div>
           </div>
         </div>
 
         {/* Total Shop Dues */}
-        <div className="bg-white/50 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
-          <div className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-1 truncate">
-            {t.briefDokLbl}
+        <div className="hover-lift bg-white/60 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-2xl p-3 sm:p-4 shadow-2xs">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider truncate">
+              {t.briefDokLbl}
+            </span>
+            <div className="w-5 h-5 rounded-lg bg-orange-500/20 text-orange-500 flex items-center justify-center shrink-0">
+              <Store className="w-3 h-3" />
+            </div>
           </div>
-          <p className="text-sm sm:text-lg md:text-xl font-bold text-slate-900 dark:text-white truncate">
+          <p className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white truncate">
             {formatCurrency(totalShopDues)}
           </p>
-          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 sm:mt-3 overflow-hidden">
+          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-full mt-2 sm:mt-3 overflow-hidden">
             <div className="w-full h-full bg-orange-500"></div>
           </div>
         </div>
 
         {/* Total Entries Count */}
-        <div className="bg-white/50 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-xl sm:rounded-2xl p-2.5 sm:p-4 shadow-xs">
-          <div className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider mb-1 truncate">
-            {t.briefEntriesLbl}
+        <div className="hover-lift bg-white/60 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-2xl p-3 sm:p-4 shadow-2xs">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider truncate">
+              {t.briefEntriesLbl}
+            </span>
+            <div className="w-5 h-5 rounded-lg bg-blue-500/20 text-blue-500 flex items-center justify-center shrink-0">
+              <Hash className="w-3 h-3" />
+            </div>
           </div>
-          <p className="text-sm sm:text-lg md:text-xl font-bold text-slate-900 dark:text-white truncate">
+          <p className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white truncate">
             {totalEntriesCount}
           </p>
-          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700 rounded-full mt-2 sm:mt-3 overflow-hidden">
+          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-full mt-2 sm:mt-3 overflow-hidden">
             <div className="w-full h-full bg-blue-500"></div>
           </div>
         </div>

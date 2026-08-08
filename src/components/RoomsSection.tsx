@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Room, Language } from '../types';
+import { Room, Tenant, Language } from '../types';
 import { getTranslation } from '../data/translations';
-import { DoorClosed, Plus, Edit2, Trash2, ChevronDown, Check, X } from 'lucide-react';
+import { DoorClosed, Plus, Edit2, Trash2, ChevronDown, Check, X, User } from 'lucide-react';
 import { matchesQuery } from '../lib/search';
 
 interface RoomsSectionProps {
   rooms: Room[];
+  tenants?: Tenant[];
   language: Language;
   searchQuery: string;
   onAddRoom: (room: Omit<Room, 'id'>) => void;
@@ -15,6 +16,7 @@ interface RoomsSectionProps {
 
 export const RoomsSection: React.FC<RoomsSectionProps> = ({
   rooms,
+  tenants = [],
   language,
   searchQuery,
   onAddRoom,
@@ -269,10 +271,26 @@ export const RoomsSection: React.FC<RoomsSectionProps> = ({
             ) : (
               filteredRooms.map((rm) => {
                 const pkg = calcPackageTotal(rm.rentAmount, rm.gasBill, rm.waterBill, rm.wasteBill);
+                const assignedTenant = tenants.find((tn) => String(tn.room).trim().toLowerCase() === String(rm.roomNo).trim().toLowerCase());
+
                 return (
                   <tr key={rm.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                    <td className="p-3 font-bold text-indigo-600 dark:text-indigo-400">
-                      {rm.roomNo}
+                    <td className="p-3">
+                      <div className="font-bold text-slate-900 dark:text-white">
+                        {rm.roomNo}
+                      </div>
+                      <div className="mt-0.5">
+                        {assignedTenant ? (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-200/80 dark:border-emerald-800/80">
+                            <User className="w-2.5 h-2.5" />
+                            <span className="truncate max-w-[90px]">{assignedTenant.name}</span>
+                          </span>
+                        ) : (
+                          <span className="inline-block text-[10px] font-semibold text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800/60 px-1.5 py-0.5 rounded">
+                            {language === 'bn' ? 'খালি' : 'Vacant'}
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="p-3">{formatCurrency(rm.rentAmount)}</td>
                     <td className="p-3">{formatCurrency(rm.gasBill)}</td>

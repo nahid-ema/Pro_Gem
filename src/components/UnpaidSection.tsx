@@ -65,10 +65,10 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
 
   return (
     <div className="bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 border border-[#E8E6E1] dark:border-[#333333] rounded-2xl md:rounded-3xl p-5 md:p-6 mb-6 shadow-sm">
-      {/* Title */}
-      <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
+      {/* Title & Actions */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-2xl bg-[#F4C542]/10 text-[#F4C542] dark:text-[#F4C542] flex items-center justify-center font-bold text-base">
+          <div className="w-9 h-9 rounded-2xl bg-[#F4C542]/10 text-[#F4C542] dark:text-[#F4C542] flex items-center justify-center font-bold text-base shrink-0">
             <AlertTriangle className="w-4 h-4" />
           </div>
           <div>
@@ -81,11 +81,9 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
           </div>
         </div>
 
-        {safeUnpaidItems.length > 0 && (
-          <div className="bg-[#F4C542]/10 border border-[#F4C542]/30 text-[#F4C542] dark:text-[#F4C542] px-3.5 py-1.5 rounded-full text-xs font-semibold">
-            {t.unpaidTotalLabel} {formatCurrency(totalUnpaidSum)}
-          </div>
-        )}
+        <div className="bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 px-3.5 py-1.5 rounded-full text-xs font-bold shrink-0">
+          {t.unpaidTotalLabel} {formatCurrency(totalUnpaidSum)}
+        </div>
       </div>
 
       {/* Table / Status */}
@@ -165,6 +163,20 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
                 </tr>
               ))}
             </tbody>
+            <tfoot>
+              <tr className="bg-slate-50 dark:bg-slate-800/90 font-bold text-slate-900 dark:text-white border-t border-[#E8E6E1] dark:border-[#333333]">
+                <td colSpan={3} className="p-3 text-right">
+                  {language === 'bn' 
+                    ? `মোট অনাদায়ী (${safeUnpaidItems.length} টি রুম/ভাড়াটিয়া):` 
+                    : `Total Unpaid Dues (${safeUnpaidItems.length} Tenants):`
+                  }
+                </td>
+                <td className="p-3 font-bold text-rose-600 dark:text-rose-400 text-sm sm:text-base font-mono">
+                  {formatCurrency(totalUnpaidSum)}
+                </td>
+                <td className="p-3 no-print"></td>
+              </tr>
+            </tfoot>
           </table>
         </div>
       )}
