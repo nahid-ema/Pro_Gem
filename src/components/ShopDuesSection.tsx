@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ShopDue, Language } from '../types';
 import { getTranslation } from '../data/translations';
-import { Store, Plus, Edit2, Trash2 } from 'lucide-react';
 import { matchesQuery } from '../lib/search';
 
 interface ShopDuesSectionProps {
@@ -110,7 +109,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
       <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-2xl bg-[#F4C542]/10 text-[#F4C542] dark:text-[#F4C542] flex items-center justify-center font-bold text-base">
-            <Store className="w-4 h-4" />
+            <i className="fi fi-br-shop" />
           </div>
           <div>
             <h3 className="text-base md:text-lg font-semibold text-slate-900 dark:text-white">
@@ -126,7 +125,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
           onClick={() => setIsFormOpen(!isFormOpen)}
           className="no-print flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] font-bold text-xs transition-colors shadow-sm cursor-pointer"
         >
-          <Plus className={`w-4 h-4 transition-transform ${isFormOpen ? 'rotate-45' : ''}`} />
+          <i className={`fi fi-br-add transition-transform ${isFormOpen ? 'rotate-45' : ''}`} />
           <span className="hidden sm:inline">{editingId ? t.dokanUpdateBtn : t.dokanToggleLabel}</span>
         </button>
       </div>
@@ -223,7 +222,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
                         className="p-1.5 rounded-lg text-slate-600 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                         title={t.edit}
                       >
-                        <Edit2 className="w-3.5 h-3.5" />
+                        <i className="fi fi-br-edit text-sm" />
                       </button>
                       <button
                         onClick={() => {
@@ -232,7 +231,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
                         className="p-1.5 rounded-lg text-slate-600 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                         title={t.delete}
                       >
-                        <Trash2 className="w-3.5 h-3.5" />
+                        <i className="fi fi-br-trash text-sm" />
                       </button>
                     </div>
                   </td>

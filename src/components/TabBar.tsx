@@ -1,16 +1,6 @@
 import React from 'react';
 import { TabType, Language } from '../types';
 import { getTranslation } from '../data/translations';
-import { 
-  BarChart3, 
-  DoorClosed, 
-  Users, 
-  Banknote, 
-  AlertTriangle, 
-  Receipt, 
-  Store, 
-  LineChart 
-} from 'lucide-react';
 
 interface TabBarProps {
   activeTab: TabType;
@@ -32,14 +22,14 @@ export const TabBar: React.FC<TabBarProps> = ({
   const t = getTranslation(language);
 
   const tabs: { id: TabType; label: string; icon: React.ReactNode; badge?: number | string }[] = [
-    { id: 'brief', label: t.tabBrief, icon: <BarChart3 className="w-4 h-4" /> },
-    { id: 'rooms', label: t.tabRooms, icon: <DoorClosed className="w-4 h-4" />, badge: totalRoomsCount },
-    { id: 'tenants', label: t.tabTenants, icon: <Users className="w-4 h-4" />, badge: totalTenantsCount },
-    { id: 'rent', label: t.tabRent, icon: <Banknote className="w-4 h-4" /> },
-    { id: 'unpaid', label: t.tabUnpaid, icon: <AlertTriangle className="w-4 h-4" />, badge: unpaidCount > 0 ? unpaidCount : undefined },
-    { id: 'expense', label: t.tabExpense, icon: <Receipt className="w-4 h-4" /> },
-    { id: 'dokan', label: t.tabDokan, icon: <Store className="w-4 h-4" /> },
-    { id: 'analytics', label: t.tabAnalytics, icon: <LineChart className="w-4 h-4" /> },
+    { id: 'brief', label: t.tabBrief, icon: <i className="fi fi-br-chart-histogram text-sm" /> },
+    { id: 'rooms', label: t.tabRooms, icon: <i className="fi fi-br-door-closed text-sm" />, badge: totalRoomsCount },
+    { id: 'tenants', label: t.tabTenants, icon: <i className="fi fi-br-users text-sm" />, badge: totalTenantsCount },
+    { id: 'rent', label: t.tabRent, icon: <i className="fi fi-br-money-bill-wave text-sm" /> },
+    { id: 'unpaid', label: t.tabUnpaid, icon: <i className="fi fi-br-triangle-warning text-sm" />, badge: unpaidCount > 0 ? unpaidCount : undefined },
+    { id: 'expense', label: t.tabExpense, icon: <i className="fi fi-br-receipt text-sm" /> },
+    { id: 'dokan', label: t.tabDokan, icon: <i className="fi fi-br-shop text-sm" /> },
+    { id: 'analytics', label: t.tabAnalytics, icon: <i className="fi fi-br-chart-line-up text-sm" /> },
   ];
 
   return (

@@ -1,18 +1,6 @@
+import { Language } from "../types";
+import { getTranslation } from "../data/translations";
 import React from 'react';
-import { Language } from '../types';
-import { getTranslation } from '../data/translations';
-import { 
-  Building2, 
-  Wallet, 
-  AlertCircle, 
-  Receipt, 
-  Store, 
-  Hash, 
-  TrendingUp, 
-  TrendingDown, 
-  CheckCircle2,
-  BarChart3
-} from 'lucide-react';
 
 interface BriefDashboardProps {
   language: Language;
@@ -60,7 +48,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
       <div className="flex items-center justify-between gap-2 mb-4 sm:mb-5 pb-3 sm:pb-4 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-[#F4C542]/10 text-[#F4C542] dark:text-[#F4C542] flex items-center justify-center font-bold text-sm sm:text-base shrink-0">
-            <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5" />
+            <i className="fi fi-br-chart-histogram text-base sm:w-5 sm:h-5" />
           </div>
           <div className="min-w-0">
             <h3 className="text-sm sm:text-base md:text-lg font-semibold text-slate-900 dark:text-white tracking-tight truncate">
@@ -77,7 +65,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
 
         {/* Collection Efficiency Gauge Badge */}
         <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-500/20 text-emerald-800 dark:text-emerald-300 px-2.5 sm:px-3.5 py-1.5 rounded-full shrink-0 text-xs font-semibold">
-          <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-500 shrink-0" />
+          <i className="fi fi-br-check-circle text-sm sm:w-4 sm:h-4 text-emerald-500 shrink-0" />
           <span className="hidden sm:inline">{t.collectionProgress}:</span>
           <span className="sm:hidden">{language === 'bn' ? 'আদায় অগ্রগতি:' : 'Collection:'}</span>
           <span className="font-bold text-emerald-600 dark:text-emerald-400">{collectionPercentage}%</span>
@@ -103,7 +91,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
               {t.briefRentLbl}
             </span>
             <div className="w-5 h-5 rounded-lg bg-[#F4C542]/20 text-[#F4C542] flex items-center justify-center shrink-0">
-              <Wallet className="w-3 h-3" />
+              <i className="fi fi-br-wallet text-xs" />
             </div>
           </div>
           <p className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white truncate">
@@ -121,7 +109,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
               {t.briefIncomeLbl}
             </span>
             <div className="w-5 h-5 rounded-lg bg-emerald-500/20 text-emerald-500 flex items-center justify-center shrink-0">
-              <TrendingUp className="w-3 h-3" />
+              <i className="fi fi-br-chart-line-up text-xs" />
             </div>
           </div>
           <p className="text-sm sm:text-lg font-bold text-emerald-600 dark:text-emerald-400 truncate">
@@ -139,7 +127,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
               {t.briefDueLbl}
             </span>
             <div className="w-5 h-5 rounded-lg bg-rose-500/20 text-rose-500 flex items-center justify-center shrink-0">
-              <AlertCircle className="w-3 h-3" />
+              <i className="fi fi-br-info text-xs" />
             </div>
           </div>
           <p className="text-sm sm:text-lg font-bold text-rose-600 dark:text-rose-400 truncate">
@@ -157,7 +145,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
               {t.briefExpLbl}
             </span>
             <div className="w-5 h-5 rounded-lg bg-purple-500/20 text-purple-500 flex items-center justify-center shrink-0">
-              <Receipt className="w-3 h-3" />
+              <i className="fi fi-br-receipt text-xs" />
             </div>
           </div>
           <p className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white truncate">
@@ -175,7 +163,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
               {t.briefDokLbl}
             </span>
             <div className="w-5 h-5 rounded-lg bg-orange-500/20 text-orange-500 flex items-center justify-center shrink-0">
-              <Store className="w-3 h-3" />
+              <i className="fi fi-br-shop text-xs" />
             </div>
           </div>
           <p className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white truncate">
@@ -193,7 +181,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
               {t.briefEntriesLbl}
             </span>
             <div className="w-5 h-5 rounded-lg bg-blue-500/20 text-blue-500 flex items-center justify-center shrink-0">
-              <Hash className="w-3 h-3" />
+              <i className="fi fi-br-pound text-xs" />
             </div>
           </div>
           <p className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white truncate">
@@ -215,7 +203,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
           <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 font-bold text-base ${
             isNetPositive ? 'bg-[#F4C542] text-slate-900' : 'bg-rose-500 text-white'
           }`}>
-            {isNetPositive ? <TrendingUp className="w-5 h-5" /> : <TrendingDown className="w-5 h-5" />}
+            {isNetPositive ? <i className="fi fi-br-arrow-trend-up text-lg" /> : <i className="fi fi-br-arrow-trend-down text-lg" />}
           </div>
           <div>
             <span className="text-[11px] font-bold uppercase tracking-wider block opacity-80">

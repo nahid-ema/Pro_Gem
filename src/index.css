@@ -20,8 +20,8 @@
     --accent-coral-light: #EBE7E0;
   }
 
-  *, ::before, ::after, html, body, button, input, select, textarea {
-    font-family: 'Google Sans', 'Product Sans', 'Google Sans Text', 'Plus Jakarta Sans', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif !important;
+  html, body, button, input, select, textarea {
+    font-family: 'Google Sans', 'Product Sans', 'Google Sans Text', 'Plus Jakarta Sans', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif;
   }
 }
 
@@ -161,7 +161,7 @@ html {
     background: #ffffff !important;
     color: #0f172a !important;
     font-size: 11pt !important;
-    font-family: 'Google Sans', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif !important;
+    font-family: 'Google Sans', 'Product Sans', 'Google Sans Text', 'Plus Jakarta Sans', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif;
     line-height: 1.4 !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -358,3 +358,11 @@ html {
   }
 }
 
+
+i[class^="fi-"], i[class*=" fi-"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  line-height: 1;
+}

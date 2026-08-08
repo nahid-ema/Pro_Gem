@@ -1,24 +1,6 @@
+import { Language, TabType } from "../types";
+import { getTranslation } from "../data/translations";
 import React, { useState, useRef, useEffect } from 'react';
-import { Language, TabType } from '../types';
-import { getTranslation } from '../data/translations';
-import { 
-  Search, 
-  Calendar, 
-  Filter, 
-  X,
-  ChevronLeft,
-  ChevronRight,
-  ChevronDown,
-  Compass,
-  BarChart3,
-  DoorClosed,
-  Users,
-  Banknote,
-  AlertTriangle,
-  Receipt,
-  Store,
-  LineChart
-} from 'lucide-react';
 
 interface FilterBarProps {
   selectedYear: string;
@@ -68,14 +50,14 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   }, []);
 
   const navItems: { id: TabType; labelEn: string; labelBn: string; icon: React.ReactNode }[] = [
-    { id: 'brief', labelEn: 'Summary', labelBn: 'সারসংক্ষেপ', icon: <BarChart3 className="w-4 h-4 text-[#F4C542]" /> },
-    { id: 'rooms', labelEn: 'Rooms', labelBn: 'রুমসমূহ', icon: <DoorClosed className="w-4 h-4 text-blue-500" /> },
-    { id: 'tenants', labelEn: 'Tenants', labelBn: 'ভাড়াটিয়া', icon: <Users className="w-4 h-4 text-emerald-500" /> },
-    { id: 'rent', labelEn: 'Rent Collection', labelBn: 'ভাড়া আদায়', icon: <Banknote className="w-4 h-4 text-amber-500" /> },
-    { id: 'unpaid', labelEn: 'Unpaid Dues', labelBn: 'বকেয়া হিসাব', icon: <AlertTriangle className="w-4 h-4 text-rose-500" /> },
-    { id: 'expense', labelEn: 'Expenses', labelBn: 'খরচসমূহ', icon: <Receipt className="w-4 h-4 text-purple-500" /> },
-    { id: 'dokan', labelEn: 'Shop Dues', labelBn: 'দোকান বাকি', icon: <Store className="w-4 h-4 text-orange-500" /> },
-    { id: 'analytics', labelEn: 'Analytics', labelBn: 'অ্যানালিটিক্স', icon: <LineChart className="w-4 h-4 text-indigo-500" /> },
+    { id: 'brief', labelEn: 'Summary', labelBn: 'সারসংক্ষেপ', icon: <i className="fi fi-br-chart-histogram text-[#F4C542]" /> },
+    { id: 'rooms', labelEn: 'Rooms', labelBn: 'রুমসমূহ', icon: <i className="fi fi-br-door-closed text-blue-500" /> },
+    { id: 'tenants', labelEn: 'Tenants', labelBn: 'ভাড়াটিয়া', icon: <i className="fi fi-br-users text-emerald-500" /> },
+    { id: 'rent', labelEn: 'Rent Collection', labelBn: 'ভাড়া আদায়', icon: <i className="fi fi-br-money-bill-wave text-amber-500" /> },
+    { id: 'unpaid', labelEn: 'Unpaid Dues', labelBn: 'বকেয়া হিসাব', icon: <i className="fi fi-br-triangle-warning text-rose-500" /> },
+    { id: 'expense', labelEn: 'Expenses', labelBn: 'খরচসমূহ', icon: <i className="fi fi-br-receipt text-purple-500" /> },
+    { id: 'dokan', labelEn: 'Shop Dues', labelBn: 'দোকান বাকি', icon: <i className="fi fi-br-shop text-orange-500" /> },
+    { id: 'analytics', labelEn: 'Analytics', labelBn: 'অ্যানালিটিক্স', icon: <i className="fi fi-br-chart-line-up text-indigo-500" /> },
   ];
 
   // Quick navigation helpers
@@ -157,9 +139,9 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
               className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200/80 dark:border-[#333333] text-xs font-bold transition-all cursor-pointer shrink-0 shadow-2xs active:scale-95"
             >
-              <Calendar className="w-3.5 h-3.5 text-[#F4C542] shrink-0" />
+              <i className="fi fi-br-calendar text-[#F4C542] shrink-0" />
               <span>{getSelectedDateLabel()}</span>
-              <ChevronDown className={`w-3.5 h-3.5 text-slate-400 shrink-0 transition-transform duration-200 ${isDatePickerOpen ? 'rotate-180' : ''}`} />
+              <i className={`fi fi-br-angle-down text-slate-400 shrink-0 transition-transform duration-200 ${isDatePickerOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {/* Date Selection Popover Dropdown */}
@@ -193,7 +175,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                     title={language === 'bn' ? 'পূর্ববর্তী মাস' : 'Previous Month'}
                     className="p-1 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors cursor-pointer"
                   >
-                    <ChevronLeft className="w-4 h-4" />
+                    <i className="fi fi-br-angle-left" />
                   </button>
 
                   <span className="text-xs font-bold text-slate-800 dark:text-slate-100">
@@ -206,7 +188,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                     title={language === 'bn' ? 'পরবর্তী মাস' : 'Next Month'}
                     className="p-1 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors cursor-pointer"
                   >
-                    <ChevronRight className="w-4 h-4" />
+                    <i className="fi fi-br-angle-right" />
                   </button>
                 </div>
 
@@ -284,9 +266,9 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               onClick={() => setIsQuickNavOpen(!isQuickNavOpen)}
               className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F4C542]/10 hover:bg-[#F4C542]/20 text-[#F4C542] border border-[#F4C542]/30 text-xs font-bold transition-all cursor-pointer shrink-0 shadow-2xs active:scale-95"
             >
-              <Compass className="w-3.5 h-3.5 shrink-0" />
+              <i className="fi fi-br-globe shrink-0" />
               <span>{language === 'bn' ? 'দ্রুত নেভিগেশন' : 'Quick Navigation'}</span>
-              <ChevronDown className={`w-3.5 h-3.5 shrink-0 transition-transform duration-200 ${isQuickNavOpen ? 'rotate-180' : ''}`} />
+              <i className={`fi fi-br-angle-down shrink-0 transition-transform duration-200 ${isQuickNavOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {isQuickNavOpen && (
@@ -325,7 +307,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         {/* Right side: Search Box with Search Button */}
         <div className="flex items-center gap-2 w-full lg:w-auto">
           <div className="relative w-full lg:w-72 shrink">
-            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <i className="absolute left-3 top-1/2 -translate-y-1/2 fi fi-br-search text-slate-400" />
             <input
               type="text"
               value={searchQuery}
@@ -339,7 +321,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 onClick={() => onSearchChange('')}
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
               >
-                <X className="w-3.5 h-3.5" />
+                <i className="fi fi-br-cross" />
               </button>
             )}
           </div>
@@ -348,7 +330,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             type="button"
             className="flex items-center gap-1.5 bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] px-3.5 py-1.5 rounded-full text-xs font-bold shrink-0 transition-colors shadow-xs cursor-pointer active:scale-95"
           >
-            <Search className="w-3.5 h-3.5" />
+            <i className="fi fi-br-search" />
             <span>{language === 'bn' ? 'খুঁজুন' : 'Search'}</span>
           </button>
         </div>

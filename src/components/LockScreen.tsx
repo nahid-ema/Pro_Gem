@@ -1,24 +1,7 @@
+import { Language } from "../types";
+import { auth, isFirebaseInitialized } from "../lib/firebase";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from 'react';
-import { Language } from '../types';
-import { auth, isFirebaseInitialized } from '../lib/firebase';
-import { 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword,
-  signOut
-} from 'firebase/auth';
-import { 
-  Lock, 
-  Mail, 
-  KeyRound, 
-  ArrowRight, 
-  CheckCircle2, 
-  AlertCircle,
-  ShieldCheck,
-  Eye,
-  EyeOff,
-  RefreshCw,
-  Building2
-} from 'lucide-react';
 
 interface LockScreenProps {
   language: Language;
@@ -99,7 +82,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({
         {/* Top Header */}
         <div className="text-center space-y-3">
           <div className="w-16 h-16 bg-[#F4C542]/15 text-[#F4C542] border border-[#F4C542]/40 rounded-2xl flex items-center justify-center mx-auto shadow-inner">
-            <Building2 className="w-8 h-8" />
+            <i className="fi fi-br-building text-4xl" />
           </div>
 
           <div>
@@ -117,14 +100,14 @@ export const LockScreen: React.FC<LockScreenProps> = ({
         {/* Status Messages */}
         {errorMsg && (
           <div className="bg-rose-500/10 border border-rose-500/40 rounded-2xl p-3.5 flex items-start gap-2.5 text-rose-400 text-xs shadow-md">
-            <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+            <i className="fi fi-br-info shrink-0 mt-0.5" />
             <span className="leading-relaxed font-semibold">{errorMsg}</span>
           </div>
         )}
 
         {infoMsg && (
           <div className="bg-emerald-500/10 border border-emerald-500/40 rounded-2xl p-3.5 flex items-start gap-2.5 text-emerald-400 text-xs shadow-md">
-            <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
+            <i className="fi fi-br-check-circle text-base shrink-0 mt-0.5" />
             <span className="leading-relaxed font-semibold">{infoMsg}</span>
           </div>
         )}
@@ -136,7 +119,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({
               {isBn ? 'ইমেইল এড্রেস (Email Address)' : 'Email Address'}
             </label>
             <div className="relative">
-              <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+              <i className="fi fi-br-envelope text-base text-slate-400 absolute left-3.5 top-3.5" />
               <input
                 type="email"
                 required
@@ -153,7 +136,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({
               {isBn ? 'পাসওয়ার্ড (Password)' : 'Password'}
             </label>
             <div className="relative">
-              <KeyRound className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+              <i className="fi fi-br-key text-base text-slate-400 absolute left-3.5 top-3.5" />
               <input
                 type={showPassword ? 'text' : 'password'}
                 required
@@ -167,7 +150,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3.5 top-3.5 text-slate-400 hover:text-slate-200 text-xs cursor-pointer"
               >
-                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                {showPassword ? <i className="fi fi-br-eye-crossed text-base text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors" /> : <i className="fi fi-br-eye text-base text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors" />}
               </button>
             </div>
           </div>
@@ -178,11 +161,11 @@ export const LockScreen: React.FC<LockScreenProps> = ({
             className="w-full bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] py-3.5 rounded-2xl font-bold text-xs shadow-lg shadow-[#F4C542]/25 transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 mt-2"
           >
             {isLoading ? (
-              <RefreshCw className="w-4 h-4 animate-spin" />
+              <i className="fi fi-br-refresh text-base animate-spin" />
             ) : (
               <>
                 <span>{isBn ? 'লগইন করুন' : 'Sign In Now'}</span>
-                <ArrowRight className="w-4 h-4" />
+                <i className="fi fi-br-arrow-right text-base" />
               </>
             )}
           </button>

@@ -4,7 +4,6 @@ import { RentRecord, Room, Language } from '../types';
 import { getTranslation } from '../data/translations';
 import { triggerPrint } from '../lib/printHelper';
 import { Logo } from './Logo';
-import { Printer, X, CheckCircle2, MessageSquare, Copy, Check, ShieldCheck, FileText } from 'lucide-react';
 
 interface ReceiptModalProps {
   rentRecord: RentRecord | null;
@@ -119,7 +118,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
               className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-[#F2F0EB] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition-all cursor-pointer"
               title={language === 'bn' ? 'রসিদ প্রিন্ট করুন' : 'Print Receipt'}
             >
-              <Printer className="w-3.5 h-3.5" />
+              <i className="fi fi-br-print text-sm" />
               <span className="hidden md:inline">{t.printBtn}</span>
             </button>
 
@@ -129,7 +128,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
               className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-[#F2F0EB] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors cursor-pointer"
               title={language === 'bn' ? 'টেক্সট মেসেজ পাঠান' : 'Text WhatsApp'}
             >
-              <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
+              <i className="fi fi-br-comment text-sm text-emerald-600" />
             </button>
 
             {/* Copy Button */}
@@ -138,7 +137,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
               className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-[#F2F0EB] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold transition-colors cursor-pointer"
               title={language === 'bn' ? 'কপি করুন' : 'Copy Summary'}
             >
-              {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+              {copied ? <i className="fi fi-br-check text-sm text-emerald-500" /> : <i className="fi fi-br-copy text-sm" />}
             </button>
 
             {/* Close Button */}
@@ -146,7 +145,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
               onClick={onClose}
               className="p-1.5 rounded-xl bg-[#F2F0EB] dark:bg-[#2A2A2A] text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors cursor-pointer"
             >
-              <X className="w-4 h-4" />
+              <i className="fi fi-br-cross text-base" />
             </button>
           </div>
         </div>
@@ -213,7 +212,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           <div className="rounded-2xl border border-slate-200 overflow-hidden shadow-2xs bg-white">
             <div className="bg-slate-100 px-3 py-1.5 border-b border-slate-200 flex items-center justify-between text-[11px] font-bold text-slate-700">
               <span className="flex items-center gap-1">
-                <FileText className="w-3.5 h-3.5 text-[#F4C542]" />
+                <i className="fi fi-br-document text-sm text-[#F4C542]" />
                 {language === 'bn' ? 'বিলের বিস্তারিত বিবরণ' : 'Itemized Bill Breakdown'}
               </span>
               <span>{language === 'bn' ? 'টাকা (TK)' : 'Amount (TK)'}</span>
@@ -280,7 +279,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
                 {/* Paid Amount Line */}
                 <tr className="bg-emerald-50 text-emerald-900 border-t border-emerald-100">
                   <td className="p-2.5 font-bold flex items-center gap-1.5 text-emerald-800">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <i className="fi fi-br-check-circle text-sm text-emerald-600 shrink-0" />
                     <span>{t.paidAmountText}</span>
                   </td>
                   <td className="p-2.5 text-right font-black text-sm text-emerald-600 font-mono">
@@ -310,7 +309,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
               <div className="mt-0.5 font-extrabold flex items-center gap-1.5">
                 {isFullyPaid && (
                   <span className="text-emerald-600 flex items-center gap-1">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    <i className="fi fi-br-check-circle text-sm" />
                     {language === 'bn' ? 'সম্পূর্ণ পরিশোধিত (PAID)' : 'PAID IN FULL'}
                   </span>
                 )}
@@ -347,7 +346,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           {/* 7. Official Signatures Section */}
           <div className="pt-4 sm:pt-6 flex justify-between items-end text-[11px] font-bold text-slate-600">
             <div className="text-center border-t-2 border-slate-300 pt-1.5 w-32">
-              <ShieldCheck className="w-4 h-4 mx-auto text-slate-400 mb-0.5 no-print" />
+              <i className="fi fi-br-shield-check text-base mx-auto text-slate-400 mb-0.5 no-print" />
               {t.signatureLandlord}
             </div>
             

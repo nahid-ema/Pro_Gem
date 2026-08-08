@@ -11,7 +11,6 @@ import {
   signInWithPopup,
   signInWithRedirect
 } from 'firebase/auth';
-import { Lock, Mail, Key, LogOut, CheckCircle2, AlertCircle, X, UserPlus, LogIn, RefreshCw } from 'lucide-react';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -208,7 +207,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           onClick={onClose}
           className="absolute right-4 top-4 p-2 rounded-full bg-[#F2F0EB] dark:bg-[#2A2A2A] text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors cursor-pointer"
         >
-          <X className="w-4 h-4" />
+          <i className="fi fi-br-cross text-base" />
         </button>
 
         <div className="text-center mb-6">
@@ -225,7 +224,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
         {userEmail ? (
           <div className="bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 rounded-2xl p-5 text-center space-y-4">
-            <CheckCircle2 className="w-10 h-10 text-emerald-500 mx-auto" />
+            <i className="fi fi-br-check-circle w-10 h-10 text-emerald-500 mx-auto" />
             <div>
               <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold block mb-1">
                 {language === 'bn' ? 'বর্তমান কানেক্টেড ইউজার:' : 'Currently signed in as:'}
@@ -239,7 +238,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               onClick={handleLogout}
               className="w-full flex items-center justify-center gap-2 py-2.5 rounded-full bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs shadow-sm transition-colors cursor-pointer"
             >
-              <LogOut className="w-4 h-4" />
+              <i className="fi fi-br-sign-out-alt" />
               <span>{t.logoutBtn}</span>
             </button>
           </div>
@@ -277,7 +276,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   {language === 'bn' ? 'ইমেইল অ্যাড্রেস' : 'Email Address'}
                 </label>
                 <div className="relative">
-                  <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <i className="fi fi-br-envelope text-base absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                   <input
                     type="email"
                     required
@@ -306,7 +305,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     )}
                   </div>
                   <div className="relative">
-                    <Key className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <i className="fi fi-br-key text-base absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                     <input
                       type="password"
                       required
@@ -325,7 +324,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     {language === 'bn' ? 'পাসওয়ার্ড নিশ্চিত করুন' : 'Confirm Password'}
                   </label>
                   <div className="relative">
-                    <Key className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <i className="fi fi-br-key text-base absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                     <input
                       type="password"
                       required
@@ -344,7 +343,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     ? 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800' 
                     : 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
                 }`}>
-                  {isError ? <AlertCircle className="w-4 h-4 shrink-0" /> : <CheckCircle2 className="w-4 h-4 shrink-0" />}
+                  {isError ? <i className="fi fi-br-info text-base shrink-0" /> : <i className="fi fi-br-check-circle text-base shrink-0" />}
                   <span>{statusMsg}</span>
                 </div>
               )}
@@ -354,9 +353,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 disabled={isLoading}
                 className="w-full py-2.5 rounded-full bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] font-bold text-xs md:text-sm shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
               >
-                {mode === 'signIn' && <LogIn className="w-4 h-4" />}
-                {mode === 'signUp' && <UserPlus className="w-4 h-4" />}
-                {mode === 'resetPassword' && <RefreshCw className="w-4 h-4" />}
+                {mode === 'signIn' && <i className="fi fi-br-sign-in-alt" />}
+                {mode === 'signUp' && <i className="fi fi-br-user-add" />}
+                {mode === 'resetPassword' && <i className="fi fi-br-refresh text-base" />}
                 <span>
                   {isLoading
                     ? (language === 'bn' ? 'অপেক্ষা করুন...' : 'Processing...')

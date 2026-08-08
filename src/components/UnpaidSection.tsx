@@ -1,7 +1,6 @@
 import React from 'react';
 import { UnpaidTenantItem, Language } from '../types';
 import { getTranslation } from '../data/translations';
-import { AlertTriangle, MessageSquare, PhoneCall, CheckCircle2, DollarSign } from 'lucide-react';
 import { matchesQuery } from '../lib/search';
 
 interface UnpaidSectionProps {
@@ -69,7 +68,7 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-2xl bg-[#F4C542]/10 text-[#F4C542] dark:text-[#F4C542] flex items-center justify-center font-bold text-base shrink-0">
-            <AlertTriangle className="w-4 h-4" />
+            <i className="fi fi-br-triangle-warning" />
           </div>
           <div>
             <h3 className="text-base md:text-lg font-semibold text-slate-900 dark:text-white">
@@ -91,7 +90,7 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
         <div className="p-3.5 sm:p-4 bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-500/20 rounded-2xl flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-xs">
-              <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5" />
+              <i className="fi fi-br-check-circle text-base sm:w-5 sm:h-5" />
             </div>
             <div>
               <h4 className="text-xs sm:text-sm font-bold text-emerald-800 dark:text-emerald-300">
@@ -140,7 +139,7 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
                         className="p-1.5 rounded-lg bg-slate-100 dark:bg-[#2A2A2A] text-slate-600 dark:text-slate-400 hover:bg-slate-200 transition-colors"
                         title={t.actionSms}
                       >
-                        <PhoneCall className="w-3.5 h-3.5" />
+                        <i className="fi fi-br-phone-call text-sm" />
                       </button>
 
                       <button
@@ -148,14 +147,14 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
                         className="p-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm transition-colors"
                         title={t.actionWa}
                       >
-                        <MessageSquare className="w-3.5 h-3.5" />
+                        <i className="fi fi-br-comment text-sm" />
                       </button>
 
                       <button
                         onClick={() => onQuickPay(item)}
                         className="flex items-center gap-1 px-3 py-1 rounded-lg bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] font-bold text-xs shadow-sm transition-colors cursor-pointer"
                       >
-                        <DollarSign className="w-3.5 h-3.5" />
+                        <i className="fi fi-br-dollar" />
                         <span>{t.quickPay}</span>
                       </button>
                     </div>
