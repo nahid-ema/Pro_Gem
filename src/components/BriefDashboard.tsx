@@ -181,7 +181,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
               {t.briefEntriesLbl}
             </span>
             <div className="w-5 h-5 rounded-lg bg-blue-500/20 text-blue-500 flex items-center justify-center shrink-0">
-              <i className="fi fi-sr-hashtag text-xs" />
+              <i className="fi fi-sr-list-check text-xs" />
             </div>
           </div>
           <p className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white truncate">

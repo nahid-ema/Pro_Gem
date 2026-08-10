@@ -37,7 +37,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
   // Close dropdowns on outside click
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const handleClickOutside = (event: Event) => {
       if (quickNavRef.current && !quickNavRef.current.contains(event.target as Node)) {
         setIsQuickNavOpen(false);
       }
@@ -46,7 +46,11 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
   }, []);
 
   const navItems: { id: TabType; labelEn: string; labelBn: string; icon: React.ReactNode }[] = [
@@ -136,7 +140,10 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           <div className="relative shrink-0" ref={datePickerRef}>
             <button
               type="button"
-              onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
+              onClick={() => {
+                setIsDatePickerOpen((prev) => !prev);
+                setIsQuickNavOpen(false);
+              }}
               className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200/80 dark:border-[#333333] text-xs font-bold transition-all cursor-pointer shrink-0 shadow-2xs active:scale-95"
             >
               <i className="fi fi-sr-calendar text-[#F4C542] shrink-0" />
@@ -146,7 +153,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
             {/* Date Selection Popover Dropdown */}
             {isDatePickerOpen && (
-              <div className="absolute left-0 mt-2 w-64 sm:w-72 bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 border border-slate-200 dark:border-[#333333] rounded-2xl shadow-xl z-50 p-3 space-y-3 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute left-0 mt-2 w-64 sm:w-72 bg-white dark:bg-[#1A1A1A] border border-slate-200 dark:border-[#333333] rounded-2xl shadow-2xl z-50 p-3 space-y-3 animate-in fade-in zoom-in-95 duration-150">
                 
                 {/* Header & Quick Action Buttons */}
                 <div className="flex items-center justify-between gap-1.5 pb-2 border-b border-slate-100 dark:border-slate-800">
@@ -263,16 +270,19 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           <div className="relative shrink-0" ref={quickNavRef}>
             <button
               type="button"
-              onClick={() => setIsQuickNavOpen(!isQuickNavOpen)}
+              onClick={() => {
+                setIsQuickNavOpen((prev) => !prev);
+                setIsDatePickerOpen(false);
+              }}
               className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F4C542]/10 hover:bg-[#F4C542]/20 text-[#F4C542] border border-[#F4C542]/30 text-xs font-bold transition-all cursor-pointer shrink-0 shadow-2xs active:scale-95"
             >
-              <i className="fi fi-sr-compass shrink-0" />
+              <i className="fi fi-sr-compass-alt shrink-0" />
               <span>{language === 'bn' ? 'দ্রুত নেভিগেশন' : 'Quick Navigation'}</span>
               <i className={`fi fi-sr-angle-down shrink-0 transition-transform duration-200 ${isQuickNavOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {isQuickNavOpen && (
-              <div className="absolute left-0 mt-2 w-52 sm:w-56 bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 border border-slate-200 dark:border-[#333333] rounded-2xl shadow-xl z-50 p-1.5 space-y-0.5 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute left-0 mt-2 w-52 sm:w-56 bg-white dark:bg-[#1A1A1A] border border-slate-200 dark:border-[#333333] rounded-2xl shadow-2xl z-50 p-1.5 space-y-0.5 animate-in fade-in zoom-in-95 duration-150">
                 <div className="px-3 py-1.5 text-[10px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase border-b border-slate-100 dark:border-slate-800 mb-1">
                   {language === 'bn' ? 'দ্রুত নেভিগেশন' : 'Quick Navigation'}
                 </div>

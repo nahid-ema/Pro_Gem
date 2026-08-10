@@ -392,7 +392,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
                   <td className="p-3 font-mono text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">{ex.date}</td>
                   <td className="p-3 whitespace-nowrap">
                     <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/50">
-                      <i className="fi fi-sr-tag text-xs text-indigo-500" />
+                      <i className="fi fi-sr-tags text-xs text-indigo-500" />
                       {formatCategory(ex.category, language)}
                     </span>
                   </td>
