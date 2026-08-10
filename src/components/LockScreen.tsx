@@ -74,14 +74,14 @@ export const LockScreen: React.FC<LockScreenProps> = ({
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4 relative overflow-hidden font-sans">
       {/* Background Decorative Gradients */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-[#F4C542]/25 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-[#0EA5E9]/25 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-emerald-600/20 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="w-full max-w-md bg-slate-900/95 border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl backdrop-blur-xl relative z-10 space-y-6">
+      <div className="w-full max-w-md bg-slate-900/95 border border-slate-800 rounded-2xl p-6 md:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.08)] backdrop-blur-xl relative z-10 space-y-6">
         
         {/* Top Header */}
         <div className="text-center space-y-3">
-          <div className="w-16 h-16 bg-[#F4C542]/15 text-[#F4C542] border border-[#F4C542]/40 rounded-2xl flex items-center justify-center mx-auto shadow-inner">
+          <div className="w-16 h-16 bg-[#0EA5E9]/15 text-[#0EA5E9] border border-[#0EA5E9]/40 rounded-2xl flex items-center justify-center mx-auto shadow-inner">
             <i className="fi fi-sr-building text-4xl" />
           </div>
 
@@ -126,7 +126,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={isBn ? 'আপনার ইমেইল অ্যাড্রেস লিখুন' : 'Enter your email address'}
-                className="w-full bg-slate-950 border border-slate-800 focus:border-[#F4C542] text-white pl-10 pr-4 py-3 rounded-2xl text-xs font-mono font-medium focus:outline-none transition-colors"
+                className="w-full bg-slate-950 border border-slate-800 focus:border-[#0EA5E9] text-white pl-10 pr-4 py-3 rounded-2xl text-xs font-mono font-medium focus:outline-none transition-colors"
               />
             </div>
           </div>
@@ -143,7 +143,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-slate-950 border border-slate-800 focus:border-[#F4C542] text-white pl-10 pr-10 py-3 rounded-2xl text-xs font-mono font-medium focus:outline-none transition-colors"
+                className="w-full bg-slate-950 border border-slate-800 focus:border-[#0EA5E9] text-white pl-10 pr-10 py-3 rounded-2xl text-xs font-mono font-medium focus:outline-none transition-colors"
               />
               <button
                 type="button"
@@ -158,7 +158,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] py-3.5 rounded-2xl font-bold text-xs shadow-lg shadow-[#F4C542]/25 transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 mt-2"
+            className="w-full bg-[#0EA5E9] text-slate-900 hover:bg-[#0284C7] py-3.5 rounded-2xl font-bold text-xs shadow-lg shadow-[#0EA5E9]/25 transition-all active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 mt-2"
           >
             {isLoading ? (
               <i className="fi fi-sr-refresh text-base animate-spin" />

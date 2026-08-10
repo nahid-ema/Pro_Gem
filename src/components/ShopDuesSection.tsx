@@ -104,11 +104,11 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
   };
 
   return (
-    <div className="bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 border border-[#E8E6E1] dark:border-[#333333] rounded-2xl md:rounded-3xl p-5 md:p-6 mb-6 shadow-sm">
+    <div className="bg-white dark:bg-[#1A1A1A] border border-slate-100 dark:border-[#333333] rounded-2xl md:rounded-2xl p-5 md:p-6 mb-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
       {/* Title */}
       <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-2xl bg-[#F4C542]/10 text-[#F4C542] dark:text-[#F4C542] flex items-center justify-center font-bold text-base">
+          <div className="w-9 h-9 rounded-2xl bg-[#0EA5E9]/10 text-[#0EA5E9] dark:text-[#0EA5E9] flex items-center justify-center font-bold text-base">
             <i className="fi fi-sr-shop" />
           </div>
           <div>
@@ -123,7 +123,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
 
         <button
           onClick={() => setIsFormOpen(!isFormOpen)}
-          className="no-print flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] font-bold text-xs transition-colors shadow-sm cursor-pointer"
+          className="no-print flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#0EA5E9] text-slate-900 hover:bg-[#0284C7] font-bold text-xs transition-colors shadow-sm cursor-pointer"
         >
           <i className={`fi fi-sr-add transition-transform ${isFormOpen ? 'rotate-45' : ''}`} />
           <span className="hidden sm:inline">{editingId ? t.dokanUpdateBtn : t.dokanToggleLabel}</span>
@@ -181,7 +181,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
             </button>
             <button
               type="submit"
-              className="px-4 py-1.5 rounded-lg bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] font-bold text-xs shadow-sm transition-colors cursor-pointer"
+              className="px-4 py-1.5 rounded-lg bg-[#0EA5E9] text-slate-900 hover:bg-[#0284C7] font-bold text-xs shadow-sm transition-colors cursor-pointer"
             >
               {editingId ? t.dokanUpdateBtn : t.dokanSubmitBtn}
             </button>

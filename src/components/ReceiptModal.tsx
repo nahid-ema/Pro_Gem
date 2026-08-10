@@ -100,12 +100,12 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
 
   return createPortal(
     <div id="receiptModalOverlay" className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn overflow-y-auto">
-      <div id="receiptModalCard" className="bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 border border-[#E8E6E1] dark:border-[#333333] rounded-3xl max-w-lg w-full p-4 sm:p-6 shadow-2xl relative overflow-hidden my-auto">
+      <div id="receiptModalCard" className="bg-white dark:bg-[#1A1A1A]/80 border border-[#E8E6E1] dark:border-[#333333] rounded-2xl max-w-lg w-full p-4 sm:p-6 shadow-[0_8px_30px_rgb(0,0,0,0.08)] relative overflow-hidden my-auto">
         
         {/* Modal Controls Bar (Screen Only - Hidden in Print) */}
         <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-slate-100 dark:border-slate-800 no-print gap-1.5 flex-wrap">
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[#F4C542]" />
+            <span className="w-2 h-2 rounded-full bg-[#0EA5E9]" />
             <h3 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
               {t.receiptTitle}
             </h3>
@@ -186,7 +186,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
               <span className="text-slate-400 font-bold block uppercase text-[10px]">
                 {t.receiptNo}
               </span>
-              <span className="font-mono font-bold text-sm text-[#F4C542]">
+              <span className="font-mono font-bold text-sm text-[#0EA5E9]">
                 #NK-{rentRecord.id.substring(0, 8).toUpperCase()}
               </span>
             </div>
@@ -204,7 +204,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
 
             <div className="text-right">
               <span className="text-slate-400 text-[11px] block font-semibold">{t.roomAssigned}</span>
-              <span className="font-black text-sm text-[#F4C542] block mt-0.5">{t.roomText} {rentRecord.room}</span>
+              <span className="font-black text-sm text-[#0EA5E9] block mt-0.5">{t.roomText} {rentRecord.room}</span>
             </div>
           </div>
 
@@ -212,7 +212,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           <div className="rounded-2xl border border-slate-200 overflow-hidden shadow-2xs bg-white">
             <div className="bg-slate-100 px-3 py-1.5 border-b border-slate-200 flex items-center justify-between text-[11px] font-bold text-slate-700">
               <span className="flex items-center gap-1">
-                <i className="fi fi-sr-document text-sm text-[#F4C542]" />
+                <i className="fi fi-sr-document text-sm text-[#0EA5E9]" />
                 {language === 'bn' ? 'বিলের বিস্তারিত বিবরণ' : 'Itemized Bill Breakdown'}
               </span>
               <span>{language === 'bn' ? 'টাকা (TK)' : 'Amount (TK)'}</span>
@@ -352,7 +352,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
             
             {/* System Stamp Motif */}
             <div className="text-center opacity-80 pointer-events-none">
-              <div className="w-11 h-11 rounded-full border-2 border-dashed border-[#F4C542] flex items-center justify-center mx-auto text-[8px] font-black text-[#F4C542] uppercase rotate-[-12deg] p-1">
+              <div className="w-11 h-11 rounded-full border-2 border-dashed border-[#0EA5E9] flex items-center justify-center mx-auto text-[8px] font-black text-[#0EA5E9] uppercase rotate-[-12deg] p-1">
                 {language === 'bn' ? 'যাচাইকৃত' : 'VERIFIED'}
               </div>
             </div>

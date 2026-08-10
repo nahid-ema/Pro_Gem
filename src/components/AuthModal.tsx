@@ -202,7 +202,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 border border-[#E8E6E1] dark:border-[#333333] rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+      <div className="bg-white dark:bg-[#1A1A1A]/80 border border-[#E8E6E1] dark:border-[#333333] rounded-2xl max-w-md w-full p-6 shadow-[0_8px_30px_rgb(0,0,0,0.08)] relative">
         <button
           onClick={onClose}
           className="absolute right-4 top-4 p-2 rounded-full bg-[#F2F0EB] dark:bg-[#2A2A2A] text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors cursor-pointer"
@@ -211,7 +211,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         </button>
 
         <div className="text-center mb-6">
-          <div className="w-12 h-12 rounded-2xl bg-[#F4C542] text-slate-900 flex items-center justify-center font-black text-xl mx-auto mb-3 shadow-md">
+          <div className="w-12 h-12 rounded-2xl bg-[#0EA5E9] text-slate-900 flex items-center justify-center font-black text-xl mx-auto mb-3 shadow-md">
             🏠
           </div>
           <h3 className="text-lg font-bold text-slate-900 dark:text-white">
@@ -251,7 +251,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 onClick={() => switchMode('signIn')}
                 className={`flex-1 py-1.5 rounded-full transition-all cursor-pointer ${
                   mode === 'signIn'
-                    ? 'bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 text-[#F4C542] shadow-xs font-bold'
+                    ? 'bg-white dark:bg-[#1A1A1A]/80 text-[#0EA5E9] shadow-xs font-bold'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
@@ -262,7 +262,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 onClick={() => switchMode('signUp')}
                 className={`flex-1 py-1.5 rounded-full transition-all cursor-pointer ${
                   mode === 'signUp'
-                    ? 'bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 text-[#F4C542] shadow-xs font-bold'
+                    ? 'bg-white dark:bg-[#1A1A1A]/80 text-[#0EA5E9] shadow-xs font-bold'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
@@ -283,7 +283,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="user@example.com"
-                    className="w-full pl-10 pr-3 py-2 rounded-full border border-[#E8E6E1] dark:border-[#333333] bg-slate-50 dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#F4C542]"
+                    className="w-full pl-10 pr-3 py-2 rounded-full border border-[#E8E6E1] dark:border-[#333333] bg-slate-50 dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#0EA5E9]"
                   />
                 </div>
               </div>
@@ -298,7 +298,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       <button
                         type="button"
                         onClick={() => switchMode('resetPassword')}
-                        className="text-[11px] font-semibold text-[#F4C542] hover:underline cursor-pointer"
+                        className="text-[11px] font-semibold text-[#0EA5E9] hover:underline cursor-pointer"
                       >
                         {language === 'bn' ? 'পাসওয়ার্ড ভুলে গেছেন?' : 'Forgot Password?'}
                       </button>
@@ -312,7 +312,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full pl-10 pr-3 py-2 rounded-full border border-[#E8E6E1] dark:border-[#333333] bg-slate-50 dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#F4C542]"
+                      className="w-full pl-10 pr-3 py-2 rounded-full border border-[#E8E6E1] dark:border-[#333333] bg-slate-50 dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#0EA5E9]"
                     />
                   </div>
                 </div>
@@ -331,7 +331,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full pl-10 pr-3 py-2 rounded-full border border-[#E8E6E1] dark:border-[#333333] bg-slate-50 dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#F4C542]"
+                      className="w-full pl-10 pr-3 py-2 rounded-full border border-[#E8E6E1] dark:border-[#333333] bg-slate-50 dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#0EA5E9]"
                     />
                   </div>
                 </div>
@@ -351,7 +351,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-2.5 rounded-full bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] font-bold text-xs md:text-sm shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+                className="w-full py-2.5 rounded-full bg-[#0EA5E9] text-slate-900 hover:bg-[#0284C7] font-bold text-xs md:text-sm shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
               >
                 {mode === 'signIn' && <i className="fi fi-sr-sign-in-alt" />}
                 {mode === 'signUp' && <i className="fi fi-sr-user-add" />}
@@ -383,7 +383,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <div className="w-full border-t border-[#E8E6E1] dark:border-[#333333]"></div>
               </div>
               <div className="relative flex justify-center text-[10px] uppercase font-bold text-slate-400">
-                <span className="bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 px-2">
+                <span className="bg-white dark:bg-[#1A1A1A]/80 px-2">
                   {language === 'bn' ? 'অথবা' : 'OR'}
                 </span>
               </div>

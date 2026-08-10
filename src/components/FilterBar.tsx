@@ -46,15 +46,15 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('touchstart', handleClickOutside);
+    
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside);
+      
     };
   }, []);
 
   const navItems: { id: TabType; labelEn: string; labelBn: string; icon: React.ReactNode }[] = [
-    { id: 'brief', labelEn: 'Summary', labelBn: 'সারসংক্ষেপ', icon: <i className="fi fi-sr-chart-histogram text-[#F4C542]" /> },
+    { id: 'brief', labelEn: 'Summary', labelBn: 'সারসংক্ষেপ', icon: <i className="fi fi-sr-chart-histogram text-[#0EA5E9]" /> },
     { id: 'rooms', labelEn: 'Rooms', labelBn: 'রুমসমূহ', icon: <i className="fi fi-sr-door-closed text-blue-500" /> },
     { id: 'tenants', labelEn: 'Tenants', labelBn: 'ভাড়াটিয়া', icon: <i className="fi fi-sr-users text-emerald-500" /> },
     { id: 'rent', labelEn: 'Rent Collection', labelBn: 'ভাড়া আদায়', icon: <i className="fi fi-sr-money-bill-wave text-amber-500" /> },
@@ -129,7 +129,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   };
 
   return (
-    <div className="bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 border border-[#E8E6E1] dark:border-[#333333] rounded-3xl p-3 sm:p-4 mb-3 sm:mb-5 shadow-sm flex flex-col gap-3 no-print relative">
+    <div className="bg-white dark:bg-[#1A1A1A] border border-slate-100 dark:border-[#333333] rounded-2xl p-3 sm:p-4 mb-3 sm:mb-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col gap-3 no-print relative">
       {/* Top Row: Search & Filters (Single Date Selector & Quick Nav) */}
       <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-2.5">
         
@@ -146,21 +146,21 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               }}
               className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200/80 dark:border-[#333333] text-xs font-bold transition-all cursor-pointer shrink-0 shadow-2xs active:scale-95"
             >
-              <i className="fi fi-sr-calendar text-[#F4C542] shrink-0" />
+              <i className="fi fi-sr-calendar text-[#0EA5E9] shrink-0" />
               <span>{getSelectedDateLabel()}</span>
               <i className={`fi fi-sr-angle-down text-slate-400 shrink-0 transition-transform duration-200 ${isDatePickerOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {/* Date Selection Popover Dropdown */}
             {isDatePickerOpen && (
-              <div className="absolute left-0 mt-2 w-64 sm:w-72 bg-white dark:bg-[#1A1A1A] border border-slate-200 dark:border-[#333333] rounded-2xl shadow-2xl z-50 p-3 space-y-3 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute left-0 mt-2 w-64 sm:w-72 bg-white dark:bg-[#1A1A1A] border border-slate-200 dark:border-[#333333] rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-50 p-3 space-y-3 animate-in fade-in zoom-in-95 duration-150">
                 
                 {/* Header & Quick Action Buttons */}
                 <div className="flex items-center justify-between gap-1.5 pb-2 border-b border-slate-100 dark:border-slate-800">
                   <button
                     type="button"
                     onClick={handleThisMonth}
-                    className="flex-1 px-2 py-1 rounded-xl bg-[#F4C542]/10 text-[#F4C542] hover:bg-[#F4C542]/20 text-[11px] font-bold transition-colors cursor-pointer text-center"
+                    className="flex-1 px-2 py-1 rounded-xl bg-[#0EA5E9]/10 text-[#0EA5E9] hover:bg-[#0EA5E9]/20 text-[11px] font-bold transition-colors cursor-pointer text-center"
                   >
                     {language === 'bn' ? 'চলতি মাস' : 'This Month'}
                   </button>
@@ -229,7 +229,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                       onClick={() => { onMonthChange('all'); setIsDatePickerOpen(false); }}
                       className={`py-1 px-1.5 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
                         selectedMonth === 'all'
-                          ? 'bg-[#F4C542] text-slate-900 shadow-xs'
+                          ? 'bg-black dark:bg-white text-white dark:text-slate-900 shadow-xs'
                           : 'bg-slate-100 dark:bg-[#2A2A2A] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                       }`}
                     >
@@ -251,7 +251,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                           }}
                           className={`py-1 px-1.5 rounded-lg text-[11px] font-semibold truncate transition-all cursor-pointer ${
                             isSelected
-                              ? 'bg-[#F4C542] text-slate-900 font-bold shadow-xs'
+                              ? 'bg-black dark:bg-white text-white dark:text-slate-900 font-bold shadow-xs'
                               : 'bg-slate-100 dark:bg-[#2A2A2A] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                           }`}
                         >
@@ -274,7 +274,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 setIsQuickNavOpen((prev) => !prev);
                 setIsDatePickerOpen(false);
               }}
-              className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F4C542]/10 hover:bg-[#F4C542]/20 text-[#F4C542] border border-[#F4C542]/30 text-xs font-bold transition-all cursor-pointer shrink-0 shadow-2xs active:scale-95"
+              className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-[#0EA5E9]/10 hover:bg-[#0EA5E9]/20 text-[#0EA5E9] border border-[#0EA5E9]/30 text-xs font-bold transition-all cursor-pointer shrink-0 shadow-2xs active:scale-95"
             >
               <i className="fi fi-sr-compass-alt shrink-0" />
               <span>{language === 'bn' ? 'দ্রুত নেভিগেশন' : 'Quick Navigation'}</span>
@@ -282,7 +282,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             </button>
 
             {isQuickNavOpen && (
-              <div className="absolute left-0 mt-2 w-52 sm:w-56 bg-white dark:bg-[#1A1A1A] border border-slate-200 dark:border-[#333333] rounded-2xl shadow-2xl z-50 p-1.5 space-y-0.5 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute left-0 mt-2 w-52 sm:w-56 bg-white dark:bg-[#1A1A1A] border border-slate-200 dark:border-[#333333] rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-50 p-1.5 space-y-0.5 animate-in fade-in zoom-in-95 duration-150">
                 <div className="px-3 py-1.5 text-[10px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase border-b border-slate-100 dark:border-slate-800 mb-1">
                   {language === 'bn' ? 'দ্রুত নেভিগেশন' : 'Quick Navigation'}
                 </div>
@@ -298,11 +298,11 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                       }}
                       className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-left transition-colors cursor-pointer ${
                         isActive
-                          ? 'bg-[#F4C542] text-slate-900 shadow-xs font-bold'
+                          ? 'bg-black dark:bg-white text-white dark:text-slate-900 shadow-xs font-bold'
                           : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
                       }`}
                     >
-                      <span className={isActive ? 'text-slate-900' : ''}>{item.icon}</span>
+                      <span className={isActive ? 'text-white dark:text-slate-900' : ''}>{item.icon}</span>
                       <span className="flex-1 truncate">{language === 'bn' ? item.labelBn : item.labelEn}</span>
                       {isActive && <span className="w-1.5 h-1.5 rounded-full bg-slate-900 shrink-0" />}
                     </button>
@@ -323,7 +323,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder={t.searchPlaceholder}
-              className="w-full pl-9 pr-7 py-1.5 bg-slate-100 dark:bg-[#2A2A2A] border border-slate-200/80 dark:border-[#333333] rounded-full text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#F4C542] transition-all"
+              className="w-full pl-9 pr-7 py-1.5 bg-slate-100 dark:bg-[#2A2A2A] border border-slate-200/80 dark:border-[#333333] rounded-full text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0EA5E9] transition-all"
             />
             {searchQuery && (
               <button
@@ -338,7 +338,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
           <button
             type="button"
-            className="flex items-center gap-1.5 bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] px-3.5 py-1.5 rounded-full text-xs font-bold shrink-0 transition-colors shadow-xs cursor-pointer active:scale-95"
+            className="flex items-center gap-1.5 bg-[#0EA5E9] text-slate-900 hover:bg-[#0284C7] px-3.5 py-1.5 rounded-full text-xs font-bold shrink-0 transition-colors shadow-xs cursor-pointer active:scale-95"
           >
             <i className="fi fi-sr-search" />
             <span>{language === 'bn' ? 'খুঁজুন' : 'Search'}</span>

@@ -206,11 +206,11 @@ export const RentSection: React.FC<RentSectionProps> = ({
   const formatCurrency = (val: number) => `${t.currencySymbol}${val.toLocaleString()}`;
 
   return (
-    <div className="bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 border border-[#E8E6E1] dark:border-[#333333] rounded-2xl md:rounded-3xl p-5 md:p-6 mb-6 shadow-sm">
+    <div className="bg-white dark:bg-[#1A1A1A] border border-slate-100 dark:border-[#333333] rounded-2xl md:rounded-2xl p-5 md:p-6 mb-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
       {/* Header */}
       <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-2xl bg-[#F4C542]/10 text-[#F4C542] dark:text-[#F4C542] flex items-center justify-center font-bold text-base">
+          <div className="w-9 h-9 rounded-2xl bg-[#0EA5E9]/10 text-[#0EA5E9] dark:text-[#0EA5E9] flex items-center justify-center font-bold text-base">
             <i className="fi fi-sr-money-bill-wave" />
           </div>
           <div>
@@ -225,7 +225,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
 
         <button
           onClick={() => setIsFormOpen(!isFormOpen)}
-          className="no-print flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] font-bold text-xs transition-colors shadow-sm cursor-pointer"
+          className="no-print flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#0EA5E9] text-slate-900 hover:bg-[#0284C7] font-bold text-xs transition-colors shadow-sm cursor-pointer"
         >
           <i className={`fi fi-sr-add transition-transform ${isFormOpen ? 'rotate-45' : ''}`} />
           <span className="hidden sm:inline">{editingId ? t.rentUpdateBtn : t.rentToggleLabel}</span>
@@ -238,7 +238,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
           onClick={() => setStatusFilter('all')}
           className={`px-3 py-1 rounded-full text-xs font-semibold transition-all shrink-0 cursor-pointer ${
             statusFilter === 'all'
-              ? 'bg-[#F4C542] text-slate-900 font-bold shadow-xs'
+              ? 'bg-black dark:bg-white text-white dark:text-slate-900 font-bold shadow-xs'
               : 'bg-slate-100 dark:bg-[#2A2A2A] text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
           }`}
         >
@@ -378,7 +378,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
             </button>
             <button
               type="submit"
-              className="px-4 py-1.5 rounded-lg bg-[#F4C542] text-slate-900 hover:bg-[#e0b233] font-bold text-xs shadow-sm transition-colors cursor-pointer"
+              className="px-4 py-1.5 rounded-lg bg-[#0EA5E9] text-slate-900 hover:bg-[#0284C7] font-bold text-xs shadow-sm transition-colors cursor-pointer"
             >
               {editingId ? t.rentUpdateBtn : t.rentSubmitBtn}
             </button>

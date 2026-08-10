@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -15,13 +16,13 @@
 
 @layer base {
   :root {
-    --accent-coral: #F4C542;
+    --accent-sky: #0EA5E9;
     --accent-coral-hover: #E3B431;
     --accent-coral-light: #EBE7E0;
   }
 
   html, body, button, input, select, textarea {
-    font-family: 'Google Sans', 'Product Sans', 'Google Sans Text', 'Plus Jakarta Sans', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif;
+    font-family: 'Inter', 'Noto Sans Bengali', system-ui, sans-serif;
   }
 
   /* Universal Flaticon Icons Clean Alignment */
@@ -83,23 +84,23 @@ html {
   }
 }
 
-.bg-coral {
-  background-color: #F4C542;
+.bg-sky-accent {
+  background-color: #0EA5E9;
 }
 
-.bg-coral:hover {
+.bg-sky-accent:hover {
   background-color: #E3B431;
 }
 
-.text-coral {
-  color: #F4C542;
+.text-sky-accent {
+  color: #0EA5E9;
 }
 
-.border-coral {
-  border-color: #F4C542;
+.border-sky-accent {
+  border-color: #0EA5E9;
 }
 
-.bg-coral-light {
+.bg-sky-accent-light {
   background-color: #EBE7E0;
 }
 
@@ -182,7 +183,7 @@ html {
     background: #ffffff !important;
     color: #0f172a !important;
     font-size: 11pt !important;
-    font-family: 'Google Sans', 'Product Sans', 'Google Sans Text', 'Plus Jakarta Sans', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif;
+    font-family: 'Inter', 'Noto Sans Bengali', system-ui, sans-serif;
     line-height: 1.4 !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -353,8 +354,8 @@ html {
     color: #be123c !important;
   }
 
-  .text-\[\#F4C542\], .dark .text-\[\#F4C542\] {
-    color: #4d7c0f !important; /* Darker green for print contrast */
+  .text-\[\#0EA5E9\], .dark .text-\[\#0EA5E9\] {
+    color: #1e3a8a !important; /* Darker blue for print contrast */
   }
 
   .text-amber-600, .text-amber-700, .text-amber-800,

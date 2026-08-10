@@ -43,11 +43,11 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
     : '';
 
   return (
-    <div className="bg-white/80 backdrop-blur-xl dark:bg-[#1A1A1A]/80 border border-[#E8E6E1] dark:border-[#333333] rounded-3xl p-3.5 sm:p-5 md:p-6 mb-4 sm:mb-6 shadow-sm relative overflow-hidden">
+    <div className="bg-white dark:bg-[#1A1A1A] border border-slate-100 dark:border-[#333333] rounded-2xl p-3.5 sm:p-5 md:p-6 mb-4 sm:mb-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden">
       {/* Header Title & Period indicator */}
       <div className="flex items-center justify-between gap-2 mb-4 sm:mb-5 pb-3 sm:pb-4 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-[#F4C542]/10 text-[#F4C542] dark:text-[#F4C542] flex items-center justify-center font-bold text-sm sm:text-base shrink-0">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl sm:rounded-2xl bg-[#0EA5E9]/10 text-[#0EA5E9] dark:text-[#0EA5E9] flex items-center justify-center font-bold text-sm sm:text-base shrink-0">
             <i className="fi fi-sr-chart-histogram text-base sm:text-lg" />
           </div>
           <div className="min-w-0">
@@ -68,7 +68,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
           <i className="fi fi-sr-check-circle text-sm sm:text-base text-emerald-500 shrink-0" />
           <span className="hidden sm:inline">{t.collectionProgress}:</span>
           <span className="sm:hidden">{language === 'bn' ? 'আদায় অগ্রগতি:' : 'Collection:'}</span>
-          <span className="font-bold text-emerald-600 dark:text-emerald-400">{collectionPercentage}%</span>
+          <span className="font-bold text-white">{collectionPercentage}%</span>
         </div>
       </div>
 
@@ -76,7 +76,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
       <div className="mb-4 sm:mb-6">
         <div className="w-full h-1.5 sm:h-2 bg-[#F2F0EB] dark:bg-[#2A2A2A] rounded-full overflow-hidden">
           <div
-            className="h-full bg-[#F4C542] rounded-full transition-all duration-500 ease-out"
+            className="h-full bg-[#0EA5E9] rounded-full transition-all duration-500 ease-out"
             style={{ width: `${collectionPercentage}%` }}
           />
         </div>
@@ -87,32 +87,32 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
         {/* Total Rent Expected */}
         <div className="hover-lift bg-white/60 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-2xl p-3 sm:p-4 shadow-2xs">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider truncate">
+            <span className="text-slate-400 dark:text-slate-500 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest truncate">
               {t.briefRentLbl}
             </span>
-            <div className="w-5 h-5 rounded-lg bg-[#F4C542]/20 text-[#F4C542] flex items-center justify-center shrink-0">
+            <div className="w-5 h-5 rounded-lg bg-[#0EA5E9]/20 text-[#0EA5E9] flex items-center justify-center shrink-0">
               <i className="fi fi-sr-wallet text-xs" />
             </div>
           </div>
-          <p className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white truncate">
+          <p className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white truncate">
             {formatCurrency(totalExpectedRent)}
           </p>
           <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-full mt-2 sm:mt-3 overflow-hidden">
-            <div className="w-full h-full bg-[#F4C542]"></div>
+            <div className="w-full h-full bg-[#0EA5E9]"></div>
           </div>
         </div>
 
         {/* Total Collected Income */}
         <div className="hover-lift bg-white/60 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-2xl p-3 sm:p-4 shadow-2xs">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider truncate">
+            <span className="text-slate-400 dark:text-slate-500 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest truncate">
               {t.briefIncomeLbl}
             </span>
             <div className="w-5 h-5 rounded-lg bg-emerald-500/20 text-emerald-500 flex items-center justify-center shrink-0">
               <i className="fi fi-sr-chart-line-up text-xs" />
             </div>
           </div>
-          <p className="text-sm sm:text-lg font-bold text-emerald-600 dark:text-emerald-400 truncate">
+          <p className="text-2xl sm:text-3xl font-black text-white truncate">
             {formatCurrency(totalCollectedIncome)}
           </p>
           <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-full mt-2 sm:mt-3 overflow-hidden">
@@ -123,14 +123,14 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
         {/* Total Outstanding Due */}
         <div className="hover-lift bg-white/60 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-2xl p-3 sm:p-4 shadow-2xs">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider truncate">
+            <span className="text-slate-400 dark:text-slate-500 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest truncate">
               {t.briefDueLbl}
             </span>
             <div className="w-5 h-5 rounded-lg bg-rose-500/20 text-rose-500 flex items-center justify-center shrink-0">
               <i className="fi fi-sr-info text-xs" />
             </div>
           </div>
-          <p className="text-sm sm:text-lg font-bold text-rose-600 dark:text-rose-400 truncate">
+          <p className="text-2xl sm:text-3xl font-black text-white truncate">
             {formatCurrency(totalOutstandingDue)}
           </p>
           <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-full mt-2 sm:mt-3 overflow-hidden">
@@ -141,14 +141,14 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
         {/* Total Operating Expenses */}
         <div className="hover-lift bg-white/60 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-2xl p-3 sm:p-4 shadow-2xs">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider truncate">
+            <span className="text-slate-400 dark:text-slate-500 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest truncate">
               {t.briefExpLbl}
             </span>
             <div className="w-5 h-5 rounded-lg bg-purple-500/20 text-purple-500 flex items-center justify-center shrink-0">
               <i className="fi fi-sr-receipt text-xs" />
             </div>
           </div>
-          <p className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white truncate">
+          <p className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white truncate">
             {formatCurrency(totalExpenses)}
           </p>
           <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-full mt-2 sm:mt-3 overflow-hidden">
@@ -159,14 +159,14 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
         {/* Total Shop Dues */}
         <div className="hover-lift bg-white/60 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-2xl p-3 sm:p-4 shadow-2xs">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider truncate">
+            <span className="text-slate-400 dark:text-slate-500 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest truncate">
               {t.briefDokLbl}
             </span>
             <div className="w-5 h-5 rounded-lg bg-orange-500/20 text-orange-500 flex items-center justify-center shrink-0">
               <i className="fi fi-sr-shop text-xs" />
             </div>
           </div>
-          <p className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white truncate">
+          <p className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white truncate">
             {formatCurrency(totalShopDues)}
           </p>
           <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-full mt-2 sm:mt-3 overflow-hidden">
@@ -177,14 +177,14 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
         {/* Total Entries Count */}
         <div className="hover-lift bg-white/60 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-[#333333] rounded-2xl p-3 sm:p-4 shadow-2xs">
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-slate-500 dark:text-slate-400 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider truncate">
+            <span className="text-slate-400 dark:text-slate-500 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest truncate">
               {t.briefEntriesLbl}
             </span>
             <div className="w-5 h-5 rounded-lg bg-blue-500/20 text-blue-500 flex items-center justify-center shrink-0">
               <i className="fi fi-sr-list-check text-xs" />
             </div>
           </div>
-          <p className="text-sm sm:text-lg font-bold text-slate-900 dark:text-white truncate">
+          <p className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white truncate">
             {totalEntriesCount}
           </p>
           <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-full mt-2 sm:mt-3 overflow-hidden">
@@ -194,14 +194,14 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
       </div>
 
       {/* Net Position Banner */}
-      <div className={`p-4 md:p-5 rounded-2xl md:rounded-3xl border flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm ${
+      <div className={`p-4 md:p-5 rounded-2xl md:rounded-2xl border flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm ${
         isNetPositive 
-          ? 'bg-slate-100/90 dark:bg-slate-900 text-slate-900 dark:text-white border-slate-200 dark:border-slate-800' 
-          : 'bg-rose-50 dark:bg-rose-950/90 text-rose-900 dark:text-white border-rose-200 dark:border-rose-800'
+          ? 'bg-gradient-to-r from-[#0EA5E9] to-[#34D399] text-white border-none shadow-[0_8px_30px_rgb(14,165,233,0.3)]' 
+          : 'bg-gradient-to-r from-rose-500 to-rose-400 text-white border-none shadow-[0_8px_30px_rgb(244,63,94,0.3)]'
       }`}>
         <div className="flex items-center gap-3 text-center sm:text-left">
           <div className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 font-bold text-base ${
-            isNetPositive ? 'bg-[#F4C542] text-slate-900' : 'bg-rose-500 text-white'
+            isNetPositive ? 'bg-black dark:bg-white text-white dark:text-slate-900' : 'bg-rose-500 text-white'
           }`}>
             {isNetPositive ? <i className="fi fi-sr-arrow-trend-up text-lg" /> : <i className="fi fi-sr-arrow-trend-down text-lg" />}
           </div>
@@ -218,8 +218,8 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
           </div>
         </div>
 
-        <div className={`text-xl md:text-2xl font-bold font-mono tracking-tight shrink-0 ${
-          isNetPositive ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
+        <div className={`text-3xl md:text-4xl font-black font-mono tracking-tight shrink-0 ${
+          isNetPositive ? 'text-white' : 'text-white'
         }`}>
           {formatCurrency(netCashFlow)}
         </div>
