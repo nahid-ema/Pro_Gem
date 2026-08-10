@@ -63,11 +63,11 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
     : '';
 
   return (
-    <div className="bg-white dark:bg-[#1A1A1A] border border-slate-100 dark:border-[#333333] rounded-2xl md:rounded-2xl p-5 md:p-6 mb-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
+    <div className="bg-white dark:bg-[#1A1A1A] border border-slate-200 dark:border-slate-800 rounded-none md:rounded-none p-5 md:p-6 mb-6 shadow-none">
       {/* Title & Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-4 border-b border-slate-200 dark:border-slate-800">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-2xl bg-[#0EA5E9]/10 text-[#0EA5E9] dark:text-[#0EA5E9] flex items-center justify-center font-bold text-base shrink-0">
+          <div className="w-9 h-9 rounded-none bg-[#F97316]/10 text-[#F97316] dark:text-[#F97316] flex items-center justify-center font-bold text-base shrink-0">
             <i className="fi fi-sr-triangle-warning" />
           </div>
           <div>
@@ -80,16 +80,16 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
           </div>
         </div>
 
-        <div className="bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 px-3.5 py-1.5 rounded-full text-xs font-bold shrink-0">
+        <div className="bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 px-3.5 py-1.5 rounded-none text-xs font-bold shrink-0">
           {t.unpaidTotalLabel} {formatCurrency(totalUnpaidSum)}
         </div>
       </div>
 
       {/* Table / Status */}
       {safeUnpaidItems.length === 0 ? (
-        <div className="p-3.5 sm:p-4 bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-500/20 rounded-2xl flex items-center justify-between gap-3">
+        <div className="p-3.5 sm:p-4 bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-500/20 rounded-none flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-none bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-xs">
               <i className="fi fi-sr-check-circle text-base sm:text-lg" />
             </div>
             <div>
@@ -101,15 +101,15 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
               </p>
             </div>
           </div>
-          <span className="hidden sm:inline-flex px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 font-bold text-xs shrink-0">
+          <span className="hidden sm:inline-flex px-3 py-1 rounded-none bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 font-bold text-xs shrink-0">
             {language === 'bn' ? '(পরিশোধিত)' : '(Paid)'}
           </span>
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-[#E8E6E1] dark:border-[#333333]">
+        <div className="overflow-x-auto rounded-none border border-[#E8E6E1] dark:border-slate-800">
           <table className="w-full text-left text-xs md:text-sm border-collapse">
             <thead>
-              <tr className="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 uppercase text-[11px] font-bold tracking-wider border-b border-[#E8E6E1] dark:border-[#333333]">
+              <tr className="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 uppercase text-[11px] font-bold tracking-wider border-b border-[#E8E6E1] dark:border-slate-800">
                 <th className="p-3">{t.thUnpaidRoom}</th>
                 <th className="p-3">{t.thUnpaidName}</th>
                 <th className="p-3">{t.thUnpaidPhone}</th>
@@ -121,7 +121,7 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
               {safeUnpaidItems.map((item) => (
                 <tr key={item.tenant.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                   <td className="p-3">
-                    <span className="inline-block px-2.5 py-0.5 rounded-md bg-slate-100 dark:bg-[#2A2A2A] text-slate-700 dark:text-slate-300 font-semibold text-xs border border-slate-200/80 dark:border-[#333333]">
+                    <span className="inline-block px-2.5 py-0.5 rounded-md bg-slate-100 dark:bg-[#2A2A2A] text-slate-700 dark:text-slate-300 font-semibold text-xs border border-slate-200/80 dark:border-slate-800">
                       {t.roomText}: {item.tenant.room}
                     </span>
                   </td>
@@ -136,7 +136,7 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
                     <div className="flex items-center justify-end gap-1.5">
                       <button
                         onClick={() => sendSms(item)}
-                        className="p-1.5 rounded-lg bg-slate-100 dark:bg-[#2A2A2A] text-slate-600 dark:text-slate-400 hover:bg-slate-200 transition-colors"
+                        className="p-1.5 rounded-none bg-slate-100 dark:bg-[#2A2A2A] text-slate-600 dark:text-slate-400 hover:bg-slate-200 transition-colors"
                         title={t.actionSms}
                       >
                         <i className="fi fi-sr-phone-call text-sm" />
@@ -144,7 +144,7 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
 
                       <button
                         onClick={() => sendWhatsApp(item)}
-                        className="p-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm transition-colors"
+                        className="p-1.5 rounded-none bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm transition-colors"
                         title={t.actionWa}
                       >
                         <i className="fi fi-sr-comment text-sm" />
@@ -152,7 +152,7 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
 
                       <button
                         onClick={() => onQuickPay(item)}
-                        className="flex items-center gap-1 px-3 py-1 rounded-lg bg-[#0EA5E9] text-slate-900 hover:bg-[#0284C7] font-bold text-xs shadow-sm transition-colors cursor-pointer"
+                        className="flex items-center gap-1 px-3 py-1 rounded-none bg-[#F97316] text-slate-900 hover:bg-[#EA580C] font-bold text-xs shadow-sm transition-colors cursor-pointer"
                       >
                         <i className="fi fi-sr-dollar" />
                         <span>{t.quickPay}</span>
@@ -163,7 +163,7 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
               ))}
             </tbody>
             <tfoot>
-              <tr className="bg-slate-50 dark:bg-slate-800/90 font-bold text-slate-900 dark:text-white border-t border-[#E8E6E1] dark:border-[#333333]">
+              <tr className="bg-slate-50 dark:bg-slate-800/90 font-bold text-slate-900 dark:text-white border-t border-[#E8E6E1] dark:border-slate-800">
                 <td colSpan={3} className="p-3 text-right">
                   {language === 'bn' 
                     ? `মোট অনাদায়ী (${safeUnpaidItems.length} টি রুম/ভাড়াটিয়া):` 

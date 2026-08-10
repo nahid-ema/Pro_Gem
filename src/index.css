@@ -16,7 +16,7 @@
 
 @layer base {
   :root {
-    --accent-sky: #0EA5E9;
+    --accent-orange: #F97316;
     --accent-coral-hover: #E3B431;
     --accent-coral-light: #EBE7E0;
   }
@@ -84,23 +84,23 @@ html {
   }
 }
 
-.bg-sky-accent {
-  background-color: #0EA5E9;
+.bg-orange-accent {
+  background-color: #F97316;
 }
 
-.bg-sky-accent:hover {
+.bg-orange-accent:hover {
   background-color: #E3B431;
 }
 
-.text-sky-accent {
-  color: #0EA5E9;
+.text-orange-accent {
+  color: #F97316;
 }
 
-.border-sky-accent {
-  border-color: #0EA5E9;
+.border-orange-accent {
+  border-color: #F97316;
 }
 
-.bg-sky-accent-light {
+.bg-orange-accent-light {
   background-color: #EBE7E0;
 }
 
@@ -354,7 +354,7 @@ html {
     color: #be123c !important;
   }
 
-  .text-\[\#0EA5E9\], .dark .text-\[\#0EA5E9\] {
+  .text-\[\#F97316\], .dark .text-\[\#F97316\] {
     color: #1e3a8a !important; /* Darker blue for print contrast */
   }
 

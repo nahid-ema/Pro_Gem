@@ -1,5 +1,5 @@
 import React from 'react';
 
-export const Logo: React.FC<{ className?: string }> = ({ className = "w-8 h-8 sm:w-10 sm:h-10 shrink-0 object-contain rounded-lg" }) => (
+export const Logo: React.FC<{ className?: string }> = ({ className = "w-8 h-8 sm:w-10 sm:h-10 shrink-0 object-contain rounded-none" }) => (
   <img src="/logo.png" alt="Nahid Kutir Logo" className={className} referrerPolicy="no-referrer" />
 );

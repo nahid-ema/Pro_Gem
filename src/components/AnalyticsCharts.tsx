@@ -141,10 +141,10 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
   const periodLabel = `${selectedYear !== 'all' ? selectedYear : (language === 'bn' ? 'সকল বছর' : 'All Years')} ${selectedMonth !== 'all' ? (t.months ? t.months[parseInt(selectedMonth, 10) - 1] : selectedMonth) : ''}`.trim();
 
   return (
-    <div className="bg-white dark:bg-[#1A1A1A] border border-slate-100 dark:border-[#333333] rounded-2xl md:rounded-2xl p-5 md:p-6 mb-6 shadow-[0_8px_30px_rgb(0,0,0,0.04)] space-y-6">
+    <div className="bg-white dark:bg-[#1A1A1A] border border-slate-200 dark:border-slate-800 rounded-none md:rounded-none p-5 md:p-6 mb-6 shadow-none space-y-6">
       {/* Title */}
-      <div className="flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
-        <div className="w-9 h-9 rounded-2xl bg-[#0EA5E9]/10 text-[#0EA5E9] dark:text-[#0EA5E9] flex items-center justify-center font-bold text-base">
+      <div className="flex items-center gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
+        <div className="w-9 h-9 rounded-none bg-[#F97316]/10 text-[#F97316] dark:text-[#F97316] flex items-center justify-center font-bold text-base">
           <i className="fi fi-sr-chart-line-up text-base" />
         </div>
         <div>
@@ -159,7 +159,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Monthly Income vs Expense Bar Chart */}
-        <div className="bg-[#F9F9F8] dark:bg-[#222222] border border-[#E8E6E1] dark:border-[#333333] rounded-xl p-4">
+        <div className="bg-[#F9F9F8] dark:bg-[#222222] border border-[#E8E6E1] dark:border-slate-800 rounded-none p-4">
           <div className="flex items-center gap-2 mb-3">
             <i className="fi fi-sr-arrow-trend-up text-base text-indigo-600 dark:text-indigo-400" />
             <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
@@ -191,7 +191,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
         </div>
 
         {/* Financial Breakdown Pie Chart */}
-        <div className="bg-[#F9F9F8] dark:bg-[#222222] border border-[#E8E6E1] dark:border-[#333333] rounded-xl p-4 flex flex-col justify-between">
+        <div className="bg-[#F9F9F8] dark:bg-[#222222] border border-[#E8E6E1] dark:border-slate-800 rounded-none p-4 flex flex-col justify-between">
           <div className="flex items-center gap-2 mb-3">
             <i className="fi fi-sr-chart-pie text-base text-indigo-600 dark:text-indigo-400" />
             <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
@@ -234,10 +234,10 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
 
       {/* Expense Type / Category Breakdown Chart */}
       {expenseCategoryData.length > 0 && (
-        <div className="bg-[#F9F9F8] dark:bg-[#222222] border border-[#E8E6E1] dark:border-[#333333] rounded-xl p-4">
+        <div className="bg-[#F9F9F8] dark:bg-[#222222] border border-[#E8E6E1] dark:border-slate-800 rounded-none p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <i className="fi fi-sr-chart-pie text-base text-[#0EA5E9]" />
+              <i className="fi fi-sr-chart-pie text-base text-[#F97316]" />
               <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
                 {t.chartExpenseCategories} ({language === 'bn' ? 'খাতভিত্তিক খরচ' : 'Expense Category Breakdown'})
               </h4>
@@ -282,9 +282,9 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
               {expenseCategoryData.map((catItem) => {
                 const pct = totalExpenses > 0 ? ((catItem.value / totalExpenses) * 100).toFixed(1) : '0';
                 return (
-                  <div key={catItem.name} className="flex items-center justify-between text-xs p-2 rounded-lg bg-white dark:bg-[#1A1A1A]/80 border border-slate-200/60 dark:border-slate-800">
+                  <div key={catItem.name} className="flex items-center justify-between text-xs p-2 rounded-none bg-white dark:bg-[#1A1A1A]/80 border border-slate-200/60 dark:border-slate-800">
                     <div className="flex items-center gap-2 min-w-0">
-                      <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: catItem.color }} />
+                      <span className="w-3 h-3 rounded-none shrink-0" style={{ backgroundColor: catItem.color }} />
                       <span className="font-medium text-slate-800 dark:text-slate-200 truncate">{catItem.name}</span>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
