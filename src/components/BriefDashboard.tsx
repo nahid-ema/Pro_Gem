@@ -43,11 +43,11 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
     : '';
 
   return (
-    <div className="bg-white dark:bg-[#1A1A1A] border border-slate-200 dark:border-slate-800 rounded-none p-3.5 sm:p-5 md:p-6 mb-4 sm:mb-6 shadow-none relative overflow-hidden">
+    <div className="bg-[#F5F5F0] dark:bg-[#1A1A1A] border border-[#D6D0C4] dark:border-slate-800 rounded-sm p-3.5 sm:p-5 md:p-6 mb-4 sm:mb-6 shadow-none relative overflow-hidden">
       {/* Header Title & Period indicator */}
-      <div className="flex items-center justify-between gap-2 mb-4 sm:mb-5 pb-3 sm:pb-4 border-b border-slate-200 dark:border-slate-800">
+      <div className="flex items-center justify-between gap-2 mb-4 sm:mb-5 pb-3 sm:pb-4 border-b border-[#D6D0C4] dark:border-slate-800">
         <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-none sm:rounded-none bg-[#F97316]/10 text-[#F97316] dark:text-[#F97316] flex items-center justify-center font-bold text-sm sm:text-base shrink-0">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-sm sm:rounded-sm bg-[#C2410C]/10 text-[#C2410C] dark:text-[#C2410C] flex items-center justify-center font-bold text-sm sm:text-base shrink-0">
             <i className="fi fi-sr-chart-histogram text-base sm:text-lg" />
           </div>
           <div className="min-w-0">
@@ -64,19 +64,19 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
         </div>
 
         {/* Collection Efficiency Gauge Badge */}
-        <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-500/20 text-emerald-800 dark:text-emerald-300 px-2.5 sm:px-3.5 py-1.5 rounded-none shrink-0 text-xs font-semibold">
+        <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-emerald-500/10 dark:bg-emerald-950/40 border border-emerald-500/20 text-emerald-800 dark:text-emerald-300 px-2.5 sm:px-3.5 py-1.5 rounded-sm shrink-0 text-xs font-semibold">
           <i className="fi fi-sr-check-circle text-sm sm:text-base text-emerald-500 shrink-0" />
           <span className="hidden sm:inline">{t.collectionProgress}:</span>
           <span className="sm:hidden">{language === 'bn' ? 'আদায় অগ্রগতি:' : 'Collection:'}</span>
-          <span className="font-bold text-white">{collectionPercentage}%</span>
+          <span className="font-bold text-emerald-900 dark:text-emerald-100">{collectionPercentage}%</span>
         </div>
       </div>
 
       {/* Collection Progress Bar */}
       <div className="mb-4 sm:mb-6">
-        <div className="w-full h-1.5 sm:h-2 bg-[#F2F0EB] dark:bg-[#2A2A2A] rounded-none overflow-hidden">
+        <div className="w-full h-1.5 sm:h-2 bg-[#F2F0EB] dark:bg-[#2A2A2A] rounded-sm overflow-hidden">
           <div
-            className="h-full bg-[#F97316] rounded-none transition-all duration-500 ease-out"
+            className="h-full bg-[#C2410C] rounded-sm transition-all duration-500 ease-out"
             style={{ width: `${collectionPercentage}%` }}
           />
         </div>
@@ -85,122 +85,122 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
       {/* 6 Key Stat Cards Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3.5 mb-4 sm:mb-5">
         {/* Total Rent Expected */}
-        <div className="hover-lift bg-white/60 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-slate-800 rounded-none p-3 sm:p-4 shadow-2xs">
+        <div className="hover-lift bg-transparent border border-slate-300 dark:border-slate-800 rounded-none p-4 sm:p-5 shadow-none">
           <div className="flex items-center justify-between mb-1.5">
             <span className="text-slate-400 dark:text-slate-500 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest truncate">
               {t.briefRentLbl}
             </span>
-            <div className="w-5 h-5 rounded-none bg-[#F97316]/20 text-[#F97316] flex items-center justify-center shrink-0">
+            <div className="w-5 h-5 rounded-sm bg-[#C2410C]/20 text-[#C2410C] flex items-center justify-center shrink-0">
               <i className="fi fi-sr-wallet text-xs" />
             </div>
           </div>
           <p className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white truncate">
             {formatCurrency(totalExpectedRent)}
           </p>
-          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-none mt-2 sm:mt-3 overflow-hidden">
-            <div className="w-full h-full bg-[#F97316]"></div>
+          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-sm mt-2 sm:mt-3 overflow-hidden">
+            <div className="w-full h-full bg-[#C2410C]"></div>
           </div>
         </div>
 
         {/* Total Collected Income */}
-        <div className="hover-lift bg-white/60 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-slate-800 rounded-none p-3 sm:p-4 shadow-2xs">
+        <div className="hover-lift bg-transparent border border-slate-300 dark:border-slate-800 rounded-none p-4 sm:p-5 shadow-none">
           <div className="flex items-center justify-between mb-1.5">
             <span className="text-slate-400 dark:text-slate-500 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest truncate">
               {t.briefIncomeLbl}
             </span>
-            <div className="w-5 h-5 rounded-none bg-emerald-500/20 text-emerald-500 flex items-center justify-center shrink-0">
+            <div className="w-5 h-5 rounded-sm bg-emerald-500/20 text-emerald-500 flex items-center justify-center shrink-0">
               <i className="fi fi-sr-chart-line-up text-xs" />
             </div>
           </div>
-          <p className="text-2xl sm:text-3xl font-black text-white truncate">
+          <p className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white truncate">
             {formatCurrency(totalCollectedIncome)}
           </p>
-          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-none mt-2 sm:mt-3 overflow-hidden">
+          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-sm mt-2 sm:mt-3 overflow-hidden">
             <div className="h-full bg-emerald-500" style={{ width: `${collectionPercentage}%` }}></div>
           </div>
         </div>
 
         {/* Total Outstanding Due */}
-        <div className="hover-lift bg-white/60 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-slate-800 rounded-none p-3 sm:p-4 shadow-2xs">
+        <div className="hover-lift bg-transparent border border-slate-300 dark:border-slate-800 rounded-none p-4 sm:p-5 shadow-none">
           <div className="flex items-center justify-between mb-1.5">
             <span className="text-slate-400 dark:text-slate-500 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest truncate">
               {t.briefDueLbl}
             </span>
-            <div className="w-5 h-5 rounded-none bg-rose-500/20 text-rose-500 flex items-center justify-center shrink-0">
+            <div className="w-5 h-5 rounded-sm bg-rose-500/20 text-rose-500 flex items-center justify-center shrink-0">
               <i className="fi fi-sr-info text-xs" />
             </div>
           </div>
-          <p className="text-2xl sm:text-3xl font-black text-white truncate">
+          <p className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white truncate">
             {formatCurrency(totalOutstandingDue)}
           </p>
-          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-none mt-2 sm:mt-3 overflow-hidden">
+          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-sm mt-2 sm:mt-3 overflow-hidden">
             <div className="w-full h-full bg-rose-500"></div>
           </div>
         </div>
 
         {/* Total Operating Expenses */}
-        <div className="hover-lift bg-white/60 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-slate-800 rounded-none p-3 sm:p-4 shadow-2xs">
+        <div className="hover-lift bg-transparent border border-slate-300 dark:border-slate-800 rounded-none p-4 sm:p-5 shadow-none">
           <div className="flex items-center justify-between mb-1.5">
             <span className="text-slate-400 dark:text-slate-500 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest truncate">
               {t.briefExpLbl}
             </span>
-            <div className="w-5 h-5 rounded-none bg-purple-500/20 text-purple-500 flex items-center justify-center shrink-0">
+            <div className="w-5 h-5 rounded-sm bg-purple-500/20 text-purple-500 flex items-center justify-center shrink-0">
               <i className="fi fi-sr-receipt text-xs" />
             </div>
           </div>
           <p className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white truncate">
             {formatCurrency(totalExpenses)}
           </p>
-          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-none mt-2 sm:mt-3 overflow-hidden">
+          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-sm mt-2 sm:mt-3 overflow-hidden">
             <div className="w-full h-full bg-purple-500"></div>
           </div>
         </div>
 
         {/* Total Shop Dues */}
-        <div className="hover-lift bg-white/60 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-slate-800 rounded-none p-3 sm:p-4 shadow-2xs">
+        <div className="hover-lift bg-transparent border border-slate-300 dark:border-slate-800 rounded-none p-4 sm:p-5 shadow-none">
           <div className="flex items-center justify-between mb-1.5">
             <span className="text-slate-400 dark:text-slate-500 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest truncate">
               {t.briefDokLbl}
             </span>
-            <div className="w-5 h-5 rounded-none bg-orange-500/20 text-orange-500 flex items-center justify-center shrink-0">
+            <div className="w-5 h-5 rounded-sm bg-orange-500/20 text-orange-500 flex items-center justify-center shrink-0">
               <i className="fi fi-sr-shop text-xs" />
             </div>
           </div>
           <p className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white truncate">
             {formatCurrency(totalShopDues)}
           </p>
-          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-none mt-2 sm:mt-3 overflow-hidden">
+          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-sm mt-2 sm:mt-3 overflow-hidden">
             <div className="w-full h-full bg-orange-500"></div>
           </div>
         </div>
 
         {/* Total Entries Count */}
-        <div className="hover-lift bg-white/60 dark:bg-white/5 backdrop-blur-md border border-[#E8E6E1] dark:border-slate-800 rounded-none p-3 sm:p-4 shadow-2xs">
+        <div className="hover-lift bg-transparent border border-slate-300 dark:border-slate-800 rounded-none p-4 sm:p-5 shadow-none">
           <div className="flex items-center justify-between mb-1.5">
             <span className="text-slate-400 dark:text-slate-500 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest truncate">
               {t.briefEntriesLbl}
             </span>
-            <div className="w-5 h-5 rounded-none bg-blue-500/20 text-blue-500 flex items-center justify-center shrink-0">
+            <div className="w-5 h-5 rounded-sm bg-blue-500/20 text-blue-500 flex items-center justify-center shrink-0">
               <i className="fi fi-sr-list-check text-xs" />
             </div>
           </div>
           <p className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white truncate">
             {totalEntriesCount}
           </p>
-          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-none mt-2 sm:mt-3 overflow-hidden">
+          <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-sm mt-2 sm:mt-3 overflow-hidden">
             <div className="w-full h-full bg-blue-500"></div>
           </div>
         </div>
       </div>
 
       {/* Net Position Banner */}
-      <div className={`p-4 md:p-5 rounded-none md:rounded-none border flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm ${
+      <div className={`p-4 md:p-5 rounded-sm md:rounded-sm border flex flex-col sm:flex-row items-center justify-between gap-3 shadow-none ${
         isNetPositive 
-          ? 'bg-gradient-to-r from-[#F97316] to-[#34D399] text-white border-none shadow-[0_8px_30px_rgb(249,115,22,0.3)]' 
+          ? 'bg-gradient-to-r from-[#C2410C] to-[#34D399] text-white border-none shadow-none' 
           : 'bg-gradient-to-r from-rose-500 to-rose-400 text-white border-none shadow-[0_8px_30px_rgb(244,63,94,0.3)]'
       }`}>
         <div className="flex items-center gap-3 text-center sm:text-left">
-          <div className={`w-10 h-10 rounded-none flex items-center justify-center shrink-0 font-bold text-base ${
+          <div className={`w-10 h-10 rounded-sm flex items-center justify-center shrink-0 font-bold text-base ${
             isNetPositive ? 'bg-black dark:bg-white text-white dark:text-slate-900' : 'bg-rose-500 text-white'
           }`}>
             {isNetPositive ? <i className="fi fi-sr-arrow-trend-up text-lg" /> : <i className="fi fi-sr-arrow-trend-down text-lg" />}

@@ -94,7 +94,7 @@ export const Header: React.FC<HeaderProps> = ({
   }, []);
 
   const navItems: { id: TabType; labelEn: string; labelBn: string; icon: React.ReactNode }[] = [
-    { id: 'brief', labelEn: 'Summary', labelBn: 'সারসংক্ষেপ', icon: <i className="fi fi-sr-chart-histogram text-base text-[#F97316]" /> },
+    { id: 'brief', labelEn: 'Summary', labelBn: 'সারসংক্ষেপ', icon: <i className="fi fi-sr-chart-histogram text-base text-[#C2410C]" /> },
     { id: 'rooms', labelEn: 'Rooms', labelBn: 'রুমসমূহ', icon: <i className="fi fi-sr-door-closed text-base text-blue-500" /> },
     { id: 'tenants', labelEn: 'Tenants', labelBn: 'ভাড়াটিয়া', icon: <i className="fi fi-sr-users text-base text-emerald-500" /> },
     { id: 'rent', labelEn: 'Rent Collection', labelBn: 'ভাড়া আদায়', icon: <i className="fi fi-sr-money-bill-wave text-base text-amber-500" /> },
@@ -167,10 +167,10 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="header-section no-print bg-white dark:bg-[#1A1A1A]/80 border-none rounded-none p-3.5 sm:p-5 mb-4 shadow-none dark:shadow-none text-slate-800 dark:text-slate-100 relative z-50">
+    <header className="header-section no-print bg-[#F5F5F0] dark:bg-[#1A1A1A]/80 border-none rounded-sm p-3.5 sm:p-5 mb-4 shadow-none dark:shadow-none text-slate-800 dark:text-slate-100 relative z-50">
       
       {/* 1. Kalima */}
-      <div className="text-center text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200 pb-2 mb-3 border-b border-slate-200/80 dark:border-slate-800/80 tracking-wide">
+      <div className="text-center text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-200 pb-2 mb-3 border-b border-[#D6D0C4]/80 dark:border-slate-800 tracking-wide">
         لَا إِلَٰهَ إِلَّا ٱللَّٰهُ مُحَمَّدٌ رَسُولُ ٱللَّٰهِ
       </div>
       
@@ -194,23 +194,23 @@ export const Header: React.FC<HeaderProps> = ({
               setIsQuickNavOpen(false);
               setIsMenuOpen(false);
             }}
-            className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-none bg-slate-100 dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200/80 dark:border-slate-800 text-xs font-bold transition-all cursor-pointer shadow-2xs active:scale-95"
+            className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-sm bg-[#E2DDCF] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-[#D6D0C4]/80 dark:border-slate-800 text-xs font-bold transition-all cursor-pointer shadow-none active:scale-95"
           >
-            <i className="fi fi-sr-calendar text-base text-[#F97316] shrink-0" />
+            <i className="fi fi-sr-calendar text-base text-[#C2410C] shrink-0" />
             <span className="truncate max-w-[80px] sm:max-w-none">{getSelectedDateLabel()}</span>
             <i className={`fi fi-sr-angle-down text-sm text-slate-400 shrink-0 transition-transform duration-200 ${isDatePickerOpen ? 'rotate-180' : ''}`} />
           </button>
 
           {/* Date Selection Popover Dropdown */}
           {isDatePickerOpen && (
-            <div className="absolute left-0 mt-2 w-64 sm:w-72 bg-white dark:bg-[#1A1A1A] border border-slate-200 dark:border-slate-800 rounded-none shadow-sm border border-slate-200 dark:border-slate-800 z-50 p-3 space-y-3 animate-in fade-in zoom-in-95 duration-150">
+            <div className="absolute left-0 mt-2 w-64 sm:w-72 bg-[#F5F5F0] dark:bg-[#1A1A1A] border border-[#D6D0C4] dark:border-slate-800 rounded-sm shadow-none border border-[#D6D0C4] dark:border-slate-800 z-50 p-3 space-y-3 animate-in fade-in zoom-in-95 duration-150">
               
               {/* Header & Quick Action Buttons */}
-              <div className="flex items-center justify-between gap-1.5 pb-2 border-b border-slate-200 dark:border-slate-800">
+              <div className="flex items-center justify-between gap-1.5 pb-2 border-b border-[#D6D0C4] dark:border-slate-800">
                 <button
                   type="button"
                   onClick={handleThisMonth}
-                  className="flex-1 px-2 py-1 rounded-none bg-[#F97316]/10 text-[#F97316] hover:bg-[#F97316]/20 text-[11px] font-bold transition-colors cursor-pointer text-center"
+                  className="flex-1 px-2 py-1 rounded-sm bg-[#C2410C]/10 text-[#C2410C] hover:bg-[#C2410C]/20 text-[11px] font-bold transition-colors cursor-pointer text-center"
                 >
                   {language === 'bn' ? 'চলতি মাস' : 'This Month'}
                 </button>
@@ -218,19 +218,19 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   type="button"
                   onClick={handleAllTime}
-                  className="flex-1 px-2 py-1 rounded-none bg-slate-100 dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-[11px] font-bold transition-colors cursor-pointer text-center"
+                  className="flex-1 px-2 py-1 rounded-sm bg-[#E2DDCF] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-[11px] font-bold transition-colors cursor-pointer text-center"
                 >
                   {language === 'bn' ? 'সকল সময়' : 'All Time'}
                 </button>
               </div>
 
               {/* Month Stepper Bar */}
-              <div className="flex items-center justify-between bg-slate-50 dark:bg-slate-800/60 rounded-none p-1.5 border border-slate-200 dark:border-slate-800">
+              <div className="flex items-center justify-between bg-[#EBE7E0] dark:bg-slate-800/60 rounded-sm p-1.5 border border-[#D6D0C4] dark:border-slate-800">
                 <button
                   type="button"
                   onClick={handlePrevMonth}
                   title={language === 'bn' ? 'পূর্ববর্তী মাস' : 'Previous Month'}
-                  className="p-1 rounded-none hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-100 transition-colors cursor-pointer"
+                  className="p-1 rounded-sm hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-100 transition-colors cursor-pointer"
                 >
                   <i className="fi fi-sr-angle-left text-base" />
                 </button>
@@ -243,7 +243,7 @@ export const Header: React.FC<HeaderProps> = ({
                   type="button"
                   onClick={handleNextMonth}
                   title={language === 'bn' ? 'পরবর্তী মাস' : 'Next Month'}
-                  className="p-1 rounded-none hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-100 transition-colors cursor-pointer"
+                  className="p-1 rounded-sm hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-100 transition-colors cursor-pointer"
                 >
                   <i className="fi fi-sr-angle-right text-base" />
                 </button>
@@ -257,7 +257,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <select
                   value={selectedYear}
                   onChange={(e) => onYearChange(e.target.value)}
-                  className="flex-1 bg-slate-100 dark:bg-[#2A2A2A] border border-slate-200/80 dark:border-slate-800 rounded-none px-2.5 py-1 text-xs font-bold text-slate-800 dark:text-slate-100 focus:outline-none cursor-pointer"
+                  className="flex-1 bg-[#E2DDCF] dark:bg-[#2A2A2A] border border-[#D6D0C4]/80 dark:border-slate-800 rounded-sm px-2.5 py-1 text-xs font-bold text-slate-800 dark:text-slate-100 focus:outline-none cursor-pointer"
                 >
                   <option value="all" className="dark:bg-slate-900">{t.yearAllOpt}</option>
                   {(availableYears || []).map((yr) => (
@@ -277,10 +277,10 @@ export const Header: React.FC<HeaderProps> = ({
                   <button
                     type="button"
                     onClick={() => { onMonthChange('all'); setIsDatePickerOpen(false); }}
-                    className={`py-1 px-1.5 rounded-none text-[11px] font-bold transition-all cursor-pointer ${
+                    className={`py-1 px-1.5 rounded-sm text-[11px] font-bold transition-all cursor-pointer ${
                       selectedMonth === 'all'
-                        ? 'bg-black dark:bg-white text-white dark:text-slate-900 shadow-xs'
-                        : 'bg-slate-100 dark:bg-[#2A2A2A] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                        ? 'bg-black dark:bg-white text-white dark:text-slate-900 shadow-none font-bold'
+                        : 'bg-[#E2DDCF] dark:bg-[#2A2A2A] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                     }`}
                   >
                     {t.monthAllOpt}
@@ -299,10 +299,10 @@ export const Header: React.FC<HeaderProps> = ({
                           onMonthChange(val);
                           setIsDatePickerOpen(false);
                         }}
-                        className={`py-1 px-1.5 rounded-none text-[11px] font-semibold truncate transition-all cursor-pointer ${
+                        className={`py-1 px-1.5 rounded-sm text-[11px] font-semibold truncate transition-all cursor-pointer ${
                           isSelected
-                            ? 'bg-black dark:bg-white text-white dark:text-slate-900 font-bold shadow-xs'
-                            : 'bg-slate-100 dark:bg-[#2A2A2A] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                            ? 'bg-black dark:bg-white text-white dark:text-slate-900 font-bold shadow-none'
+                            : 'bg-[#E2DDCF] dark:bg-[#2A2A2A] text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                         }`}
                       >
                         {m}
@@ -325,7 +325,7 @@ export const Header: React.FC<HeaderProps> = ({
               setIsDatePickerOpen(false);
               setIsMenuOpen(false);
             }}
-            className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-none bg-[#F97316]/10 hover:bg-[#F97316]/20 text-[#F97316] border border-[#F97316]/30 text-xs font-semibold transition-all cursor-pointer shadow-xs active:scale-95"
+            className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-sm bg-[#C2410C]/10 hover:bg-[#C2410C]/20 text-[#C2410C] border border-[#C2410C]/30 text-xs font-semibold transition-all cursor-pointer shadow-none active:scale-95"
           >
             <i className="fi fi-sr-compass-alt text-base shrink-0" />
             <span className="truncate max-w-[65px] sm:max-w-none">{language === 'bn' ? 'নেভিগেশন' : 'Navigation'}</span>
@@ -333,8 +333,8 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
 
           {isQuickNavOpen && (
-            <div className="absolute right-0 sm:left-1/2 sm:-translate-x-1/2 mt-2 w-52 sm:w-56 bg-white dark:bg-[#1A1A1A] border border-[#E8E6E1] dark:border-slate-800 rounded-none shadow-sm border border-slate-200 dark:border-slate-800 z-50 p-1.5 space-y-0.5 animate-in fade-in zoom-in-95 duration-150">
-              <div className="px-3 py-1.5 text-[10px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase border-b border-slate-200 dark:border-slate-800 mb-1">
+            <div className="absolute right-0 sm:left-1/2 sm:-translate-x-1/2 mt-2 w-52 sm:w-56 bg-[#F5F5F0] dark:bg-[#1A1A1A] border border-[#D6D0C4] dark:border-slate-800 rounded-sm shadow-none border border-[#D6D0C4] dark:border-slate-800 z-50 p-1.5 space-y-0.5 animate-in fade-in zoom-in-95 duration-150">
+              <div className="px-3 py-1.5 text-[10px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase border-b border-[#D6D0C4] dark:border-slate-800 mb-1">
                 {language === 'bn' ? 'দ্রুত নেভিগেশন' : 'Quick Navigation'}
               </div>
               {navItems.map((item) => {
@@ -347,15 +347,15 @@ export const Header: React.FC<HeaderProps> = ({
                       onTabChange?.(item.id);
                       setIsQuickNavOpen(false);
                     }}
-                    className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-none text-xs font-semibold text-left transition-colors cursor-pointer ${
+                    className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-sm text-xs font-semibold text-left transition-colors cursor-pointer ${
                       isActive
-                        ? 'bg-black dark:bg-white text-white dark:text-slate-900 shadow-xs'
-                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
+                        ? 'bg-black dark:bg-white text-white dark:text-slate-900 shadow-none font-bold'
+                        : 'text-slate-700 dark:text-slate-300 hover:bg-[#E2DDCF] dark:hover:bg-slate-800'
                     }`}
                   >
                     <span className={isActive ? 'text-white dark:text-slate-900' : ''}>{item.icon}</span>
                     <span className="flex-1 truncate">{language === 'bn' ? item.labelBn : item.labelEn}</span>
-                    {isActive && <span className="w-1.5 h-1.5 rounded-none bg-slate-900 shrink-0" />}
+                    {isActive && <span className="w-1.5 h-1.5 rounded-sm bg-white dark:bg-slate-900 shrink-0" />}
                   </button>
                 );
               })}
@@ -372,7 +372,7 @@ export const Header: React.FC<HeaderProps> = ({
               setIsDatePickerOpen(false);
               setIsQuickNavOpen(false);
             }}
-            className="w-full flex items-center justify-center gap-1.5 bg-[#F97316] text-slate-900 hover:bg-[#EA580C] px-3 py-2 rounded-none text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer"
+            className="w-full flex items-center justify-center gap-1.5 bg-[#C2410C] text-white hover:bg-[#9A3412] px-3 py-2 rounded-sm text-xs font-bold transition-all shadow-none active:scale-95 cursor-pointer"
           >
             <i className="fi fi-sr-menu-burger text-base" />
             <span className="truncate max-w-[40px] sm:max-w-none">{language === 'bn' ? 'মেনু' : 'Menu'}</span>
@@ -381,16 +381,16 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Dropdown Menu */}
           {isMenuOpen && (
-            <div className="absolute right-0 mt-2 w-[280px] sm:w-80 bg-white dark:bg-[#1A1A1A] text-slate-800 dark:text-slate-100 rounded-none shadow-sm border border-slate-200 dark:border-slate-800 border border-[#E8E6E1] dark:border-slate-800 z-50 overflow-hidden text-xs divide-y divide-slate-100 dark:divide-slate-800 max-h-[85vh] overflow-y-auto">
+            <div className="absolute right-0 mt-2 w-[280px] sm:w-80 bg-[#F5F5F0] dark:bg-[#1A1A1A] text-slate-800 dark:text-slate-100 rounded-sm shadow-none border border-[#D6D0C4] dark:border-slate-800 border border-[#D6D0C4] dark:border-slate-800 z-50 overflow-hidden text-xs divide-y divide-slate-100 dark:divide-slate-800 max-h-[85vh] overflow-y-auto">
               
               {/* 1. Online Sync State Banner */}
-              <div className="p-3 bg-slate-50 dark:bg-slate-800/80 flex items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800">
+              <div className="p-3 bg-[#EBE7E0] dark:bg-slate-800/80 flex items-center justify-between gap-2 border-b border-[#D6D0C4] dark:border-slate-800">
                 <div className="flex items-center gap-2 min-w-0">
                   <span className="relative flex h-2.5 w-2.5 shrink-0">
-                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-none opacity-75 ${
+                    <span className={`animate-ping absolute inline-flex h-full w-full rounded-sm opacity-75 ${
                       isFirebaseActive ? 'bg-emerald-400' : 'bg-amber-400'
                     }`} />
-                    <span className={`relative inline-flex rounded-none h-2.5 w-2.5 ${
+                    <span className={`relative inline-flex rounded-sm h-2.5 w-2.5 ${
                       isFirebaseActive ? 'bg-emerald-500' : 'bg-amber-500'
                     }`} />
                   </span>
@@ -407,7 +407,7 @@ export const Header: React.FC<HeaderProps> = ({
                   </div>
                 </div>
                 {lastCloudBackupTime && (
-                  <span className="text-[9px] px-2 py-0.5 rounded-none bg-slate-200/70 dark:bg-slate-700/80 text-slate-600 dark:text-slate-400 font-mono shrink-0">
+                  <span className="text-[9px] px-2 py-0.5 rounded-sm bg-slate-200/70 dark:bg-slate-700/80 text-slate-600 dark:text-slate-400 font-mono shrink-0">
                     {lastCloudBackupTime}
                   </span>
                 )}
@@ -426,7 +426,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <button
                     type="button"
                     onClick={() => { setIsMenuOpen(false); onFirebaseCloudBackup(); }}
-                    className="flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white py-2 px-2.5 rounded-none font-bold text-xs transition-colors cursor-pointer"
+                    className="flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white py-2 px-2.5 rounded-sm font-bold text-xs transition-colors cursor-pointer"
                   >
                     <i className="fi fi-sr-cloud-upload-alt text-sm" />
                     <span>{language === 'bn' ? 'ব্যাকআপ নিন' : 'Cloud Backup'}</span>
@@ -434,7 +434,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <button
                     type="button"
                     onClick={() => { setIsMenuOpen(false); onFirebaseCloudRestore(); }}
-                    className="flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 py-2 px-2.5 rounded-none font-bold text-xs transition-colors cursor-pointer border border-slate-200/80 dark:border-slate-700/80"
+                    className="flex items-center justify-center gap-1.5 bg-[#E2DDCF] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 py-2 px-2.5 rounded-sm font-bold text-xs transition-colors cursor-pointer border border-[#D6D0C4]/80 dark:border-slate-700/80"
                   >
                     <i className="fi fi-sr-cloud-download-alt text-sm text-indigo-500" />
                     <span>{language === 'bn' ? 'রিস্টোর করুন' : 'Cloud Restore'}</span>
@@ -451,7 +451,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <button
                     type="button"
                     onClick={() => { setIsMenuOpen(false); onTriggerBackup(); }}
-                    className="flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-100 py-1.5 px-2 rounded-none font-medium text-xs transition-colors cursor-pointer"
+                    className="flex items-center justify-center gap-1.5 bg-[#E2DDCF] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-100 py-1.5 px-2 rounded-sm font-medium text-xs transition-colors cursor-pointer"
                   >
                     <i className="fi fi-sr-download text-sm text-sky-600 dark:text-sky-400" />
                     <span>{t.backupBtn}</span>
@@ -460,7 +460,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <button
                     type="button"
                     onClick={() => { setIsMenuOpen(false); fileInputRef.current?.click(); }}
-                    className="flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-100 py-1.5 px-2 rounded-none font-medium text-xs transition-colors cursor-pointer"
+                    className="flex items-center justify-center gap-1.5 bg-[#E2DDCF] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-100 py-1.5 px-2 rounded-sm font-medium text-xs transition-colors cursor-pointer"
                   >
                     <i className="fi fi-sr-upload text-sm text-teal-600 dark:text-teal-400" />
                     <span>{t.restoreBtn}</span>
@@ -486,7 +486,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <button
                     type="button"
                     onClick={() => { onLanguageToggle(); }}
-                    className="flex items-center justify-between bg-slate-100 dark:bg-[#2A2A2A]/80 p-2 rounded-none border border-slate-200/80 dark:border-slate-800 cursor-pointer hover:bg-slate-200/70 dark:hover:bg-slate-700/80 transition-colors"
+                    className="flex items-center justify-between bg-[#E2DDCF] dark:bg-[#2A2A2A]/80 p-2 rounded-sm border border-[#D6D0C4]/80 dark:border-slate-800 cursor-pointer hover:bg-slate-200/70 dark:hover:bg-slate-700/80 transition-colors"
                   >
                     <div className="flex items-center gap-1.5 text-slate-800 dark:text-slate-100 font-medium">
                       <i className="fi fi-sr-globe text-sm text-indigo-600 dark:text-indigo-400" />
@@ -499,7 +499,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <button
                     type="button"
                     onClick={() => { onThemeToggle(); }}
-                    className="flex items-center justify-between bg-slate-100 dark:bg-[#2A2A2A]/80 p-2 rounded-none border border-slate-200/80 dark:border-slate-800 cursor-pointer hover:bg-slate-200/70 dark:hover:bg-slate-700/80 transition-colors"
+                    className="flex items-center justify-between bg-[#E2DDCF] dark:bg-[#2A2A2A]/80 p-2 rounded-sm border border-[#D6D0C4]/80 dark:border-slate-800 cursor-pointer hover:bg-slate-200/70 dark:hover:bg-slate-700/80 transition-colors"
                   >
                     <div className="flex items-center gap-1.5 text-slate-800 dark:text-slate-100 font-medium">
                       {theme === 'dark' ? (
@@ -517,7 +517,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   type="button"
                   onClick={() => { setIsMenuOpen(false); onPrint(); }}
-                  className="w-full text-left px-3 py-2 rounded-none bg-slate-100 dark:bg-[#2A2A2A]/80 hover:bg-slate-200/70 dark:hover:bg-slate-700/80 flex items-center justify-between text-slate-700 dark:text-slate-100 font-medium transition-colors cursor-pointer border border-slate-200/80 dark:border-slate-800"
+                  className="w-full text-left px-3 py-2 rounded-sm bg-[#E2DDCF] dark:bg-[#2A2A2A]/80 hover:bg-slate-200/70 dark:hover:bg-slate-700/80 flex items-center justify-between text-slate-700 dark:text-slate-100 font-medium transition-colors cursor-pointer border border-[#D6D0C4]/80 dark:border-slate-800"
                 >
                   <div className="flex items-center gap-2">
                     <i className="fi fi-sr-print text-base text-emerald-600 dark:text-emerald-400" />
@@ -527,7 +527,7 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
 
               {/* 5. Owner Account & Security */}
-              <div className="px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900/90 space-y-1.5 border-t border-slate-200 dark:border-slate-800">
+              <div className="px-3.5 py-2.5 bg-[#EBE7E0] dark:bg-slate-900/90 space-y-1.5 border-t border-[#D6D0C4] dark:border-slate-800">
                 <div className="flex items-center justify-between">
                   <span className="font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1 text-[11px]">
                     <i className="fi fi-sr-shield-check text-sm text-emerald-500" />
@@ -536,7 +536,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <button
                     type="button"
                     onClick={() => { setIsMenuOpen(false); onOpenAuthModal(); }}
-                    className="text-[#F97316] hover:underline font-bold cursor-pointer text-xs"
+                    className="text-[#C2410C] hover:underline font-bold cursor-pointer text-xs"
                   >
                     {userEmail ? (language === 'bn' ? 'অ্যাকাউন্ট সেটিংস' : 'Manage') : t.loginBtn}
                   </button>
@@ -555,7 +555,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <button
                     type="button"
                     onClick={() => { setIsMenuOpen(false); onLockApp(); }}
-                    className="w-full mt-1.5 py-1.5 px-3 rounded-none bg-[#F97316]/10 hover:bg-[#F97316]/20 text-[#F97316] font-bold text-[11px] transition-colors flex items-center justify-center gap-1.5 cursor-pointer border border-[#F97316]/30"
+                    className="w-full mt-1.5 py-1.5 px-3 rounded-sm bg-[#C2410C]/10 hover:bg-[#C2410C]/20 text-[#C2410C] font-bold text-[11px] transition-colors flex items-center justify-center gap-1.5 cursor-pointer border border-[#C2410C]/30"
                   >
                     <i className="fi fi-sr-lock text-xs" />
                     <span>{language === 'bn' ? 'ওয়েবসাইট লক করুন (লগআউট)' : 'Lock Website (Log Out)'}</span>
@@ -568,7 +568,7 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* Divider */}
-      <div className="my-3 border-t border-slate-200 dark:border-slate-800/80" />
+      <div className="my-3 border-t border-[#D6D0C4] dark:border-slate-800" />
 
       {/* 4. Search Box */}
       <div className="relative w-full">
@@ -578,7 +578,7 @@ export const Header: React.FC<HeaderProps> = ({
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder={t.searchPlaceholder}
-          className="w-full pl-10 pr-8 py-2.5 bg-slate-100 dark:bg-[#2A2A2A] border border-slate-200/80 dark:border-slate-800 rounded-none text-xs sm:text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#F97316] transition-all"
+          className="w-full pl-10 pr-8 py-2.5 bg-[#E2DDCF] dark:bg-[#2A2A2A] border border-[#D6D0C4]/80 dark:border-slate-800 rounded-sm text-xs sm:text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-[#C2410C] transition-all"
         />
         {searchQuery && (
           <button

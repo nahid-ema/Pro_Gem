@@ -202,16 +202,16 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white dark:bg-[#1A1A1A]/80 border border-[#E8E6E1] dark:border-slate-800 rounded-none max-w-md w-full p-6 shadow-sm border border-slate-200 dark:border-slate-800 relative">
+      <div className="bg-[#F5F5F0] dark:bg-[#1A1A1A]/80 border border-[#D6D0C4] dark:border-slate-800 rounded-sm max-w-md w-full p-6 shadow-none border border-[#D6D0C4] dark:border-slate-800 relative">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 p-2 rounded-none bg-[#F2F0EB] dark:bg-[#2A2A2A] text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors cursor-pointer"
+          className="absolute right-4 top-4 p-2 rounded-sm bg-[#F2F0EB] dark:bg-[#2A2A2A] text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors cursor-pointer"
         >
           <i className="fi fi-sr-cross text-base" />
         </button>
 
         <div className="text-center mb-6">
-          <div className="w-12 h-12 rounded-none bg-[#F97316] text-slate-900 flex items-center justify-center font-black text-xl mx-auto mb-3 shadow-md">
+          <div className="w-12 h-12 rounded-sm bg-[#C2410C] text-white flex items-center justify-center font-black text-xl mx-auto mb-3 shadow-none">
             🏠
           </div>
           <h3 className="text-lg font-bold text-slate-900 dark:text-white">
@@ -223,20 +223,20 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         </div>
 
         {userEmail ? (
-          <div className="bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 rounded-none p-5 text-center space-y-4">
+          <div className="bg-[#EBE7E0] dark:bg-slate-800/60 border border-[#D6D0C4]/80 dark:border-slate-700 rounded-sm p-5 text-center space-y-4">
             <i className="fi fi-sr-check-circle text-4xl text-emerald-500 mx-auto" />
             <div>
               <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold block mb-1">
                 {language === 'bn' ? 'বর্তমান কানেক্টেড ইউজার:' : 'Currently signed in as:'}
               </span>
-              <p className="text-sm font-bold font-mono text-slate-900 dark:text-white bg-[#F2F0EB] dark:bg-[#2A2A2A] py-1.5 px-3 rounded-none inline-block">
+              <p className="text-sm font-bold font-mono text-slate-900 dark:text-white bg-[#F2F0EB] dark:bg-[#2A2A2A] py-1.5 px-3 rounded-sm inline-block">
                 {userEmail}
               </p>
             </div>
 
             <button
               onClick={handleLogout}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-none bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs shadow-sm transition-colors cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-sm bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs shadow-none transition-colors cursor-pointer"
             >
               <i className="fi fi-sr-sign-out-alt" />
               <span>{t.logoutBtn}</span>
@@ -245,13 +245,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         ) : (
           <div>
             {/* Tab selection for Sign In / Sign Up / Reset */}
-            <div className="flex bg-[#F2F0EB] dark:bg-[#2A2A2A] p-1 rounded-none mb-5 text-xs font-semibold">
+            <div className="flex bg-[#F2F0EB] dark:bg-[#2A2A2A] p-1 rounded-sm mb-5 text-xs font-semibold">
               <button
                 type="button"
                 onClick={() => switchMode('signIn')}
-                className={`flex-1 py-1.5 rounded-none transition-all cursor-pointer ${
+                className={`flex-1 py-1.5 rounded-sm transition-all cursor-pointer ${
                   mode === 'signIn'
-                    ? 'bg-white dark:bg-[#1A1A1A]/80 text-[#F97316] shadow-xs font-bold'
+                    ? 'bg-[#F5F5F0] dark:bg-[#1A1A1A]/80 text-[#C2410C] shadow-none font-bold'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
@@ -260,9 +260,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <button
                 type="button"
                 onClick={() => switchMode('signUp')}
-                className={`flex-1 py-1.5 rounded-none transition-all cursor-pointer ${
+                className={`flex-1 py-1.5 rounded-sm transition-all cursor-pointer ${
                   mode === 'signUp'
-                    ? 'bg-white dark:bg-[#1A1A1A]/80 text-[#F97316] shadow-xs font-bold'
+                    ? 'bg-[#F5F5F0] dark:bg-[#1A1A1A]/80 text-[#C2410C] shadow-none font-bold'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
@@ -283,7 +283,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="user@example.com"
-                    className="w-full pl-10 pr-3 py-2 rounded-none border border-[#E8E6E1] dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#F97316]"
+                    className="w-full pl-10 pr-3 py-2 rounded-sm border border-[#D6D0C4] dark:border-slate-800 bg-[#EBE7E0] dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#C2410C]"
                   />
                 </div>
               </div>
@@ -298,7 +298,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       <button
                         type="button"
                         onClick={() => switchMode('resetPassword')}
-                        className="text-[11px] font-semibold text-[#F97316] hover:underline cursor-pointer"
+                        className="text-[11px] font-semibold text-[#C2410C] hover:underline cursor-pointer"
                       >
                         {language === 'bn' ? 'পাসওয়ার্ড ভুলে গেছেন?' : 'Forgot Password?'}
                       </button>
@@ -312,7 +312,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full pl-10 pr-3 py-2 rounded-none border border-[#E8E6E1] dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#F97316]"
+                      className="w-full pl-10 pr-3 py-2 rounded-sm border border-[#D6D0C4] dark:border-slate-800 bg-[#EBE7E0] dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#C2410C]"
                     />
                   </div>
                 </div>
@@ -331,14 +331,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full pl-10 pr-3 py-2 rounded-none border border-[#E8E6E1] dark:border-slate-800 bg-slate-50 dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#F97316]"
+                      className="w-full pl-10 pr-3 py-2 rounded-sm border border-[#D6D0C4] dark:border-slate-800 bg-[#EBE7E0] dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#C2410C]"
                     />
                   </div>
                 </div>
               )}
 
               {statusMsg && (
-                <div className={`p-3 rounded-none text-xs font-semibold flex items-center gap-2 ${
+                <div className={`p-3 rounded-sm text-xs font-semibold flex items-center gap-2 ${
                   isError 
                     ? 'bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800' 
                     : 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
@@ -351,7 +351,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-2.5 rounded-none bg-[#F97316] text-slate-900 hover:bg-[#EA580C] font-bold text-xs md:text-sm shadow-md transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+                className="w-full py-2.5 rounded-sm bg-[#C2410C] text-white hover:bg-[#9A3412] font-bold text-xs md:text-sm shadow-none transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
               >
                 {mode === 'signIn' && <i className="fi fi-sr-sign-in-alt" />}
                 {mode === 'signUp' && <i className="fi fi-sr-user-add" />}
@@ -380,10 +380,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
             <div className="relative my-4">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-[#E8E6E1] dark:border-slate-800"></div>
+                <div className="w-full border-t border-[#D6D0C4] dark:border-slate-800"></div>
               </div>
               <div className="relative flex justify-center text-[10px] uppercase font-bold text-slate-400">
-                <span className="bg-white dark:bg-[#1A1A1A]/80 px-2">
+                <span className="bg-[#F5F5F0] dark:bg-[#1A1A1A]/80 px-2">
                   {language === 'bn' ? 'অথবা' : 'OR'}
                 </span>
               </div>
@@ -393,7 +393,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               type="button"
               onClick={handleGoogleSignIn}
               disabled={isLoading}
-              className="w-full py-2.5 rounded-none bg-[#F2F0EB] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 font-semibold text-xs shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-2.5 rounded-sm bg-[#F2F0EB] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 font-semibold text-xs shadow-none transition-colors flex items-center justify-center gap-2 cursor-pointer"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24">
                 <path
@@ -416,7 +416,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <span>{language === 'bn' ? 'গুগল দিয়ে প্রবেশ করুন' : 'Continue with Google'}</span>
             </button>
 
-            <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800 text-center">
+            <div className="mt-4 pt-3 border-t border-[#D6D0C4] dark:border-slate-800 text-center">
               <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-2">
                 {language === 'bn'
                   ? '💡 টিপস: ফায়ারবেস লগইন ছাড়া সিকিউরিটি পিন (ডিফল্ট: 1234) দিয়েও সম্পূর্ণ অ্যাপ নিরাপদ রাখতে পারেন।'
@@ -425,7 +425,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="w-full py-2 rounded-none border border-[#E8E6E1] dark:border-slate-800 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-xs cursor-pointer transition-colors"
+                className="w-full py-2 rounded-sm border border-[#D6D0C4] dark:border-slate-800 bg-[#F5F5F0] dark:bg-slate-800 hover:bg-[#EBE7E0] dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-semibold text-xs cursor-pointer transition-colors"
               >
                 {language === 'bn' ? 'সিকিউরিটি পিন দিয়ে চালু রাখুন' : 'Continue with Security PIN'}
               </button>

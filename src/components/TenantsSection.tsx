@@ -95,11 +95,11 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
   };
 
   return (
-    <div className="bg-white dark:bg-[#1A1A1A] border border-slate-200 dark:border-slate-800 rounded-none md:rounded-none p-5 md:p-6 mb-6 shadow-none">
+    <div className="bg-[#F5F5F0] dark:bg-[#1A1A1A] border border-[#D6D0C4] dark:border-slate-800 rounded-sm md:rounded-sm p-5 md:p-6 mb-6 shadow-none">
       {/* Title */}
-      <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-200 dark:border-slate-800">
+      <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#D6D0C4] dark:border-slate-800">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-none bg-[#F97316]/10 text-[#F97316] dark:text-[#F97316] flex items-center justify-center font-bold text-base">
+          <div className="w-9 h-9 rounded-sm bg-[#C2410C]/10 text-[#C2410C] dark:text-[#C2410C] flex items-center justify-center font-bold text-base">
             <i className="fi fi-sr-users" />
           </div>
           <div>
@@ -114,7 +114,7 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
 
         <button
           onClick={() => setIsFormOpen(!isFormOpen)}
-          className="no-print flex items-center gap-1.5 px-4 py-2 rounded-none bg-[#F97316] text-slate-900 hover:bg-[#EA580C] font-bold text-xs transition-colors shadow-sm cursor-pointer"
+          className="no-print flex items-center gap-1.5 px-4 py-2 rounded-sm bg-[#C2410C] text-white hover:bg-[#9A3412] font-bold text-xs transition-colors shadow-none cursor-pointer"
         >
           <i className={`fi fi-sr-add transition-transform ${isFormOpen ? 'rotate-45' : ''}`} />
           <span className="hidden sm:inline">{editingId ? t.tenantUpdateBtn : t.tenantToggleLabel}</span>
@@ -123,7 +123,7 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
 
       {/* Expandable Add/Edit Form */}
       {isFormOpen && (
-        <form onSubmit={handleSubmit} className="bg-[#F9F9F8] dark:bg-[#222222] border border-[#E8E6E1] dark:border-slate-800/80 rounded-none p-4 mb-5 space-y-4 no-print animate-fadeIn">
+        <form onSubmit={handleSubmit} className="bg-[#F9F9F8] dark:bg-[#222222] border border-[#D6D0C4] dark:border-slate-800 rounded-sm p-4 mb-5 space-y-4 no-print animate-fadeIn">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">{t.thName} *</label>
@@ -133,7 +133,7 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder={t.tNamePh}
-                className="w-full px-3 py-2 rounded-none border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 rounded-sm border border-slate-300 dark:border-slate-700 bg-[#F5F5F0] dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white"
               />
             </div>
 
@@ -145,7 +145,7 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder={t.tPhonePh}
-                className="w-full px-3 py-2 rounded-none border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 rounded-sm border border-slate-300 dark:border-slate-700 bg-[#F5F5F0] dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white"
               />
             </div>
 
@@ -155,7 +155,7 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
                 required
                 value={room}
                 onChange={(e) => setRoom(e.target.value)}
-                className="w-full px-3 py-2 rounded-none border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 rounded-sm border border-slate-300 dark:border-slate-700 bg-[#F5F5F0] dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white"
               >
                 <option value="">{t.tRoomPh}</option>
                 {safeRooms.map((rm) => (
@@ -173,22 +173,22 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
                 value={nid}
                 onChange={(e) => setNid(e.target.value)}
                 placeholder={t.tNidPh}
-                className="w-full px-3 py-2 rounded-none border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 rounded-sm border border-slate-300 dark:border-slate-700 bg-[#F5F5F0] dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white"
               />
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#E8E6E1] dark:border-slate-800">
+          <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#D6D0C4] dark:border-slate-800">
             <button
               type="button"
               onClick={resetForm}
-              className="px-3.5 py-1.5 rounded-none bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-colors"
+              className="px-3.5 py-1.5 rounded-sm bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-colors"
             >
               {t.cancelBtn}
             </button>
             <button
               type="submit"
-              className="px-4 py-1.5 rounded-none bg-[#F97316] text-slate-900 hover:bg-[#EA580C] font-bold text-xs shadow-sm transition-colors cursor-pointer"
+              className="px-4 py-1.5 rounded-sm bg-[#C2410C] text-white hover:bg-[#9A3412] font-bold text-xs shadow-none transition-colors cursor-pointer"
             >
               {editingId ? t.tenantUpdateBtn : t.tenantSubmitBtn}
             </button>
@@ -197,10 +197,10 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
       )}
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-none border border-slate-200 dark:border-slate-800">
+      <div className="overflow-x-auto rounded-sm border border-[#D6D0C4] dark:border-slate-800">
         <table className="w-full text-left text-xs md:text-sm border-collapse">
           <thead>
-            <tr className="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 uppercase text-[11px] font-bold tracking-wider border-b border-[#E8E6E1] dark:border-slate-800">
+            <tr className="bg-transparent text-slate-900 dark:text-white uppercase text-[10px] font-black tracking-widest border-b-2 border-slate-900 dark:border-white">
               <th className="p-3">{t.thName}</th>
               <th className="p-3">{t.thPhone}</th>
               <th className="p-3">{t.thRoom}</th>
@@ -217,7 +217,7 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
               </tr>
             ) : (
               filteredTenants.map((tn) => (
-                <tr key={tn.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                <tr key={tn.id} className="border-b border-[#E2DDCF] dark:border-slate-800/50 hover:bg-[#EBE7E0] dark:hover:bg-slate-800/50 transition-colors">
                   <td className="p-3 font-bold text-slate-900 dark:text-white">
                     {tn.name}
                   </td>
@@ -226,7 +226,7 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
                       <span>{tn.phone}</span>
                       <a
                         href={`tel:${tn.phone}`}
-                        className="no-print p-1 rounded bg-slate-100 dark:bg-[#2A2A2A] text-indigo-600 hover:bg-slate-200 transition-colors"
+                        className="no-print p-1 rounded bg-[#E2DDCF] dark:bg-[#2A2A2A] text-indigo-600 hover:bg-slate-200 transition-colors"
                         title="Call Tenant"
                       >
                         <i className="fi fi-sr-phone-call text-xs" />
@@ -243,7 +243,7 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
                     </div>
                   </td>
                   <td className="p-3">
-                    <span className="inline-block px-2.5 py-0.5 rounded-md bg-slate-100 dark:bg-[#2A2A2A] text-slate-700 dark:text-slate-300 font-semibold text-xs border border-slate-200/80 dark:border-slate-800">
+                    <span className="inline-block px-2.5 py-0.5 rounded-md bg-[#E2DDCF] dark:bg-[#2A2A2A] text-slate-700 dark:text-slate-300 font-semibold text-xs border border-[#D6D0C4]/80 dark:border-slate-800">
                       {t.roomText}: {tn.room}
                     </span>
                   </td>
@@ -252,7 +252,7 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
                     <div className="flex items-center justify-end gap-1.5">
                       <button
                         onClick={() => handleEditClick(tn)}
-                        className="p-1.5 rounded-none text-slate-600 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                        className="p-1.5 rounded-sm text-slate-600 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 hover:bg-[#E2DDCF] dark:hover:bg-slate-800 transition-colors"
                         title={t.edit}
                       >
                         <i className="fi fi-sr-edit text-sm" />
@@ -261,7 +261,7 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
                         onClick={() => {
                           if (confirm(t.deleteConfirm)) onDeleteTenant(tn.id);
                         }}
-                        className="p-1.5 rounded-none text-slate-600 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                        className="p-1.5 rounded-sm text-slate-600 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 hover:bg-[#E2DDCF] dark:hover:bg-slate-800 transition-colors"
                         title={t.delete}
                       >
                         <i className="fi fi-sr-trash text-sm" />

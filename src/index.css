@@ -1,5 +1,27 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap");
+
+
+body {
+  font-family: "DM Sans", system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+h1, h2, h3, h4, h5, h6, .font-mono, .tracking-wider, .tracking-widest {
+  font-family: "Outfit", system-ui, sans-serif;
+}
+
+/* Enhancing tracking for headers to give it that stark Nordic feel */
+h1, h2, h3 {
+  letter-spacing: -0.02em;
+}
+
+/* Make table headers pop */
+th {
+  letter-spacing: 0.05em;
+}
+
 
 @theme {
   --font-sans: 'Google Sans', 'Product Sans', 'Google Sans Text', 'Plus Jakarta Sans', 'Noto Sans Bengali', system-ui, -apple-system, sans-serif;
@@ -16,8 +38,8 @@
 
 @layer base {
   :root {
-    --accent-orange: #F97316;
-    --accent-coral-hover: #E3B431;
+    --accent-orange: #C2410C;
+    --accent-coral-hover: #9A3412;
     --accent-coral-light: #EBE7E0;
   }
 
@@ -85,19 +107,19 @@ html {
 }
 
 .bg-orange-accent {
-  background-color: #F97316;
+  background-color: #C2410C;
 }
 
 .bg-orange-accent:hover {
-  background-color: #E3B431;
+  background-color: #9A3412;
 }
 
 .text-orange-accent {
-  color: #F97316;
+  color: #C2410C;
 }
 
 .border-orange-accent {
-  border-color: #F97316;
+  border-color: #C2410C;
 }
 
 .bg-orange-accent-light {
@@ -354,7 +376,7 @@ html {
     color: #be123c !important;
   }
 
-  .text-\[\#F97316\], .dark .text-\[\#F97316\] {
+  .text-\[\#C2410C\], .dark .text-\[\#C2410C\] {
     color: #1e3a8a !important; /* Darker blue for print contrast */
   }
 
