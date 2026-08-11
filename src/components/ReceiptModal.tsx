@@ -105,7 +105,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
         {/* Modal Controls Bar (Screen Only - Hidden in Print) */}
         <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-[#D6D0C4] dark:border-slate-800 no-print gap-1.5 flex-wrap">
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-sm bg-[#C2410C]" />
+            <span className="w-2 h-2 rounded-sm bg-[#2563EB]" />
             <h3 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
               {t.receiptTitle}
             </h3>
@@ -186,7 +186,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
               <span className="text-slate-400 font-bold block uppercase text-[10px]">
                 {t.receiptNo}
               </span>
-              <span className="font-mono font-bold text-sm text-[#C2410C]">
+              <span className="font-mono font-bold text-sm text-[#2563EB]">
                 #NK-{rentRecord.id.substring(0, 8).toUpperCase()}
               </span>
             </div>
@@ -204,7 +204,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
 
             <div className="text-right">
               <span className="text-slate-400 text-[11px] block font-semibold">{t.roomAssigned}</span>
-              <span className="font-black text-sm text-[#C2410C] block mt-0.5">{t.roomText} {rentRecord.room}</span>
+              <span className="font-black text-sm text-[#2563EB] block mt-0.5">{t.roomText} {rentRecord.room}</span>
             </div>
           </div>
 
@@ -212,7 +212,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           <div className="rounded-sm border border-[#D6D0C4] overflow-hidden shadow-none bg-white">
             <div className="bg-[#E2DDCF] px-3 py-1.5 border-b border-[#D6D0C4] flex items-center justify-between text-[11px] font-bold text-slate-700">
               <span className="flex items-center gap-1">
-                <i className="fi fi-sr-document text-sm text-[#C2410C]" />
+                <i className="fi fi-sr-document text-sm text-[#2563EB]" />
                 {language === 'bn' ? 'বিলের বিস্তারিত বিবরণ' : 'Itemized Bill Breakdown'}
               </span>
               <span>{language === 'bn' ? 'টাকা (TK)' : 'Amount (TK)'}</span>
@@ -352,7 +352,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
             
             {/* System Stamp Motif */}
             <div className="text-center opacity-80 pointer-events-none">
-              <div className="w-11 h-11 rounded-sm border-2 border-dashed border-[#C2410C] flex items-center justify-center mx-auto text-[8px] font-black text-[#C2410C] uppercase rotate-[-12deg] p-1">
+              <div className="w-11 h-11 rounded-sm border-2 border-dashed border-[#2563EB] flex items-center justify-center mx-auto text-[8px] font-black text-[#2563EB] uppercase rotate-[-12deg] p-1">
                 {language === 'bn' ? 'যাচাইকৃত' : 'VERIFIED'}
               </div>
             </div>

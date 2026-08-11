@@ -108,7 +108,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
       {/* Title */}
       <div className="flex items-center justify-between pb-4 mb-4 border-b border-[#D6D0C4] dark:border-slate-800">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-sm bg-[#C2410C]/10 text-[#C2410C] dark:text-[#C2410C] flex items-center justify-center font-bold text-base">
+          <div className="w-9 h-9 rounded-sm bg-[#2563EB]/10 text-[#2563EB] dark:text-[#2563EB] flex items-center justify-center font-bold text-base">
             <i className="fi fi-sr-shop" />
           </div>
           <div>
@@ -123,7 +123,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
 
         <button
           onClick={() => setIsFormOpen(!isFormOpen)}
-          className="no-print flex items-center gap-1.5 px-4 py-2 rounded-sm bg-[#C2410C] text-white hover:bg-[#9A3412] font-bold text-xs transition-colors shadow-none cursor-pointer"
+          className="no-print flex items-center gap-1.5 px-4 py-2 rounded-sm bg-[#2563EB] text-white hover:bg-[#1D4ED8] font-bold text-xs transition-colors shadow-none cursor-pointer"
         >
           <i className={`fi fi-sr-add transition-transform ${isFormOpen ? 'rotate-45' : ''}`} />
           <span className="hidden sm:inline">{editingId ? t.dokanUpdateBtn : t.dokanToggleLabel}</span>
@@ -181,7 +181,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
             </button>
             <button
               type="submit"
-              className="px-4 py-1.5 rounded-sm bg-[#C2410C] text-white hover:bg-[#9A3412] font-bold text-xs shadow-none transition-colors cursor-pointer"
+              className="px-4 py-1.5 rounded-sm bg-[#2563EB] text-white hover:bg-[#1D4ED8] font-bold text-xs shadow-none transition-colors cursor-pointer"
             >
               {editingId ? t.dokanUpdateBtn : t.dokanSubmitBtn}
             </button>

@@ -38,8 +38,8 @@ th {
 
 @layer base {
   :root {
-    --accent-orange: #C2410C;
-    --accent-coral-hover: #9A3412;
+    --accent-orange: #2563EB;
+    --accent-coral-hover: #1D4ED8;
     --accent-coral-light: #EBE7E0;
   }
 
@@ -107,19 +107,19 @@ html {
 }
 
 .bg-orange-accent {
-  background-color: #C2410C;
+  background-color: #2563EB;
 }
 
 .bg-orange-accent:hover {
-  background-color: #9A3412;
+  background-color: #1D4ED8;
 }
 
 .text-orange-accent {
-  color: #C2410C;
+  color: #2563EB;
 }
 
 .border-orange-accent {
-  border-color: #C2410C;
+  border-color: #2563EB;
 }
 
 .bg-orange-accent-light {
@@ -376,7 +376,7 @@ html {
     color: #be123c !important;
   }
 
-  .text-\[\#C2410C\], .dark .text-\[\#C2410C\] {
+  .text-\[\#2563EB\], .dark .text-\[\#2563EB\] {
     color: #1e3a8a !important; /* Darker blue for print contrast */
   }
 

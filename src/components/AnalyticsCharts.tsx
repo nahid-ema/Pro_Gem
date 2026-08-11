@@ -124,7 +124,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
     categoryMap.set(cat, prev + (ex.amount || 0));
   });
 
-  const categoryColors = ['#6366f1', '#ec4899', '#14b8a6', '#C2410C', '#8b5cf6', '#06b6d4', '#eab308', '#3b82f6', '#a855f7'];
+  const categoryColors = ['#6366f1', '#ec4899', '#14b8a6', '#2563EB', '#8b5cf6', '#06b6d4', '#eab308', '#3b82f6', '#a855f7'];
 
   const expenseCategoryData = Array.from(categoryMap.entries())
     .map(([name, value], idx) => ({
@@ -144,7 +144,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
     <div className="bg-[#F5F5F0] dark:bg-[#1A1A1A] border border-[#D6D0C4] dark:border-slate-800 rounded-sm md:rounded-sm p-5 md:p-6 mb-6 shadow-none space-y-6">
       {/* Title */}
       <div className="flex items-center gap-3 pb-4 border-b border-[#D6D0C4] dark:border-slate-800">
-        <div className="w-9 h-9 rounded-sm bg-[#C2410C]/10 text-[#C2410C] dark:text-[#C2410C] flex items-center justify-center font-bold text-base">
+        <div className="w-9 h-9 rounded-sm bg-[#2563EB]/10 text-[#2563EB] dark:text-[#2563EB] flex items-center justify-center font-bold text-base">
           <i className="fi fi-sr-chart-line-up text-base" />
         </div>
         <div>
@@ -237,7 +237,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
         <div className="bg-[#F9F9F8] dark:bg-[#222222] border border-[#D6D0C4] dark:border-slate-800 rounded-sm p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <i className="fi fi-sr-chart-pie text-base text-[#C2410C]" />
+              <i className="fi fi-sr-chart-pie text-base text-[#2563EB]" />
               <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
                 {t.chartExpenseCategories} ({language === 'bn' ? 'খাতভিত্তিক খরচ' : 'Expense Category Breakdown'})
               </h4>

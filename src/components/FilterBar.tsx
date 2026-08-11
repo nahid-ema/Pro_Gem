@@ -54,7 +54,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   }, []);
 
   const navItems: { id: TabType; labelEn: string; labelBn: string; icon: React.ReactNode }[] = [
-    { id: 'brief', labelEn: 'Summary', labelBn: 'সারসংক্ষেপ', icon: <i className="fi fi-sr-chart-histogram text-[#C2410C]" /> },
+    { id: 'brief', labelEn: 'Summary', labelBn: 'সারসংক্ষেপ', icon: <i className="fi fi-sr-chart-histogram text-[#2563EB]" /> },
     { id: 'rooms', labelEn: 'Rooms', labelBn: 'রুমসমূহ', icon: <i className="fi fi-sr-door-closed text-blue-500" /> },
     { id: 'tenants', labelEn: 'Tenants', labelBn: 'ভাড়াটিয়া', icon: <i className="fi fi-sr-users text-emerald-500" /> },
     { id: 'rent', labelEn: 'Rent Collection', labelBn: 'ভাড়া আদায়', icon: <i className="fi fi-sr-money-bill-wave text-amber-500" /> },
@@ -146,7 +146,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               }}
               className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-sm bg-[#E2DDCF] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-[#D6D0C4]/80 dark:border-slate-800 text-xs font-bold transition-all cursor-pointer shrink-0 shadow-none active:scale-95"
             >
-              <i className="fi fi-sr-calendar text-[#C2410C] shrink-0" />
+              <i className="fi fi-sr-calendar text-[#2563EB] shrink-0" />
               <span>{getSelectedDateLabel()}</span>
               <i className={`fi fi-sr-angle-down text-slate-400 shrink-0 transition-transform duration-200 ${isDatePickerOpen ? 'rotate-180' : ''}`} />
             </button>
@@ -160,7 +160,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                   <button
                     type="button"
                     onClick={handleThisMonth}
-                    className="flex-1 px-2 py-1 rounded-sm bg-[#C2410C]/10 text-[#C2410C] hover:bg-[#C2410C]/20 text-[11px] font-bold transition-colors cursor-pointer text-center"
+                    className="flex-1 px-2 py-1 rounded-sm bg-[#2563EB]/10 text-[#2563EB] hover:bg-[#2563EB]/20 text-[11px] font-bold transition-colors cursor-pointer text-center"
                   >
                     {language === 'bn' ? 'চলতি মাস' : 'This Month'}
                   </button>
@@ -274,7 +274,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 setIsQuickNavOpen((prev) => !prev);
                 setIsDatePickerOpen(false);
               }}
-              className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-sm bg-[#C2410C]/10 hover:bg-[#C2410C]/20 text-[#C2410C] border border-[#C2410C]/30 text-xs font-bold transition-all cursor-pointer shrink-0 shadow-none active:scale-95"
+              className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-sm bg-[#2563EB]/10 hover:bg-[#2563EB]/20 text-[#2563EB] border border-[#2563EB]/30 text-xs font-bold transition-all cursor-pointer shrink-0 shadow-none active:scale-95"
             >
               <i className="fi fi-sr-compass-alt shrink-0" />
               <span>{language === 'bn' ? 'দ্রুত নেভিগেশন' : 'Quick Navigation'}</span>
@@ -323,7 +323,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder={t.searchPlaceholder}
-              className="w-full pl-9 pr-7 py-1.5 bg-[#E2DDCF] dark:bg-[#2A2A2A] border border-[#D6D0C4]/80 dark:border-slate-800 rounded-sm text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C2410C] transition-all"
+              className="w-full pl-9 pr-7 py-1.5 bg-[#E2DDCF] dark:bg-[#2A2A2A] border border-[#D6D0C4]/80 dark:border-slate-800 rounded-sm text-xs text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2563EB] transition-all"
             />
             {searchQuery && (
               <button
@@ -338,7 +338,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
           <button
             type="button"
-            className="flex items-center gap-1.5 bg-[#C2410C] text-white hover:bg-[#9A3412] px-3.5 py-1.5 rounded-sm text-xs font-bold shrink-0 transition-colors shadow-none cursor-pointer active:scale-95"
+            className="flex items-center gap-1.5 bg-[#2563EB] text-white hover:bg-[#1D4ED8] px-3.5 py-1.5 rounded-sm text-xs font-bold shrink-0 transition-colors shadow-none cursor-pointer active:scale-95"
           >
             <i className="fi fi-sr-search" />
             <span>{language === 'bn' ? 'খুঁজুন' : 'Search'}</span>

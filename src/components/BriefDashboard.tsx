@@ -47,7 +47,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
       {/* Header Title & Period indicator */}
       <div className="flex items-center justify-between gap-2 mb-4 sm:mb-5 pb-3 sm:pb-4 border-b border-[#D6D0C4] dark:border-slate-800">
         <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-sm sm:rounded-sm bg-[#C2410C]/10 text-[#C2410C] dark:text-[#C2410C] flex items-center justify-center font-bold text-sm sm:text-base shrink-0">
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-sm sm:rounded-sm bg-[#2563EB]/10 text-[#2563EB] dark:text-[#2563EB] flex items-center justify-center font-bold text-sm sm:text-base shrink-0">
             <i className="fi fi-sr-chart-histogram text-base sm:text-lg" />
           </div>
           <div className="min-w-0">
@@ -76,7 +76,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
       <div className="mb-4 sm:mb-6">
         <div className="w-full h-1.5 sm:h-2 bg-[#F2F0EB] dark:bg-[#2A2A2A] rounded-sm overflow-hidden">
           <div
-            className="h-full bg-[#C2410C] rounded-sm transition-all duration-500 ease-out"
+            className="h-full bg-[#2563EB] rounded-sm transition-all duration-500 ease-out"
             style={{ width: `${collectionPercentage}%` }}
           />
         </div>
@@ -90,7 +90,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
             <span className="text-slate-400 dark:text-slate-500 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest truncate">
               {t.briefRentLbl}
             </span>
-            <div className="w-5 h-5 rounded-sm bg-[#C2410C]/20 text-[#C2410C] flex items-center justify-center shrink-0">
+            <div className="w-5 h-5 rounded-sm bg-[#2563EB]/20 text-[#2563EB] flex items-center justify-center shrink-0">
               <i className="fi fi-sr-wallet text-xs" />
             </div>
           </div>
@@ -98,7 +98,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
             {formatCurrency(totalExpectedRent)}
           </p>
           <div className="w-full h-1 bg-slate-200 dark:bg-slate-700/80 rounded-sm mt-2 sm:mt-3 overflow-hidden">
-            <div className="w-full h-full bg-[#C2410C]"></div>
+            <div className="w-full h-full bg-[#2563EB]"></div>
           </div>
         </div>
 
@@ -196,7 +196,7 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
       {/* Net Position Banner */}
       <div className={`p-4 md:p-5 rounded-sm md:rounded-sm border flex flex-col sm:flex-row items-center justify-between gap-3 shadow-none ${
         isNetPositive 
-          ? 'bg-gradient-to-r from-[#C2410C] to-[#34D399] text-white border-none shadow-none' 
+          ? 'bg-gradient-to-r from-[#2563EB] to-[#34D399] text-white border-none shadow-none' 
           : 'bg-gradient-to-r from-rose-500 to-rose-400 text-white border-none shadow-[0_8px_30px_rgb(244,63,94,0.3)]'
       }`}>
         <div className="flex items-center gap-3 text-center sm:text-left">
