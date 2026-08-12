@@ -1,14 +1,19 @@
-@import url("https://fonts.cdnfonts.com/css/samsung-sans");
+@font-face {
+  font-family: "One UI Sans";
+  src: url("https://cdn.jsdelivr.net/gh/Deemitry88/OneUI-Sans@main/OneUISans-VF.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+}
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800;900&display=swap");
 @import "tailwindcss";
 
 body {
-  font-family: "Samsung Sans", "Noto Sans Bengali", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: "One UI Sans", "Noto Sans Bengali", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   letter-spacing: -0.01em;
 }
 
 h1, h2, h3, h4, h5, h6, .font-mono, .tracking-wider, .tracking-widest {
-  font-family: "Samsung Sans", "Noto Sans Bengali", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: "One UI Sans", "Noto Sans Bengali", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 /* Enhancing tracking for headers */
@@ -23,7 +28,7 @@ th {
 
 
 @theme {
-  --font-sans: "Samsung Sans", "Noto Sans Bengali", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: "One UI Sans", "Noto Sans Bengali", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
   /* Premium Obsidian & Charcoal Dark Palette (replaces navy-blue tint slate in dark mode) */
@@ -43,7 +48,7 @@ th {
   }
 
   html, body, button, input, select, textarea {
-    font-family: "Samsung Sans", "Noto Sans Bengali", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: "One UI Sans", "Noto Sans Bengali", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   }
 
   /* Universal Flaticon Icons Clean Alignment */
@@ -204,7 +209,7 @@ html {
     background: #ffffff !important;
     color: #0f172a !important;
     font-size: 11pt !important;
-    font-family: "Samsung Sans", "Noto Sans Bengali", system-ui, sans-serif;
+    font-family: "One UI Sans", "Noto Sans Bengali", system-ui, sans-serif;
     line-height: 1.4 !important;
     margin: 0 !important;
     padding: 0 !important;
