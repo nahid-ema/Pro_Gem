@@ -415,14 +415,20 @@ export default function App() {
 
   // Calculate Unpaid Tenants for Selected Period
   const unpaidTenantItems = useMemo<UnpaidTenantItem[]>(() => {
-    const activeY = selectedYear === 'all' ? String(today.getFullYear()) : selectedYear;
-    const activeM = selectedMonth === 'all' ? String(today.getMonth() + 1).padStart(2, '0') : selectedMonth;
+    const isAllY = selectedYear === 'all';
+    const isAllM = selectedMonth === 'all';
 
     const roomDueMap = new Map<string, number>();
     const roomHasRecordMap = new Map<string, boolean>();
 
     (rents || [])
-      .filter((r) => r && r.date && r.date.startsWith(`${activeY}-${activeM}`))
+      .filter((r) => {
+        if (!r || !r.date) return false;
+        const [y, m] = r.date.split('-');
+        const matchY = isAllY || y === selectedYear;
+        const matchM = isAllM || m === selectedMonth;
+        return matchY && matchM;
+      })
       .forEach((r) => {
         const key = (r.room || '').trim();
         roomHasRecordMap.set(key, true);
@@ -437,25 +443,33 @@ export default function App() {
       const roomNoTrim = (tn.room || '').trim();
       const hasRecord = roomHasRecordMap.get(roomNoTrim) || false;
       const due = roomDueMap.get(roomNoTrim) || 0;
+      const matchedRoom = (rooms || []).find((r) => r && (r.roomNo || '').trim() === roomNoTrim);
 
-      if (!hasRecord || due > 0) {
-        const matchedRoom = (rooms || []).find((r) => r && (r.roomNo || '').trim() === roomNoTrim);
-        let estDue = due;
-
-        if (!hasRecord) {
+      if (hasRecord) {
+        if (due > 0) {
+          items.push({
+            tenant: tn,
+            room: matchedRoom,
+            estimatedDue: due,
+            hasRecord: true,
+          });
+        }
+      } else {
+        // If tenant has no payment record in the selected month
+        if (!isAllM) {
+          let estDue = 0;
           if (matchedRoom) {
             estDue = (matchedRoom.rentAmount || 0) + (matchedRoom.gasBill || 0) + (matchedRoom.waterBill || 0) + (matchedRoom.wasteBill || 0);
-          } else {
-            estDue = 0;
+          }
+          if (estDue > 0) {
+            items.push({
+              tenant: tn,
+              room: matchedRoom,
+              estimatedDue: estDue,
+              hasRecord: false,
+            });
           }
         }
-
-        items.push({
-          tenant: tn,
-          room: matchedRoom,
-          estimatedDue: estDue,
-          hasRecord,
-        });
       }
     });
 
@@ -494,23 +508,13 @@ export default function App() {
   }, [dokanDues, selectedYear, selectedMonth]);
 
   const totalCollectedIncome = filteredRentsForTotals.reduce((acc, r) => acc + (r.paid || 0), 0);
-  const totalRecordedExpectedRent = filteredRentsForTotals.reduce((acc, r) => acc + (r.rent || 0), 0);
+  
+  const totalOutstandingDue = useMemo(() => {
+    return unpaidTenantItems.reduce((acc, item) => acc + (item.estimatedDue || 0), 0);
+  }, [unpaidTenantItems]);
 
-  // Expected capacity calculation from assigned tenants
-  const totalTenantCapacity = (tenants || []).reduce((acc, tn) => {
-    if (!tn) return acc;
-    const rm = (rooms || []).find((r) => r && (r.roomNo || '').trim() === (tn.room || '').trim());
-    if (rm) {
-      return acc + ((rm.rentAmount || 0) + (rm.gasBill || 0) + (rm.waterBill || 0) + (rm.wasteBill || 0));
-    }
-    return acc;
-  }, 0);
+  const totalExpectedRent = totalCollectedIncome + totalOutstandingDue;
 
-  const totalExpectedRent = (selectedMonth !== 'all' && selectedYear !== 'all')
-    ? Math.max(totalRecordedExpectedRent, totalTenantCapacity)
-    : totalRecordedExpectedRent;
-
-  const totalOutstandingDue = Math.max(0, totalExpectedRent - totalCollectedIncome);
   const totalExpensesSum = filteredExpensesForTotals.reduce((acc, ex) => acc + (ex.amount || 0), 0);
   const totalShopDuesSum = filteredDokanForTotals.reduce((acc, dk) => acc + (dk.amount || 0), 0);
   const totalEntriesCount = filteredRentsForTotals.length + filteredExpensesForTotals.length + filteredDokanForTotals.length;

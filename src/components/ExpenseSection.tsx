@@ -197,18 +197,18 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
   const formatCurrency = (val: number) => `${t.currencySymbol}${val.toLocaleString()}`;
 
   return (
-    <div className="bg-[#F5F5F0] dark:bg-[#1A1A1A] border border-[#D6D0C4] dark:border-slate-800 rounded-sm md:rounded-sm p-5 md:p-6 mb-6 shadow-none">
+    <div className="rounded-[32px] bg-white/75 dark:bg-slate-900/75 backdrop-blur-2xl border border-white/80 dark:border-white/10 p-6 sm:p-8 mb-6 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.05)] dark:shadow-[0_12px_40px_-12px_rgba(0,0,0,0.3)]">
       {/* Header Title */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 mb-4 border-b border-[#D6D0C4] dark:border-slate-800">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-sm bg-[#2563EB]/10 text-[#2563EB] dark:text-[#2563EB] flex items-center justify-center font-bold text-base">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-5 mb-5 border-b border-slate-200/60 dark:border-slate-800">
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 rounded-full bg-blue-50 dark:bg-blue-950/40 text-[#2563EB] dark:text-blue-400 flex items-center justify-center font-bold text-lg shrink-0 border border-blue-100 dark:border-blue-900/40 shadow-sm">
             <i className="fi fi-sr-receipt" />
           </div>
           <div>
-            <h3 className="text-base md:text-lg font-semibold text-slate-900 dark:text-white">
+            <h3 className="text-base md:text-lg font-extrabold text-slate-900 dark:text-white tracking-tight">
               {t.expenseTitle}
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
               {t.expenseSubtitle}
             </p>
           </div>
@@ -216,32 +216,32 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
 
         <button
           onClick={() => setIsFormOpen(!isFormOpen)}
-          className="no-print flex items-center gap-1.5 px-4 py-2 rounded-sm bg-[#2563EB] text-white hover:bg-[#1D4ED8] font-bold text-xs transition-colors shadow-none cursor-pointer"
+          className="no-print flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#2563EB] text-white hover:bg-[#1D4ED8] font-bold text-xs transition-all shadow-md active:scale-95 cursor-pointer"
         >
-          <i className={`fi fi-sr-add transition-transform ${isFormOpen ? 'rotate-45' : ''}`} />
+          <i className={`fi fi-sr-add transition-transform duration-200 ${isFormOpen ? 'rotate-45' : ''}`} />
           <span className="hidden sm:inline">{editingId ? t.expUpdateBtn : t.expToggleLabel}</span>
         </button>
       </div>
 
       {/* Expandable Form */}
       {isFormOpen && (
-        <form onSubmit={handleSubmit} className="bg-[#F9F9F8] dark:bg-[#222222] border border-[#D6D0C4] dark:border-slate-800 rounded-sm p-4 mb-5 space-y-4 no-print animate-fadeIn">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <form onSubmit={handleSubmit} className="bg-slate-50/80 dark:bg-slate-800/50 backdrop-blur-md border border-white/80 dark:border-white/10 rounded-[24px] p-5 mb-6 space-y-4 no-print animate-fadeIn shadow-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Date Field */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">{t.thExpDate} *</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.thExpDate} *</label>
               <input
                 type="date"
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full px-3 py-2 rounded-sm border border-slate-300 dark:border-slate-700 bg-[#F5F5F0] dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white"
+                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50"
               />
             </div>
 
             {/* Expense Type / Category Field */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                 {t.thExpCategory} *
               </label>
               <select
@@ -250,7 +250,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
                   setCategory(e.target.value);
                   setUserManuallySelectedCategory(true);
                 }}
-                className="w-full px-3 py-2 rounded-sm border border-slate-300 dark:border-slate-700 bg-[#F5F5F0] dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white font-medium"
+                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50"
               >
                 {predefinedCategories.map((catOption) => (
                   <option key={catOption} value={catOption}>
@@ -264,7 +264,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
             {/* Custom Category Field (if selected) */}
             {category === 'CUSTOM' ? (
               <div>
-                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
                   {t.expCategoryLbl} *
                 </label>
                 <input
@@ -273,27 +273,27 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
                   value={customCategory}
                   onChange={(e) => setCustomCategory(e.target.value)}
                   placeholder={t.customCategoryPh}
-                  className="w-full px-3 py-2 rounded-sm border border-slate-300 dark:border-slate-700 bg-[#F5F5F0] dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white"
+                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50"
                 />
               </div>
             ) : null}
 
             {/* Description Field */}
             <div className={category === 'CUSTOM' ? '' : 'sm:col-span-1'}>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">{t.thExpDesc} *</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.thExpDesc} *</label>
               <input
                 type="text"
                 required
                 value={desc}
                 onChange={handleDescChange}
                 placeholder={t.expDescPh}
-                className="w-full px-3 py-2 rounded-sm border border-slate-300 dark:border-slate-700 bg-[#F5F5F0] dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white"
+                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50"
               />
             </div>
 
             {/* Amount Field */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">{t.thExpAmt} *</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.thExpAmt} *</label>
               <input
                 type="number"
                 required
@@ -301,22 +301,22 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder={t.expAmtPh}
-                className="w-full px-3 py-2 rounded-sm border border-slate-300 dark:border-slate-700 bg-[#F5F5F0] dark:bg-slate-800 text-xs md:text-sm font-bold text-rose-600 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white"
+                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-bold text-rose-600 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50"
               />
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#D6D0C4] dark:border-slate-800">
+          <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-200/60 dark:border-slate-700/60">
             <button
               type="button"
               onClick={resetForm}
-              className="px-3.5 py-1.5 rounded-sm bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-colors"
+              className="px-4 py-2 rounded-full bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 text-slate-700 dark:text-slate-200 font-bold text-xs transition-colors cursor-pointer"
             >
               {t.cancelBtn}
             </button>
             <button
               type="submit"
-              className="px-4 py-1.5 rounded-sm bg-[#2563EB] text-white hover:bg-[#1D4ED8] font-bold text-xs shadow-none transition-colors cursor-pointer"
+              className="px-5 py-2 rounded-full bg-[#2563EB] text-white hover:bg-[#1D4ED8] font-bold text-xs shadow-md transition-colors cursor-pointer"
             >
               {editingId ? t.expUpdateBtn : t.expSubmitBtn}
             </button>
@@ -326,18 +326,18 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
 
       {/* Expense Type Category Filter Pills */}
       {existingCategories.length > 0 && (
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-3 mb-4 no-print scrollbar-none border-b border-[#D6D0C4] dark:border-slate-800">
-          <div className="flex items-center gap-1 text-xs text-slate-400 font-semibold pr-1 shrink-0">
-            <i className="fi fi-sr-filter" />
+        <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-5 no-print scrollbar-none border-b border-slate-200/60 dark:border-slate-800">
+          <div className="flex items-center gap-1.5 text-xs text-slate-400 font-bold pr-1 shrink-0">
+            <i className="fi fi-sr-filter text-xs" />
             <span className="hidden sm:inline">{t.thExpCategory}:</span>
           </div>
 
           <button
             onClick={() => setSelectedCategoryFilter('all')}
-            className={`px-3 py-1 rounded-sm text-xs font-semibold transition-all shrink-0 cursor-pointer ${
+            className={`px-4 py-1.5 rounded-full text-xs font-extrabold transition-all shrink-0 cursor-pointer ${
               selectedCategoryFilter === 'all'
-                ? 'bg-black dark:bg-white text-white dark:text-slate-900 font-bold shadow-none'
-                : 'bg-[#E2DDCF] dark:bg-[#2A2A2A] text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+                ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md scale-105'
+                : 'bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 hover:bg-slate-200/70 dark:hover:bg-slate-700'
             }`}
           >
             {t.expCategoryAll}
@@ -349,15 +349,15 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
               <button
                 key={cat}
                 onClick={() => setSelectedCategoryFilter(cat)}
-                className={`px-3 py-1 rounded-sm text-xs font-semibold transition-all shrink-0 cursor-pointer flex items-center gap-1.5 ${
+                className={`px-4 py-1.5 rounded-full text-xs font-extrabold transition-all shrink-0 cursor-pointer flex items-center gap-2 ${
                   selectedCategoryFilter === cat
-                    ? 'bg-black dark:bg-white text-white dark:text-slate-900 font-bold shadow-none'
-                    : 'bg-[#E2DDCF] dark:bg-[#2A2A2A] text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+                    ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-md scale-105'
+                    : 'bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 hover:bg-slate-200/70 dark:hover:bg-slate-700'
                 }`}
               >
                 <span>{cat}</span>
-                <span className={`px-1.5 py-0.2 rounded-sm text-[10px] font-bold ${
-                  selectedCategoryFilter === cat ? 'bg-slate-900/10 text-slate-900' : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-300'
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
+                  selectedCategoryFilter === cat ? 'bg-white/20 dark:bg-slate-900/20 text-current' : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
                 }`}>
                   {count}
                 </span>
@@ -368,43 +368,43 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
       )}
 
       {/* Expenses Table */}
-      <div className="overflow-x-auto rounded-sm border border-[#D6D0C4] dark:border-slate-800">
+      <div className="overflow-x-auto rounded-[24px] border border-white/80 dark:border-white/10 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md">
         <table className="w-full text-left text-xs md:text-sm border-collapse">
           <thead>
-            <tr className="bg-transparent text-slate-900 dark:text-white uppercase text-[10px] font-black tracking-widest border-b-2 border-slate-900 dark:border-white">
-              <th className="p-3">{t.thExpDate}</th>
-              <th className="p-3">{t.thExpCategory}</th>
-              <th className="p-3">{t.thExpDesc}</th>
-              <th className="p-3">{t.thExpAmt}</th>
-              <th className="p-3 no-print text-right">{t.thExpAct}</th>
+            <tr className="bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur-md text-slate-900 dark:text-white uppercase text-[10px] font-black tracking-widest border-b border-slate-200 dark:border-slate-700">
+              <th className="p-3.5 pl-4">{t.thExpDate}</th>
+              <th className="p-3.5">{t.thExpCategory}</th>
+              <th className="p-3.5">{t.thExpDesc}</th>
+              <th className="p-3.5">{t.thExpAmt}</th>
+              <th className="p-3.5 pr-4 no-print text-right">{t.thExpAct}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 font-medium text-slate-800 dark:text-slate-200">
             {filteredExpenses.length === 0 ? (
               <tr>
-                <td colSpan={5} className="p-6 text-center text-slate-400 font-bold">
+                <td colSpan={5} className="p-8 text-center text-slate-400 font-bold">
                   {t.noData}
                 </td>
               </tr>
             ) : (
               filteredExpenses.map((ex) => (
-                <tr key={ex.id} className="border-b border-[#E2DDCF] dark:border-slate-800/50 hover:bg-[#EBE7E0] dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="p-3 font-mono text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">{ex.date}</td>
-                  <td className="p-3 whitespace-nowrap">
-                    <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-sm text-[11px] font-semibold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/50">
+                <tr key={ex.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
+                  <td className="p-3.5 pl-4 font-mono text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">{ex.date}</td>
+                  <td className="p-3.5 whitespace-nowrap">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/50">
                       <i className="fi fi-sr-tags text-xs text-indigo-500" />
                       {formatCategory(ex.category, language)}
                     </span>
                   </td>
-                  <td className="p-3 font-bold text-slate-900 dark:text-white">{ex.desc}</td>
-                  <td className="p-3 font-bold text-rose-600 dark:text-rose-400 whitespace-nowrap">
+                  <td className="p-3.5 font-bold text-slate-900 dark:text-white">{ex.desc}</td>
+                  <td className="p-3.5 font-bold text-rose-600 dark:text-rose-400 whitespace-nowrap">
                     -{formatCurrency(ex.amount)}
                   </td>
-                  <td className="p-3 no-print text-right">
+                  <td className="p-3.5 pr-4 no-print text-right">
                     <div className="flex items-center justify-end gap-1.5">
                       <button
                         onClick={() => handleEditClick(ex)}
-                        className="p-1.5 rounded-sm text-slate-600 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 hover:bg-[#E2DDCF] dark:hover:bg-slate-800 transition-colors"
+                        className="p-2 rounded-full text-slate-600 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                         title={t.edit}
                       >
                         <i className="fi fi-sr-edit text-sm" />
@@ -413,7 +413,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
                         onClick={() => {
                           if (confirm(t.deleteConfirm)) onDeleteExpense(ex.id);
                         }}
-                        className="p-1.5 rounded-sm text-slate-600 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 hover:bg-[#E2DDCF] dark:hover:bg-slate-800 transition-colors"
+                        className="p-2 rounded-full text-slate-600 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                         title={t.delete}
                       >
                         <i className="fi fi-sr-trash text-sm" />
@@ -427,14 +427,14 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
 
           {filteredExpenses.length > 0 && (
             <tfoot>
-              <tr className="bg-transparent border-t-2 border-slate-900 dark:border-white font-bold text-slate-900 dark:text-white border-t border-[#D6D0C4] dark:border-slate-800">
-                <td className="p-3" colSpan={2}>
+              <tr className="bg-slate-100/80 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white border-t border-slate-200 dark:border-slate-700">
+                <td className="p-3.5 pl-4" colSpan={2}>
                   {t.totalRow} ({filteredExpenses.length})
                   {selectedCategoryFilter !== 'all' ? ` • ${selectedCategoryFilter}` : ''}
                 </td>
-                <td className="p-3">-</td>
-                <td className="p-3 text-rose-600 dark:text-rose-400">-{formatCurrency(totalExpenseSum)}</td>
-                <td className="p-3 no-print"></td>
+                <td className="p-3.5">-</td>
+                <td className="p-3.5 text-rose-600 dark:text-rose-400 font-extrabold">-{formatCurrency(totalExpenseSum)}</td>
+                <td className="p-3.5 pr-4 no-print"></td>
               </tr>
             </tfoot>
           )}

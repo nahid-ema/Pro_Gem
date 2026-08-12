@@ -141,17 +141,17 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
   const periodLabel = `${selectedYear !== 'all' ? selectedYear : (language === 'bn' ? 'সকল বছর' : 'All Years')} ${selectedMonth !== 'all' ? (t.months ? t.months[parseInt(selectedMonth, 10) - 1] : selectedMonth) : ''}`.trim();
 
   return (
-    <div className="bg-[#F5F5F0] dark:bg-[#1A1A1A] border border-[#D6D0C4] dark:border-slate-800 rounded-sm md:rounded-sm p-5 md:p-6 mb-6 shadow-none space-y-6">
+    <div className="rounded-[32px] bg-white/75 dark:bg-slate-900/75 backdrop-blur-2xl border border-white/80 dark:border-white/10 p-6 sm:p-8 mb-6 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.05)] dark:shadow-[0_12px_40px_-12px_rgba(0,0,0,0.3)] space-y-6">
       {/* Title */}
-      <div className="flex items-center gap-3 pb-4 border-b border-[#D6D0C4] dark:border-slate-800">
-        <div className="w-9 h-9 rounded-sm bg-[#2563EB]/10 text-[#2563EB] dark:text-[#2563EB] flex items-center justify-center font-bold text-base">
-          <i className="fi fi-sr-chart-line-up text-base" />
+      <div className="flex items-center gap-3.5 pb-5 border-b border-slate-200/60 dark:border-slate-800">
+        <div className="w-11 h-11 rounded-full bg-blue-50 dark:bg-blue-950/40 text-[#2563EB] dark:text-blue-400 flex items-center justify-center font-bold text-lg shrink-0 border border-blue-100 dark:border-blue-900/40 shadow-sm">
+          <i className="fi fi-sr-chart-line-up text-lg" />
         </div>
         <div>
-          <h3 className="text-base md:text-lg font-semibold text-slate-900 dark:text-white">
+          <h3 className="text-base md:text-lg font-extrabold text-slate-900 dark:text-white tracking-tight">
             {t.analyticsTitle}
           </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400">
+          <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
             {t.analyticsSubtitle} ({periodLabel})
           </p>
         </div>
@@ -159,10 +159,10 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Monthly Income vs Expense Bar Chart */}
-        <div className="bg-[#F9F9F8] dark:bg-[#222222] border border-[#D6D0C4] dark:border-slate-800 rounded-sm p-4">
-          <div className="flex items-center gap-2 mb-3">
-            <i className="fi fi-sr-arrow-trend-up text-base text-indigo-600 dark:text-indigo-400" />
-            <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
+        <div className="bg-slate-50/80 dark:bg-slate-800/50 backdrop-blur-md border border-white/80 dark:border-white/10 rounded-[24px] p-5 shadow-sm">
+          <div className="flex items-center gap-2 mb-4">
+            <i className="fi fi-sr-arrow-trend-up text-base text-[#2563EB] dark:text-blue-400" />
+            <h4 className="text-sm font-extrabold text-slate-900 dark:text-white">
               {t.chartIncomeVsExpense} ({activeYear})
             </h4>
           </div>
@@ -170,31 +170,32 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={monthlyData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <i className="fi fi-sr-cross" Axis dataKey="month" tick={{ fontSize: 10 }} />
-                <YAxis tick={{ fontSize: 10 }} />
+                <XAxis dataKey="month" tick={{ fontSize: 10, fill: '#64748b' }} />
+                <YAxis tick={{ fontSize: 10, fill: '#64748b' }} />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: '#0f172a',
                     borderColor: '#334155',
-                    borderRadius: '8px',
+                    borderRadius: '16px',
                     color: '#fff',
                     fontSize: '11px',
+                    fontWeight: 'bold',
                   }}
                   formatter={(value: any) => [formatCurrency(Number(value) || 0), '']}
                 />
-                <Bar dataKey={language === 'bn' ? 'আদায় (Income)' : 'Income'} fill="#10b981" radius={[4, 4, 0, 0]} />
-                <Bar dataKey={language === 'bn' ? 'খরচ (Expenses)' : 'Expenses'} fill="#f43f5e" radius={[4, 4, 0, 0]} />
-                <Bar dataKey={language === 'bn' ? 'দোকান বাকি (Shop Dues)' : 'Shop Dues'} fill="#f59e0b" radius={[4, 4, 0, 0]} />
+                <Bar dataKey={language === 'bn' ? 'আদায় (Income)' : 'Income'} fill="#10b981" radius={[8, 8, 0, 0]} />
+                <Bar dataKey={language === 'bn' ? 'খরচ (Expenses)' : 'Expenses'} fill="#f43f5e" radius={[8, 8, 0, 0]} />
+                <Bar dataKey={language === 'bn' ? 'দোকান বাকি (Shop Dues)' : 'Shop Dues'} fill="#f59e0b" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Financial Breakdown Pie Chart */}
-        <div className="bg-[#F9F9F8] dark:bg-[#222222] border border-[#D6D0C4] dark:border-slate-800 rounded-sm p-4 flex flex-col justify-between">
-          <div className="flex items-center gap-2 mb-3">
-            <i className="fi fi-sr-chart-pie text-base text-indigo-600 dark:text-indigo-400" />
-            <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
+        <div className="bg-slate-50/80 dark:bg-slate-800/50 backdrop-blur-md border border-white/80 dark:border-white/10 rounded-[24px] p-5 shadow-sm flex flex-col justify-between">
+          <div className="flex items-center gap-2 mb-4">
+            <i className="fi fi-sr-chart-pie text-base text-[#2563EB] dark:text-blue-400" />
+            <h4 className="text-sm font-extrabold text-slate-900 dark:text-white">
               {language === 'bn' ? 'অর্থসংস্থানের সার্বিক বন্টন' : 'Overall Financial Breakdown'}
             </h4>
           </div>
@@ -208,7 +209,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
                   cy="50%"
                   innerRadius={55}
                   outerRadius={85}
-                  paddingAngle={4}
+                  paddingAngle={6}
                   dataKey="value"
                 >
                   {pieData.map((entry, index) => (
@@ -219,13 +220,14 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
                   contentStyle={{
                     backgroundColor: '#0f172a',
                     borderColor: '#334155',
-                    borderRadius: '8px',
+                    borderRadius: '16px',
                     color: '#fff',
                     fontSize: '11px',
+                    fontWeight: 'bold',
                   }}
                   formatter={(value: any) => [formatCurrency(Number(value) || 0), '']}
                 />
-                <Legend wrapperStyle={{ fontSize: '11px' }} />
+                <Legend wrapperStyle={{ fontSize: '11px', fontWeight: 600 }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -234,15 +236,15 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
 
       {/* Expense Type / Category Breakdown Chart */}
       {expenseCategoryData.length > 0 && (
-        <div className="bg-[#F9F9F8] dark:bg-[#222222] border border-[#D6D0C4] dark:border-slate-800 rounded-sm p-4">
-          <div className="flex items-center justify-between mb-3">
+        <div className="bg-slate-50/80 dark:bg-slate-800/50 backdrop-blur-md border border-white/80 dark:border-white/10 rounded-[24px] p-5 shadow-sm">
+          <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <i className="fi fi-sr-chart-pie text-base text-[#2563EB]" />
-              <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
+              <i className="fi fi-sr-chart-pie text-base text-[#2563EB] dark:text-blue-400" />
+              <h4 className="text-sm font-extrabold text-slate-900 dark:text-white">
                 {t.chartExpenseCategories} ({language === 'bn' ? 'খাতভিত্তিক খরচ' : 'Expense Category Breakdown'})
               </h4>
             </div>
-            <span className="text-xs font-bold text-rose-600 dark:text-rose-400">
+            <span className="text-xs font-black text-rose-600 dark:text-rose-400 px-3 py-1 bg-rose-50 dark:bg-rose-950/60 rounded-full border border-rose-200/60 dark:border-rose-900/40">
               {formatCurrency(totalExpenses)}
             </span>
           </div>
@@ -257,7 +259,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
                     cy="50%"
                     innerRadius={45}
                     outerRadius={75}
-                    paddingAngle={3}
+                    paddingAngle={4}
                     dataKey="value"
                   >
                     {expenseCategoryData.map((entry, index) => (
@@ -268,9 +270,10 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
                     contentStyle={{
                       backgroundColor: '#0f172a',
                       borderColor: '#334155',
-                      borderRadius: '8px',
+                      borderRadius: '16px',
                       color: '#fff',
                       fontSize: '11px',
+                      fontWeight: 'bold',
                     }}
                     formatter={(value: any) => [formatCurrency(Number(value) || 0), '']}
                   />
@@ -278,17 +281,17 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
               </ResponsiveContainer>
             </div>
 
-            <div className="space-y-2 max-h-56 overflow-y-auto pr-2">
+            <div className="space-y-2 max-h-56 overflow-y-auto pr-2 scrollbar-none">
               {expenseCategoryData.map((catItem) => {
                 const pct = totalExpenses > 0 ? ((catItem.value / totalExpenses) * 100).toFixed(1) : '0';
                 return (
-                  <div key={catItem.name} className="flex items-center justify-between text-xs p-2 rounded-sm bg-[#F5F5F0] dark:bg-[#1A1A1A]/80 border border-[#D6D0C4]/60 dark:border-slate-800">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: catItem.color }} />
-                      <span className="font-medium text-slate-800 dark:text-slate-200 truncate">{catItem.name}</span>
+                  <div key={catItem.name} className="flex items-center justify-between text-xs p-2.5 rounded-full bg-white dark:bg-slate-900/80 border border-slate-200/60 dark:border-slate-800 shadow-sm">
+                    <div className="flex items-center gap-2.5 min-w-0 pl-1">
+                      <span className="w-3.5 h-3.5 rounded-full shrink-0 shadow-sm" style={{ backgroundColor: catItem.color }} />
+                      <span className="font-bold text-slate-800 dark:text-slate-200 truncate">{catItem.name}</span>
                     </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <span className="font-bold text-slate-900 dark:text-white">{formatCurrency(catItem.value)}</span>
+                    <div className="flex items-center gap-2 shrink-0 pr-1">
+                      <span className="font-black text-slate-900 dark:text-white">{formatCurrency(catItem.value)}</span>
                       <span className="text-[10px] text-slate-400 font-mono">({pct}%)</span>
                     </div>
                   </div>
