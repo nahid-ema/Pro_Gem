@@ -227,7 +227,7 @@ export const Header: React.FC<HeaderProps> = ({
 
             {/* Date Selection Popover Dropdown */}
             {isDatePickerOpen && (
-              <div className="absolute right-0 mt-2 w-64 sm:w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl z-50 p-4 space-y-3 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute left-0 sm:left-auto sm:right-0 mt-2 w-64 sm:w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl z-50 p-4 space-y-3 animate-in fade-in zoom-in-95 duration-150">
                 {/* Header & Quick Action Buttons */}
                 <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
                   <button
