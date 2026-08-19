@@ -36,7 +36,7 @@ export const Toast: React.FC<ToastProps> = ({ toast, onClose }) => {
 
   return (
     <div className="fixed bottom-5 right-5 z-50 no-print animate-slideUp">
-      <div className={`flex items-center gap-3 px-4 py-3 rounded-sm border shadow-none backdrop-blur-md text-xs md:text-sm font-bold max-w-sm ${bgColors[toast.type]}`}>
+      <div className={`flex items-center gap-3 px-4 py-3 rounded-2xl border shadow-sm text-xs md:text-sm font-bold max-w-sm ${bgColors[toast.type]}`}>
         {icons[toast.type]}
         <span className="flex-1">{toast.message}</span>
         <button onClick={onClose} className="opacity-80 hover:opacity-100 p-0.5">

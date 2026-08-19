@@ -33,7 +33,7 @@ export const TabBar: React.FC<TabBarProps> = ({
   ];
 
   return (
-    <nav className="tab-bar flex items-center gap-1.5 p-1.5 rounded-full bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border border-white/80 dark:border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.3)] overflow-x-auto scrollbar-none no-print mb-6">
+    <nav className="tab-bar flex items-center gap-1.5 p-1.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm overflow-x-auto scrollbar-none no-print mb-6">
       {tabs.map((tab) => {
         const isActive = activeTab === tab.id;
         const isUnpaidTab = tab.id === 'unpaid' && unpaidCount > 0;
@@ -44,8 +44,8 @@ export const TabBar: React.FC<TabBarProps> = ({
             onClick={() => onTabChange(tab.id)}
             className={`flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full font-bold text-xs md:text-sm whitespace-nowrap transition-all duration-200 shrink-0 cursor-pointer active:scale-95 ${
               isActive
-                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-[0_4px_16px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.4)] scale-[1.02]'
-                : 'text-slate-600 dark:text-slate-300 hover:bg-white/60 dark:hover:bg-slate-800/50'
+                ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm scale-[1.02]'
+                : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50'
             }`}
           >
             <span className={isActive ? 'text-[#2563EB] dark:text-blue-400' : 'text-slate-400 dark:text-slate-500'}>

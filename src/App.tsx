@@ -23,7 +23,8 @@ import { onAuthStateChanged, User, signOut } from 'firebase/auth';
 import { collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, setDoc, getDoc } from 'firebase/firestore';
 
 import { Header } from './components/Header';
-import { TabBar } from './components/TabBar';
+import { Sidebar } from './components/Sidebar';
+import { MobileNav } from './components/MobileNav';
 import { BriefDashboard } from './components/BriefDashboard';
 import { RoomsSection } from './components/RoomsSection';
 import { TenantsSection } from './components/TenantsSection';
@@ -765,69 +766,81 @@ export default function App() {
   const activeUserEmail = currentUser?.email || (isLocalUnlocked ? (ownerEmail || 'nahidferdousemonema@gmail.com') : null);
 
   return (
-    <div className="min-h-screen bg-[#F5F5F0] dark:bg-[#0A0A0A] text-slate-900 dark:text-slate-100 font-sans p-2 sm:p-4 md:p-6 transition-colors duration-300 relative">
-      <div className="w-full max-w-[1720px] 2xl:max-w-[1860px] mx-auto space-y-3 sm:space-y-4">
-        {/* Printable Document Report Header (Only visible on PDF / Print) */}
-        <div className="hidden print:block mb-6 pb-4 border-b-2 border-slate-900">
-          <div className="flex justify-between items-start">
-            <div className="flex items-center gap-3">
-              <Logo className="w-12 h-12" />
-              <div>
-                <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
-                  {t.appName}
-                </h1>
-                <p className="text-xs text-slate-600 mt-1">
-                  {language === 'bn' ? 'মালিকানা ব্যবস্থাপনা ও হিসাব রিপোর্ট' : 'Property Management & Financial Statement'}
-                </p>
+    <div className="flex h-screen overflow-hidden bg-[#F5F5F0] dark:bg-[#0A0A0A] text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
+      
+      {/* Sidebar (Desktop Only) */}
+      <Sidebar 
+        activeTab={activeTab} 
+        onTabChange={setActiveTab} 
+        language={language} 
+        unpaidCount={unpaidTenantItems.length} 
+      />
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col h-full overflow-y-auto w-full relative pb-[80px] lg:pb-0">
+        <div className="w-full max-w-[1720px] 2xl:max-w-[1860px] mx-auto p-3 sm:p-5 md:p-8 space-y-4">
+          
+          {/* Printable Document Report Header (Only visible on PDF / Print) */}
+          <div className="hidden print:block mb-6 pb-4 border-b-2 border-slate-900">
+            <div className="flex justify-between items-start">
+              <div className="flex items-center gap-3">
+                <Logo className="w-12 h-12" />
+                <div>
+                  <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+                    {t.appName}
+                  </h1>
+                  <p className="text-xs text-slate-600 mt-1">
+                    {language === 'bn' ? 'মালিকানা ব্যবস্থাপনা ও হিসাব রিপোর্ট' : 'Property Management & Financial Statement'}
+                  </p>
+                </div>
+              </div>
+              <div className="text-right text-xs text-slate-600">
+                <p><strong>{language === 'bn' ? 'তারিখ:' : 'Date:'}</strong> {new Date().toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                {(selectedYear !== 'all' || selectedMonth !== 'all') && (
+                  <p className="mt-0.5">
+                    <strong>{language === 'bn' ? 'সময়কাল:' : 'Period:'}</strong> {selectedYear !== 'all' ? selectedYear : ''} {selectedMonth !== 'all' ? (t.months ? t.months[parseInt(selectedMonth, 10) - 1] : selectedMonth) : ''}
+                  </p>
+                )}
               </div>
             </div>
-            <div className="text-right text-xs text-slate-600">
-              <p><strong>{language === 'bn' ? 'তারিখ:' : 'Date:'}</strong> {new Date().toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-              {(selectedYear !== 'all' || selectedMonth !== 'all') && (
-                <p className="mt-0.5">
-                  <strong>{language === 'bn' ? 'সময়কাল:' : 'Period:'}</strong> {selectedYear !== 'all' ? selectedYear : ''} {selectedMonth !== 'all' ? (t.months ? t.months[parseInt(selectedMonth, 10) - 1] : selectedMonth) : ''}
-                </p>
-              )}
-            </div>
           </div>
-        </div>
 
-        {/* Header containing Branding, Menu, Date Picker, Quick Nav, and Search */}
-        <Header
-          language={language}
-          theme={theme}
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          onLanguageToggle={() => setLanguage(language === 'bn' ? 'en' : 'bn')}
-          onThemeToggle={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          onTriggerBackup={handleTriggerBackup}
-          onTriggerRestore={handleTriggerRestore}
-          onFirebaseCloudBackup={handleFirebaseCloudBackup}
-          onFirebaseCloudRestore={handleFirebaseCloudRestore}
-          onPrint={() => triggerPrint(language, undefined, showToast)}
-          onOpenAuthModal={() => setIsAuthModalOpen(true)}
-          onLockApp={handleLockApp}
-          userEmail={activeUserEmail}
-          ownerEmail={ownerEmail}
-          isFirebaseActive={isFirebaseInitialized && (!!currentUser || isLocalUnlocked)}
-          isSyncing={isSyncing}
-          lastCloudBackupTime={lastCloudBackupTime}
-          selectedYear={selectedYear}
-          selectedMonth={selectedMonth}
-          searchQuery={searchQuery}
-          availableYears={availableYears}
-          onYearChange={setSelectedYear}
-          onMonthChange={setSelectedMonth}
-          onSearchChange={setSearchQuery}
-          onClearFilters={() => {
-            setSelectedYear('all');
-            setSelectedMonth('all');
-            setSearchQuery('');
-          }}
-        />
+          {/* Header containing Branding, Menu, Date Picker, and Search */}
+          <Header
+            language={language}
+            theme={theme}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+            onLanguageToggle={() => setLanguage(language === 'bn' ? 'en' : 'bn')}
+            onThemeToggle={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            onTriggerBackup={handleTriggerBackup}
+            onTriggerRestore={handleTriggerRestore}
+            onFirebaseCloudBackup={handleFirebaseCloudBackup}
+            onFirebaseCloudRestore={handleFirebaseCloudRestore}
+            onPrint={() => triggerPrint(language, undefined, showToast)}
+            onOpenAuthModal={() => setIsAuthModalOpen(true)}
+            onLockApp={handleLockApp}
+            userEmail={activeUserEmail}
+            ownerEmail={ownerEmail}
+            isFirebaseActive={isFirebaseInitialized && (!!currentUser || isLocalUnlocked)}
+            isSyncing={isSyncing}
+            lastCloudBackupTime={lastCloudBackupTime}
+            selectedYear={selectedYear}
+            selectedMonth={selectedMonth}
+            searchQuery={searchQuery}
+            availableYears={availableYears}
+            onYearChange={setSelectedYear}
+            onMonthChange={setSelectedMonth}
+            onSearchChange={setSearchQuery}
+            onClearFilters={() => {
+              setSelectedYear('all');
+              setSelectedMonth('all');
+              setSearchQuery('');
+            }}
+          />
 
-        {/* TAB CONTENTS */}
-        <main className="space-y-6">
+          {/* TAB CONTENTS */}
+          <main className="space-y-6">
           {/* 1. Brief Dashboard */}
           {activeTab === 'brief' && (
             <>
@@ -958,7 +971,16 @@ export default function App() {
             />
           )}
         </main>
+        </div>
       </div>
+
+      {/* Mobile Bottom Navigation */}
+      <MobileNav 
+        activeTab={activeTab} 
+        onTabChange={setActiveTab} 
+        language={language} 
+        unpaidCount={unpaidTenantItems.length} 
+      />
 
       {/* Modals & Toasts */}
       <ReceiptModal

@@ -129,7 +129,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   };
 
   return (
-    <div className="bg-white/70 dark:bg-slate-900/75 backdrop-blur-2xl border border-white/80 dark:border-white/10 rounded-[28px] p-3 sm:p-4 mb-4 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] dark:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.3)] flex flex-col gap-3 no-print relative">
+    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-3 sm:p-4 mb-4 shadow-sm flex flex-col gap-3 no-print relative">
       {/* Top Row: Search & Filters (Single Date Selector & Quick Nav) */}
       <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-2.5">
         
@@ -153,7 +153,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
             {/* Date Selection Popover Dropdown */}
             {isDatePickerOpen && (
-              <div className="absolute left-0 mt-2 w-72 sm:w-80 bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl border border-slate-200 dark:border-slate-800 rounded-[24px] shadow-xl z-50 p-4 space-y-3.5 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute left-0 mt-2 w-72 sm:w-80 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl z-50 p-4 space-y-3.5 animate-in fade-in zoom-in-95 duration-150">
                 
                 {/* Header & Quick Action Buttons */}
                 <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-slate-100 dark:border-slate-800">
@@ -282,7 +282,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             </button>
 
             {isQuickNavOpen && (
-              <div className="absolute left-0 mt-2 w-56 sm:w-60 bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl border border-slate-200 dark:border-slate-800 rounded-[24px] shadow-xl z-50 p-2 space-y-1 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute left-0 mt-2 w-56 sm:w-60 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl z-50 p-2 space-y-1 animate-in fade-in zoom-in-95 duration-150">
                 <div className="px-3 py-2 text-[10px] font-black tracking-widest text-slate-400 dark:text-slate-500 uppercase border-b border-slate-100 dark:border-slate-800 mb-1">
                   {language === 'bn' ? 'দ্রুত নেভিগেশন' : 'Quick Navigation'}
                 </div>

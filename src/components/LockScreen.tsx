@@ -77,7 +77,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({
       <div className="absolute -top-40 -left-40 w-96 h-96 bg-[#2563EB]/25 rounded-sm blur-3xl pointer-events-none" />
       <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-emerald-600/20 rounded-sm blur-3xl pointer-events-none" />
 
-      <div className="w-full max-w-md bg-slate-900/95 border border-slate-800 rounded-sm p-6 md:p-8 shadow-none border border-[#D6D0C4] dark:border-slate-800 backdrop-blur-xl relative z-10 space-y-6">
+      <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 shadow-sm relative z-10 space-y-6">
         
         {/* Top Header */}
         <div className="text-center space-y-3">

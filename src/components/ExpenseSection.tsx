@@ -197,11 +197,11 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
   const formatCurrency = (val: number) => `${t.currencySymbol}${val.toLocaleString()}`;
 
   return (
-    <div className="rounded-[32px] bg-white/75 dark:bg-slate-900/75 backdrop-blur-2xl border border-white/80 dark:border-white/10 p-6 sm:p-8 mb-6 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.05)] dark:shadow-[0_12px_40px_-12px_rgba(0,0,0,0.3)]">
+    <div className="rounded-[32px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 mb-6 shadow-sm">
       {/* Header Title */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-5 mb-5 border-b border-slate-200/60 dark:border-slate-800">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-5 mb-5 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-full bg-blue-50 dark:bg-blue-950/40 text-[#2563EB] dark:text-blue-400 flex items-center justify-center font-bold text-lg shrink-0 border border-blue-100 dark:border-blue-900/40 shadow-sm">
+          <div className="w-11 h-11 rounded-full bg-blue-50 dark:bg-blue-900/30 text-[#2563EB] dark:text-blue-400 flex items-center justify-center font-bold text-lg shrink-0 border border-blue-100 dark:border-blue-800/30">
             <i className="fi fi-sr-receipt" />
           </div>
           <div>
@@ -216,7 +216,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
 
         <button
           onClick={() => setIsFormOpen(!isFormOpen)}
-          className="no-print flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#2563EB] text-white hover:bg-[#1D4ED8] font-bold text-xs transition-all shadow-md active:scale-95 cursor-pointer"
+          className="no-print flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#2563EB] text-white hover:bg-[#1D4ED8] font-bold text-xs transition-all active:scale-95 cursor-pointer"
         >
           <i className={`fi fi-sr-add transition-transform duration-200 ${isFormOpen ? 'rotate-45' : ''}`} />
           <span className="hidden sm:inline">{editingId ? t.expUpdateBtn : t.expToggleLabel}</span>
@@ -225,7 +225,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
 
       {/* Expandable Form */}
       {isFormOpen && (
-        <form onSubmit={handleSubmit} className="bg-slate-50/80 dark:bg-slate-800/50 backdrop-blur-md border border-white/80 dark:border-white/10 rounded-[24px] p-5 mb-6 space-y-4 no-print animate-fadeIn shadow-sm">
+        <form onSubmit={handleSubmit} className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-[24px] p-5 mb-6 space-y-4 no-print animate-fadeIn">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Date Field */}
             <div>
@@ -236,6 +236,33 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50"
+              />
+            </div>
+
+            {/* Description Field */}
+            <div className={category === 'CUSTOM' ? '' : 'sm:col-span-1'}>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.thExpDesc} *</label>
+              <input
+                type="text"
+                required
+                value={desc}
+                onChange={handleDescChange}
+                placeholder={t.expDescPh}
+                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50"
+              />
+            </div>
+
+            {/* Amount Field */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.thExpAmt} *</label>
+              <input
+                type="number"
+                required
+                min="0"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder={t.expAmtPh}
+                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-bold text-rose-600 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50"
               />
             </div>
 
@@ -277,33 +304,6 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
                 />
               </div>
             ) : null}
-
-            {/* Description Field */}
-            <div className={category === 'CUSTOM' ? '' : 'sm:col-span-1'}>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.thExpDesc} *</label>
-              <input
-                type="text"
-                required
-                value={desc}
-                onChange={handleDescChange}
-                placeholder={t.expDescPh}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50"
-              />
-            </div>
-
-            {/* Amount Field */}
-            <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.thExpAmt} *</label>
-              <input
-                type="number"
-                required
-                min="0"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder={t.expAmtPh}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-bold text-rose-600 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50"
-              />
-            </div>
           </div>
 
           <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-200/60 dark:border-slate-700/60">
@@ -368,14 +368,14 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
       )}
 
       {/* Expenses Table */}
-      <div className="overflow-x-auto rounded-[24px] border border-white/80 dark:border-white/10 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md">
+      <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
         <table className="w-full text-left text-xs md:text-sm border-collapse">
           <thead>
-            <tr className="bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur-md text-slate-900 dark:text-white uppercase text-[10px] font-black tracking-widest border-b border-slate-200 dark:border-slate-700">
+            <tr className="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-200 dark:border-slate-800">
               <th className="p-3.5 pl-4">{t.thExpDate}</th>
-              <th className="p-3.5">{t.thExpCategory}</th>
               <th className="p-3.5">{t.thExpDesc}</th>
-              <th className="p-3.5">{t.thExpAmt}</th>
+              <th className="p-3.5 text-right">{t.thExpAmt}</th>
+              <th className="p-3.5">{t.thExpCategory}</th>
               <th className="p-3.5 pr-4 no-print text-right">{t.thExpAct}</th>
             </tr>
           </thead>
@@ -388,23 +388,22 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
               </tr>
             ) : (
               filteredExpenses.map((ex) => (
-                <tr key={ex.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
+                <tr key={ex.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
                   <td className="p-3.5 pl-4 font-mono text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">{ex.date}</td>
+                  <td className="p-3.5 font-bold text-slate-900 dark:text-white">{ex.desc}</td>
+                  <td className="p-3.5 font-mono font-bold text-rose-600 dark:text-rose-400 whitespace-nowrap text-right">
+                    -{formatCurrency(ex.amount)}
+                  </td>
                   <td className="p-3.5 whitespace-nowrap">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/50">
-                      <i className="fi fi-sr-tags text-xs text-indigo-500" />
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                       {formatCategory(ex.category, language)}
                     </span>
-                  </td>
-                  <td className="p-3.5 font-bold text-slate-900 dark:text-white">{ex.desc}</td>
-                  <td className="p-3.5 font-bold text-rose-600 dark:text-rose-400 whitespace-nowrap">
-                    -{formatCurrency(ex.amount)}
                   </td>
                   <td className="p-3.5 pr-4 no-print text-right">
                     <div className="flex items-center justify-end gap-1.5">
                       <button
                         onClick={() => handleEditClick(ex)}
-                        className="p-2 rounded-full text-slate-600 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                        className="p-2 rounded-full text-slate-400 hover:text-blue-600 dark:text-slate-500 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
                         title={t.edit}
                       >
                         <i className="fi fi-sr-edit text-sm" />
@@ -413,7 +412,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
                         onClick={() => {
                           if (confirm(t.deleteConfirm)) onDeleteExpense(ex.id);
                         }}
-                        className="p-2 rounded-full text-slate-600 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                        className="p-2 rounded-full text-slate-400 hover:text-rose-600 dark:text-slate-500 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-colors"
                         title={t.delete}
                       >
                         <i className="fi fi-sr-trash text-sm" />
@@ -427,13 +426,13 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
 
           {filteredExpenses.length > 0 && (
             <tfoot>
-              <tr className="bg-slate-100/80 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white border-t border-slate-200 dark:border-slate-700">
+              <tr className="bg-slate-50 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white border-t border-slate-200 dark:border-slate-800">
                 <td className="p-3.5 pl-4" colSpan={2}>
                   {t.totalRow} ({filteredExpenses.length})
                   {selectedCategoryFilter !== 'all' ? ` • ${selectedCategoryFilter}` : ''}
                 </td>
+                <td className="p-3.5 text-rose-600 dark:text-rose-400 font-mono font-extrabold text-right">-{formatCurrency(totalExpenseSum)}</td>
                 <td className="p-3.5">-</td>
-                <td className="p-3.5 text-rose-600 dark:text-rose-400 font-extrabold">-{formatCurrency(totalExpenseSum)}</td>
                 <td className="p-3.5 pr-4 no-print"></td>
               </tr>
             </tfoot>

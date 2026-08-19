@@ -167,37 +167,34 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="header-section no-print rounded-[32px] bg-white/75 dark:bg-slate-900/75 backdrop-blur-2xl border border-white/80 dark:border-white/10 p-4 sm:p-6 mb-6 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.05)] dark:shadow-[0_12px_40px_-12px_rgba(0,0,0,0.3)] text-slate-800 dark:text-slate-100 relative z-50">
+    <header className="header-section no-print rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 sm:p-5 shadow-sm text-slate-800 dark:text-slate-100 relative z-50">
       
       {/* 1. Kalima */}
-      <div className="text-center text-base sm:text-lg font-bold text-slate-800 dark:text-slate-200 pb-2 mb-3 border-b border-slate-200/60 dark:border-slate-800/80 tracking-wide">
+      <div className="text-center text-sm sm:text-base font-bold text-slate-800 dark:text-slate-200 pb-2 mb-3 border-b border-slate-100 dark:border-slate-800 tracking-wide">
         لَا إِلَٰهَ إِلَّا ٱللَّٰهُ مُحَمَّدٌ رَسُولُ ٱللَّٰهِ
       </div>
       
-      {/* 2. Top Bar: Logo Branding + Search + Actions */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4">
-        {/* Brand Logo & Name */}
-        <div className="flex items-center gap-3 shrink-0">
-          <Logo />
+      {/* 2. Top Bar: Search + Actions */}
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+        {/* Mobile Brand Logo & Name (Hidden on Desktop) */}
+        <div className="flex lg:hidden items-center gap-3 shrink-0 self-start md:self-auto mb-2 md:mb-0">
+          <Logo className="w-8 h-8" />
           <div>
-            <h1 className="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+            <h1 className="text-base sm:text-lg font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
               {t.appName}
             </h1>
-            <p className="text-[10px] uppercase font-bold tracking-widest text-slate-400 dark:text-slate-500">
-              {language === 'bn' ? 'ম্যানেজমেন্ট সিস্টেম' : 'Property Management'}
-            </p>
           </div>
         </div>
 
-        {/* Search Bar - Pill Style matching reference image */}
-        <div className="relative flex-1 w-full max-w-md">
+        {/* Search Bar */}
+        <div className="relative flex-1 w-full max-w-xl">
           <i className="fi fi-sr-search text-sm absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder={t.searchPlaceholder}
-            className="w-full pl-11 pr-9 py-2.5 bg-white/80 dark:bg-slate-800/80 border border-white dark:border-white/10 rounded-full text-xs sm:text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50 shadow-sm backdrop-blur-md transition-all"
+            className="w-full pl-11 pr-9 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full text-xs sm:text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50 transition-all"
           />
           {searchQuery && (
             <button
@@ -221,7 +218,7 @@ export const Header: React.FC<HeaderProps> = ({
                 setIsQuickNavOpen(false);
                 setIsMenuOpen(false);
               }}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-white/80 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-white dark:border-white/10 text-xs font-bold transition-all cursor-pointer shadow-sm active:scale-95 backdrop-blur-md"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 text-xs font-bold transition-all cursor-pointer shadow-sm active:scale-95"
             >
               <i className="fi fi-sr-calendar text-sm text-[#2563EB] shrink-0" />
               <span className="truncate max-w-[80px] sm:max-w-none">{getSelectedDateLabel()}</span>
@@ -230,9 +227,9 @@ export const Header: React.FC<HeaderProps> = ({
 
             {/* Date Selection Popover Dropdown */}
             {isDatePickerOpen && (
-              <div className="absolute right-0 mt-2 w-64 sm:w-72 bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl border border-white/80 dark:border-white/10 rounded-[24px] shadow-xl z-50 p-4 space-y-3 animate-in fade-in zoom-in-95 duration-150">
+              <div className="absolute right-0 mt-2 w-64 sm:w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl z-50 p-4 space-y-3 animate-in fade-in zoom-in-95 duration-150">
                 {/* Header & Quick Action Buttons */}
-                <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-200/60 dark:border-slate-800">
+                <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
                   <button
                     type="button"
                     onClick={handleThisMonth}
@@ -340,52 +337,6 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             )}
           </div>
-          
-          {/* Quick Navigation Button Pill */}
-          <div className="relative shrink-0 flex-1 md:flex-none" ref={quickNavRef}>
-            <button
-              type="button"
-              onClick={() => {
-                setIsQuickNavOpen((prev) => !prev);
-                setIsDatePickerOpen(false);
-                setIsMenuOpen(false);
-              }}
-              className="w-full flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 text-[#2563EB] dark:text-blue-400 border border-blue-200/60 dark:border-blue-900/50 text-xs font-semibold transition-all cursor-pointer shadow-sm active:scale-95 backdrop-blur-md"
-            >
-              <i className="fi fi-sr-compass-alt text-sm shrink-0" />
-              <span className="truncate max-w-[65px] sm:max-w-none">{language === 'bn' ? 'নেভিগেশন' : 'Navigation'}</span>
-              <i className={`fi fi-sr-angle-down text-xs shrink-0 transition-transform duration-200 ${isQuickNavOpen ? 'rotate-180' : ''}`} />
-            </button>
-
-            {isQuickNavOpen && (
-              <div className="absolute right-0 mt-2 w-56 bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl border border-white/80 dark:border-white/10 rounded-[24px] shadow-xl z-50 p-2 space-y-1 animate-in fade-in zoom-in-95 duration-150">
-                <div className="px-3 py-1.5 text-[10px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase border-b border-slate-100 dark:border-slate-800 mb-1">
-                  {language === 'bn' ? 'দ্রুত নেভিগেশন' : 'Quick Navigation'}
-                </div>
-                {navItems.map((item) => {
-                  const isActive = activeTab === item.id;
-                  return (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={() => {
-                        onTabChange?.(item.id);
-                        setIsQuickNavOpen(false);
-                      }}
-                      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-full text-xs font-semibold text-left transition-colors cursor-pointer ${
-                        isActive
-                          ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold shadow-sm'
-                          : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'
-                      }`}
-                    >
-                      <span className={isActive ? 'text-white dark:text-slate-900' : ''}>{item.icon}</span>
-                      <span className="flex-1 truncate">{language === 'bn' ? item.labelBn : item.labelEn}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-          </div>
 
           {/* Menu Pill Button */}
           <div className="relative shrink-0 flex-1 md:flex-none" ref={menuRef}>
@@ -405,10 +356,10 @@ export const Header: React.FC<HeaderProps> = ({
 
             {/* Dropdown Menu */}
             {isMenuOpen && (
-              <div className="absolute right-0 mt-2 w-[280px] sm:w-80 bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl text-slate-800 dark:text-slate-100 rounded-[28px] shadow-2xl border border-white/80 dark:border-white/10 z-50 overflow-hidden text-xs divide-y divide-slate-100 dark:divide-slate-800/60 max-h-[85vh] overflow-y-auto">
+              <div className="absolute right-0 mt-2 w-[280px] sm:w-80 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 z-50 overflow-hidden text-xs divide-y divide-slate-100 dark:divide-slate-800 max-h-[85vh] overflow-y-auto">
                 
                 {/* Online Sync State Banner */}
-                <div className="p-4 bg-slate-50/80 dark:bg-slate-800/50 flex items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800">
+                <div className="p-4 bg-slate-50 dark:bg-slate-800/40 flex items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800">
                   <div className="flex items-center gap-2.5 min-w-0">
                     <span className="relative flex h-3 w-3 shrink-0">
                       <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
@@ -511,7 +462,7 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
 
                 {/* Owner Account & Security */}
-                <div className="p-4 bg-slate-50/80 dark:bg-slate-900/90 space-y-2 border-t border-slate-100 dark:border-slate-800">
+                <div className="p-4 bg-slate-50 dark:bg-slate-800/40 space-y-2 border-t border-slate-100 dark:border-slate-800">
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1.5 text-[11px]">
                       <i className="fi fi-sr-shield-check text-sm text-emerald-500" />

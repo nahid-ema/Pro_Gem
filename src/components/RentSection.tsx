@@ -206,11 +206,11 @@ export const RentSection: React.FC<RentSectionProps> = ({
   const formatCurrency = (val: number) => `${t.currencySymbol}${val.toLocaleString()}`;
 
   return (
-    <div className="rounded-[32px] bg-white/75 dark:bg-slate-900/75 backdrop-blur-2xl border border-white/80 dark:border-white/10 p-6 sm:p-8 mb-6 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.05)] dark:shadow-[0_12px_40px_-12px_rgba(0,0,0,0.3)]">
+    <div className="rounded-[32px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 mb-6 shadow-sm">
       {/* Header */}
-      <div className="flex items-center justify-between pb-5 mb-5 border-b border-slate-200/60 dark:border-slate-800">
+      <div className="flex items-center justify-between pb-5 mb-5 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-full bg-blue-50 dark:bg-blue-950/40 text-[#2563EB] dark:text-blue-400 flex items-center justify-center font-bold text-lg shrink-0 border border-blue-100 dark:border-blue-900/40 shadow-sm">
+          <div className="w-11 h-11 rounded-full bg-blue-50 dark:bg-blue-900/30 text-[#2563EB] dark:text-blue-400 flex items-center justify-center font-bold text-lg shrink-0 border border-blue-100 dark:border-blue-800/30">
             <i className="fi fi-sr-money-bill-wave" />
           </div>
           <div>
@@ -225,7 +225,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
 
         <button
           onClick={() => setIsFormOpen(!isFormOpen)}
-          className="no-print flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#2563EB] text-white hover:bg-[#1D4ED8] font-bold text-xs transition-all shadow-md active:scale-95 cursor-pointer"
+          className="no-print flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#2563EB] text-white hover:bg-[#1D4ED8] font-bold text-xs transition-all active:scale-95 cursor-pointer"
         >
           <i className={`fi fi-sr-add transition-transform duration-200 ${isFormOpen ? 'rotate-45' : ''}`} />
           <span className="hidden sm:inline">{editingId ? t.rentUpdateBtn : t.rentToggleLabel}</span>
@@ -248,8 +248,8 @@ export const RentSection: React.FC<RentSectionProps> = ({
           onClick={() => setStatusFilter('paid')}
           className={`px-4 py-2 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer ${
             statusFilter === 'paid'
-              ? 'bg-emerald-500 text-white shadow-sm scale-105'
-              : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+              ? 'bg-emerald-600 dark:bg-emerald-500 text-white shadow-sm scale-105'
+              : 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/50'
           }`}
         >
           {language === 'bn' ? 'পরিশোধিত' : 'Fully Paid'}
@@ -258,8 +258,8 @@ export const RentSection: React.FC<RentSectionProps> = ({
           onClick={() => setStatusFilter('due')}
           className={`px-4 py-2 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer ${
             statusFilter === 'due'
-              ? 'bg-rose-500 text-white shadow-sm scale-105'
-              : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+              ? 'bg-rose-600 dark:bg-rose-500 text-white shadow-sm scale-105'
+              : 'bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/50'
           }`}
         >
           {language === 'bn' ? 'বকেয়া আছে' : 'Has Due'}
@@ -268,7 +268,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
 
       {/* Expandable Form */}
       {isFormOpen && (
-        <form onSubmit={handleSubmit} className="bg-slate-50/80 dark:bg-slate-800/50 backdrop-blur-md border border-white/80 dark:border-white/10 rounded-[24px] p-5 mb-6 space-y-4 no-print animate-fadeIn shadow-sm">
+        <form onSubmit={handleSubmit} className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-[24px] p-5 mb-6 space-y-4 no-print animate-fadeIn">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.thRentDate} *</label>
@@ -387,15 +387,15 @@ export const RentSection: React.FC<RentSectionProps> = ({
       )}
 
       {/* Table Container */}
-      <div className="overflow-x-auto rounded-[24px] border border-white/80 dark:border-white/10 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md max-h-[500px]">
+      <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 max-h-[500px]">
         <table className="w-full text-left text-xs md:text-sm border-collapse">
-          <thead className="sticky top-0 bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur-md text-slate-900 dark:text-white uppercase text-[10px] font-black tracking-widest border-b border-slate-200 dark:border-slate-700 z-10">
+          <thead className="sticky top-0 bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-200 dark:border-slate-800 z-10">
             <tr>
               <th className="p-3.5 pl-4">{t.thRentDate}</th>
               <th className="p-3.5">{t.thRentName}</th>
-              <th className="p-3.5">{t.thRentAmount}</th>
-              <th className="p-3.5">{t.thPaidAmount}</th>
-              <th className="p-3.5">{t.thDueStatus}</th>
+              <th className="p-3.5 text-right">{t.thRentAmount}</th>
+              <th className="p-3.5 text-right">{t.thPaidAmount}</th>
+              <th className="p-3.5 text-right">{t.thDueStatus}</th>
               <th className="p-3.5 pr-4 no-print text-right">{t.thRentAction}</th>
             </tr>
           </thead>
@@ -410,7 +410,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
               filteredRents.map((rt) => {
                 const isPaid = rt.due <= 0;
                 return (
-                  <tr key={rt.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
+                  <tr key={rt.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
                     <td className="p-3.5 pl-4 font-mono text-xs text-slate-500 dark:text-slate-400">
                       {rt.date}
                     </td>
@@ -422,29 +422,29 @@ export const RentSection: React.FC<RentSectionProps> = ({
                         {t.roomText}: {rt.room} {rt.note ? `• ${rt.note}` : ''}
                       </div>
                     </td>
-                    <td className="p-3.5 font-bold">{formatCurrency(rt.rent)}</td>
-                    <td className="p-3.5 font-bold text-emerald-600 dark:text-emerald-400">
+                    <td className="p-3.5 font-mono font-bold text-slate-600 dark:text-slate-300 text-right">{formatCurrency(rt.rent)}</td>
+                    <td className="p-3.5 font-mono font-bold text-emerald-600 dark:text-emerald-400 text-right">
                       {formatCurrency(rt.paid)}
                     </td>
-                    <td className="p-3.5">
+                    <td className="p-3.5 text-right">
                       {isPaid ? (
-                        <span className="inline-flex items-center px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 font-extrabold text-[10px] uppercase tracking-wider">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 font-extrabold text-[10px] uppercase tracking-wider">
                           {t.paidStatus}
                         </span>
                       ) : (
-                        <div className="flex items-center gap-1.5">
-                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-rose-100 text-rose-700 dark:bg-rose-950/60 dark:text-rose-300 font-extrabold text-[10px] uppercase tracking-wider">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-rose-50 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400 font-extrabold text-[10px] uppercase tracking-wider">
                             <i className="fi fi-sr-triangle-warning text-xs" />
-                            {t.dueStatus} {formatCurrency(rt.due)}
+                            {t.dueStatus} <span className="font-mono">{formatCurrency(rt.due)}</span>
                           </span>
                           <a
                             href={getWhatsAppLink(rt)}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="no-print p-1.5 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white transition-colors"
+                            className="no-print p-1.5 rounded-full text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-colors"
                             title="Send WhatsApp Reminder"
                           >
-                            <i className="fi fi-sr-comment text-xs" />
+                            <i className="fi fi-sr-comment text-sm" />
                           </a>
                         </div>
                       )}
@@ -453,14 +453,14 @@ export const RentSection: React.FC<RentSectionProps> = ({
                       <div className="flex items-center justify-end gap-1.5">
                         <button
                           onClick={() => onSelectReceipt(rt)}
-                          className="p-2 rounded-full text-slate-600 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                          className="p-2 rounded-full text-slate-400 hover:text-emerald-600 dark:text-slate-500 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-colors"
                           title={t.receiptBtn}
                         >
                           <i className="fi fi-sr-receipt text-sm" />
                         </button>
                         <button
                           onClick={() => handleEditClick(rt)}
-                          className="p-2 rounded-full text-slate-600 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                          className="p-2 rounded-full text-slate-400 hover:text-blue-600 dark:text-slate-500 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
                           title={t.edit}
                         >
                           <i className="fi fi-sr-edit text-sm" />
@@ -469,7 +469,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
                           onClick={() => {
                             if (confirm(t.deleteConfirm)) onDeleteRent(rt.id);
                           }}
-                          className="p-2 rounded-full text-slate-600 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                          className="p-2 rounded-full text-slate-400 hover:text-rose-600 dark:text-slate-500 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-colors"
                           title={t.delete}
                         >
                           <i className="fi fi-sr-trash text-sm" />
@@ -483,13 +483,17 @@ export const RentSection: React.FC<RentSectionProps> = ({
           </tbody>
 
           {filteredRents.length > 0 && (
-            <tfoot>
-              <tr className="bg-slate-100/80 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white border-t border-slate-200 dark:border-slate-700">
+            <tfoot className="sticky bottom-0 z-10">
+              <tr className="bg-slate-50 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white border-t border-slate-200 dark:border-slate-800">
                 <td className="p-3.5 pl-4">{t.totalRow} ({filteredRents.length})</td>
                 <td className="p-3.5">-</td>
-                <td className="p-3.5">{formatCurrency(totalRentAmount)}</td>
-                <td className="p-3.5 text-emerald-600 dark:text-emerald-400">{formatCurrency(totalPaidAmount)}</td>
-                <td className="p-3.5 text-rose-600 dark:text-rose-400">{formatCurrency(totalDueAmount)}</td>
+                <td className="p-3.5 font-mono font-extrabold text-slate-600 dark:text-slate-300 text-right">{formatCurrency(totalRentAmount)}</td>
+                <td className="p-3.5 font-mono font-extrabold text-emerald-600 dark:text-emerald-400 text-right">{formatCurrency(totalPaidAmount)}</td>
+                <td className="p-3.5 font-mono font-extrabold text-rose-600 dark:text-rose-400 text-right">
+                  <div className="flex justify-end">
+                    {totalDueAmount > 0 ? formatCurrency(totalDueAmount) : '-'}
+                  </div>
+                </td>
                 <td className="p-3.5 pr-4 no-print"></td>
               </tr>
             </tfoot>

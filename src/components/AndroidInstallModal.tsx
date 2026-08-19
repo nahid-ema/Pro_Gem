@@ -51,13 +51,13 @@ export const AndroidInstallModal: React.FC<AndroidInstallModalProps> = ({ isOpen
   const isBn = language === 'bn';
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-[#F5F5F0] dark:bg-[#1A1A1A]/80 border border-[#D6D0C4] dark:border-slate-800 rounded-sm shadow-none border border-[#D6D0C4] dark:border-slate-800 w-full max-w-md overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/80 animate-in fade-in duration-200">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl w-full max-w-md overflow-hidden flex flex-col max-h-[90vh]">
         
         {/* Modal Header */}
         <div className="p-5 bg-gradient-to-r from-[#2563EB] to-[#D49D1A] text-white flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-white/15 backdrop-blur-md rounded-sm border border-white/20">
+            <div className="p-2.5 bg-white/20 rounded-xl border border-white/30">
               <i className="fi fi-sr-smartphone text-2xl text-white" />
             </div>
             <div>

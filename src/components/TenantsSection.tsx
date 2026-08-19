@@ -95,11 +95,11 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
   };
 
   return (
-    <div className="rounded-[32px] bg-white/75 dark:bg-slate-900/75 backdrop-blur-2xl border border-white/80 dark:border-white/10 p-6 sm:p-8 mb-6 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.05)] dark:shadow-[0_12px_40px_-12px_rgba(0,0,0,0.3)]">
+    <div className="rounded-[32px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 mb-6 shadow-sm">
       {/* Title */}
-      <div className="flex items-center justify-between pb-5 mb-5 border-b border-slate-200/60 dark:border-slate-800">
+      <div className="flex items-center justify-between pb-5 mb-5 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-full bg-blue-50 dark:bg-blue-950/40 text-[#2563EB] dark:text-blue-400 flex items-center justify-center font-bold text-lg shrink-0 border border-blue-100 dark:border-blue-900/40 shadow-sm">
+          <div className="w-11 h-11 rounded-full bg-blue-50 dark:bg-blue-900/30 text-[#2563EB] dark:text-blue-400 flex items-center justify-center font-bold text-lg shrink-0 border border-blue-100 dark:border-blue-800/30">
             <i className="fi fi-sr-users" />
           </div>
           <div>
@@ -114,7 +114,7 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
 
         <button
           onClick={() => setIsFormOpen(!isFormOpen)}
-          className="no-print flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#2563EB] text-white hover:bg-[#1D4ED8] font-bold text-xs transition-all shadow-md active:scale-95 cursor-pointer"
+          className="no-print flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#2563EB] text-white hover:bg-[#1D4ED8] font-bold text-xs transition-all active:scale-95 cursor-pointer"
         >
           <i className={`fi fi-sr-add transition-transform duration-200 ${isFormOpen ? 'rotate-45' : ''}`} />
           <span className="hidden sm:inline">{editingId ? t.tenantUpdateBtn : t.tenantToggleLabel}</span>
@@ -123,7 +123,7 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
 
       {/* Expandable Add/Edit Form */}
       {isFormOpen && (
-        <form onSubmit={handleSubmit} className="bg-slate-50/80 dark:bg-slate-800/50 backdrop-blur-md border border-white/80 dark:border-white/10 rounded-[24px] p-5 mb-6 space-y-4 no-print animate-fadeIn shadow-sm">
+        <form onSubmit={handleSubmit} className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-[24px] p-5 mb-6 space-y-4 no-print animate-fadeIn">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.thName} *</label>
@@ -197,14 +197,14 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
       )}
 
       {/* Table Container */}
-      <div className="overflow-x-auto rounded-[24px] border border-white/80 dark:border-white/10 bg-white/50 dark:bg-slate-900/50 backdrop-blur-md">
+      <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
         <table className="w-full text-left text-xs md:text-sm border-collapse">
           <thead>
-            <tr className="bg-slate-100/90 dark:bg-slate-800/90 backdrop-blur-md text-slate-900 dark:text-white uppercase text-[10px] font-black tracking-widest border-b border-slate-200 dark:border-slate-700">
+            <tr className="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-200 dark:border-slate-800">
               <th className="p-3.5 pl-4">{t.thName}</th>
-              <th className="p-3.5">{t.thPhone}</th>
-              <th className="p-3.5">{t.thRoom}</th>
-              <th className="p-3.5">{t.thNid}</th>
+              <th className="p-3.5 text-right">{t.thPhone}</th>
+              <th className="p-3.5 text-right">{t.thRoom}</th>
+              <th className="p-3.5 text-right">{t.thNid}</th>
               <th className="p-3.5 pr-4 no-print text-right">{t.thAction}</th>
             </tr>
           </thead>
@@ -217,16 +217,16 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
               </tr>
             ) : (
               filteredTenants.map((tn) => (
-                <tr key={tn.id} className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
+                <tr key={tn.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
                   <td className="p-3.5 pl-4 font-bold text-slate-900 dark:text-white">
                     {tn.name}
                   </td>
-                  <td className="p-3.5">
-                    <div className="flex items-center gap-2 font-mono text-xs">
+                  <td className="p-3.5 text-right">
+                    <div className="flex items-center justify-end gap-2 font-mono text-xs">
                       <span>{tn.phone}</span>
                       <a
                         href={`tel:${tn.phone}`}
-                        className="no-print p-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-600 hover:bg-indigo-100 transition-colors"
+                        className="no-print p-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
                         title="Call Tenant"
                       >
                         <i className="fi fi-sr-phone-call text-xs" />
@@ -235,24 +235,24 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
                         href={`https://wa.me/${getCleanPhone(tn.phone)}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="no-print p-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-600 hover:bg-emerald-100 transition-colors"
+                        className="no-print p-1.5 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors"
                         title="Open WhatsApp"
                       >
                         <i className="fi fi-sr-comment text-xs" />
                       </a>
                     </div>
                   </td>
-                  <td className="p-3.5">
-                    <span className="inline-block px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs border border-slate-200/60 dark:border-slate-700">
+                  <td className="p-3.5 text-right">
+                    <span className="inline-block px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs">
                       {t.roomText}: {tn.room}
                     </span>
                   </td>
-                  <td className="p-3.5 font-mono text-slate-500 dark:text-slate-400">{tn.nid || '-'}</td>
+                  <td className="p-3.5 font-mono text-slate-500 dark:text-slate-400 text-right">{tn.nid || '-'}</td>
                   <td className="p-3.5 pr-4 no-print text-right">
                     <div className="flex items-center justify-end gap-1.5">
                       <button
                         onClick={() => handleEditClick(tn)}
-                        className="p-2 rounded-full text-slate-600 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                        className="p-2 rounded-full text-slate-400 hover:text-blue-600 dark:text-slate-500 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
                         title={t.edit}
                       >
                         <i className="fi fi-sr-edit text-sm" />
@@ -261,7 +261,7 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
                         onClick={() => {
                           if (confirm(t.deleteConfirm)) onDeleteTenant(tn.id);
                         }}
-                        className="p-2 rounded-full text-slate-600 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                        className="p-2 rounded-full text-slate-400 hover:text-rose-600 dark:text-slate-500 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-colors"
                         title={t.delete}
                       >
                         <i className="fi fi-sr-trash text-sm" />

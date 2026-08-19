@@ -201,17 +201,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-[#F5F5F0] dark:bg-[#1A1A1A]/80 border border-[#D6D0C4] dark:border-slate-800 rounded-sm max-w-md w-full p-6 shadow-none border border-[#D6D0C4] dark:border-slate-800 relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 animate-fadeIn">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-md w-full p-6 shadow-xl relative">
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 p-2 rounded-sm bg-[#F2F0EB] dark:bg-[#2A2A2A] text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors cursor-pointer"
+          className="absolute right-4 top-4 p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors cursor-pointer"
         >
           <i className="fi fi-sr-cross text-base" />
         </button>
 
         <div className="text-center mb-6">
-          <div className="w-12 h-12 rounded-sm bg-[#2563EB] text-white flex items-center justify-center font-black text-xl mx-auto mb-3 shadow-none">
+          <div className="w-12 h-12 rounded-2xl bg-[#2563EB] text-white flex items-center justify-center font-black text-xl mx-auto mb-3 shadow-none">
             🏠
           </div>
           <h3 className="text-lg font-bold text-slate-900 dark:text-white">
@@ -223,20 +223,20 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         </div>
 
         {userEmail ? (
-          <div className="bg-[#EBE7E0] dark:bg-slate-800/60 border border-[#D6D0C4]/80 dark:border-slate-700 rounded-sm p-5 text-center space-y-4">
+          <div className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 text-center space-y-4">
             <i className="fi fi-sr-check-circle text-4xl text-emerald-500 mx-auto" />
             <div>
               <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold block mb-1">
                 {language === 'bn' ? 'বর্তমান কানেক্টেড ইউজার:' : 'Currently signed in as:'}
               </span>
-              <p className="text-sm font-bold font-mono text-slate-900 dark:text-white bg-[#F2F0EB] dark:bg-[#2A2A2A] py-1.5 px-3 rounded-sm inline-block">
+              <p className="text-sm font-bold font-mono text-slate-900 dark:text-white bg-slate-100 dark:bg-slate-900 py-1.5 px-3 rounded-lg inline-block">
                 {userEmail}
               </p>
             </div>
 
             <button
               onClick={handleLogout}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-sm bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs shadow-none transition-colors cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-full bg-rose-600 hover:bg-rose-700 text-white font-semibold text-xs shadow-none transition-colors cursor-pointer"
             >
               <i className="fi fi-sr-sign-out-alt" />
               <span>{t.logoutBtn}</span>
@@ -245,7 +245,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         ) : (
           <div>
             {/* Tab selection for Sign In / Sign Up / Reset */}
-            <div className="flex bg-[#F2F0EB] dark:bg-[#2A2A2A] p-1 rounded-sm mb-5 text-xs font-semibold">
+            <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-full mb-5 text-xs font-semibold">
               <button
                 type="button"
                 onClick={() => switchMode('signIn')}

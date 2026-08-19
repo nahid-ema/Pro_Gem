@@ -99,8 +99,8 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
   const isPartiallyPaid = rentRecord.paid > 0 && rentRecord.due > 0;
 
   return createPortal(
-    <div id="receiptModalOverlay" className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn overflow-y-auto">
-      <div id="receiptModalCard" className="bg-[#F5F5F0] dark:bg-[#1A1A1A]/80 border border-[#D6D0C4] dark:border-slate-800 rounded-sm max-w-lg w-full p-4 sm:p-6 shadow-none border border-[#D6D0C4] dark:border-slate-800 relative overflow-hidden my-auto">
+    <div id="receiptModalOverlay" className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/80 animate-fadeIn overflow-y-auto">
+      <div id="receiptModalCard" className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-lg w-full p-4 sm:p-6 shadow-xl relative overflow-hidden my-auto">
         
         {/* Modal Controls Bar (Screen Only - Hidden in Print) */}
         <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-[#D6D0C4] dark:border-slate-800 no-print gap-1.5 flex-wrap">
