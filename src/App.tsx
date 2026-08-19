@@ -78,6 +78,7 @@ export default function App() {
   const [receiptRecord, setReceiptRecord] = useState<RentRecord | null>(null);
   const [quickPayTenantId, setQuickPayTenantId] = useState<string | null>(null);
   const [quickPayDueAmount, setQuickPayDueAmount] = useState<number | null>(null);
+  const [quickPayRentRecordId, setQuickPayRentRecordId] = useState<string | null>(null);
   const [toast, setToast] = useState<ToastMessage | null>(null);
 
   const showToast = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
@@ -421,6 +422,7 @@ export default function App() {
 
     const roomDueMap = new Map<string, number>();
     const roomHasRecordMap = new Map<string, boolean>();
+    const roomRecordIdMap = new Map<string, string>();
 
     (rents || [])
       .filter((r) => {
@@ -433,6 +435,7 @@ export default function App() {
       .forEach((r) => {
         const key = (r.room || '').trim();
         roomHasRecordMap.set(key, true);
+        roomRecordIdMap.set(key, r.id);
         const prev = roomDueMap.get(key) || 0;
         roomDueMap.set(key, prev + (r.due || 0));
       });
@@ -443,6 +446,7 @@ export default function App() {
       if (!tn) return;
       const roomNoTrim = (tn.room || '').trim();
       const hasRecord = roomHasRecordMap.get(roomNoTrim) || false;
+      const rentRecordId = roomRecordIdMap.get(roomNoTrim);
       const due = roomDueMap.get(roomNoTrim) || 0;
       const matchedRoom = (rooms || []).find((r) => r && (r.roomNo || '').trim() === roomNoTrim);
 
@@ -453,6 +457,7 @@ export default function App() {
             room: matchedRoom,
             estimatedDue: due,
             hasRecord: true,
+            rentRecordId,
           });
         }
       } else {
@@ -664,6 +669,7 @@ export default function App() {
   const handleQuickPay = (item: UnpaidTenantItem) => {
     setQuickPayTenantId(item.tenant.id);
     setQuickPayDueAmount(item.estimatedDue);
+    setQuickPayRentRecordId(item.rentRecordId || null);
     setActiveTab('rent');
     showToast(
       language === 'bn'
@@ -908,9 +914,11 @@ export default function App() {
               selectedMonth={selectedMonth}
               initialTenantId={quickPayTenantId}
               initialDueAmount={quickPayDueAmount}
+              initialRentRecordId={quickPayRentRecordId}
               onClearQuickPay={() => {
                 setQuickPayTenantId(null);
                 setQuickPayDueAmount(null);
+                setQuickPayRentRecordId(null);
               }}
               onAddRent={handleAddRent}
               onUpdateRent={handleUpdateRent}

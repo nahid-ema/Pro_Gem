@@ -68,5 +68,6 @@ export interface UnpaidTenantItem {
   room?: Room;
   estimatedDue: number;
   hasRecord: boolean;
+  rentRecordId?: string;
   partiallyPaidAmount?: number;
 }

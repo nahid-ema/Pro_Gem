@@ -14,6 +14,7 @@ interface RentSectionProps {
   selectedMonth: string;
   initialTenantId?: string | null;
   initialDueAmount?: number | null;
+  initialRentRecordId?: string | null;
   onClearQuickPay?: () => void;
   onAddRent: (rent: Omit<RentRecord, 'id'>) => void;
   onUpdateRent: (id: string, rent: Omit<RentRecord, 'id'>) => void;
@@ -31,6 +32,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
   selectedMonth,
   initialTenantId,
   initialDueAmount,
+  initialRentRecordId,
   onClearQuickPay,
   onAddRent,
   onUpdateRent,
@@ -92,7 +94,18 @@ export const RentSection: React.FC<RentSectionProps> = ({
     if (initialTenantId) {
       setIsFormOpen(true);
       handleTenantSelect(initialTenantId);
-      if (initialDueAmount !== undefined && initialDueAmount !== null && initialDueAmount > 0) {
+      
+      if (initialRentRecordId) {
+        const rt = rents.find((r) => r.id === initialRentRecordId);
+        if (rt) {
+          setEditingId(rt.id);
+          setDate(rt.date);
+          setRent(String(rt.rent || 0));
+          // Pre-fill paid with the full rent amount to clear the due
+          setPaid(String(rt.rent || 0));
+          setNote(rt.note || '');
+        }
+      } else if (initialDueAmount !== undefined && initialDueAmount !== null && initialDueAmount > 0) {
         setPaid(String(initialDueAmount));
       }
       onClearQuickPay?.();
@@ -124,6 +137,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
     setPaid(String(rt.paid || 0));
     setNote(rt.note || '');
     setIsFormOpen(true);
+      if (initialRentRecordId) setEditingId(initialRentRecordId);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
