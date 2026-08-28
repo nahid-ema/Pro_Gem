@@ -188,6 +188,62 @@ export const translations = {
     signatureLandlord: "বাড়িওয়ালার স্বাক্ষর",
     signatureTenant: "ভাড়াটিয়ার স্বাক্ষর",
     closeBtn: "বন্ধ করুন",
+    downloadImgBtn: "ছবি ডাউনলোড",
+    downloadPdfBtn: "PDF রসিদ",
+
+    // Room Matrix Grid
+    matrixTitle: "রুমের অবস্থান ও পেমেন্ট স্ট্যাটাস গ্রিড",
+    matrixSubtitle: "বাসার সকল রুমের বুকিং ও চলতি মাসের ভাড়া পরিশোধের দৃশ্যমান চিত্র",
+    matrixTotalRooms: "সর্বমোট রুম",
+    matrixOccupied: "ভাড়াকৃত",
+    matrixVacant: "খালি রুম",
+    matrixPaidRooms: "পরিশোধিত",
+    matrixDueRooms: "বকেয়া",
+    filterAll: "সকল রুম",
+    filterOccupied: "ভাড়াকৃত",
+    filterVacant: "খালি",
+    filterPaid: "পরিশোধিত",
+    filterDue: "বকেয়া",
+    vacantText: "খালি (ভাড়া প্রস্তুত)",
+    assignTenantBtn: "ভাড়াটিয়া বসান",
+
+    // Quick Action Speed Dial
+    quickActionsTitle: "কুইক অ্যাকশন",
+    qaAddRent: "ভাড়া আদায় এন্ট্রি",
+    qaBatchChecklist: "মাসের চেকশিট (১-ক্লিক)",
+    qaAddExpense: "খরচের হিসাব লিখুন",
+    qaAddTenant: "নতুন ভাড়াটিয়া যোগ",
+    qaMonthlyReport: "মাসিক অডিট রিপোর্ট",
+
+    // Monthly Batch Checklist
+    batchChecklistTitle: "মাসিক ভাড়া আদায়ের চেকশিট",
+    batchChecklistSubtitle: "চলতি মাসের সকল ভাড়াটিয়ার ভাড়া এক ক্লিকে আদায় ও পর্যবেক্ষণ",
+    batchCollectAllBtn: "সকল বকেয়া ১-ক্লিকে আদায় করুন",
+    batchMarkPaid: "পরিশোধ গ্রহণ",
+    batchAlreadyPaid: "পরিশোধিত",
+    batchCollectConfirm: "আপনি কি সকল বকেয়া ভাড়াটিয়ার সম্পূর্ণ ভাড়া এই মাসের জন্য পরিশোধিত হিসেবে রেকর্ড করতে চান?",
+    batchSuccessMsg: "সকল বকেয়া ভাড়া সফলভাবে আদায় ও রেকর্ড করা হয়েছে!",
+
+    // Overdue Tracking
+    overdueDays: "দিন অতিক্রান্ত",
+    overdueMonths: "মাস বকেয়া",
+    overdueSevere: "দীর্ঘমেয়াদী বকেয়া",
+    sortByDueDesc: "সর্বাধিক বকেয়া আগে",
+    sortByAgeDesc: "সবচেয়ে পুরোনো বকেয়া আগে",
+    sortByRoomAsc: "রুম নম্বর অনুযায়ী",
+
+    // Monthly Financial Report
+    monthlyReportTitle: "নাহিদ কুটির — মাসিক আর্থিক বিবরণী ও অডিট রিপোর্ট",
+    monthlyReportSubtitle: "আয়, ব্যয়, ভাড়া আদায় ও নেট ক্যাশফ্লোর অফিসিয়াল প্রিন্ট শিট",
+    repGrossExpected: "মোট প্রত্যাশিত ভাড়া",
+    repCollected: "মোট সংগৃহীত রাজস্ব",
+    repOutstanding: "মোট অনাদায়ী বকেয়া",
+    repTotalExpenses: "মোট পরিচালনা ব্যয়",
+    repNetProfit: "নেট মুনাফা / ক্যাশফ্লো",
+    repShopCredit: "দোকান বাকি ব্যালেন্স",
+    repExportCSV: "এক্সেল / CSV ডাউনলোড",
+    repDownloadPDF: "PDF ডাউনলোড",
+    repPrintReport: "প্রিন্ট করুন",
 
     // WhatsApp Message Template
     waMessageTemplate: (tenantName: string, roomNo: string, dueAmount: number) =>
@@ -381,6 +437,62 @@ export const translations = {
     signatureLandlord: "Landlord Signature",
     signatureTenant: "Tenant Signature",
     closeBtn: "Close",
+    downloadImgBtn: "Download Image",
+    downloadPdfBtn: "PDF Receipt",
+
+    // Room Matrix Grid
+    matrixTitle: "Room Occupancy & Payment Matrix",
+    matrixSubtitle: "Visual floor plan of all units, occupancy, and current period rent status",
+    matrixTotalRooms: "Total Units",
+    matrixOccupied: "Occupied",
+    matrixVacant: "Vacant",
+    matrixPaidRooms: "Paid in Full",
+    matrixDueRooms: "Rent Due",
+    filterAll: "All Rooms",
+    filterOccupied: "Occupied",
+    filterVacant: "Vacant",
+    filterPaid: "Paid",
+    filterDue: "Due",
+    vacantText: "Vacant (Available)",
+    assignTenantBtn: "Assign Tenant",
+
+    // Quick Action Speed Dial
+    quickActionsTitle: "Quick Actions",
+    qaAddRent: "Record Rent",
+    qaBatchChecklist: "Monthly Checklist (1-Click)",
+    qaAddExpense: "Log Expense",
+    qaAddTenant: "Register Tenant",
+    qaMonthlyReport: "Monthly Statement Report",
+
+    // Monthly Batch Checklist
+    batchChecklistTitle: "Monthly Multi-Tenant Rent Checklist",
+    batchChecklistSubtitle: "Review and collect rent for all active units in one quick view",
+    batchCollectAllBtn: "Collect All Pending Rent in 1-Click",
+    batchMarkPaid: "Collect",
+    batchAlreadyPaid: "Paid",
+    batchCollectConfirm: "Are you sure you want to record full payment for all unpaid units for this month?",
+    batchSuccessMsg: "All pending rents have been successfully collected and recorded!",
+
+    // Overdue Tracking
+    overdueDays: "days past due",
+    overdueMonths: "months overdue",
+    overdueSevere: "Long-standing Due",
+    sortByDueDesc: "Highest Due First",
+    sortByAgeDesc: "Oldest Due First",
+    sortByRoomAsc: "By Room Number",
+
+    // Monthly Financial Report
+    monthlyReportTitle: "Nahid Kutir — Monthly Financial Statement & Audit Sheet",
+    monthlyReportSubtitle: "Official income, expense, rent collection, and cash flow audit record",
+    repGrossExpected: "Gross Expected Rent",
+    repCollected: "Collected Revenue",
+    repOutstanding: "Outstanding Dues",
+    repTotalExpenses: "Operating Expenses",
+    repNetProfit: "Net Cash Flow / Profit",
+    repShopCredit: "Shop Credit Balance",
+    repExportCSV: "Export to Excel / CSV",
+    repDownloadPDF: "Download PDF",
+    repPrintReport: "Print Statement",
 
     // WhatsApp Message Template
     waMessageTemplate: (tenantName: string, roomNo: string, dueAmount: number) =>

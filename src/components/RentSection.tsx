@@ -62,7 +62,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
   const calcDue = () => {
     const r = Number(rent) || 0;
     const p = Number(paid) || 0;
-    return Math.max(0, r - p);
+    return r - p;
   };
 
   const handleTenantSelect = (tenantId: string) => {
@@ -81,9 +81,28 @@ export const RentSection: React.FC<RentSectionProps> = ({
 
       const rm = rooms.find((r) => (r.roomNo || '').trim() === (tn.room || '').trim());
       if (rm) {
-        const totalPkg = rm.rentAmount + rm.gasBill + rm.waterBill + rm.wasteBill;
-        setRent(String(totalPkg));
-        setPaid(String(totalPkg)); // Default paid to total for quick entry
+        let previousDues = 0;
+        rents.forEach((r) => {
+          if ((r.room || "").trim() === (tn.room || "").trim()) {
+            if (r.id !== editingId) {
+              previousDues += (r.due || 0);
+            }
+          }
+        });
+        const currentPkg = rm.rentAmount + rm.gasBill + rm.waterBill + rm.wasteBill;
+        const suggestedPaid = Math.max(0, currentPkg + previousDues);
+        
+        if (previousDues > 0) {
+          setNote(language === "bn" ? `পূর্বের বকেয়া ৳${previousDues} সহ, মোট দেয় ৳${suggestedPaid}` : `Includes previous due of ৳${previousDues}, Total Payable ৳${suggestedPaid}`);
+        } else if (previousDues < 0) {
+          const adv = Math.abs(previousDues);
+          setNote(language === "bn" ? `পূর্বের অগ্রিম ৳${adv} সমন্বয় করে, মোট দেয় ৳${suggestedPaid}` : `Adjusted previous advance of ৳${adv}, Total Payable ৳${suggestedPaid}`);
+        } else {
+          setNote('');
+        }
+        
+        setRent(String(currentPkg));
+        setPaid(String(suggestedPaid)); // Default paid to suggested total for quick entry
       } else {
         setRent('');
       }
@@ -105,12 +124,59 @@ export const RentSection: React.FC<RentSectionProps> = ({
           setPaid(String(rt.rent || 0));
           setNote(rt.note || '');
         }
-      } else if (initialDueAmount !== undefined && initialDueAmount !== null && initialDueAmount > 0) {
-        setPaid(String(initialDueAmount));
       }
       onClearQuickPay?.();
     }
   }, [initialTenantId]);
+
+  useEffect(() => {
+    if (!selectedTenantId || !date) return;
+    
+    const tn = tenants.find((t) => t.id === selectedTenantId);
+    if (!tn) return;
+
+    const [y, m] = date.split('-');
+    const existingRecord = rents.find((r) => {
+      if (!r.date) return false;
+      const [ey, em] = r.date.split('-');
+      return ey === y && em === m && (r.room || '').trim() === (tn.room || '').trim();
+    });
+
+    if (existingRecord) {
+      if (existingRecord.id !== editingId) {
+        setEditingId(existingRecord.id);
+        setRent(String(existingRecord.rent || 0));
+        setPaid(String(existingRecord.paid || 0));
+        setNote(existingRecord.note || '');
+      }
+    } else {
+      if (editingId) {
+        setEditingId(null);
+        // Recalculate default values for new entry
+        const rm = rooms.find((r) => (r.roomNo || '').trim() === (tn.room || '').trim());
+        if (rm) {
+          let previousDues = 0;
+          rents.forEach((r) => {
+            if ((r.room || "").trim() === (tn.room || "").trim()) {
+              previousDues += (r.due || 0);
+            }
+          });
+          const currentPkg = rm.rentAmount + rm.gasBill + rm.waterBill + rm.wasteBill;
+          const suggestedPaid = Math.max(0, currentPkg + previousDues);
+          setRent(String(currentPkg));
+          setPaid(String(suggestedPaid));
+          if (previousDues > 0) {
+            setNote(language === "bn" ? `পূর্বের বকেয়া ৳${previousDues} সহ, মোট দেয় ৳${suggestedPaid}` : `Includes previous due of ৳${previousDues}, Total Payable ৳${suggestedPaid}`);
+          } else if (previousDues < 0) {
+            const adv = Math.abs(previousDues);
+            setNote(language === "bn" ? `পূর্বের অগ্রিম ৳${adv} সমন্বয় করে, মোট দেয় ৳${suggestedPaid}` : `Adjusted previous advance of ৳${adv}, Total Payable ৳${suggestedPaid}`);
+          } else {
+            setNote('');
+          }
+        }
+      }
+    }
+  }, [date, selectedTenantId, rents, editingId, rooms, tenants, language]);
 
   const resetForm = () => {
     setEditingId(null);
@@ -150,7 +216,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
     const tenantName = matchedTenant ? matchedTenant.name : (fallBackRent ? fallBackRent.tenant : '');
     const rentVal = Number(rent) || 0;
     const paidVal = Number(paid) || 0;
-    const dueVal = Math.max(0, rentVal - paidVal);
+    const dueVal = rentVal - paidVal;
 
     const payload = {
       date,
@@ -361,12 +427,14 @@ export const RentSection: React.FC<RentSectionProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.duePlaceholder}</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                {calcDue() < 0 ? (language === 'bn' ? 'অগ্রিম জমা (Advance)' : 'Advance') : t.duePlaceholder}
+              </label>
               <input
                 type="text"
                 readOnly
-                value={formatCurrency(calcDue())}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs md:text-sm font-bold text-rose-600"
+                value={formatCurrency(Math.abs(calcDue()))}
+                className={`w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs md:text-sm font-bold ${calcDue() < 0 ? 'text-emerald-600' : 'text-rose-600'}`}
               />
             </div>
 
@@ -443,7 +511,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
                     <td className="p-3.5 text-right">
                       {isPaid ? (
                         <span className="inline-flex items-center px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 font-extrabold text-[10px] uppercase tracking-wider">
-                          {t.paidStatus}
+                          {rt.due < 0 ? (language === 'bn' ? `অগ্রিম ${formatCurrency(Math.abs(rt.due))}` : `Advance ${formatCurrency(Math.abs(rt.due))}`) : t.paidStatus}
                         </span>
                       ) : (
                         <div className="flex items-center justify-end gap-1.5">
@@ -503,9 +571,9 @@ export const RentSection: React.FC<RentSectionProps> = ({
                 <td className="p-3.5">-</td>
                 <td className="p-3.5 font-mono font-extrabold text-slate-600 dark:text-slate-300 text-right">{formatCurrency(totalRentAmount)}</td>
                 <td className="p-3.5 font-mono font-extrabold text-emerald-600 dark:text-emerald-400 text-right">{formatCurrency(totalPaidAmount)}</td>
-                <td className="p-3.5 font-mono font-extrabold text-rose-600 dark:text-rose-400 text-right">
+                <td className={`p-3.5 font-mono font-extrabold text-right ${totalDueAmount < 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
                   <div className="flex justify-end">
-                    {totalDueAmount > 0 ? formatCurrency(totalDueAmount) : '-'}
+                    {totalDueAmount !== 0 ? (totalDueAmount < 0 ? `(অগ্রিম) ${formatCurrency(Math.abs(totalDueAmount))}` : formatCurrency(totalDueAmount)) : '-'}
                   </div>
                 </td>
                 <td className="p-3.5 pr-4 no-print"></td>

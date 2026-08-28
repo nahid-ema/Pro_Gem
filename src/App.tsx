@@ -38,6 +38,10 @@ import { AuthModal } from './components/AuthModal';
 import { LockScreen } from './components/LockScreen';
 import { Toast, ToastMessage } from './components/Toast';
 import { Logo } from './components/Logo';
+import { RoomMatrixGrid } from './components/RoomMatrixGrid';
+import { BatchRentChecklistModal } from './components/BatchRentChecklistModal';
+import { MonthlyReportModal } from './components/MonthlyReportModal';
+import { QuickActionBar } from './components/QuickActionBar';
 import { getTranslation } from './data/translations';
 import { initialRooms, initialTenants, initialRentRecords, initialExpenses, initialShopDues } from './data/sampleData';
 import { triggerPrint } from './lib/printHelper';
@@ -75,6 +79,8 @@ export default function App() {
   // Auth & Modal States
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isBatchChecklistOpen, setIsBatchChecklistOpen] = useState(false);
+  const [isMonthlyReportOpen, setIsMonthlyReportOpen] = useState(false);
   const [receiptRecord, setReceiptRecord] = useState<RentRecord | null>(null);
   const [quickPayTenantId, setQuickPayTenantId] = useState<string | null>(null);
   const [quickPayDueAmount, setQuickPayDueAmount] = useState<number | null>(null);
@@ -583,6 +589,23 @@ export default function App() {
   };
 
   const handleAddRent = async (rentData: Omit<RentRecord, 'id'>) => {
+    // Prevent duplicate entries for the same room in the same month
+    const incomingParts = (rentData.date || '').split('-');
+    if (incomingParts.length >= 2) {
+      const incomingY = incomingParts[0];
+      const incomingM = incomingParts[1];
+      const existingRecord = rents.find(r => {
+        if (!r.date) return false;
+        const [ey, em] = r.date.split('-');
+        return ey === incomingY && em === incomingM && (r.room || '').trim() === (rentData.room || '').trim();
+      });
+
+      if (existingRecord) {
+        await handleUpdateRent(existingRecord.id, rentData);
+        return;
+      }
+    }
+
     const newRent: RentRecord = { id: `rent-${Date.now()}`, ...rentData };
     setRents((prev) => [...prev, newRent]);
     showToast(language === 'bn' ? 'ভাড়া আদায় এন্ট্রি সফলভাবে সংরক্ষণ করা হয়েছে!' : 'Rent collection recorded!');
@@ -607,6 +630,66 @@ export default function App() {
 
     if (db) {
       try { await deleteDoc(doc(db, 'rents', id)); } catch (e) {}
+    }
+  };
+
+  const handleBatchRentSave = async (newRecords: Omit<RentRecord, 'id'>[]) => {
+    let updateCount = 0;
+    let addCount = 0;
+
+    const dbPromises: Promise<void>[] = [];
+
+    setRents((prev) => {
+      const updatedRents = [...prev];
+      newRecords.forEach((r, i) => {
+        const incomingParts = (r.date || '').split('-');
+        let existingIndex = -1;
+        
+        if (incomingParts.length >= 2) {
+          const incomingY = incomingParts[0];
+          const incomingM = incomingParts[1];
+          existingIndex = updatedRents.findIndex(existing => {
+            if (!existing.date) return false;
+            const [ey, em] = existing.date.split('-');
+            return ey === incomingY && em === incomingM && (existing.room || '').trim() === (r.room || '').trim();
+          });
+        }
+
+        if (existingIndex !== -1) {
+          // Update
+          const existingRecord = updatedRents[existingIndex];
+          const updatedRecord = { ...existingRecord, ...r };
+          updatedRents[existingIndex] = updatedRecord;
+          updateCount++;
+          if (db) {
+            dbPromises.push(setDoc(doc(db, 'rents', existingRecord.id), updatedRecord, { merge: true }));
+          }
+        } else {
+          // Add
+          const newRecord: RentRecord = { id: `rent-${Date.now()}-${i}`, ...r };
+          updatedRents.push(newRecord);
+          addCount++;
+          if (db) {
+            dbPromises.push(setDoc(doc(db, 'rents', newRecord.id), newRecord));
+          }
+        }
+      });
+      return updatedRents;
+    });
+
+    showToast(
+      language === 'bn'
+        ? `✓ ${addCount} টি নতুন এন্ট্রি এবং ${updateCount} টি পূর্বের এন্ট্রি সফলভাবে সংরক্ষিত হয়েছে!`
+        : `✓ ${addCount} new records saved, ${updateCount} records updated!`,
+      'success'
+    );
+    
+    if (db) {
+      try {
+        await Promise.all(dbPromises);
+      } catch (e) {
+        console.error('Firestore batch write error:', e);
+      }
     }
   };
 
@@ -850,6 +933,54 @@ export default function App() {
           {/* 1. Brief Dashboard */}
           {activeTab === 'brief' && (
             <>
+              {/* Quick Feature Action Banners for 1-Click Checklist and Statement */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 no-print">
+                <button
+                  onClick={() => setIsBatchChecklistOpen(true)}
+                  className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-md transition-all cursor-pointer group text-left"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-amber-300">
+                      <i className="fi fi-sr-bolt text-lg" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-black tracking-tight">
+                        {t.batchChecklistTitle || '১-ক্লিক মাসিক ভাড়া চেকশিট'}
+                      </h4>
+                      <p className="text-xs text-white/80">
+                        {language === 'bn' ? 'সব ভাড়াটিয়ার ভাড়া একসাথে দ্রুত জমা করুন' : 'Collect rent for all rooms in one tap'}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="text-xs font-bold bg-white/20 px-3 py-1.5 rounded-xl group-hover:bg-white group-hover:text-emerald-800 transition-colors shrink-0">
+                    {language === 'bn' ? 'খুলুন →' : 'Open →'}
+                  </span>
+                </button>
+
+                <button
+                  onClick={() => setIsMonthlyReportOpen(true)}
+                  className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-md transition-all cursor-pointer group text-left"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-white">
+                      <i className="fi fi-sr-file-invoice text-lg" />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-black tracking-tight">
+                        {t.monthlyReportTitle || 'মাসিক আর্থিক বিবরণী ও অডিট'}
+                      </h4>
+                      <p className="text-xs text-white/80">
+                        {language === 'bn' ? 'PDF ও এক্সেলে সম্পূর্ণ হিসাব স্টেটমেন্ট' : 'Printable PDF & CSV audit statement'}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="text-xs font-bold bg-white/20 px-3 py-1.5 rounded-xl group-hover:bg-white group-hover:text-blue-800 transition-colors shrink-0">
+                    {language === 'bn' ? 'রিপোর্ট →' : 'Report →'}
+                  </span>
+                </button>
+              </div>
+
+              {/* Core Financial Metrics Dashboard */}
               <BriefDashboard
                 language={language}
                 totalExpectedRent={totalExpectedRent}
@@ -862,7 +993,25 @@ export default function App() {
                 selectedMonth={selectedMonth}
               />
 
-              {/* Also show mini Unpaid Alert when there are pending rents */}
+              {/* Visual Room Status Matrix Grid */}
+              <RoomMatrixGrid
+                rooms={rooms}
+                tenants={tenants}
+                rents={rents}
+                language={language}
+                selectedYear={selectedYear}
+                selectedMonth={selectedMonth}
+                onSelectRoomRent={(room) => {
+                  const targetTenant = tenants.find((tn) => tn.room === room.roomNo);
+                  if (targetTenant) {
+                    setQuickPayTenantId(targetTenant.id);
+                    setQuickPayDueAmount((room.rentAmount || 0) + (room.gasBill || 0) + (room.waterBill || 0) + (room.wasteBill || 0));
+                    setActiveTab('rent');
+                  }
+                }}
+              />
+
+              {/* Overdue Alert Tracker with Days Counter & Instant Sorting */}
               {unpaidTenantItems.length > 0 && (
                 <UnpaidSection
                   unpaidItems={unpaidTenantItems}
@@ -999,6 +1148,35 @@ export default function App() {
         showToast={showToast}
       />
 
+      <BatchRentChecklistModal
+        isOpen={isBatchChecklistOpen}
+        onClose={() => setIsBatchChecklistOpen(false)}
+        rooms={rooms}
+        tenants={tenants}
+        rents={rents}
+        language={language}
+        selectedYear={selectedYear}
+        selectedMonth={selectedMonth}
+        onBatchCollectAll={handleBatchRentSave}
+        onSingleCollect={handleAddRent}
+        onSelectReceipt={(rec) => setReceiptRecord(rec)}
+        showToast={showToast}
+      />
+
+      <MonthlyReportModal
+        isOpen={isMonthlyReportOpen}
+        onClose={() => setIsMonthlyReportOpen(false)}
+        rooms={rooms}
+        tenants={tenants}
+        rents={rents}
+        expenses={expenses}
+        dokanDues={dokanDues}
+        language={language}
+        selectedYear={selectedYear}
+        selectedMonth={selectedMonth}
+        showToast={showToast}
+      />
+
       <AuthModal
         isOpen={isAuthModalOpen}
         userEmail={activeUserEmail}
@@ -1006,6 +1184,15 @@ export default function App() {
         onClose={() => setIsAuthModalOpen(false)}
         onLogout={handleLockApp}
         onUnlockOwner={handleUnlockOwner}
+      />
+
+      {/* Floating Speed Dial Action Bar */}
+      <QuickActionBar
+        language={language}
+        unpaidCount={unpaidTenantItems.length}
+        onNavigateTab={setActiveTab}
+        onOpenBatchChecklist={() => setIsBatchChecklistOpen(true)}
+        onOpenMonthlyReport={() => setIsMonthlyReportOpen(true)}
       />
 
       <Toast toast={toast} onClose={() => setToast(null)} />

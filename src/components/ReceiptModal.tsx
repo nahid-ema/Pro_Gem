@@ -4,6 +4,8 @@ import { RentRecord, Room, Language } from '../types';
 import { getTranslation } from '../data/translations';
 import { triggerPrint } from '../lib/printHelper';
 import { Logo } from './Logo';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 
 interface ReceiptModalProps {
   rentRecord: RentRecord | null;
@@ -21,6 +23,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
   showToast,
 }) => {
   const [copied, setCopied] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
 
   // Add print isolation hook
   useEffect(() => {
@@ -60,6 +63,64 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
     triggerPrint(language, rentRecord.id, showToast);
   };
 
+  const handleDownloadImage = async () => {
+    const el = document.getElementById('receiptContent');
+    if (!el) return;
+    try {
+      setIsExporting(true);
+      const canvas = await html2canvas(el, {
+        scale: 2.5,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        logging: false,
+      });
+      const link = document.createElement('a');
+      link.download = `nahid-kutir-receipt-NK-${rentRecord.id.substring(0, 8).toUpperCase()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      showToast?.(
+        language === 'bn' ? '✓ রসিদের ছবি ডাউনলোড সম্পন্ন হয়েছে!' : '✓ Receipt image downloaded successfully!'
+      );
+    } catch (err) {
+      console.error('Download image error:', err);
+      showToast?.(language === 'bn' ? 'ছবি তৈরি ব্যর্থ হয়েছে' : 'Failed to export image', 'error');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const handleDownloadPDF = async () => {
+    const el = document.getElementById('receiptContent');
+    if (!el) return;
+    try {
+      setIsExporting(true);
+      const canvas = await html2canvas(el, {
+        scale: 2.5,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        logging: false,
+      });
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a5',
+      });
+      const imgWidth = 138;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      pdf.addImage(imgData, 'PNG', 5, 5, imgWidth, imgHeight);
+      pdf.save(`nahid-kutir-receipt-NK-${rentRecord.id.substring(0, 8).toUpperCase()}.pdf`);
+      showToast?.(
+        language === 'bn' ? '✓ রসিদের PDF ফাইল ডাউনলোড হয়েছে!' : '✓ Receipt PDF downloaded successfully!'
+      );
+    } catch (err) {
+      console.error('Download PDF error:', err);
+      showToast?.(language === 'bn' ? 'PDF তৈরি ব্যর্থ হয়েছে' : 'Failed to export PDF', 'error');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   const handleShareWhatsApp = () => {
     const cleanPhone = rentRecord.phone.replace(/[^0-9]/g, '');
     const phoneWithCode = cleanPhone.startsWith('88') ? cleanPhone : `88${cleanPhone}`;
@@ -72,8 +133,8 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
     }
 
     const message = language === 'bn'
-      ? `*নাহিদ কুটির — ভাড়া পরিশোধের রসিদ*\n\nরসিদ নং: #NK-${rentRecord.id.substring(0, 8).toUpperCase()}\nতারিখ: ${rentRecord.date}\nভাড়াটিয়া: ${rentRecord.tenant}\nরুম: ${rentRecord.room}${breakdownText}\n\n------------------------------\nমোট পাওনা: ৳${totalBillPackage.toLocaleString()}\nজমা দেওয়া হয়েছে: ৳${rentRecord.paid.toLocaleString()}\nঅবশিষ্ট বকেয়া: ৳${rentRecord.due.toLocaleString()}\n\nনাহিদ কুটিরে থাকার জন্য ধন্যবাদ!`
-      : `*Nahid Kutir — Rent Payment Receipt*\n\nReceipt No: #NK-${rentRecord.id.substring(0, 8).toUpperCase()}\nDate: ${rentRecord.date}\nTenant: ${rentRecord.tenant}\nRoom: ${rentRecord.room}${breakdownText}\n\n------------------------------\nTotal Payable: ৳${totalBillPackage.toLocaleString()}\nPaid Amount: ৳${rentRecord.paid.toLocaleString()}\nRemaining Due: ৳${rentRecord.due.toLocaleString()}\n\nThank you for staying at Nahid Kutir!`;
+      ? `*নাহিদ কুটির — ভাড়া পরিশোধের রসিদ*\n\nরসিদ নং: #NK-${rentRecord.id.substring(0, 8).toUpperCase()}\nতারিখ: ${rentRecord.date}\nভাড়াটিয়া: ${rentRecord.tenant}\nরুম: ${rentRecord.room}${breakdownText}\n\n------------------------------\nমোট পাওনা: ৳${totalBillPackage.toLocaleString()}\nজমা দেওয়া হয়েছে: ৳${rentRecord.paid.toLocaleString()}\n${rentRecord.due < 0 ? `অগ্রিম জমা: ৳${Math.abs(rentRecord.due).toLocaleString()}` : `অবশিষ্ট ${rentRecord.due < 0 ? `অগ্রিম: ৳${Math.abs(rentRecord.due).toLocaleString()}` : `বকেয়া: ৳${rentRecord.due.toLocaleString()}`}`}\n\nনাহিদ কুটিরে থাকার জন্য ধন্যবাদ!`
+      : `*Nahid Kutir — Rent Payment Receipt*\n\nReceipt No: #NK-${rentRecord.id.substring(0, 8).toUpperCase()}\nDate: ${rentRecord.date}\nTenant: ${rentRecord.tenant}\nRoom: ${rentRecord.room}${breakdownText}\n\n------------------------------\nTotal Payable: ৳${totalBillPackage.toLocaleString()}\nPaid Amount: ৳${rentRecord.paid.toLocaleString()}\n${rentRecord.due < 0 ? `Advance Payment: ৳${Math.abs(rentRecord.due).toLocaleString()}` : `Remaining ${rentRecord.due < 0 ? `Advance: ৳${Math.abs(rentRecord.due).toLocaleString()}` : `Due: ৳${rentRecord.due.toLocaleString()}`}`}\n\nThank you for staying at Nahid Kutir!`;
     
     window.open(`https://wa.me/${phoneWithCode}?text=${encodeURIComponent(message)}`, '_blank');
   };
@@ -87,8 +148,8 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
     }
 
     const summary = language === 'bn'
-      ? `নাহিদ কুটির রসিদ (#NK-${rentRecord.id.substring(0, 8).toUpperCase()})\nতারিখ: ${rentRecord.date}\nভাড়াটিয়া: ${rentRecord.tenant} (রুম ${rentRecord.room})${breakdownText}\nজমা: ৳${rentRecord.paid.toLocaleString()} | বকেয়া: ৳${rentRecord.due.toLocaleString()}`
-      : `Nahid Kutir Receipt (#NK-${rentRecord.id.substring(0, 8).toUpperCase()})\nDate: ${rentRecord.date}\nTenant: ${rentRecord.tenant} (Room ${rentRecord.room})${breakdownText}\nPaid: ৳${rentRecord.paid.toLocaleString()} | Due: ৳${rentRecord.due.toLocaleString()}`;
+      ? `নাহিদ কুটির রসিদ (#NK-${rentRecord.id.substring(0, 8).toUpperCase()})\nতারিখ: ${rentRecord.date}\nভাড়াটিয়া: ${rentRecord.tenant} (রুম ${rentRecord.room})${breakdownText}\nজমা: ৳${rentRecord.paid.toLocaleString()} | ${rentRecord.due < 0 ? `অগ্রিম: ৳${Math.abs(rentRecord.due).toLocaleString()}` : `বকেয়া: ৳${rentRecord.due.toLocaleString()}`}`
+      : `Nahid Kutir Receipt (#NK-${rentRecord.id.substring(0, 8).toUpperCase()})\nDate: ${rentRecord.date}\nTenant: ${rentRecord.tenant} (Room ${rentRecord.room})${breakdownText}\nPaid: ৳${rentRecord.paid.toLocaleString()} | ${rentRecord.due < 0 ? `Advance: ৳${Math.abs(rentRecord.due).toLocaleString()}` : `Due: ৳${rentRecord.due.toLocaleString()}`}`;
     
     navigator.clipboard.writeText(summary);
     setCopied(true);
@@ -112,6 +173,28 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           </div>
 
           <div className="flex items-center gap-1.5 flex-wrap">
+            {/* Download Image Button */}
+            <button
+              onClick={handleDownloadImage}
+              disabled={isExporting}
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-sm bg-[#F2F0EB] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition-all cursor-pointer disabled:opacity-50"
+              title={language === 'bn' ? 'ছবি ডাউনলোড করুন' : 'Download Image'}
+            >
+              <i className="fi fi-sr-picture text-sm text-blue-600" />
+              <span className="hidden sm:inline">{t.downloadImgBtn || 'ছবি'}</span>
+            </button>
+
+            {/* Download PDF Button */}
+            <button
+              onClick={handleDownloadPDF}
+              disabled={isExporting}
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-sm bg-[#F2F0EB] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition-all cursor-pointer disabled:opacity-50"
+              title={language === 'bn' ? 'PDF রসিদ সংরক্ষণ করুন' : 'Save PDF Receipt'}
+            >
+              <i className="fi fi-sr-file-pdf text-sm text-rose-600" />
+              <span className="hidden sm:inline">{t.downloadPdfBtn || 'PDF'}</span>
+            </button>
+
             {/* Print Button */}
             <button
               onClick={handlePrintReceipt}
@@ -288,12 +371,12 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
                 </tr>
 
                 {/* Remaining Due Line */}
-                <tr className={rentRecord.due > 0 ? "bg-rose-50 text-rose-900 border-t border-rose-100" : "bg-white"}>
+                <tr className={rentRecord.due > 0 ? "bg-rose-50 text-rose-900 border-t border-rose-100" : (rentRecord.due < 0 ? "bg-emerald-50 text-emerald-900 border-t border-emerald-100" : "bg-white")}>
                   <td className="p-2.5 font-bold text-slate-700">
-                    {t.remainingDueText}
+                    {rentRecord.due < 0 ? (language === 'bn' ? 'অগ্রিম জমা' : 'Advance Payment') : t.remainingDueText}
                   </td>
-                  <td className={`p-2.5 text-right font-black text-sm font-mono ${rentRecord.due > 0 ? 'text-rose-600' : 'text-slate-500'}`}>
-                    {formatCurrency(rentRecord.due)}
+                  <td className={`p-2.5 text-right font-black text-sm font-mono ${rentRecord.due > 0 ? 'text-rose-600' : (rentRecord.due < 0 ? 'text-emerald-600' : 'text-slate-500')}`}>
+                    {formatCurrency(Math.abs(rentRecord.due))}
                   </td>
                 </tr>
               </tbody>
