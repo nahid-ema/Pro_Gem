@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { RentRecord, Expense, ShopDue, Language } from '../types';
 import { getTranslation } from '../data/translations';
 import { formatCategory } from './ExpenseSection';
@@ -32,6 +32,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
   selectedYear = 'all',
   selectedMonth = 'all',
 }) => {
+  const [expenseSortBy, setExpenseSortBy] = useState<'amount' | 'date'>('amount');
   const t = getTranslation(language);
 
   const safeRents = Array.isArray(rents) ? rents : [];
@@ -236,8 +237,8 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
 
       {/* Expense Type / Category Breakdown Chart */}
       {expenseCategoryData.length > 0 && (
-        <div className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
+        <div className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 shadow-sm space-y-6">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <i className="fi fi-sr-chart-pie text-base text-[#2563EB] dark:text-blue-400" />
               <h4 className="text-sm font-extrabold text-slate-900 dark:text-white">
@@ -297,6 +298,89 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
                   </div>
                 );
               })}
+            </div>
+          </div>
+
+          {/* Detailed Expenses Ledger */}
+          <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+              <h4 className="text-sm font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+                <i className="fi fi-sr-clipboard-list text-slate-400" />
+                {language === 'bn' ? 'বিস্তারিত খরচের তালিকা' : 'Detailed Expense List'}
+              </h4>
+              <div className="flex items-center gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl">
+                <button
+                  onClick={() => setExpenseSortBy('amount')}
+                  className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-colors ${
+                    expenseSortBy === 'amount'
+                      ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
+                      : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                  }`}
+                >
+                  {language === 'bn' ? 'সর্বোচ্চ খরচ' : 'Highest Amount'}
+                </button>
+                <button
+                  onClick={() => setExpenseSortBy('date')}
+                  className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-colors ${
+                    expenseSortBy === 'date'
+                      ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
+                      : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                  }`}
+                >
+                  {language === 'bn' ? 'সাম্প্রতিক' : 'Recent First'}
+                </button>
+              </div>
+            </div>
+            
+            <div className="space-y-3">
+              {filteredExpenses
+                .slice()
+                .sort((a, b) => {
+                  if (expenseSortBy === 'amount') {
+                    return (b.amount || 0) - (a.amount || 0);
+                  }
+                  return new Date(b.date || '').getTime() - new Date(a.date || '').getTime();
+                })
+                .slice(0, 10) // Show top 10 largest or most recent expenses
+                .map((ex, idx) => (
+                  <div key={ex.id || idx} className="flex items-start justify-between p-3 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm">
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-900/50 flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-700/50">
+                         {ex.category === 'electricity' ? <i className="fi fi-sr-bolt text-amber-500" /> : 
+                          ex.category === 'water' ? <i className="fi fi-sr-raindrops text-blue-500" /> :
+                          ex.category === 'gas' ? <i className="fi fi-sr-flame text-orange-500" /> :
+                          ex.category === 'waste' ? <i className="fi fi-sr-trash text-slate-500" /> :
+                          ex.category === 'wifi' ? <i className="fi fi-sr-wifi text-emerald-500" /> :
+                          ex.category === 'cleaning' ? <i className="fi fi-sr-broom text-teal-500" /> :
+                          ex.category === 'maintenance' ? <i className="fi fi-sr-tools text-slate-600 dark:text-slate-400" /> :
+                          <i className="fi fi-sr-box text-slate-400" />}
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-slate-900 dark:text-white">
+                          {formatCategory(ex.category, language)}
+                        </p>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
+                          {ex.details || (language === 'bn' ? 'কোনো বিবরণ নেই' : 'No details provided')}
+                        </p>
+                        <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">
+                          <i className="fi fi-sr-calendar text-[8px] mr-1" />
+                          {ex.date}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="text-sm font-black text-rose-600 dark:text-rose-400">
+                        -{formatCurrency(ex.amount || 0)}
+                      </p>
+                    </div>
+                  </div>
+              ))}
+              
+              {filteredExpenses.length === 0 && (
+                <div className="text-center py-6 text-slate-500 text-sm">
+                  {language === 'bn' ? 'কোনো খরচের রেকর্ড পাওয়া যায়নি' : 'No expense records found'}
+                </div>
+              )}
             </div>
           </div>
         </div>
