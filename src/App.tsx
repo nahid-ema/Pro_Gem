@@ -197,6 +197,12 @@ export default function App() {
     setIsSyncing(true);
     const syncTimer = setTimeout(async () => {
       try {
+        const isDummy = rooms.length === 2 && rooms[0]?.rentAmount === 3745 && tenants.length === 18 && tenants[0]?.name === 'খালেদা বেগম';
+        if (isDummy) {
+          setIsSyncing(false);
+          return;
+        }
+
         const backupPayload = {
           rooms,
           tenants,
@@ -304,6 +310,16 @@ export default function App() {
       showToast(err?.message || 'Firebase cloud restore failed.', 'error');
     }
   };
+
+  // Auto-restore on boot if dummy data is detected
+  useEffect(() => {
+    if (db && isFirebaseInitialized) {
+      const isDummy = rooms.length === 2 && rooms[0]?.rentAmount === 3745 && tenants.length === 18 && tenants[0]?.name === 'খালেদা বেগম';
+      if (isDummy) {
+        handleFirebaseCloudRestore();
+      }
+    }
+  }, [db, isFirebaseInitialized]); // Run once when DB is ready
 
   const handleLockApp = async () => {
     setIsLocalUnlocked(false);

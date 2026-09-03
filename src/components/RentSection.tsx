@@ -59,11 +59,32 @@ export const RentSection: React.FC<RentSectionProps> = ({
   const [paid, setPaid] = useState('');
   const [note, setNote] = useState('');
 
-  const calcDue = () => {
-    const r = Number(rent) || 0;
-    const p = Number(paid) || 0;
-    return r - p;
+  const safeRents = Array.isArray(rents) ? rents : [];
+  const safeTenants = Array.isArray(tenants) ? tenants : [];
+  const safeRooms = Array.isArray(rooms) ? rooms : [];
+
+  const getPreviousDues = () => {
+    if (!selectedTenantId) return 0;
+    const tn = safeTenants.find((t) => t && t.id === selectedTenantId);
+    if (!tn) return 0;
+    
+    let prev = 0;
+    safeRents.forEach((r) => {
+      if (!r) return;
+      if ((r.room || '').trim() === (tn.room || '').trim()) {
+        if (r.id !== editingId) {
+          prev += (r.due || 0);
+        }
+      }
+    });
+    return prev;
   };
+
+  const prevDues = getPreviousDues();
+  const currentRent = Number(rent) || 0;
+  const currentPaid = Number(paid) || 0;
+  const totalPayable = currentRent + prevDues;
+  const remainingDue = totalPayable - currentPaid;
 
   const handleTenantSelect = (tenantId: string) => {
     setSelectedTenantId(tenantId);
@@ -74,15 +95,16 @@ export const RentSection: React.FC<RentSectionProps> = ({
       return;
     }
 
-    const tn = tenants.find((t) => t.id === tenantId);
+    const tn = safeTenants.find((t) => t && t.id === tenantId);
     if (tn) {
       setDispRoom(tn.room);
       setDispPhone(tn.phone);
 
-      const rm = rooms.find((r) => (r.roomNo || '').trim() === (tn.room || '').trim());
+      const rm = safeRooms.find((r) => r && (r.roomNo || '').trim() === (tn.room || '').trim());
       if (rm) {
         let previousDues = 0;
-        rents.forEach((r) => {
+        safeRents.forEach((r) => {
+          if (!r) return;
           if ((r.room || "").trim() === (tn.room || "").trim()) {
             if (r.id !== editingId) {
               previousDues += (r.due || 0);
@@ -92,14 +114,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
         const currentPkg = rm.rentAmount + rm.gasBill + rm.waterBill + rm.wasteBill;
         const suggestedPaid = Math.max(0, currentPkg + previousDues);
         
-        if (previousDues > 0) {
-          setNote(language === "bn" ? `পূর্বের বকেয়া ৳${previousDues} সহ, মোট দেয় ৳${suggestedPaid}` : `Includes previous due of ৳${previousDues}, Total Payable ৳${suggestedPaid}`);
-        } else if (previousDues < 0) {
-          const adv = Math.abs(previousDues);
-          setNote(language === "bn" ? `পূর্বের অগ্রিম ৳${adv} সমন্বয় করে, মোট দেয় ৳${suggestedPaid}` : `Adjusted previous advance of ৳${adv}, Total Payable ৳${suggestedPaid}`);
-        } else {
-          setNote('');
-        }
+        setNote('');
         
         setRent(String(currentPkg));
         setPaid(String(suggestedPaid)); // Default paid to suggested total for quick entry
@@ -115,7 +130,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
       handleTenantSelect(initialTenantId);
       
       if (initialRentRecordId) {
-        const rt = rents.find((r) => r.id === initialRentRecordId);
+        const rt = safeRents.find((r) => r && r.id === initialRentRecordId);
         if (rt) {
           setEditingId(rt.id);
           setDate(rt.date);
@@ -132,12 +147,12 @@ export const RentSection: React.FC<RentSectionProps> = ({
   useEffect(() => {
     if (!selectedTenantId || !date) return;
     
-    const tn = tenants.find((t) => t.id === selectedTenantId);
+    const tn = safeTenants.find((t) => t && t.id === selectedTenantId);
     if (!tn) return;
 
     const [y, m] = date.split('-');
-    const existingRecord = rents.find((r) => {
-      if (!r.date) return false;
+    const existingRecord = safeRents.find((r) => {
+      if (!r || !r.date) return false;
       const [ey, em] = r.date.split('-');
       return ey === y && em === m && (r.room || '').trim() === (tn.room || '').trim();
     });
@@ -153,10 +168,11 @@ export const RentSection: React.FC<RentSectionProps> = ({
       if (editingId) {
         setEditingId(null);
         // Recalculate default values for new entry
-        const rm = rooms.find((r) => (r.roomNo || '').trim() === (tn.room || '').trim());
+        const rm = safeRooms.find((r) => r && (r.roomNo || '').trim() === (tn.room || '').trim());
         if (rm) {
           let previousDues = 0;
-          rents.forEach((r) => {
+          safeRents.forEach((r) => {
+            if (!r) return;
             if ((r.room || "").trim() === (tn.room || "").trim()) {
               previousDues += (r.due || 0);
             }
@@ -165,14 +181,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
           const suggestedPaid = Math.max(0, currentPkg + previousDues);
           setRent(String(currentPkg));
           setPaid(String(suggestedPaid));
-          if (previousDues > 0) {
-            setNote(language === "bn" ? `পূর্বের বকেয়া ৳${previousDues} সহ, মোট দেয় ৳${suggestedPaid}` : `Includes previous due of ৳${previousDues}, Total Payable ৳${suggestedPaid}`);
-          } else if (previousDues < 0) {
-            const adv = Math.abs(previousDues);
-            setNote(language === "bn" ? `পূর্বের অগ্রিম ৳${adv} সমন্বয় করে, মোট দেয় ৳${suggestedPaid}` : `Adjusted previous advance of ৳${adv}, Total Payable ৳${suggestedPaid}`);
-          } else {
-            setNote('');
-          }
+          setNote('');
         }
       }
     }
@@ -238,9 +247,6 @@ export const RentSection: React.FC<RentSectionProps> = ({
     resetForm();
   };
 
-  const safeRents = Array.isArray(rents) ? rents : [];
-  const safeTenants = Array.isArray(tenants) ? tenants : [];
-  const safeRooms = Array.isArray(rooms) ? rooms : [];
 
   const filteredRents = safeRents
     .filter((rt) => {
@@ -401,7 +407,9 @@ export const RentSection: React.FC<RentSectionProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.thRentAmount} *</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                {language === 'bn' ? 'চলতি মাসের ভাড়া *' : 'Current Rent *'}
+              </label>
               <input
                 type="number"
                 required
@@ -410,6 +418,30 @@ export const RentSection: React.FC<RentSectionProps> = ({
                 onChange={(e) => setRent(e.target.value)}
                 placeholder={t.rentPlaceholder}
                 className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                {prevDues < 0 ? (language === 'bn' ? 'পূর্বের অগ্রিম' : 'Previous Advance') : (language === 'bn' ? 'পূর্বের বকেয়া' : 'Previous Due')}
+              </label>
+              <input
+                type="text"
+                readOnly
+                value={formatCurrency(Math.abs(prevDues))}
+                className={`w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs md:text-sm font-bold ${prevDues < 0 ? 'text-emerald-600' : (prevDues > 0 ? 'text-rose-600' : 'text-slate-500')}`}
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                {language === 'bn' ? 'সর্বমোট প্রদেয়' : 'Total Payable'}
+              </label>
+              <input
+                type="text"
+                readOnly
+                value={formatCurrency(Math.max(0, totalPayable))}
+                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs md:text-sm font-bold text-slate-900 dark:text-white"
               />
             </div>
 
@@ -428,13 +460,13 @@ export const RentSection: React.FC<RentSectionProps> = ({
 
             <div>
               <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                {calcDue() < 0 ? (language === 'bn' ? 'অগ্রিম জমা (Advance)' : 'Advance') : t.duePlaceholder}
+                {remainingDue < 0 ? (language === 'bn' ? 'বর্তমান অগ্রিম' : 'Current Advance') : (language === 'bn' ? 'বর্তমান বকেয়া' : 'Current Due')}
               </label>
               <input
                 type="text"
                 readOnly
-                value={formatCurrency(Math.abs(calcDue()))}
-                className={`w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs md:text-sm font-bold ${calcDue() < 0 ? 'text-emerald-600' : 'text-rose-600'}`}
+                value={formatCurrency(Math.abs(remainingDue))}
+                className={`w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs md:text-sm font-bold ${remainingDue < 0 ? 'text-emerald-600' : (remainingDue > 0 ? 'text-rose-600' : 'text-slate-500')}`}
               />
             </div>
 
