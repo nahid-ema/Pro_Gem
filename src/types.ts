@@ -35,6 +35,7 @@ export interface RentRecord {
   paid: number;
   due: number;
   previousDue?: number;
+  isVacant?: boolean;
   note?: string;
   createdAt?: string;
 }

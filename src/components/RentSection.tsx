@@ -240,6 +240,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
       paid: paidVal,
       due: remainingDueVal,
       previousDue: prevDuesVal,
+      isVacant: false,
       note: note.trim(),
     };
 

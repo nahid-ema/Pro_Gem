@@ -1023,6 +1023,36 @@ export default function App() {
                   if (rentRecordId) setQuickPayRentRecordId(rentRecordId);
                   setActiveTab('rent');
                 }}
+                onMarkVacant={async (roomNo, tenantName) => {
+                  const confirmMsg = language === 'bn' 
+                    ? `আপনি কি নিশ্চিত যে ${roomNo} ফ্লাটটি এই মাসে খালি হিসেবে চিহ্নিত করতে চান?` 
+                    : `Are you sure you want to mark room ${roomNo} as vacant this month?`;
+                  if (!window.confirm(confirmMsg)) return;
+
+                  const yy = selectedYear === 'all' ? new Date().getFullYear().toString() : selectedYear;
+                  const mm = selectedMonth === 'all' ? String(new Date().getMonth() + 1).padStart(2, '0') : selectedMonth.padStart(2, '0');
+                  
+                  await handleAddRent({
+                    date: `${yy}-${mm}-01`,
+                    tenant: tenantName || (language === 'bn' ? 'খালি ফ্লাট' : 'Vacant Flat'),
+                    phone: '',
+                    room: roomNo,
+                    rent: 0,
+                    paid: 0,
+                    due: 0,
+                    previousDue: 0,
+                    isVacant: true,
+                    note: language === 'bn' ? 'খালি ফ্লাট' : 'Vacant Flat',
+                    createdAt: new Date().toISOString(),
+                  });
+                }}
+                onUndoVacant={async (rentRecordId) => {
+                  const confirmMsg = language === 'bn' 
+                    ? `আপনি কি নিশ্চিত যে এই ফ্লাটটির খালি স্ট্যাটাস বাতিল করতে চান?` 
+                    : `Are you sure you want to undo the vacant status for this room?`;
+                  if (!window.confirm(confirmMsg)) return;
+                  await handleDeleteRent(rentRecordId);
+                }}
                 onSelectReceipt={(rec) => setReceiptRecord(rec)}
                 onNavigateTab={(tab) => setActiveTab(tab)}
               />

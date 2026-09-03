@@ -10,6 +10,8 @@ interface RoomMatrixGridProps {
   selectedYear: string;
   selectedMonth: string;
   onQuickPay?: (tenantId: string, dueAmount?: number, rentRecordId?: string) => void;
+  onMarkVacant?: (roomNo: string, tenantName?: string) => void;
+  onUndoVacant?: (rentRecordId: string) => void;
   onSelectReceipt?: (rec: RentRecord) => void;
   onNavigateTab?: (tab: TabType) => void;
 }
@@ -24,6 +26,8 @@ export const RoomMatrixGrid: React.FC<RoomMatrixGridProps> = ({
   selectedYear,
   selectedMonth,
   onQuickPay,
+  onMarkVacant,
+  onUndoVacant,
   onSelectReceipt,
   onNavigateTab,
 }) => {
@@ -34,30 +38,16 @@ export const RoomMatrixGrid: React.FC<RoomMatrixGridProps> = ({
   // Compute status for each room based on selected year/month or active month
   const roomStatusList = useMemo(() => {
     return rooms.map((room) => {
-      // Find tenant assigned to this room
+      // Find tenant currently assigned to this room
       const tenant = tenants.find(
         (t) => String(t.room).trim().toLowerCase() === String(room.roomNo).trim().toLowerCase()
       );
 
       const totalPackage = (room.rentAmount || 0) + (room.gasBill || 0) + (room.waterBill || 0) + (room.wasteBill || 0);
 
-      if (!tenant) {
-        return {
-          room,
-          tenant: null,
-          isVacant: true,
-          status: 'vacant' as const,
-          paidAmount: 0,
-          dueAmount: 0,
-          rentRecord: null,
-          totalPackage,
-        };
-      }
-
-      // Find rent record for this tenant/room matching year/month
+      // Find rent record for this room matching year/month
       const matchedRents = rents.filter((r) => {
         const matchesRoom = String(r.room).trim().toLowerCase() === String(room.roomNo).trim().toLowerCase();
-        const matchesTenant = String(r.tenant).trim().toLowerCase() === String(tenant.name).trim().toLowerCase();
         
         let matchesPeriod = true;
         if (selectedYear !== 'all' || selectedMonth !== 'all') {
@@ -65,13 +55,25 @@ export const RoomMatrixGrid: React.FC<RoomMatrixGridProps> = ({
           if (selectedYear !== 'all' && rYear !== selectedYear) matchesPeriod = false;
           if (selectedMonth !== 'all' && parseInt(rMonth || '0', 10) !== parseInt(selectedMonth, 10)) matchesPeriod = false;
         }
-        return (matchesRoom || matchesTenant) && matchesPeriod;
+        return matchesRoom && matchesPeriod;
       });
 
       // Pick the latest rent record if multiple
       const latestRecord = matchedRents.length > 0 ? matchedRents[matchedRents.length - 1] : null;
 
       if (latestRecord) {
+        if (latestRecord.isVacant) {
+          return {
+            room,
+            tenant,
+            isVacant: true,
+            status: 'vacant' as const,
+            paidAmount: 0,
+            dueAmount: 0,
+            rentRecord: latestRecord,
+            totalPackage,
+          };
+        }
         const isPaid = latestRecord.due <= 0;
         return {
           room,
@@ -84,6 +86,18 @@ export const RoomMatrixGrid: React.FC<RoomMatrixGridProps> = ({
           totalPackage: latestRecord.rent || totalPackage,
         };
       } else {
+        if (!tenant) {
+          return {
+            room,
+            tenant: null,
+            isVacant: true,
+            status: 'vacant' as const,
+            paidAmount: 0,
+            dueAmount: 0,
+            rentRecord: null,
+            totalPackage,
+          };
+        }
         // No payment recorded for this period -> full package is due
         return {
           room,
@@ -375,14 +389,24 @@ export const RoomMatrixGrid: React.FC<RoomMatrixGridProps> = ({
                 {/* Bottom Action Button */}
                 <div className="mt-3 pt-2">
                   {isVacant ? (
-                    onNavigateTab && (
+                    item.rentRecord && onUndoVacant ? (
                       <button
-                        onClick={() => onNavigateTab('tenants')}
+                        onClick={() => onUndoVacant(item.rentRecord!.id)}
                         className="w-full py-1.5 px-2.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-800 dark:text-amber-300 text-xs font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer"
                       >
-                        <i className="fi fi-sr-user-add text-xs" />
-                        <span>{t.assignTenantBtn || 'ভাড়াটিয়া বসান'}</span>
+                        <i className="fi fi-sr-undo text-xs" />
+                        <span>{language === 'bn' ? 'খালি বাতিল করুন' : 'Undo Vacant'}</span>
                       </button>
+                    ) : (
+                      onNavigateTab && (
+                        <button
+                          onClick={() => onNavigateTab('tenants')}
+                          className="w-full py-1.5 px-2.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-800 dark:text-amber-300 text-xs font-bold transition-colors flex items-center justify-center gap-1 cursor-pointer"
+                        >
+                          <i className="fi fi-sr-user-add text-xs" />
+                          <span>{t.assignTenantBtn || 'ভাড়াটিয়া বসান'}</span>
+                        </button>
+                      )
                     )
                   ) : isPaid ? (
                     item.rentRecord && onSelectReceipt ? (
@@ -400,13 +424,24 @@ export const RoomMatrixGrid: React.FC<RoomMatrixGridProps> = ({
                     )
                   ) : (
                     item.tenant && onQuickPay ? (
-                      <button
-                        onClick={() => onQuickPay(item.tenant!.id, item.dueAmount, item.rentRecord?.id)}
-                        className="w-full py-1.5 px-2.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-sm transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-                      >
-                        <i className="fi fi-sr-bolt text-xs" />
-                        <span>{t.quickPay || 'দ্রুত জমা'} ({t.currencySymbol}{item.dueAmount.toLocaleString()})</span>
-                      </button>
+                      <div className="flex flex-col gap-1.5">
+                        <button
+                          onClick={() => onQuickPay(item.tenant!.id, item.dueAmount, item.rentRecord?.id)}
+                          className="w-full py-1.5 px-2.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-sm transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                        >
+                          <i className="fi fi-sr-bolt text-xs" />
+                          <span>{t.quickPay || 'দ্রুত জমা'} ({t.currencySymbol}{item.dueAmount.toLocaleString()})</span>
+                        </button>
+                        {onMarkVacant && (
+                          <button
+                            onClick={() => onMarkVacant(item.room.roomNo, item.tenant?.name)}
+                            className="w-full py-1.5 px-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-300 text-[10px] font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                          >
+                            <i className="fi fi-sr-bed-alt text-[10px]" />
+                            <span>{language === 'bn' ? 'এই মাসে খালি দেখান' : 'Mark Vacant this month'}</span>
+                          </button>
+                        )}
+                      </div>
                     ) : null
                   )}
                 </div>
