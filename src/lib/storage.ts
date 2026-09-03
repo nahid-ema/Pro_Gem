@@ -43,10 +43,17 @@ export function loadInitialData() {
   const expenses = safeGetItem<Expense[]>(STORAGE_KEYS.EXPENSES, initialExpenses);
   const dokan = safeGetItem<ShopDue[]>(STORAGE_KEYS.DOKAN, initialShopDues);
 
+  const cleanedRents = (Array.isArray(rents) ? rents : initialRentRecords).map((r) => {
+    if (r.id === 'rent-1788453978494' && r.due === -100) {
+      return { ...r, due: 0, previousDue: 100 };
+    }
+    return r;
+  });
+
   return {
     rooms: Array.isArray(rooms) ? rooms : initialRooms,
     tenants: Array.isArray(tenants) ? tenants : initialTenants,
-    rents: Array.isArray(rents) ? rents : initialRentRecords,
+    rents: cleanedRents,
     expenses: Array.isArray(expenses) ? expenses : initialExpenses,
     dokan: Array.isArray(dokan) ? dokan : initialShopDues,
   };

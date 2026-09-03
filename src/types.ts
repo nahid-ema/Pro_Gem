@@ -19,6 +19,9 @@ export interface Tenant {
   phone: string;
   room: string;
   nid: string;
+  advance?: number;
+  address?: string;
+  occupation?: string;
   createdAt?: string;
 }
 
@@ -31,6 +34,7 @@ export interface RentRecord {
   rent: number;
   paid: number;
   due: number;
+  previousDue?: number;
   note?: string;
   createdAt?: string;
 }

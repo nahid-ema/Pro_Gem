@@ -1017,14 +1017,14 @@ export default function App() {
                 language={language}
                 selectedYear={selectedYear}
                 selectedMonth={selectedMonth}
-                onSelectRoomRent={(room) => {
-                  const targetTenant = tenants.find((tn) => tn.room === room.roomNo);
-                  if (targetTenant) {
-                    setQuickPayTenantId(targetTenant.id);
-                    setQuickPayDueAmount((room.rentAmount || 0) + (room.gasBill || 0) + (room.waterBill || 0) + (room.wasteBill || 0));
-                    setActiveTab('rent');
-                  }
+                onQuickPay={(tenantId, dueAmount, rentRecordId) => {
+                  setQuickPayTenantId(tenantId);
+                  if (dueAmount) setQuickPayDueAmount(dueAmount);
+                  if (rentRecordId) setQuickPayRentRecordId(rentRecordId);
+                  setActiveTab('rent');
                 }}
+                onSelectReceipt={(rec) => setReceiptRecord(rec)}
+                onNavigateTab={(tab) => setActiveTab(tab)}
               />
 
               {/* Overdue Alert Tracker with Days Counter & Instant Sorting */}
@@ -1159,6 +1159,7 @@ export default function App() {
       <ReceiptModal
         rentRecord={receiptRecord}
         rooms={rooms}
+        rents={rents}
         language={language}
         onClose={() => setReceiptRecord(null)}
         showToast={showToast}

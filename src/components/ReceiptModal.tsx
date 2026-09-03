@@ -10,6 +10,7 @@ import { jsPDF } from 'jspdf';
 interface ReceiptModalProps {
   rentRecord: RentRecord | null;
   rooms?: Room[];
+  rents?: RentRecord[];
   language: Language;
   onClose: () => void;
   showToast?: (msg: string, type?: 'success' | 'error' | 'info') => void;
@@ -18,6 +19,7 @@ interface ReceiptModalProps {
 export const ReceiptModal: React.FC<ReceiptModalProps> = ({
   rentRecord,
   rooms = [],
+  rents = [],
   language,
   onClose,
   showToast,
@@ -57,7 +59,42 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
   }
 
   const hasBillBreakdown = matchedRoom && utilitySum > 0;
-  const totalBillPackage = rentRecord.rent;
+  const currentMonthRent = rentRecord.rent;
+
+  // Determine previous due or advance for this tenant/room
+  let previousDue = rentRecord.previousDue ?? 0;
+  if (rentRecord.previousDue === undefined && rents && rents.length > 0) {
+    const recordDate = rentRecord.date || '';
+    const roomKey = (rentRecord.room || '').trim().toLowerCase();
+    const tenantKey = (rentRecord.tenant || '').trim().toLowerCase();
+
+    const priorRecords = rents.filter((r) => {
+      if (!r || r.id === rentRecord.id) return false;
+      const rRoom = (r.room || '').trim().toLowerCase();
+      const rTenant = (r.tenant || '').trim().toLowerCase();
+      if (rRoom !== roomKey && rTenant !== tenantKey) return false;
+      
+      if (r.date && recordDate) {
+        if (r.date < recordDate) return true;
+        if (r.date === recordDate) {
+          return (r.createdAt || '') < (rentRecord.createdAt || '') || r.id < rentRecord.id;
+        }
+      }
+      return false;
+    });
+
+    const priorRentSum = priorRecords.reduce((sum, r) => sum + (r.rent || 0), 0);
+    const priorPaidSum = priorRecords.reduce((sum, r) => sum + (r.paid || 0), 0);
+    const priorBalance = priorRentSum - priorPaidSum;
+    if (priorBalance !== 0) {
+      previousDue = priorBalance;
+    }
+  }
+
+  const totalPayable = currentMonthRent + previousDue;
+  const calculatedDue = totalPayable - rentRecord.paid;
+  const effectiveDue = rentRecord.previousDue !== undefined ? rentRecord.due : calculatedDue;
+  const totalBillPackage = totalPayable;
 
   const handlePrintReceipt = () => {
     triggerPrint(language, rentRecord.id, showToast);
@@ -132,9 +169,22 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
         : `\n\n*Bill Breakdown:*\n• House Rent: ৳${houseRent.toLocaleString()}\n• Gas Bill: ৳${gasBill.toLocaleString()}\n• Water Bill: ৳${waterBill.toLocaleString()}\n• Waste Bill: ৳${wasteBill.toLocaleString()}`;
     }
 
+    let prevDueText = '';
+    if (previousDue > 0) {
+      prevDueText = language === 'bn' ? `\n• পূর্বের বকেয়া: +৳${previousDue.toLocaleString()}` : `\n• Previous Due: +৳${previousDue.toLocaleString()}`;
+    } else if (previousDue < 0) {
+      prevDueText = language === 'bn' ? `\n• পূর্বের অগ্রিম সমন্বয়: -৳${Math.abs(previousDue).toLocaleString()}` : `\n• Previous Advance Adjusted: -৳${Math.abs(previousDue).toLocaleString()}`;
+    }
+
+    const dueStatusText = effectiveDue < 0
+      ? (language === 'bn' ? `অগ্রিম জমা: ৳${Math.abs(effectiveDue).toLocaleString()}` : `Advance Payment: ৳${Math.abs(effectiveDue).toLocaleString()}`)
+      : (effectiveDue === 0
+          ? (language === 'bn' ? 'অবশিষ্ট বকেয়া: ৳০ (সম্পূর্ণ পরিশোধিত)' : 'Remaining Due: ৳0 (Paid in Full)')
+          : (language === 'bn' ? `অবশিষ্ট বকেয়া: ৳${effectiveDue.toLocaleString()}` : `Remaining Due: ৳${effectiveDue.toLocaleString()}`));
+
     const message = language === 'bn'
-      ? `*নাহিদ কুটির — ভাড়া পরিশোধের রসিদ*\n\nরসিদ নং: #NK-${rentRecord.id.substring(0, 8).toUpperCase()}\nতারিখ: ${rentRecord.date}\nভাড়াটিয়া: ${rentRecord.tenant}\nরুম: ${rentRecord.room}${breakdownText}\n\n------------------------------\nমোট পাওনা: ৳${totalBillPackage.toLocaleString()}\nজমা দেওয়া হয়েছে: ৳${rentRecord.paid.toLocaleString()}\n${rentRecord.due < 0 ? `অগ্রিম জমা: ৳${Math.abs(rentRecord.due).toLocaleString()}` : `অবশিষ্ট ${rentRecord.due < 0 ? `অগ্রিম: ৳${Math.abs(rentRecord.due).toLocaleString()}` : `বকেয়া: ৳${rentRecord.due.toLocaleString()}`}`}\n\nনাহিদ কুটিরে থাকার জন্য ধন্যবাদ!`
-      : `*Nahid Kutir — Rent Payment Receipt*\n\nReceipt No: #NK-${rentRecord.id.substring(0, 8).toUpperCase()}\nDate: ${rentRecord.date}\nTenant: ${rentRecord.tenant}\nRoom: ${rentRecord.room}${breakdownText}\n\n------------------------------\nTotal Payable: ৳${totalBillPackage.toLocaleString()}\nPaid Amount: ৳${rentRecord.paid.toLocaleString()}\n${rentRecord.due < 0 ? `Advance Payment: ৳${Math.abs(rentRecord.due).toLocaleString()}` : `Remaining ${rentRecord.due < 0 ? `Advance: ৳${Math.abs(rentRecord.due).toLocaleString()}` : `Due: ৳${rentRecord.due.toLocaleString()}`}`}\n\nThank you for staying at Nahid Kutir!`;
+      ? `*নাহিদ কুটির — ভাড়া পরিশোধের রসিদ*\n\nরসিদ নং: #NK-${rentRecord.id.substring(0, 8).toUpperCase()}\nতারিখ: ${rentRecord.date}\nভাড়াটিয়া: ${rentRecord.tenant}\nরুম: ${rentRecord.room}${breakdownText}${prevDueText}\n\n------------------------------\nমোট পাওনা: ৳${totalPayable.toLocaleString()}\nজমা দেওয়া হয়েছে: ৳${rentRecord.paid.toLocaleString()}\n${dueStatusText}\n\nনাহিদ কুটিরে থাকার জন্য ধন্যবাদ!`
+      : `*Nahid Kutir — Rent Payment Receipt*\n\nReceipt No: #NK-${rentRecord.id.substring(0, 8).toUpperCase()}\nDate: ${rentRecord.date}\nTenant: ${rentRecord.tenant}\nRoom: ${rentRecord.room}${breakdownText}${prevDueText}\n\n------------------------------\nTotal Payable: ৳${totalPayable.toLocaleString()}\nPaid Amount: ৳${rentRecord.paid.toLocaleString()}\n${dueStatusText}\n\nThank you for staying at Nahid Kutir!`;
     
     window.open(`https://wa.me/${phoneWithCode}?text=${encodeURIComponent(message)}`, '_blank');
   };
@@ -147,17 +197,27 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
         : ` | Rent: ৳${houseRent.toLocaleString()}, Gas: ৳${gasBill.toLocaleString()}, Water: ৳${waterBill.toLocaleString()}, Waste: ৳${wasteBill.toLocaleString()}`;
     }
 
+    const prevDueSummary = previousDue > 0
+      ? (language === 'bn' ? ` | পূর্বের বকেয়া: ৳${previousDue.toLocaleString()}` : ` | Prev Due: ৳${previousDue.toLocaleString()}`)
+      : (previousDue < 0 ? (language === 'bn' ? ` | অগ্রিম সমন্বয়: ৳${Math.abs(previousDue).toLocaleString()}` : ` | Advance Adj: ৳${Math.abs(previousDue).toLocaleString()}`) : '');
+
+    const copyDueText = effectiveDue < 0
+      ? (language === 'bn' ? `অগ্রিম: ৳${Math.abs(effectiveDue).toLocaleString()}` : `Advance: ৳${Math.abs(effectiveDue).toLocaleString()}`)
+      : (effectiveDue === 0
+          ? (language === 'bn' ? 'বকেয়া: ৳০ (পরিশোধিত)' : 'Due: ৳0 (Paid)')
+          : (language === 'bn' ? `বকেয়া: ৳${effectiveDue.toLocaleString()}` : `Due: ৳${effectiveDue.toLocaleString()}`));
+
     const summary = language === 'bn'
-      ? `নাহিদ কুটির রসিদ (#NK-${rentRecord.id.substring(0, 8).toUpperCase()})\nতারিখ: ${rentRecord.date}\nভাড়াটিয়া: ${rentRecord.tenant} (রুম ${rentRecord.room})${breakdownText}\nজমা: ৳${rentRecord.paid.toLocaleString()} | ${rentRecord.due < 0 ? `অগ্রিম: ৳${Math.abs(rentRecord.due).toLocaleString()}` : `বকেয়া: ৳${rentRecord.due.toLocaleString()}`}`
-      : `Nahid Kutir Receipt (#NK-${rentRecord.id.substring(0, 8).toUpperCase()})\nDate: ${rentRecord.date}\nTenant: ${rentRecord.tenant} (Room ${rentRecord.room})${breakdownText}\nPaid: ৳${rentRecord.paid.toLocaleString()} | ${rentRecord.due < 0 ? `Advance: ৳${Math.abs(rentRecord.due).toLocaleString()}` : `Due: ৳${rentRecord.due.toLocaleString()}`}`;
+      ? `নাহিদ কুটির রসিদ (#NK-${rentRecord.id.substring(0, 8).toUpperCase()})\nতারিখ: ${rentRecord.date}\nভাড়াটিয়া: ${rentRecord.tenant} (রুম ${rentRecord.room})${breakdownText}${prevDueSummary}\nমোট প্রদেয়: ৳${totalPayable.toLocaleString()} | জমা: ৳${rentRecord.paid.toLocaleString()} | ${copyDueText}`
+      : `Nahid Kutir Receipt (#NK-${rentRecord.id.substring(0, 8).toUpperCase()})\nDate: ${rentRecord.date}\nTenant: ${rentRecord.tenant} (Room ${rentRecord.room})${breakdownText}${prevDueSummary}\nTotal: ৳${totalPayable.toLocaleString()} | Paid: ৳${rentRecord.paid.toLocaleString()} | ${copyDueText}`;
     
     navigator.clipboard.writeText(summary);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const isFullyPaid = rentRecord.due <= 0;
-  const isPartiallyPaid = rentRecord.paid > 0 && rentRecord.due > 0;
+  const isFullyPaid = effectiveDue <= 0;
+  const isPartiallyPaid = rentRecord.paid > 0 && effectiveDue > 0;
 
   return createPortal(
     <div id="receiptModalOverlay" className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/80 animate-fadeIn overflow-y-auto">
@@ -349,13 +409,37 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
                   </tr>
                 )}
 
+                {/* Previous Due or Advance Row */}
+                {previousDue > 0 && (
+                  <tr className="bg-amber-50/80 text-amber-950 border-t border-amber-200">
+                    <td className="p-2.5 font-bold flex items-center gap-1.5 text-amber-900">
+                      <i className="fi fi-sr-time-past text-sm text-amber-600 shrink-0" />
+                      <span>{language === 'bn' ? 'পূর্বের বকেয়া (Previous Due)' : 'Previous Due'}</span>
+                    </td>
+                    <td className="p-2.5 text-right font-black text-rose-600 text-sm font-mono">
+                      +{formatCurrency(previousDue)}
+                    </td>
+                  </tr>
+                )}
+                {previousDue < 0 && (
+                  <tr className="bg-emerald-50/80 text-emerald-950 border-t border-emerald-200">
+                    <td className="p-2.5 font-bold flex items-center gap-1.5 text-emerald-900">
+                      <i className="fi fi-sr-badge-percent text-sm text-emerald-600 shrink-0" />
+                      <span>{language === 'bn' ? 'পূর্বের অগ্রিম সমন্বয় (Advance Adjusted)' : 'Previous Advance Adjusted'}</span>
+                    </td>
+                    <td className="p-2.5 text-right font-black text-emerald-600 text-sm font-mono">
+                      -{formatCurrency(Math.abs(previousDue))}
+                    </td>
+                  </tr>
+                )}
+
                 {/* Total Bill Package Line */}
                 <tr className="bg-[#E2DDCF]/80 font-bold border-t border-[#D6D0C4]">
                   <td className="p-2.5 text-slate-900 font-bold">
                     {language === 'bn' ? 'সর্বমোট পাওনা (Total Payable Rent)' : 'Total Payable Rent'}
                   </td>
                   <td className="p-2.5 text-right font-black text-slate-900 text-sm font-mono">
-                    {formatCurrency(totalBillPackage)}
+                    {formatCurrency(totalPayable)}
                   </td>
                 </tr>
 
@@ -371,12 +455,12 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
                 </tr>
 
                 {/* Remaining Due Line */}
-                <tr className={rentRecord.due > 0 ? "bg-rose-50 text-rose-900 border-t border-rose-100" : (rentRecord.due < 0 ? "bg-emerald-50 text-emerald-900 border-t border-emerald-100" : "bg-white")}>
+                <tr className={effectiveDue > 0 ? "bg-rose-50 text-rose-900 border-t border-rose-100" : (effectiveDue < 0 ? "bg-emerald-50 text-emerald-900 border-t border-emerald-100" : "bg-white")}>
                   <td className="p-2.5 font-bold text-slate-700">
-                    {rentRecord.due < 0 ? (language === 'bn' ? 'অগ্রিম জমা' : 'Advance Payment') : t.remainingDueText}
+                    {effectiveDue < 0 ? (language === 'bn' ? 'অগ্রিম জমা (Advance Payment)' : 'Advance Payment') : t.remainingDueText}
                   </td>
-                  <td className={`p-2.5 text-right font-black text-sm font-mono ${rentRecord.due > 0 ? 'text-rose-600' : (rentRecord.due < 0 ? 'text-emerald-600' : 'text-slate-500')}`}>
-                    {formatCurrency(Math.abs(rentRecord.due))}
+                  <td className={`p-2.5 text-right font-black text-sm font-mono ${effectiveDue > 0 ? 'text-rose-600' : (effectiveDue < 0 ? 'text-emerald-600' : 'text-slate-500')}`}>
+                    {formatCurrency(Math.abs(effectiveDue))}
                   </td>
                 </tr>
               </tbody>
@@ -398,7 +482,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
                 )}
                 {isPartiallyPaid && (
                   <span className="text-amber-600">
-                    {language === 'bn' ? `আংশিক জমা (বকেয়া ৳${rentRecord.due.toLocaleString()})` : `PARTIAL PAYMENT (Due ৳${rentRecord.due.toLocaleString()})`}
+                    {language === 'bn' ? `আংশিক জমা (বকেয়া ৳${effectiveDue.toLocaleString()})` : `PARTIAL PAYMENT (Due ৳${effectiveDue.toLocaleString()})`}
                   </span>
                 )}
                 {!isFullyPaid && !isPartiallyPaid && (

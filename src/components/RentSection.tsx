@@ -63,21 +63,31 @@ export const RentSection: React.FC<RentSectionProps> = ({
   const safeTenants = Array.isArray(tenants) ? tenants : [];
   const safeRooms = Array.isArray(rooms) ? rooms : [];
 
-  const getPreviousDues = () => {
-    if (!selectedTenantId) return 0;
-    const tn = safeTenants.find((t) => t && t.id === selectedTenantId);
+  const getPreviousDues = (targetTenantId = selectedTenantId) => {
+    if (!targetTenantId) return 0;
+    const tn = safeTenants.find((t) => t && t.id === targetTenantId);
     if (!tn) return 0;
     
-    let prev = 0;
-    safeRents.forEach((r) => {
-      if (!r) return;
-      if ((r.room || '').trim() === (tn.room || '').trim()) {
-        if (r.id !== editingId) {
-          prev += (r.due || 0);
-        }
+    const roomKey = (tn.room || '').trim().toLowerCase();
+    const tenantKey = (tn.name || '').trim().toLowerCase();
+
+    // Prior records strictly before this record or excluding editingId
+    const priorRecords = safeRents.filter((r) => {
+      if (!r || (editingId && r.id === editingId)) return false;
+      const rRoom = (r.room || '').trim().toLowerCase();
+      const rTenant = (r.tenant || '').trim().toLowerCase();
+      if (rRoom !== roomKey && rTenant !== tenantKey) return false;
+      if (date && r.date) {
+        if (r.date < date) return true;
+        if (r.date === date && r.id !== editingId) return true;
+        return false;
       }
+      return true;
     });
-    return prev;
+
+    const priorRentSum = priorRecords.reduce((sum, r) => sum + (r.rent || 0), 0);
+    const priorPaidSum = priorRecords.reduce((sum, r) => sum + (r.paid || 0), 0);
+    return priorRentSum - priorPaidSum;
   };
 
   const prevDues = getPreviousDues();
@@ -102,15 +112,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
 
       const rm = safeRooms.find((r) => r && (r.roomNo || '').trim() === (tn.room || '').trim());
       if (rm) {
-        let previousDues = 0;
-        safeRents.forEach((r) => {
-          if (!r) return;
-          if ((r.room || "").trim() === (tn.room || "").trim()) {
-            if (r.id !== editingId) {
-              previousDues += (r.due || 0);
-            }
-          }
-        });
+        const previousDues = getPreviousDues(tenantId);
         const currentPkg = rm.rentAmount + rm.gasBill + rm.waterBill + rm.wasteBill;
         const suggestedPaid = Math.max(0, currentPkg + previousDues);
         
@@ -225,7 +227,9 @@ export const RentSection: React.FC<RentSectionProps> = ({
     const tenantName = matchedTenant ? matchedTenant.name : (fallBackRent ? fallBackRent.tenant : '');
     const rentVal = Number(rent) || 0;
     const paidVal = Number(paid) || 0;
-    const dueVal = rentVal - paidVal;
+    const prevDuesVal = prevDues;
+    const totalPayableVal = rentVal + prevDuesVal;
+    const remainingDueVal = totalPayableVal - paidVal;
 
     const payload = {
       date,
@@ -234,7 +238,8 @@ export const RentSection: React.FC<RentSectionProps> = ({
       room: dispRoom.trim(),
       rent: rentVal,
       paid: paidVal,
-      due: dueVal,
+      due: remainingDueVal,
+      previousDue: prevDuesVal,
       note: note.trim(),
     };
 
@@ -533,7 +538,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
                         {rt.tenant}
                       </div>
                       <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-                        {t.roomText}: {rt.room} {rt.note ? `• ${rt.note}` : ''}
+                        {t.roomText}: {rt.room} {rt.previousDue ? (language === 'bn' ? ` • পূর্বের বকেয়া: ${formatCurrency(rt.previousDue)}` : ` • Prev Due: ${formatCurrency(rt.previousDue)}`) : ''} {rt.note ? `• ${rt.note}` : ''}
                       </div>
                     </td>
                     <td className="p-3.5 font-mono font-bold text-slate-600 dark:text-slate-300 text-right">{formatCurrency(rt.rent)}</td>

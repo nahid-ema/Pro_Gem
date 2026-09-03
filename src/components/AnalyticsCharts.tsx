@@ -360,7 +360,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
                           {formatCategory(ex.category, language)}
                         </p>
                         <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
-                          {ex.details || (language === 'bn' ? 'কোনো বিবরণ নেই' : 'No details provided')}
+                          {ex.desc || (language === 'bn' ? 'কোনো বিবরণ নেই' : 'No details provided')}
                         </p>
                         <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">
                           <i className="fi fi-sr-calendar text-[8px] mr-1" />
