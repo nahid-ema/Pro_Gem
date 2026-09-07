@@ -76,7 +76,8 @@ export const RentSection: React.FC<RentSectionProps> = ({
       if (!r || (editingId && r.id === editingId)) return false;
       const rRoom = (r.room || '').trim().toLowerCase();
       const rTenant = (r.tenant || '').trim().toLowerCase();
-      if (rRoom !== roomKey && rTenant !== tenantKey) return false;
+      // Must match BOTH room and tenant to inherit dues. We don't want a new tenant to inherit the previous tenant's dues.
+      if (rRoom !== roomKey || rTenant !== tenantKey) return false;
       if (date && r.date) {
         if (r.date < date) return true;
         if (r.date === date && r.id !== editingId) return true;
