@@ -108,7 +108,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
       {/* Header Title */}
       <div className="flex items-center justify-between pb-5 mb-5 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-full bg-blue-50 dark:bg-blue-900/30 text-[#2563EB] dark:text-blue-400 flex items-center justify-center font-bold text-lg shrink-0 border border-blue-100 dark:border-blue-800/30">
+          <div className="w-11 h-11 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-[#4F46E5] dark:text-indigo-400 flex items-center justify-center font-bold text-lg shrink-0 border border-indigo-100 dark:border-indigo-800/30">
             <i className="fi fi-sr-shop" />
           </div>
           <div>
@@ -123,7 +123,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
 
         <button
           onClick={() => setIsFormOpen(!isFormOpen)}
-          className="no-print flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#2563EB] text-white hover:bg-[#1D4ED8] font-bold text-xs transition-all active:scale-95 cursor-pointer"
+          className="no-print flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#4F46E5] text-white hover:bg-[#4338CA] font-bold text-xs transition-all active:scale-95 cursor-pointer"
         >
           <i className={`fi fi-sr-add transition-transform duration-200 ${isFormOpen ? 'rotate-45' : ''}`} />
           <span className="hidden sm:inline">{editingId ? t.dokanUpdateBtn : t.dokanToggleLabel}</span>
@@ -141,7 +141,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50"
+                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50"
               />
             </div>
 
@@ -153,7 +153,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
                 value={desc}
                 onChange={(e) => setDesc(e.target.value)}
                 placeholder={t.dokanDescPh}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50"
+                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50"
               />
             </div>
 
@@ -166,7 +166,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder={t.dokanAmtPh}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs md:text-sm font-bold text-amber-600 dark:text-amber-400 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50"
+                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs md:text-sm font-bold text-amber-600 dark:text-amber-400 focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50"
               />
             </div>
           </div>
@@ -181,7 +181,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-full bg-[#2563EB] text-white hover:bg-[#1D4ED8] font-bold text-xs transition-colors cursor-pointer"
+              className="px-5 py-2 rounded-full bg-[#4F46E5] text-white hover:bg-[#4338CA] font-bold text-xs transition-colors cursor-pointer"
             >
               {editingId ? t.dokanUpdateBtn : t.dokanSubmitBtn}
             </button>
@@ -219,7 +219,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
                     <div className="flex items-center justify-end gap-1.5">
                       <button
                         onClick={() => handleEditClick(dk)}
-                        className="p-2 rounded-full text-slate-400 hover:text-blue-600 dark:text-slate-500 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                        className="p-2 rounded-full text-slate-400 hover:text-indigo-600 dark:text-slate-500 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
                         title={t.edit}
                       >
                         <i className="fi fi-sr-edit text-sm" />

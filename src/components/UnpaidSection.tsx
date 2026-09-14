@@ -155,7 +155,7 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
             <button
               onClick={() => setSortBy('roomAsc')}
               className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer ${
-                sortBy === 'roomAsc' ? 'bg-white dark:bg-slate-900 text-blue-600 font-bold shadow-xs' : 'text-slate-500 dark:text-slate-400'
+                sortBy === 'roomAsc' ? 'bg-white dark:bg-slate-900 text-indigo-600 font-bold shadow-xs' : 'text-slate-500 dark:text-slate-400'
               }`}
             >
               {t.sortByRoomAsc || 'রুম অনুযায়ী'}
@@ -257,7 +257,7 @@ export const UnpaidSection: React.FC<UnpaidSectionProps> = ({
 
                         <button
                           onClick={() => onQuickPay(item)}
-                          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#2563EB] text-white hover:bg-[#1D4ED8] font-bold text-xs transition-all cursor-pointer active:scale-95 ml-1.5 shadow-xs"
+                          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#4F46E5] text-white hover:bg-[#4338CA] font-bold text-xs transition-all cursor-pointer active:scale-95 ml-1.5 shadow-xs"
                         >
                           <i className="fi fi-sr-bolt text-xs" />
                           <span>{t.quickPay}</span>

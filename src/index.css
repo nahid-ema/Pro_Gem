@@ -1,11 +1,28 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800;900&display=swap");
+@import "tailwindcss";
 @font-face {
   font-family: "One UI Sans";
   src: url("https://cdn.jsdelivr.net/gh/Deemitry88/OneUI-Sans@main/OneUISans-VF.ttf") format("truetype");
   font-weight: 100 900;
   font-style: normal;
 }
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800;900&display=swap");
-@import "tailwindcss";
+@theme {
+  --shadow-sm: 0 2px 8px -2px rgba(15, 23, 42, 0.04);
+  --shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 8px 24px -4px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.08);
+  --color-slate-50: #f8f9fb; /* Ultra-light silver gray */
+  --color-slate-100: #f8f9fb; /* Light app bg */
+  --color-slate-200: #e2e8f0; /* Subtle borders light */
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b; /* Secondary text light */
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #222838; /* Subtle borders dark / deep slate */
+  --color-slate-900: #171b26; /* Violet-tinted dark gray cards */
+  --color-slate-950: #0e1118; /* Deep orbiter black background */
+}
 
 body {
   font-family: "One UI Sans", "Noto Sans Bengali", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -28,6 +45,10 @@ th {
 
 
 @theme {
+  --shadow-sm: 0 2px 8px -2px rgba(0, 0, 0, 0.04);
+  --shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 12px 32px -4px rgba(0, 0, 0, 0.08);
   --font-sans: "One UI Sans", "Noto Sans Bengali", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
@@ -110,25 +131,10 @@ html {
   }
 }
 
-.bg-orange-accent {
-  background-color: #2563EB;
-}
 
-.bg-orange-accent:hover {
-  background-color: #1D4ED8;
-}
 
-.text-orange-accent {
-  color: #2563EB;
-}
 
-.border-orange-accent {
-  border-color: #2563EB;
-}
 
-.bg-orange-accent-light {
-  background-color: #EBE7E0;
-}
 
 @layer utilities {
   /* Keyframe Animations */
@@ -380,8 +386,9 @@ html {
     color: #be123c !important;
   }
 
+  .text-\[\#4F46E5\], .dark .text-\[\#4F46E5\],
   .text-\[\#2563EB\], .dark .text-\[\#2563EB\] {
-    color: #1e3a8a !important; /* Darker blue for print contrast */
+    color: #3730a3 !important; /* Dark indigo for print contrast */
   }
 
   .text-amber-600, .text-amber-700, .text-amber-800,

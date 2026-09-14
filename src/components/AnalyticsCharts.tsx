@@ -125,7 +125,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
     categoryMap.set(cat, prev + (ex.amount || 0));
   });
 
-  const categoryColors = ['#6366f1', '#ec4899', '#14b8a6', '#2563EB', '#8b5cf6', '#06b6d4', '#eab308', '#3b82f6', '#a855f7'];
+  const categoryColors = ['#4F46E5', '#F43F5E', '#10B981', '#F59E0B', '#6366F1', '#EC4899', '#06B6D4', '#8B5CF6', '#14B8A6'];
 
   const expenseCategoryData = Array.from(categoryMap.entries())
     .map(([name, value], idx) => ({
@@ -145,7 +145,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
     <div className="rounded-[32px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 mb-6 shadow-sm space-y-6">
       {/* Title */}
       <div className="flex items-center gap-3.5 pb-5 border-b border-slate-100 dark:border-slate-800">
-        <div className="w-11 h-11 rounded-full bg-blue-50 dark:bg-blue-900/30 text-[#2563EB] dark:text-blue-400 flex items-center justify-center font-bold text-lg shrink-0 border border-blue-100 dark:border-blue-800/30">
+        <div className="w-11 h-11 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-[#4F46E5] dark:text-indigo-400 flex items-center justify-center font-bold text-lg shrink-0 border border-indigo-100 dark:border-indigo-800/30">
           <i className="fi fi-sr-chart-line-up text-lg" />
         </div>
         <div>
@@ -162,7 +162,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
         {/* Monthly Income vs Expense Bar Chart */}
         <div className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
-            <i className="fi fi-sr-arrow-trend-up text-base text-[#2563EB] dark:text-blue-400" />
+            <i className="fi fi-sr-arrow-trend-up text-base text-[#4F46E5] dark:text-indigo-400" />
             <h4 className="text-sm font-extrabold text-slate-900 dark:text-white">
               {t.chartIncomeVsExpense} ({activeYear})
             </h4>
@@ -195,7 +195,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
         {/* Financial Breakdown Pie Chart */}
         <div className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 shadow-sm flex flex-col justify-between">
           <div className="flex items-center gap-2 mb-4">
-            <i className="fi fi-sr-chart-pie text-base text-[#2563EB] dark:text-blue-400" />
+            <i className="fi fi-sr-chart-pie text-base text-[#4F46E5] dark:text-indigo-400" />
             <h4 className="text-sm font-extrabold text-slate-900 dark:text-white">
               {language === 'bn' ? 'অর্থসংস্থানের সার্বিক বন্টন' : 'Overall Financial Breakdown'}
             </h4>
@@ -240,7 +240,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
         <div className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 shadow-sm space-y-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <i className="fi fi-sr-chart-pie text-base text-[#2563EB] dark:text-blue-400" />
+              <i className="fi fi-sr-chart-pie text-base text-[#4F46E5] dark:text-indigo-400" />
               <h4 className="text-sm font-extrabold text-slate-900 dark:text-white">
                 {t.chartExpenseCategories} ({language === 'bn' ? 'খাতভিত্তিক খরচ' : 'Expense Category Breakdown'})
               </h4>
@@ -347,7 +347,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
                     <div className="flex items-start gap-3">
                       <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-900/50 flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-700/50">
                          {ex.category === 'electricity' ? <i className="fi fi-sr-bolt text-amber-500" /> : 
-                          ex.category === 'water' ? <i className="fi fi-sr-raindrops text-blue-500" /> :
+                          ex.category === 'water' ? <i className="fi fi-sr-raindrops text-indigo-600" /> :
                           ex.category === 'gas' ? <i className="fi fi-sr-flame text-orange-500" /> :
                           ex.category === 'waste' ? <i className="fi fi-sr-trash text-slate-500" /> :
                           ex.category === 'wifi' ? <i className="fi fi-sr-wifi text-emerald-500" /> :

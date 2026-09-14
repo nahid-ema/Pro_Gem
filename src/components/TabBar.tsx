@@ -48,7 +48,7 @@ export const TabBar: React.FC<TabBarProps> = ({
                 : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/50'
             }`}
           >
-            <span className={isActive ? 'text-[#2563EB] dark:text-blue-400' : 'text-slate-400 dark:text-slate-500'}>
+            <span className={isActive ? 'text-[#4F46E5] dark:text-indigo-400' : 'text-slate-400 dark:text-slate-500'}>
               {tab.icon}
             </span>
             <span>{tab.label}</span>

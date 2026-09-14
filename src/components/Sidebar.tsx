@@ -30,7 +30,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   return (
-    <aside className="hidden lg:flex flex-col w-64 h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 shadow-sm z-40 no-print flex-shrink-0">
+    <aside className="hidden lg:flex flex-col w-64 h-full bg-white dark:bg-[#0E1118] border-r border-slate-200 dark:border-slate-800 shadow-sm z-40 no-print flex-shrink-0">
       {/* Brand & Logo */}
       <div className="flex items-center gap-3 px-6 py-6 border-b border-slate-100 dark:border-slate-800/60">
         <Logo className="w-10 h-10" />
@@ -56,12 +56,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
               onClick={() => onTabChange(item.id)}
               className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold transition-all cursor-pointer ${
                 isActive
-                  ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 shadow-sm'
+                  ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 shadow-sm'
                   : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               <div className="flex items-center gap-3">
-                <span className={`${isActive ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500'}`}>
+                <span className={`${isActive ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400 dark:text-slate-500'}`}>
                   {item.icon}
                 </span>
                 <span>{language === 'bn' ? item.labelBn : item.labelEn}</span>
@@ -72,7 +72,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   isUnpaidTab
                     ? 'bg-rose-500 text-white animate-pulse shadow-sm shadow-rose-500/20'
                     : isActive
-                      ? 'bg-blue-200 dark:bg-blue-800 text-blue-800 dark:text-blue-200'
+                      ? 'bg-indigo-200 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-200'
                       : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
                 }`}>
                   {item.badge}

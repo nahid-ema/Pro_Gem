@@ -201,7 +201,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
       {/* Header Title */}
       <div className="flex flex-wrap items-center justify-between gap-3 pb-5 mb-5 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-full bg-blue-50 dark:bg-blue-900/30 text-[#2563EB] dark:text-blue-400 flex items-center justify-center font-bold text-lg shrink-0 border border-blue-100 dark:border-blue-800/30">
+          <div className="w-11 h-11 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-[#4F46E5] dark:text-indigo-400 flex items-center justify-center font-bold text-lg shrink-0 border border-indigo-100 dark:border-indigo-800/30">
             <i className="fi fi-sr-receipt" />
           </div>
           <div>
@@ -216,7 +216,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
 
         <button
           onClick={() => setIsFormOpen(!isFormOpen)}
-          className="no-print flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#2563EB] text-white hover:bg-[#1D4ED8] font-bold text-xs transition-all active:scale-95 cursor-pointer"
+          className="no-print flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#4F46E5] text-white hover:bg-[#4338CA] font-bold text-xs transition-all active:scale-95 cursor-pointer"
         >
           <i className={`fi fi-sr-add transition-transform duration-200 ${isFormOpen ? 'rotate-45' : ''}`} />
           <span className="hidden sm:inline">{editingId ? t.expUpdateBtn : t.expToggleLabel}</span>
@@ -235,7 +235,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50"
+                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50"
               />
             </div>
 
@@ -248,7 +248,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
                 value={desc}
                 onChange={handleDescChange}
                 placeholder={t.expDescPh}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50"
+                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50"
               />
             </div>
 
@@ -262,7 +262,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder={t.expAmtPh}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-bold text-rose-600 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50"
+                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-bold text-rose-600 focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50"
               />
             </div>
 
@@ -277,7 +277,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
                   setCategory(e.target.value);
                   setUserManuallySelectedCategory(true);
                 }}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50"
+                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50"
               >
                 {predefinedCategories.map((catOption) => (
                   <option key={catOption} value={catOption}>
@@ -300,7 +300,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
                   value={customCategory}
                   onChange={(e) => setCustomCategory(e.target.value)}
                   placeholder={t.customCategoryPh}
-                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50"
+                  className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50"
                 />
               </div>
             ) : null}
@@ -316,7 +316,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-full bg-[#2563EB] text-white hover:bg-[#1D4ED8] font-bold text-xs shadow-md transition-colors cursor-pointer"
+              className="px-5 py-2 rounded-full bg-[#4F46E5] text-white hover:bg-[#4338CA] font-bold text-xs shadow-md transition-colors cursor-pointer"
             >
               {editingId ? t.expUpdateBtn : t.expSubmitBtn}
             </button>
@@ -403,7 +403,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
                     <div className="flex items-center justify-end gap-1.5">
                       <button
                         onClick={() => handleEditClick(ex)}
-                        className="p-2 rounded-full text-slate-400 hover:text-blue-600 dark:text-slate-500 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
+                        className="p-2 rounded-full text-slate-400 hover:text-indigo-600 dark:text-slate-500 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
                         title={t.edit}
                       >
                         <i className="fi fi-sr-edit text-sm" />

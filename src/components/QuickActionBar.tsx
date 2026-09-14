@@ -56,7 +56,7 @@ export const QuickActionBar: React.FC<QuickActionBarProps> = ({
           {/* 2. Monthly Financial Statement Report */}
           <button
             onClick={() => handleAction(onOpenMonthlyReport)}
-            className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white shadow-xl hover:scale-105 transition-all text-xs font-bold cursor-pointer group"
+            className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-xl hover:scale-105 transition-all text-xs font-bold cursor-pointer group"
           >
             <span>{t.qaMonthlyReport || 'মাসিক অডিট রিপোর্ট'}</span>
             <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center">
@@ -92,7 +92,7 @@ export const QuickActionBar: React.FC<QuickActionBarProps> = ({
             className="flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white dark:bg-[#202020] text-slate-800 dark:text-white border border-[#D6D0C4] dark:border-[#333] shadow-xl hover:scale-105 transition-all text-xs font-bold cursor-pointer group"
           >
             <span>{t.qaAddTenant || 'নতুন ভাড়াটিয়া যোগ'}</span>
-            <div className="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-xl bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 flex items-center justify-center">
               <i className="fi fi-sr-user-add text-sm" />
             </div>
           </button>
@@ -107,7 +107,7 @@ export const QuickActionBar: React.FC<QuickActionBarProps> = ({
         className={`w-13 h-13 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center text-white shadow-2xl transition-all duration-300 cursor-pointer z-40 relative ${
           isOpen
             ? 'bg-slate-800 rotate-45 scale-95 ring-4 ring-slate-800/30'
-            : 'bg-gradient-to-tr from-slate-900 via-blue-900 to-blue-700 dark:from-blue-600 dark:to-emerald-600 hover:scale-105 shadow-blue-500/25 ring-4 ring-blue-500/20'
+            : 'bg-gradient-to-tr from-slate-900 via-indigo-900 to-indigo-700 dark:from-indigo-600 dark:to-emerald-600 hover:scale-105 shadow-indigo-500/25 ring-4 ring-indigo-500/20'
         }`}
       >
         <i className="fi fi-sr-plus text-xl transition-transform duration-300" />

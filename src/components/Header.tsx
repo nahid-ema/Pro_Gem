@@ -94,12 +94,12 @@ export const Header: React.FC<HeaderProps> = ({
   }, []);
 
   const navItems: { id: TabType; labelEn: string; labelBn: string; icon: React.ReactNode }[] = [
-    { id: 'brief', labelEn: 'Summary', labelBn: 'সারসংক্ষেপ', icon: <i className="fi fi-sr-chart-histogram text-base text-[#2563EB]" /> },
-    { id: 'rooms', labelEn: 'Rooms', labelBn: 'রুমসমূহ', icon: <i className="fi fi-sr-door-closed text-base text-blue-500" /> },
+    { id: 'brief', labelEn: 'Summary', labelBn: 'সারসংক্ষেপ', icon: <i className="fi fi-sr-chart-histogram text-base text-[#4F46E5]" /> },
+    { id: 'rooms', labelEn: 'Rooms', labelBn: 'রুমসমূহ', icon: <i className="fi fi-sr-door-closed text-base text-indigo-600" /> },
     { id: 'tenants', labelEn: 'Tenants', labelBn: 'ভাড়াটিয়া', icon: <i className="fi fi-sr-users text-base text-emerald-500" /> },
     { id: 'rent', labelEn: 'Rent Collection', labelBn: 'ভাড়া আদায়', icon: <i className="fi fi-sr-money-bill-wave text-base text-amber-500" /> },
     { id: 'unpaid', labelEn: 'Unpaid Dues', labelBn: 'বকেয়া হিসাব', icon: <i className="fi fi-sr-triangle-warning text-base text-rose-500" /> },
-    { id: 'expense', labelEn: 'Expenses', labelBn: 'খরচসমূহ', icon: <i className="fi fi-sr-receipt text-base text-purple-500" /> },
+    { id: 'expense', labelEn: 'Expenses', labelBn: 'খরচসমূহ', icon: <i className="fi fi-sr-receipt text-base text-indigo-600" /> },
     { id: 'dokan', labelEn: 'Shop Dues', labelBn: 'দোকান বাকি', icon: <i className="fi fi-sr-shop text-base text-orange-500" /> },
     { id: 'analytics', labelEn: 'Analytics', labelBn: 'অ্যানালিটিক্স', icon: <i className="fi fi-sr-chart-line-up text-base text-indigo-500" /> },
   ];
@@ -194,7 +194,7 @@ export const Header: React.FC<HeaderProps> = ({
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder={t.searchPlaceholder}
-            className="w-full pl-11 pr-9 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full text-xs sm:text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50 transition-all"
+            className="w-full pl-11 pr-9 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full text-xs sm:text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50 transition-all"
           />
           {searchQuery && (
             <button
@@ -220,7 +220,7 @@ export const Header: React.FC<HeaderProps> = ({
               }}
               className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 text-xs font-bold transition-all cursor-pointer shadow-sm active:scale-95"
             >
-              <i className="fi fi-sr-calendar text-sm text-[#2563EB] shrink-0" />
+              <i className="fi fi-sr-calendar text-sm text-[#4F46E5] shrink-0" />
               <span className="truncate max-w-[80px] sm:max-w-none">{getSelectedDateLabel()}</span>
               <i className={`fi fi-sr-angle-down text-xs text-slate-400 shrink-0 transition-transform duration-200 ${isDatePickerOpen ? 'rotate-180' : ''}`} />
             </button>
@@ -233,7 +233,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <button
                     type="button"
                     onClick={handleThisMonth}
-                    className="flex-1 px-3 py-1.5 rounded-full bg-[#2563EB]/10 text-[#2563EB] hover:bg-[#2563EB]/20 text-[11px] font-bold transition-colors cursor-pointer text-center"
+                    className="flex-1 px-3 py-1.5 rounded-full bg-[#4F46E5]/10 text-[#4F46E5] hover:bg-[#4F46E5]/20 text-[11px] font-bold transition-colors cursor-pointer text-center"
                   >
                     {language === 'bn' ? 'চলতি মাস' : 'This Month'}
                   </button>
@@ -347,7 +347,7 @@ export const Header: React.FC<HeaderProps> = ({
                 setIsDatePickerOpen(false);
                 setIsQuickNavOpen(false);
               }}
-              className="w-full flex items-center justify-center gap-2 bg-[#2563EB] text-white hover:bg-[#1D4ED8] px-4 py-2.5 rounded-full text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 bg-[#4F46E5] text-white hover:bg-[#4338CA] px-4 py-2.5 rounded-full text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer"
             >
               <i className="fi fi-sr-menu-burger text-sm" />
               <span className="truncate max-w-[40px] sm:max-w-none">{language === 'bn' ? 'মেনু' : 'Menu'}</span>
@@ -471,7 +471,7 @@ export const Header: React.FC<HeaderProps> = ({
                     <button
                       type="button"
                       onClick={() => { setIsMenuOpen(false); onOpenAuthModal(); }}
-                      className="text-[#2563EB] hover:underline font-extrabold cursor-pointer text-xs"
+                      className="text-[#4F46E5] hover:underline font-extrabold cursor-pointer text-xs"
                     >
                       {userEmail ? (language === 'bn' ? 'অ্যাকাউন্ট সেটিংস' : 'Manage') : t.loginBtn}
                     </button>
@@ -490,7 +490,7 @@ export const Header: React.FC<HeaderProps> = ({
                     <button
                       type="button"
                       onClick={() => { setIsMenuOpen(false); onLockApp(); }}
-                      className="w-full mt-2 py-2 px-4 rounded-full bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 text-[#2563EB] font-extrabold text-[11px] transition-colors flex items-center justify-center gap-1.5 cursor-pointer border border-blue-200 dark:border-blue-900"
+                      className="w-full mt-2 py-2 px-4 rounded-full bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 text-[#4F46E5] font-extrabold text-[11px] transition-colors flex items-center justify-center gap-1.5 cursor-pointer border border-indigo-200 dark:border-indigo-900"
                     >
                       <i className="fi fi-sr-lock text-xs" />
                       <span>{language === 'bn' ? 'ওয়েবসাইট লক করুন (লগআউট)' : 'Lock Website (Log Out)'}</span>

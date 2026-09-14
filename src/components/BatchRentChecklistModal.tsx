@@ -167,11 +167,11 @@ export const BatchRentChecklistModal: React.FC<BatchRentChecklistModalProps> = (
         <div className="flex items-center justify-between pb-4 border-b border-[#E8E4DC] dark:border-[#262626] shrink-0">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-blue-600" />
+              <span className="w-2.5 h-2.5 rounded-full bg-indigo-600" />
               <h2 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
                 {t.batchChecklistTitle || 'মাসিক ভাড়া আদায়ের চেকশিট'}
               </h2>
-              <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300">
+              <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-md bg-indigo-100 dark:bg-indigo-950/60 text-indigo-800 dark:text-blue-300">
                 {monthName} {currentEvalYear}
               </span>
             </div>
@@ -195,7 +195,7 @@ export const BatchRentChecklistModal: React.FC<BatchRentChecklistModalProps> = (
               <span className="font-bold text-slate-700 dark:text-slate-200">
                 {language === 'bn' ? 'সংগ্রহের অগ্রগতি:' : 'Collection Progress:'}
               </span>
-              <span className="font-mono font-bold text-blue-600 dark:text-blue-400">
+              <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">
                 {paidCount} / {totalTenants} {language === 'bn' ? 'রুম সম্পন্ন' : 'units paid'} ({percentCollected}%)
               </span>
             </div>
@@ -213,7 +213,7 @@ export const BatchRentChecklistModal: React.FC<BatchRentChecklistModalProps> = (
           {/* Progress Bar */}
           <div className="w-full bg-slate-200 dark:bg-[#2A2A2A] h-2 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full transition-all duration-300"
+              className="h-full bg-gradient-to-r from-indigo-600 to-rose-500 rounded-full transition-all duration-300"
               style={{ width: `${percentCollected}%` }}
             />
           </div>

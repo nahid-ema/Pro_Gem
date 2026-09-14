@@ -99,13 +99,35 @@ export const RoomMatrixGrid: React.FC<RoomMatrixGridProps> = ({
           };
         }
         // No payment recorded for this period -> full package is due
+        const yy = selectedYear === 'all' ? new Date().getFullYear().toString() : selectedYear;
+        const mm = selectedMonth === 'all' ? String(new Date().getMonth() + 1).padStart(2, '0') : selectedMonth.padStart(2, '0');
+        const targetDateStr = `${yy}-${mm}-01`;
+        
+        let priorRentSum = 0;
+        let priorPaidSum = 0;
+        const rRoom = String(room.roomNo).trim().toLowerCase();
+        const rTenant = String(tenant.name).trim().toLowerCase();
+        
+        rents.forEach((r) => {
+           if (r.date && r.date < targetDateStr) {
+              if ((r.room || '').trim().toLowerCase() === rRoom && (r.tenant || '').trim().toLowerCase() === rTenant) {
+                 priorRentSum += (r.rent || 0);
+                 priorPaidSum += (r.paid || 0);
+              }
+           }
+        });
+        const prevDues = priorRentSum - priorPaidSum;
+        const estDue = totalPackage + prevDues;
+        
+        const isActuallyPaid = estDue <= 0;
+
         return {
           room,
           tenant,
           isVacant: false,
-          status: 'due' as const,
+          status: (isActuallyPaid ? 'paid' : 'due') as 'paid' | 'due',
           paidAmount: 0,
-          dueAmount: totalPackage,
+          dueAmount: isActuallyPaid ? 0 : estDue,
           rentRecord: null,
           totalPackage,
         };
@@ -167,7 +189,7 @@ export const RoomMatrixGrid: React.FC<RoomMatrixGridProps> = ({
             onClick={() => onNavigateTab('rooms')}
             className="self-start sm:self-auto text-xs font-bold px-3 py-1.5 rounded-lg bg-[#F5F2EB] dark:bg-[#202020] text-slate-700 dark:text-slate-200 hover:bg-[#EAE5DA] dark:hover:bg-[#2A2A2A] border border-[#D6D0C4] dark:border-[#333] transition-colors flex items-center gap-1.5 cursor-pointer"
           >
-            <i className="fi fi-sr-apps text-xs text-blue-600 dark:text-blue-400" />
+            <i className="fi fi-sr-apps text-xs text-indigo-600 dark:text-indigo-400" />
             <span>{language === 'bn' ? 'রুম তালিকা পরিচালনা' : 'Manage Units'}</span>
           </button>
         )}
@@ -186,16 +208,16 @@ export const RoomMatrixGrid: React.FC<RoomMatrixGridProps> = ({
         </div>
 
         {/* Occupied */}
-        <div className="bg-blue-50/60 dark:bg-blue-950/20 p-3 rounded-xl border border-blue-100 dark:border-blue-900/40">
+        <div className="bg-indigo-50/60 dark:bg-indigo-950/20 p-3 rounded-xl border border-indigo-100 dark:border-indigo-900/40">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] text-blue-800 dark:text-blue-300 font-semibold">
+            <span className="text-[11px] text-indigo-800 dark:text-blue-300 font-semibold">
               {t.matrixOccupied || 'ভাড়াকৃত'}
             </span>
-            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-200/70 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-indigo-200/70 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200">
               {occupancyPercent}%
             </span>
           </div>
-          <span className="text-lg font-black text-blue-700 dark:text-blue-400 font-mono mt-0.5 block">
+          <span className="text-lg font-black text-indigo-700 dark:text-indigo-400 font-mono mt-0.5 block">
             {occupiedCount} {language === 'bn' ? 'টি' : 'units'}
           </span>
         </div>
@@ -266,7 +288,7 @@ export const RoomMatrixGrid: React.FC<RoomMatrixGridProps> = ({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder={language === 'bn' ? 'গ্রিডে রুম বা ভাড়াটিয়া খুঁজুন...' : 'Search matrix...'}
-            className="w-full pl-8 pr-3 py-1.5 text-xs bg-[#FAF8F5] dark:bg-[#1A1A1A] border border-[#D6D0C4] dark:border-[#333] rounded-lg text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full pl-8 pr-3 py-1.5 text-xs bg-[#FAF8F5] dark:bg-[#1A1A1A] border border-[#D6D0C4] dark:border-[#333] rounded-lg text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
           />
         </div>
       </div>
@@ -350,7 +372,7 @@ export const RoomMatrixGrid: React.FC<RoomMatrixGridProps> = ({
                     {item.tenant ? (
                       <div>
                         <div className="flex items-center gap-1 text-xs font-black text-slate-800 dark:text-slate-100 truncate">
-                          <i className="fi fi-sr-user text-[11px] text-blue-600 dark:text-blue-400 shrink-0" />
+                          <i className="fi fi-sr-user text-[11px] text-indigo-600 dark:text-indigo-400 shrink-0" />
                           <span className="truncate">{item.tenant.name}</span>
                         </div>
                         {item.tenant.phone && (

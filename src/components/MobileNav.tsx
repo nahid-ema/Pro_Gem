@@ -26,7 +26,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
   ];
 
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 pb-safe shadow-sm no-print">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-[#0E1118] border-t border-slate-200 dark:border-slate-800 pb-safe shadow-sm no-print">
       <div className="flex items-center overflow-x-auto scrollbar-none px-2 py-2 gap-1">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
@@ -38,7 +38,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
               onClick={() => onTabChange(tab.id)}
               className={`relative flex flex-col items-center justify-center min-w-[72px] px-2 py-1.5 rounded-2xl transition-all cursor-pointer flex-shrink-0 ${
                 isActive
-                  ? 'text-blue-600 dark:text-blue-400 bg-blue-50/50 dark:bg-blue-900/20'
+                  ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-900/20'
                   : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
@@ -48,13 +48,13 @@ export const MobileNav: React.FC<MobileNavProps> = ({
                   <span className={`absolute -top-2 -right-3 px-1.5 py-0.5 text-[9px] font-black rounded-full flex items-center justify-center min-w-[18px] ${
                     isUnpaidTab
                       ? 'bg-rose-500 text-white animate-pulse shadow-sm'
-                      : 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
+                      : 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-blue-300'
                   }`}>
                     {tab.badge}
                   </span>
                 )}
               </div>
-              <span className={`text-[10px] font-bold truncate w-full text-center ${isActive ? 'text-blue-700 dark:text-blue-400' : ''}`}>
+              <span className={`text-[10px] font-bold truncate w-full text-center ${isActive ? 'text-indigo-700 dark:text-indigo-400' : ''}`}>
                 {language === 'bn' ? tab.labelBn : tab.labelEn}
               </span>
             </button>

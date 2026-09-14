@@ -5,7 +5,7 @@ import { getTranslation } from '../data/translations';
 import { triggerPrint } from '../lib/printHelper';
 import { Logo } from './Logo';
 import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
+import { exportElementToPDF } from '../lib/pdfHelper';
 
 interface ReceiptModalProps {
   rentRecord: RentRecord | null;
@@ -131,22 +131,13 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
     if (!el) return;
     try {
       setIsExporting(true);
-      const canvas = await html2canvas(el, {
-        scale: 2.5,
-        useCORS: true,
-        backgroundColor: '#ffffff',
-        logging: false,
-      });
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
+      await exportElementToPDF(el, {
+        fileName: `nahid-kutir-receipt-NK-${rentRecord.id.substring(0, 8).toUpperCase()}.pdf`,
         format: 'a5',
+        orientation: 'portrait',
+        marginMm: 6,
+        scale: 2.5,
       });
-      const imgWidth = 138;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      pdf.addImage(imgData, 'PNG', 5, 5, imgWidth, imgHeight);
-      pdf.save(`nahid-kutir-receipt-NK-${rentRecord.id.substring(0, 8).toUpperCase()}.pdf`);
       showToast?.(
         language === 'bn' ? '✓ রসিদের PDF ফাইল ডাউনলোড হয়েছে!' : '✓ Receipt PDF downloaded successfully!'
       );
@@ -226,7 +217,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
         {/* Modal Controls Bar (Screen Only - Hidden in Print) */}
         <div className="flex items-center justify-between pb-3 sm:pb-4 border-b border-[#D6D0C4] dark:border-slate-800 no-print gap-1.5 flex-wrap">
           <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-sm bg-[#2563EB]" />
+            <span className="w-2 h-2 rounded-sm bg-[#4F46E5]" />
             <h3 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
               {t.receiptTitle}
             </h3>
@@ -240,7 +231,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
               className="flex items-center gap-1 px-2.5 py-1.5 rounded-sm bg-[#F2F0EB] dark:bg-[#2A2A2A] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold transition-all cursor-pointer disabled:opacity-50"
               title={language === 'bn' ? 'ছবি ডাউনলোড করুন' : 'Download Image'}
             >
-              <i className="fi fi-sr-picture text-sm text-blue-600" />
+              <i className="fi fi-sr-picture text-sm text-indigo-600" />
               <span className="hidden sm:inline">{t.downloadImgBtn || 'ছবি'}</span>
             </button>
 
@@ -329,7 +320,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
               <span className="text-slate-400 font-bold block uppercase text-[10px]">
                 {t.receiptNo}
               </span>
-              <span className="font-mono font-bold text-sm text-[#2563EB]">
+              <span className="font-mono font-bold text-sm text-[#4F46E5]">
                 #NK-{rentRecord.id.substring(0, 8).toUpperCase()}
               </span>
             </div>
@@ -347,7 +338,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
 
             <div className="text-right">
               <span className="text-slate-400 text-[11px] block font-semibold">{t.roomAssigned}</span>
-              <span className="font-black text-sm text-[#2563EB] block mt-0.5">{t.roomText} {rentRecord.room}</span>
+              <span className="font-black text-sm text-[#4F46E5] block mt-0.5">{t.roomText} {rentRecord.room}</span>
             </div>
           </div>
 
@@ -355,7 +346,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
           <div className="rounded-sm border border-[#D6D0C4] overflow-hidden shadow-none bg-white">
             <div className="bg-[#E2DDCF] px-3 py-1.5 border-b border-[#D6D0C4] flex items-center justify-between text-[11px] font-bold text-slate-700">
               <span className="flex items-center gap-1">
-                <i className="fi fi-sr-document text-sm text-[#2563EB]" />
+                <i className="fi fi-sr-document text-sm text-[#4F46E5]" />
                 {language === 'bn' ? 'বিলের বিস্তারিত বিবরণ' : 'Itemized Bill Breakdown'}
               </span>
               <span>{language === 'bn' ? 'টাকা (TK)' : 'Amount (TK)'}</span>
@@ -519,7 +510,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
             
             {/* System Stamp Motif */}
             <div className="text-center opacity-80 pointer-events-none">
-              <div className="w-11 h-11 rounded-sm border-2 border-dashed border-[#2563EB] flex items-center justify-center mx-auto text-[8px] font-black text-[#2563EB] uppercase rotate-[-12deg] p-1">
+              <div className="w-11 h-11 rounded-sm border-2 border-dashed border-[#4F46E5] flex items-center justify-center mx-auto text-[8px] font-black text-[#4F46E5] uppercase rotate-[-12deg] p-1">
                 {language === 'bn' ? 'যাচাইকৃত' : 'VERIFIED'}
               </div>
             </div>

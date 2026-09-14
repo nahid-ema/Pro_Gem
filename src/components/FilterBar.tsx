@@ -54,12 +54,12 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   }, []);
 
   const navItems: { id: TabType; labelEn: string; labelBn: string; icon: React.ReactNode }[] = [
-    { id: 'brief', labelEn: 'Summary', labelBn: 'সারসংক্ষেপ', icon: <i className="fi fi-sr-chart-histogram text-[#2563EB]" /> },
-    { id: 'rooms', labelEn: 'Rooms', labelBn: 'রুমসমূহ', icon: <i className="fi fi-sr-door-closed text-blue-500" /> },
+    { id: 'brief', labelEn: 'Summary', labelBn: 'সারসংক্ষেপ', icon: <i className="fi fi-sr-chart-histogram text-[#4F46E5]" /> },
+    { id: 'rooms', labelEn: 'Rooms', labelBn: 'রুমসমূহ', icon: <i className="fi fi-sr-door-closed text-indigo-600" /> },
     { id: 'tenants', labelEn: 'Tenants', labelBn: 'ভাড়াটিয়া', icon: <i className="fi fi-sr-users text-emerald-500" /> },
     { id: 'rent', labelEn: 'Rent Collection', labelBn: 'ভাড়া আদায়', icon: <i className="fi fi-sr-money-bill-wave text-amber-500" /> },
     { id: 'unpaid', labelEn: 'Unpaid Dues', labelBn: 'বকেয়া হিসাব', icon: <i className="fi fi-sr-triangle-warning text-rose-500" /> },
-    { id: 'expense', labelEn: 'Expenses', labelBn: 'খরচসমূহ', icon: <i className="fi fi-sr-receipt text-purple-500" /> },
+    { id: 'expense', labelEn: 'Expenses', labelBn: 'খরচসমূহ', icon: <i className="fi fi-sr-receipt text-indigo-600" /> },
     { id: 'dokan', labelEn: 'Shop Dues', labelBn: 'দোকান বাকি', icon: <i className="fi fi-sr-shop text-orange-500" /> },
     { id: 'analytics', labelEn: 'Analytics', labelBn: 'অ্যানালিটিক্স', icon: <i className="fi fi-sr-chart-line-up text-indigo-500" /> },
   ];
@@ -146,7 +146,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               }}
               className="flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200/80 dark:border-slate-700 text-xs font-bold transition-all cursor-pointer shrink-0 shadow-sm active:scale-95"
             >
-              <i className="fi fi-sr-calendar text-[#2563EB] shrink-0" />
+              <i className="fi fi-sr-calendar text-[#4F46E5] shrink-0" />
               <span>{getSelectedDateLabel()}</span>
               <i className={`fi fi-sr-angle-down text-slate-400 shrink-0 transition-transform duration-200 ${isDatePickerOpen ? 'rotate-180' : ''}`} />
             </button>
@@ -160,7 +160,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                   <button
                     type="button"
                     onClick={handleThisMonth}
-                    className="flex-1 px-3 py-1.5 rounded-full bg-blue-50 dark:bg-blue-950/50 text-[#2563EB] dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/60 text-[11px] font-extrabold transition-colors cursor-pointer text-center"
+                    className="flex-1 px-3 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-950/50 text-[#4F46E5] dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-[11px] font-extrabold transition-colors cursor-pointer text-center"
                   >
                     {language === 'bn' ? 'চলতি মাস' : 'This Month'}
                   </button>
@@ -274,7 +274,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 setIsQuickNavOpen((prev) => !prev);
                 setIsDatePickerOpen(false);
               }}
-              className="flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-950/40 hover:bg-blue-100 dark:hover:bg-blue-900/50 text-[#2563EB] dark:text-blue-400 border border-blue-200/60 dark:border-blue-900/40 text-xs font-bold transition-all cursor-pointer shrink-0 shadow-sm active:scale-95"
+              className="flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 text-[#4F46E5] dark:text-indigo-400 border border-indigo-200/60 dark:border-indigo-900/40 text-xs font-bold transition-all cursor-pointer shrink-0 shadow-sm active:scale-95"
             >
               <i className="fi fi-sr-compass-alt shrink-0" />
               <span>{language === 'bn' ? 'দ্রুত নেভিগেশন' : 'Quick Navigation'}</span>
@@ -323,7 +323,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder={t.searchPlaceholder}
-              className="w-full pl-9 pr-8 py-2 bg-slate-100 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 rounded-full text-xs font-medium text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2563EB]/50 transition-all"
+              className="w-full pl-9 pr-8 py-2 bg-slate-100 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 rounded-full text-xs font-medium text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50 transition-all"
             />
             {searchQuery && (
               <button
@@ -338,7 +338,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
           <button
             type="button"
-            className="flex items-center gap-1.5 bg-[#2563EB] text-white hover:bg-[#1D4ED8] px-4 py-2 rounded-full text-xs font-bold shrink-0 transition-colors shadow-sm cursor-pointer active:scale-95"
+            className="flex items-center gap-1.5 bg-[#4F46E5] text-white hover:bg-[#4338CA] px-4 py-2 rounded-full text-xs font-bold shrink-0 transition-colors shadow-sm cursor-pointer active:scale-95"
           >
             <i className="fi fi-sr-search text-xs" />
             <span>{language === 'bn' ? 'খুঁজুন' : 'Search'}</span>

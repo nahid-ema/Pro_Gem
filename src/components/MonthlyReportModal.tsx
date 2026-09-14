@@ -3,8 +3,7 @@ import { createPortal } from 'react-dom';
 import { Room, Tenant, RentRecord, Expense, ShopDue, Language } from '../types';
 import { getTranslation } from '../data/translations';
 import { Logo } from './Logo';
-import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
+import { exportElementToPDF, FallbackReportData } from '../lib/pdfHelper';
 
 interface MonthlyReportModalProps {
   isOpen: boolean;
@@ -95,22 +94,45 @@ export const MonthlyReportModal: React.FC<MonthlyReportModalProps> = ({
     if (!el) return;
     try {
       setIsExporting(true);
-      const canvas = await html2canvas(el, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#ffffff',
-        logging: false,
-      });
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4',
-      });
-      const imgWidth = 195;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      pdf.addImage(imgData, 'PNG', 7.5, 8, imgWidth, imgHeight);
-      pdf.save(`nahid-kutir-financial-report-${evalYear}-${evalMonth}.pdf`);
+
+      const fallbackData: FallbackReportData = {
+        title: `Nahid Kutir Statement - ${monthName} ${evalYear}`,
+        subtitle: `Financial Statement & Audit (Generated: ${new Date().toLocaleDateString()})`,
+        kpis: [
+          { label: 'Gross Expected', value: `${t.currencySymbol}${totalGrossRent.toLocaleString()}` },
+          { label: 'Collected', value: `${t.currencySymbol}${totalCollectedRent.toLocaleString()}` },
+          { label: 'Rent Due', value: `${t.currencySymbol}${totalRentDue.toLocaleString()}` },
+          { label: 'Expenses', value: `${t.currencySymbol}${totalExpensesSum.toLocaleString()}` },
+          { label: 'Net Cashflow', value: `${t.currencySymbol}${netCashFlow.toLocaleString()}` },
+          { label: 'Shop Credit', value: `${t.currencySymbol}${totalShopDueSum.toLocaleString()}` },
+        ],
+        rentRows: periodRents.map((r) => ({
+          date: r.date,
+          room: r.room,
+          tenant: r.tenant,
+          rent: r.rent,
+          paid: r.paid,
+          due: r.due,
+        })),
+        expenseRows: periodExpenses.map((e) => ({
+          date: e.date,
+          category: e.category || 'General',
+          desc: e.desc,
+          amount: e.amount,
+        })),
+      };
+
+      await exportElementToPDF(
+        el,
+        {
+          fileName: `nahid-kutir-financial-report-${evalYear}-${evalMonth}.pdf`,
+          format: 'a4',
+          orientation: 'portrait',
+          scale: 2,
+        },
+        fallbackData
+      );
+
       showToast?.(
         language === 'bn' ? '✓ মাসিক রিপোর্ট PDF সফলভাবে তৈরি হয়েছে!' : '✓ Monthly report PDF downloaded successfully!'
       );
@@ -184,7 +206,7 @@ export const MonthlyReportModal: React.FC<MonthlyReportModalProps> = ({
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pb-4 border-b border-[#E8E4DC] dark:border-[#262626] shrink-0 no-print">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#2563EB]" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#4F46E5]" />
               <h2 className="text-base sm:text-lg font-black text-slate-900 dark:text-white">
                 {t.monthlyReportTitle || 'মাসিক আর্থিক বিবরণী ও অডিট রিপোর্ট'}
               </h2>
@@ -210,8 +232,16 @@ export const MonthlyReportModal: React.FC<MonthlyReportModalProps> = ({
               disabled={isExporting}
               className="px-3 py-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 hover:bg-rose-100 text-xs font-bold transition-colors flex items-center gap-1.5 cursor-pointer border border-rose-200 dark:border-rose-800 disabled:opacity-50"
             >
-              <i className="fi fi-sr-file-pdf text-xs text-rose-600" />
-              <span>{t.repDownloadPDF || 'PDF ডাউনলোড'}</span>
+              {isExporting ? (
+                <i className="fi fi-sr-refresh text-xs animate-spin text-rose-600" />
+              ) : (
+                <i className="fi fi-sr-file-pdf text-xs text-rose-600" />
+              )}
+              <span>
+                {isExporting
+                  ? (language === 'bn' ? 'PDF তৈরি হচ্ছে...' : 'Generating PDF...')
+                  : (t.repDownloadPDF || 'PDF ডাউনলোড')}
+              </span>
             </button>
 
             {/* Print */}
@@ -238,25 +268,25 @@ export const MonthlyReportModal: React.FC<MonthlyReportModalProps> = ({
           <div
             id="reportPrintContent"
             className="bg-white text-slate-900 p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-xs space-y-6 max-w-4xl mx-auto"
-            style={{ colorScheme: 'light' }}
+            style={{ colorScheme: 'light', backgroundColor: '#ffffff', color: '#0f172a' }}
           >
             {/* 1. Official Header */}
-            <div className="border-b-2 border-slate-900 pb-4 flex justify-between items-start">
+            <div className="border-b-2 border-slate-900 pb-4 flex justify-between items-start" style={{ borderColor: '#0f172a' }}>
               <div className="flex items-center gap-3">
                 <Logo className="w-12 h-12" />
                 <div>
-                  <h1 className="text-xl font-black tracking-tight text-slate-900">
+                  <h1 className="text-xl font-black tracking-tight text-slate-900" style={{ color: '#0f172a' }}>
                     {t.appName} 🏠
                   </h1>
-                  <p className="text-xs text-slate-500 font-medium">
+                  <p className="text-xs text-slate-500 font-medium" style={{ color: '#64748b' }}>
                     {language === 'bn' ? 'অফিসিয়াল মাসিক আর্থিক বিবরণী ও নিরীক্ষা প্রতিবেদন' : 'Official Financial Statement & Audit Sheet'}
                   </p>
                 </div>
               </div>
 
-              <div className="text-right text-xs text-slate-600">
-                <p className="font-bold text-slate-900 text-sm">{monthName} {evalYear}</p>
-                <p className="text-[11px] text-slate-400 mt-0.5">
+              <div className="text-right text-xs text-slate-600" style={{ color: '#475569' }}>
+                <p className="font-bold text-slate-900 text-sm" style={{ color: '#0f172a' }}>{monthName} {evalYear}</p>
+                <p className="text-[11px] text-slate-400 mt-0.5" style={{ color: '#94a3b8' }}>
                   {language === 'bn' ? 'প্রস্তুতের তারিখ:' : 'Generated:'} {new Date().toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                 </p>
               </div>
@@ -264,56 +294,59 @@ export const MonthlyReportModal: React.FC<MonthlyReportModalProps> = ({
 
             {/* 2. Executive Financial KPI Cards */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
-              <div className="bg-[#FAF8F5] p-3 rounded-xl border border-[#E8E4DC]">
-                <span className="text-[11px] text-slate-500 font-bold uppercase block">
+              <div className="bg-[#FAF8F5] p-3 rounded-xl border border-[#E8E4DC]" style={{ backgroundColor: '#FAF8F5', borderColor: '#E8E4DC' }}>
+                <span className="text-[11px] text-slate-500 font-bold uppercase block" style={{ color: '#64748b' }}>
                   {t.repGrossExpected || 'প্রত্যাশিত ভাড়া'}
                 </span>
-                <span className="text-base font-black text-slate-900 font-mono mt-0.5 block">
+                <span className="text-base font-black text-slate-900 font-mono mt-0.5 block" style={{ color: '#0f172a' }}>
                   {t.currencySymbol}{totalGrossRent.toLocaleString()}
                 </span>
               </div>
 
-              <div className="bg-emerald-50 p-3 rounded-xl border border-emerald-100">
-                <span className="text-[11px] text-emerald-800 font-bold uppercase block">
+              <div className="bg-emerald-50 p-3 rounded-xl border border-emerald-100" style={{ backgroundColor: '#ECFDF5', borderColor: '#D1FAE5' }}>
+                <span className="text-[11px] text-emerald-800 font-bold uppercase block" style={{ color: '#065F46' }}>
                   {t.repCollected || 'সংগৃহীত রাজস্ব'}
                 </span>
-                <span className="text-base font-black text-emerald-700 font-mono mt-0.5 block">
+                <span className="text-base font-black text-emerald-700 font-mono mt-0.5 block" style={{ color: '#047857' }}>
                   {t.currencySymbol}{totalCollectedRent.toLocaleString()}
                 </span>
               </div>
 
-              <div className="bg-rose-50 p-3 rounded-xl border border-rose-100">
-                <span className="text-[11px] text-rose-800 font-bold uppercase block">
+              <div className="bg-rose-50 p-3 rounded-xl border border-rose-100" style={{ backgroundColor: '#FFF1F2', borderColor: '#FFE4E6' }}>
+                <span className="text-[11px] text-rose-800 font-bold uppercase block" style={{ color: '#9F1239' }}>
                   {t.repOutstanding || 'বকেয়া পাওনা'}
                 </span>
-                <span className="text-base font-black text-rose-700 font-mono mt-0.5 block">
+                <span className="text-base font-black text-rose-700 font-mono mt-0.5 block" style={{ color: '#BE123C' }}>
                   {t.currencySymbol}{totalRentDue.toLocaleString()}
                 </span>
               </div>
 
-              <div className="bg-amber-50 p-3 rounded-xl border border-amber-100">
-                <span className="text-[11px] text-amber-800 font-bold uppercase block">
+              <div className="bg-amber-50 p-3 rounded-xl border border-amber-100" style={{ backgroundColor: '#FFFBEB', borderColor: '#FEF3C7' }}>
+                <span className="text-[11px] text-amber-800 font-bold uppercase block" style={{ color: '#92400E' }}>
                   {t.repTotalExpenses || 'পরিচালনা ব্যয়'}
                 </span>
-                <span className="text-base font-black text-amber-700 font-mono mt-0.5 block">
+                <span className="text-base font-black text-amber-700 font-mono mt-0.5 block" style={{ color: '#B45309' }}>
                   {t.currencySymbol}{totalExpensesSum.toLocaleString()}
                 </span>
               </div>
 
-              <div className="bg-blue-50 p-3 rounded-xl border border-blue-100">
-                <span className="text-[11px] text-blue-800 font-bold uppercase block">
+              <div className="bg-indigo-50 p-3 rounded-xl border border-indigo-100" style={{ backgroundColor: '#EEF2FF', borderColor: '#E0E7FF' }}>
+                <span className="text-[11px] text-indigo-800 font-bold uppercase block" style={{ color: '#3730A3' }}>
                   {t.repNetProfit || 'নেট ক্যাশফ্লো (লাভ)'}
                 </span>
-                <span className={`text-base font-black font-mono mt-0.5 block ${netCashFlow >= 0 ? 'text-blue-700' : 'text-rose-600'}`}>
+                <span
+                  className={`text-base font-black font-mono mt-0.5 block ${netCashFlow >= 0 ? 'text-indigo-700' : 'text-rose-600'}`}
+                  style={{ color: netCashFlow >= 0 ? '#4338CA' : '#E11D48' }}
+                >
                   {t.currencySymbol}{netCashFlow.toLocaleString()}
                 </span>
               </div>
 
-              <div className="bg-purple-50 p-3 rounded-xl border border-purple-100">
-                <span className="text-[11px] text-purple-800 font-bold uppercase block">
+              <div className="bg-indigo-50 p-3 rounded-xl border border-indigo-100" style={{ backgroundColor: '#EEF2FF', borderColor: '#E0E7FF' }}>
+                <span className="text-[11px] text-indigo-800 font-bold uppercase block" style={{ color: '#3730A3' }}>
                   {t.repShopCredit || 'দোকান বাকি'}
                 </span>
-                <span className="text-base font-black text-purple-700 font-mono mt-0.5 block">
+                <span className="text-base font-black text-indigo-700 font-mono mt-0.5 block" style={{ color: '#4338CA' }}>
                   {t.currencySymbol}{totalShopDueSum.toLocaleString()}
                 </span>
               </div>
@@ -353,7 +386,7 @@ export const MonthlyReportModal: React.FC<MonthlyReportModalProps> = ({
                     periodRents.map((r) => (
                       <tr key={r.id} className="hover:bg-slate-50">
                         <td className="p-2 font-mono">{r.date}</td>
-                        <td className="p-2 font-bold font-mono text-blue-600">{r.room}</td>
+                        <td className="p-2 font-bold font-mono text-indigo-600">{r.room}</td>
                         <td className="p-2 font-semibold">{r.tenant}</td>
                         <td className="p-2 text-right font-mono">{t.currencySymbol}{r.rent.toLocaleString()}</td>
                         <td className="p-2 text-right font-mono font-bold text-emerald-600">{t.currencySymbol}{r.paid.toLocaleString()}</td>
@@ -416,7 +449,7 @@ export const MonthlyReportModal: React.FC<MonthlyReportModalProps> = ({
               </div>
 
               <div className="text-center">
-                <div className="w-16 h-16 rounded-full border-2 border-dashed border-blue-600 flex items-center justify-center text-[9px] font-black text-blue-600 uppercase rotate-[-10deg]">
+                <div className="w-16 h-16 rounded-full border-2 border-dashed border-indigo-600 flex items-center justify-center text-[9px] font-black text-indigo-600 uppercase rotate-[-10deg]">
                   NAHID KUTIR<br/>VERIFIED
                 </div>
               </div>

@@ -489,6 +489,24 @@ export default function App() {
           if (matchedRoom) {
             estDue = (matchedRoom.rentAmount || 0) + (matchedRoom.gasBill || 0) + (matchedRoom.waterBill || 0) + (matchedRoom.wasteBill || 0);
           }
+          
+          const targetDateStr = `${selectedYear === 'all' ? new Date().getFullYear().toString() : selectedYear}-${selectedMonth.padStart(2, '0')}-01`;
+          let priorRentSum = 0;
+          let priorPaidSum = 0;
+          const rRoom = roomNoTrim.toLowerCase();
+          const rTenant = (tn.name || '').trim().toLowerCase();
+          
+          (rents || []).forEach((r) => {
+             if (r.date && r.date < targetDateStr) {
+                if ((r.room || '').trim().toLowerCase() === rRoom && (r.tenant || '').trim().toLowerCase() === rTenant) {
+                   priorRentSum += (r.rent || 0);
+                   priorPaidSum += (r.paid || 0);
+                }
+             }
+          });
+          const prevDues = priorRentSum - priorPaidSum;
+          estDue += prevDues;
+
           if (estDue > 0) {
             items.push({
               tenant: tn,
@@ -975,7 +993,7 @@ export default function App() {
 
                 <button
                   onClick={() => setIsMonthlyReportOpen(true)}
-                  className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-md transition-all cursor-pointer group text-left"
+                  className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-rose-600 hover:from-indigo-700 hover:to-rose-700 text-white shadow-md transition-all cursor-pointer group text-left"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-white">
@@ -990,7 +1008,7 @@ export default function App() {
                       </p>
                     </div>
                   </div>
-                  <span className="text-xs font-bold bg-white/20 px-3 py-1.5 rounded-xl group-hover:bg-white group-hover:text-blue-800 transition-colors shrink-0">
+                  <span className="text-xs font-bold bg-white/20 px-3 py-1.5 rounded-xl group-hover:bg-white group-hover:text-indigo-800 transition-colors shrink-0">
                     {language === 'bn' ? 'রিপোর্ট →' : 'Report →'}
                   </span>
                 </button>
