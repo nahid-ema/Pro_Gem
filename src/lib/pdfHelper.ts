@@ -1,4 +1,4 @@
-import html2canvas from 'html2canvas';
+import domToImage from 'dom-to-image-more';
 import { jsPDF } from 'jspdf';
 
 interface PDFExportOptions {
@@ -15,62 +15,6 @@ export interface FallbackReportData {
   kpis?: { label: string; value: string }[];
   rentRows?: { date: string; room: string; tenant: string; rent: number; paid: number; due: number }[];
   expenseRows?: { date: string; category: string; desc: string; amount: number }[];
-}
-
-/**
- * Robustly converts any oklch, lab, color-mix, or CSS variables in a DOM element to standard rgb()
- * so that html2canvas will never throw an "Unsupported color function: oklch" error.
- */
-function sanitizeColorsForCanvas(root: HTMLElement) {
-  try {
-    const canvas = document.createElement('canvas');
-    canvas.width = 1;
-    canvas.height = 1;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const elements = [root, ...Array.from(root.querySelectorAll('*'))] as HTMLElement[];
-    const colorProps = [
-      'color',
-      'backgroundColor',
-      'borderTopColor',
-      'borderBottomColor',
-      'borderLeftColor',
-      'borderRightColor',
-      'outlineColor',
-    ];
-
-    for (const el of elements) {
-      if (!el.style) continue;
-      const computed = window.getComputedStyle(el);
-
-      for (const prop of colorProps) {
-        const val = (computed as any)[prop];
-        if (
-          val &&
-          typeof val === 'string' &&
-          (val.includes('oklch') || val.includes('color-mix') || val.includes('lab') || val.includes('var('))
-        ) {
-          try {
-            ctx.fillStyle = '#000000';
-            ctx.fillStyle = val;
-            const converted = ctx.fillStyle;
-            (el.style as any)[prop] = converted;
-          } catch {
-            if (prop.toLowerCase().includes('background')) {
-              el.style.backgroundColor = '#ffffff';
-            } else if (prop.toLowerCase().includes('color')) {
-              el.style.color = '#0f172a';
-            } else if (prop.toLowerCase().includes('border')) {
-              el.style.borderColor = '#e2e8f0';
-            }
-          }
-        }
-      }
-    }
-  } catch (err) {
-    console.warn('Color sanitization warning:', err);
-  }
 }
 
 /**
@@ -251,25 +195,21 @@ export async function exportElementToPDF(
   } = options;
 
   try {
-    // 1. Capture with html2canvas with full color sanitization
-    const canvas = await html2canvas(element, {
-      scale,
-      useCORS: true,
-      allowTaint: false,
-      backgroundColor: '#ffffff',
-      logging: false,
-      windowWidth: Math.max(element.scrollWidth || 0, 1024),
-      windowHeight: Math.max(element.scrollHeight || 0, 1400),
-      scrollY: 0,
-      scrollX: 0,
-      onclone: (_clonedDoc, clonedEl) => {
-        // Ensure the cloned container is visible and unclipped
-        clonedEl.style.overflow = 'visible';
-        clonedEl.style.maxHeight = 'none';
-        clonedEl.style.height = 'auto';
+    // 1. Capture with dom-to-image-more
+    // Using domToImage.toCanvas natively supports complex scripts (Bangla, etc) 
+    // and modern CSS (oklch) because it uses the browser's own rendering engine via SVG foreignObject.
+    const width = element.scrollWidth || 1024;
+    const height = element.scrollHeight || 1400;
 
-        // Sanitize modern CSS colors (oklch, color-mix) that break html2canvas
-        sanitizeColorsForCanvas(clonedEl);
+    const canvas = await domToImage.toCanvas(element, {
+      bgcolor: '#ffffff',
+      width: width * scale,
+      height: height * scale,
+      style: {
+        transform: `scale(${scale})`,
+        transformOrigin: 'top left',
+        width: `${width}px`,
+        height: `${height}px`,
       },
     });
 
