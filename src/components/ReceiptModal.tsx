@@ -286,7 +286,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({
 
         {/* PRINTABLE RECEIPT CONTENT CONTAINER */}
         <div
-          className="py-4 sm:py-5 px-3 sm:px-4 space-y-4 text-slate-900 bg-white rounded-sm border border-[#D6D0C4]/80 shadow-none"
+          className="py-4 sm:py-5 px-3 sm:px-4 space-y-4 text-slate-900 bg-white rounded-sm border border-[#D6D0C4]/80 shadow-none h-auto min-h-fit"
           id="receiptContent"
           style={{ colorScheme: 'light' }}
         >

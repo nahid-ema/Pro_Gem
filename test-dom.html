@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <div id="target" style="background: white; padding: 20px;">
+    <h1>Hello</h1>
+    <div style="height: 3000px; background: linear-gradient(red, blue);">Tall gradient</div>
+    <h2>Bottom</h2>
+  </div>
+  <script type="module">
+    import domToImage from './node_modules/dom-to-image-more/lib/dom-to-image-more.js';
+    const el = document.getElementById('target');
+    domToImage.toCanvas(el).then(canvas => {
+      console.log("Canvas size:", canvas.width, canvas.height);
+      document.body.appendChild(canvas);
+    });
+  </script>
+</body>
+</html>

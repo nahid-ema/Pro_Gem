@@ -199,7 +199,7 @@ export const MonthlyReportModal: React.FC<MonthlyReportModalProps> = ({
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-900/80 backdrop-blur-xs animate-fadeIn overflow-y-auto">
+    <div id="monthlyReportModal" className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-900/80 backdrop-blur-xs animate-fadeIn overflow-y-auto">
       <div className="bg-white dark:bg-[#141414] border border-[#D6D0C4] dark:border-[#262626] rounded-3xl max-w-5xl w-full p-4 sm:p-6 shadow-2xl relative my-auto flex flex-col max-h-[92vh] overflow-hidden">
         
         {/* Controls Toolbar */}
@@ -267,7 +267,7 @@ export const MonthlyReportModal: React.FC<MonthlyReportModalProps> = ({
         <div className="flex-1 overflow-y-auto py-4">
           <div
             id="reportPrintContent"
-            className="bg-white text-slate-900 p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-xs space-y-6 max-w-4xl mx-auto"
+            className="bg-white text-slate-900 p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-xs space-y-6 max-w-4xl mx-auto h-auto min-h-fit"
             style={{ colorScheme: 'light', backgroundColor: '#ffffff', color: '#0f172a' }}
           >
             {/* 1. Official Header */}

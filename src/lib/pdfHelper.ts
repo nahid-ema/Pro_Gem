@@ -201,6 +201,15 @@ export async function exportElementToPDF(
     const width = element.scrollWidth || 1024;
     const height = element.scrollHeight || 1400;
 
+    console.log('PDF Export Dimensions:', {
+      width,
+      height,
+      clientWidth: element.clientWidth,
+      clientHeight: element.clientHeight,
+      scrollWidth: element.scrollWidth,
+      scrollHeight: element.scrollHeight,
+    });
+
     const canvas = await domToImage.toCanvas(element, {
       bgcolor: '#ffffff',
       width: width * scale,
@@ -210,7 +219,14 @@ export async function exportElementToPDF(
         transformOrigin: 'top left',
         width: `${width}px`,
         height: `${height}px`,
+        maxHeight: 'none',
+        overflow: 'visible',
       },
+    });
+
+    console.log('Canvas generated:', {
+      canvasWidth: canvas.width,
+      canvasHeight: canvas.height,
     });
 
     // 2. Determine PDF page dimensions in mm

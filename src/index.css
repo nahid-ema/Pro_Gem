@@ -240,7 +240,8 @@ html {
 
   /* When receipt modal is active, completely hide #root (the entire app content behind the portal) */
   body.receipt-modal-active #root,
-  body:has(#receiptModalOverlay) #root {
+  body:has(#receiptModalOverlay) #root,
+  body:has(#monthlyReportModal) #root {
     display: none !important;
   }
 
@@ -263,8 +264,9 @@ html {
     display: block !important;
   }
 
-  /* Position receipt overlay cleanly for printing */
-  #receiptModalOverlay {
+  /* Position overlays cleanly for printing */
+  #receiptModalOverlay,
+  #monthlyReportModal {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
@@ -280,9 +282,16 @@ html {
     overflow: visible !important;
   }
 
-  #receiptModalCard {
+  /* Unconstrain inner card wrappers */
+  #receiptModalCard,
+  #monthlyReportModal > div,
+  #monthlyReportModal .overflow-y-auto,
+  #monthlyReportModal .max-h-\[92vh\] {
     border: none !important;
     box-shadow: none !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
     padding: 0 !important;
     margin: 0 auto !important;
     max-width: 100% !important;
