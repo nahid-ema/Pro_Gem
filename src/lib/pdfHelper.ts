@@ -195,22 +195,45 @@ export async function exportElementToPDF(
   } = options;
 
   try {
-    // 1. Capture with dom-to-image-more
-    // Using domToImage.toCanvas natively supports complex scripts (Bangla, etc) 
-    // and modern CSS (oklch) because it uses the browser's own rendering engine via SVG foreignObject.
-    const width = element.scrollWidth || 1024;
-    const height = element.scrollHeight || 1400;
+    // 1. Prepare element for capture
+    // To ensure the element is captured at its full unconstrained height (avoiding modal scroll limits),
+    // we clone it, attach it to the body with absolute positioning and max-content height.
+    const clone = element.cloneNode(true) as HTMLElement;
+    clone.style.position = 'absolute';
+    clone.style.top = '-9999px';
+    clone.style.left = '0';
+    clone.style.width = `${element.scrollWidth || 1024}px`;
+    clone.style.height = 'max-content';
+    clone.style.maxHeight = 'none';
+    clone.style.overflow = 'visible';
+    clone.style.zIndex = '-9999';
+    
+    // Ensure nested scrollable areas in the clone are expanded
+    const scrollables = clone.querySelectorAll('.overflow-y-auto, .overflow-x-auto, .overflow-hidden');
+    scrollables.forEach(el => {
+      if (el instanceof HTMLElement) {
+        el.style.overflow = 'visible';
+        el.style.maxHeight = 'none';
+        el.style.height = 'max-content';
+      }
+    });
+
+    document.body.appendChild(clone);
+
+    // Wait a brief moment for the browser to calculate the layout of the clone
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    const width = clone.scrollWidth || 1024;
+    const height = clone.scrollHeight || 1400;
 
     console.log('PDF Export Dimensions:', {
       width,
       height,
-      clientWidth: element.clientWidth,
-      clientHeight: element.clientHeight,
-      scrollWidth: element.scrollWidth,
-      scrollHeight: element.scrollHeight,
+      scrollWidth: clone.scrollWidth,
+      scrollHeight: clone.scrollHeight,
     });
 
-    const canvas = await domToImage.toCanvas(element, {
+    const canvas = await domToImage.toCanvas(clone, {
       bgcolor: '#ffffff',
       width: width * scale,
       height: height * scale,
@@ -223,6 +246,9 @@ export async function exportElementToPDF(
         overflow: 'visible',
       },
     });
+
+    // Cleanup clone
+    document.body.removeChild(clone);
 
     console.log('Canvas generated:', {
       canvasWidth: canvas.width,
