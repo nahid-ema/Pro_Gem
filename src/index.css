@@ -422,3 +422,51 @@ html {
   }
 }
 
+/* Mobile Table Compact View to eliminate horizontal/vertical scrolling */
+@media (max-width: 640px) {
+  /* Prevent nested vertical scrolling in sections like RentSection */
+  .max-h-\[500px\] {
+    max-height: none !important;
+  }
+  
+  /* Make table layouts ultra-compact to fit full data columns on screen */
+  table th, 
+  table td {
+    padding: 0.35rem 0.2rem !important;
+    font-size: 0.65rem !important; /* ~10.4px for maximum density */
+    line-height: 1.15 !important;
+    white-space: normal !important; /* Allow natural text wrapping */
+  }
+  
+  /* Tighten horizontal edges */
+  table th.pl-4, table td.pl-4, table th:first-child, table td:first-child {
+    padding-left: 0.4rem !important;
+  }
+  table th.pr-4, table td.pr-4, table th:last-child, table td:last-child {
+    padding-right: 0.4rem !important;
+  }
+
+  /* Compress flex gaps inside table cells (like action buttons) */
+  table td .flex {
+    gap: 0.2rem !important;
+  }
+  
+  table button {
+    padding: 0.25rem !important;
+  }
+  
+  table button svg {
+    width: 0.85rem !important;
+    height: 0.85rem !important;
+  }
+  
+  /* Badges compression */
+  table td span {
+    padding-top: 0.15rem !important;
+    padding-bottom: 0.15rem !important;
+    padding-left: 0.3rem !important;
+    padding-right: 0.3rem !important;
+    font-size: 0.6rem !important;
+  }
+}
+
