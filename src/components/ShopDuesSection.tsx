@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ShopDue, Language } from '../types';
 import { getTranslation } from '../data/translations';
 import { matchesQuery } from '../lib/search';
+import { formatShortDate } from '../lib/dateUtils';
 
 interface ShopDuesSectionProps {
   dokanDues: ShopDue[];
@@ -210,7 +211,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
             ) : (
               filteredDokan.map((dk) => (
                 <tr key={dk.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                  <td className="p-3.5 pl-4 font-mono text-xs text-slate-500 dark:text-slate-400">{dk.date}</td>
+                  <td className="p-3.5 pl-4 font-mono text-xs text-slate-500 dark:text-slate-400">{formatShortDate(dk.date, language)}</td>
                   <td className="p-3.5 font-bold text-slate-900 dark:text-white">{dk.desc}</td>
                   <td className={`p-3.5 font-mono font-bold text-right ${dk.amount < 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}`}>
                     {formatCurrency(dk.amount)}

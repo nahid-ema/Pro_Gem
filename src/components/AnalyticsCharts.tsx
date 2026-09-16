@@ -14,6 +14,7 @@ import {
   Cell, 
   Legend 
 } from 'recharts';
+import { formatShortDate } from '../lib/dateUtils';
 
 interface AnalyticsChartsProps {
   rents: RentRecord[];
@@ -364,7 +365,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
                         </p>
                         <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">
                           <i className="fi fi-sr-calendar text-[8px] mr-1" />
-                          {ex.date}
+                          {formatShortDate(ex.date, language)}
                         </p>
                       </div>
                     </div>

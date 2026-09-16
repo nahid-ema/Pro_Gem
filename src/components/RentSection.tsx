@@ -3,6 +3,7 @@ import { RentRecord, Tenant, Room, Language } from '../types';
 import { getTranslation } from '../data/translations';
 
 import { matchesQuery } from '../lib/search';
+import { formatShortDate } from '../lib/dateUtils';
 
 interface RentSectionProps {
   rents: RentRecord[];
@@ -533,7 +534,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
                 return (
                   <tr key={rt.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
                     <td className="p-3.5 pl-4 font-mono text-xs text-slate-500 dark:text-slate-400">
-                      {rt.date}
+                      {formatShortDate(rt.date, language)}
                     </td>
                     <td className="p-3.5">
                       <div className="font-bold text-slate-900 dark:text-white">

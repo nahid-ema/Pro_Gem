@@ -4,6 +4,7 @@ import { Room, Tenant, RentRecord, Expense, ShopDue, Language } from '../types';
 import { getTranslation } from '../data/translations';
 import { Logo } from './Logo';
 import { exportElementToPDF, FallbackReportData } from '../lib/pdfHelper';
+import { formatShortDate } from '../lib/dateUtils';
 
 interface MonthlyReportModalProps {
   isOpen: boolean;
@@ -385,7 +386,7 @@ export const MonthlyReportModal: React.FC<MonthlyReportModalProps> = ({
                   ) : (
                     periodRents.map((r) => (
                       <tr key={r.id} className="hover:bg-slate-50">
-                        <td className="p-2 font-mono">{r.date}</td>
+                        <td className="p-2 font-mono">{formatShortDate(r.date, language)}</td>
                         <td className="p-2 font-bold font-mono text-indigo-600">{r.room}</td>
                         <td className="p-2 font-semibold">{r.tenant}</td>
                         <td className="p-2 text-right font-mono">{t.currencySymbol}{r.rent.toLocaleString()}</td>
@@ -431,7 +432,7 @@ export const MonthlyReportModal: React.FC<MonthlyReportModalProps> = ({
                   ) : (
                     periodExpenses.map((e) => (
                       <tr key={e.id} className="hover:bg-slate-50">
-                        <td className="p-2 font-mono">{e.date}</td>
+                        <td className="p-2 font-mono">{formatShortDate(e.date, language)}</td>
                         <td className="p-2 font-bold text-amber-700">{e.category || 'সাধারণ'}</td>
                         <td className="p-2">{e.desc}</td>
                         <td className="p-2 text-right font-mono font-bold text-slate-900">{t.currencySymbol}{e.amount.toLocaleString()}</td>

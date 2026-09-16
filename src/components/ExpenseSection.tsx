@@ -3,6 +3,7 @@ import { Expense, Language } from '../types';
 import { getTranslation } from '../data/translations';
 import { matchesQuery } from '../lib/search';
 import { autoDetectCategory } from '../lib/autoCategory';
+import { formatShortDate } from '../lib/dateUtils';
 
 interface ExpenseSectionProps {
   expenses: Expense[];
@@ -389,7 +390,7 @@ export const ExpenseSection: React.FC<ExpenseSectionProps> = ({
             ) : (
               filteredExpenses.map((ex) => (
                 <tr key={ex.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                  <td className="p-3.5 pl-4 font-mono text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">{ex.date}</td>
+                  <td className="p-3.5 pl-4 font-mono text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">{formatShortDate(ex.date, language)}</td>
                   <td className="p-3.5 font-bold text-slate-900 dark:text-white">{ex.desc}</td>
                   <td className="p-3.5 font-mono font-bold text-rose-600 dark:text-rose-400 whitespace-nowrap text-right">
                     -{formatCurrency(ex.amount)}
