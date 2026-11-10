@@ -18,34 +18,81 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const t = getTranslation(language);
 
-  const navItems: { id: TabType; labelEn: string; labelBn: string; icon: React.ReactNode; badge?: number }[] = [
-    { id: 'brief', labelEn: 'Summary', labelBn: 'সারসংক্ষেপ', icon: <i className="fi fi-sr-chart-histogram text-lg" /> },
-    { id: 'rooms', labelEn: 'Rooms', labelBn: 'রুমসমূহ', icon: <i className="fi fi-sr-door-closed text-lg" /> },
-    { id: 'tenants', labelEn: 'Tenants', labelBn: 'ভাড়াটিয়া', icon: <i className="fi fi-sr-users text-lg" /> },
-    { id: 'rent', labelEn: 'Rent Collection', labelBn: 'ভাড়া আদায়', icon: <i className="fi fi-sr-money-bill-wave text-lg" /> },
-    { id: 'unpaid', labelEn: 'Unpaid Dues', labelBn: 'বকেয়া হিসাব', icon: <i className="fi fi-sr-triangle-warning text-lg" />, badge: unpaidCount > 0 ? unpaidCount : undefined },
-    { id: 'expense', labelEn: 'Expenses', labelBn: 'খরচসমূহ', icon: <i className="fi fi-sr-receipt text-lg" /> },
-    { id: 'dokan', labelEn: 'Shop Dues', labelBn: 'দোকান বাকি', icon: <i className="fi fi-sr-shop text-lg" /> },
-    { id: 'analytics', labelEn: 'Analytics', labelBn: 'অ্যানালিটিক্স', icon: <i className="fi fi-sr-chart-line-up text-lg" /> },
+  const navItems: {
+    id: TabType;
+    labelEn: string;
+    labelBn: string;
+    icon: React.ReactNode;
+    badge?: number;
+  }[] = [
+    {
+      id: 'brief',
+      labelEn: 'Summary',
+      labelBn: 'সারসংক্ষেপ',
+      icon: <i className="fi fi-sr-chart-histogram text-base" />,
+    },
+    {
+      id: 'rooms',
+      labelEn: 'Rooms',
+      labelBn: 'রুমসমূহ',
+      icon: <i className="fi fi-sr-door-closed text-base" />,
+    },
+    {
+      id: 'tenants',
+      labelEn: 'Tenants',
+      labelBn: 'ভাড়াটিয়া',
+      icon: <i className="fi fi-sr-users text-base" />,
+    },
+    {
+      id: 'rent',
+      labelEn: 'Rent Collection',
+      labelBn: 'ভাড়া আদায়',
+      icon: <i className="fi fi-sr-money-bill-wave text-base" />,
+    },
+    {
+      id: 'unpaid',
+      labelEn: 'Unpaid Dues',
+      labelBn: 'বকেয়া হিসাব',
+      icon: <i className="fi fi-sr-triangle-warning text-base" />,
+      badge: unpaidCount > 0 ? unpaidCount : undefined,
+    },
+    {
+      id: 'expense',
+      labelEn: 'Expenses',
+      labelBn: 'খরচসমূহ',
+      icon: <i className="fi fi-sr-receipt text-base" />,
+    },
+    {
+      id: 'dokan',
+      labelEn: 'Shop Dues',
+      labelBn: 'দোকান বাকি',
+      icon: <i className="fi fi-sr-shop text-base" />,
+    },
+    {
+      id: 'analytics',
+      labelEn: 'Analytics',
+      labelBn: 'অ্যানালিটিক্স',
+      icon: <i className="fi fi-sr-chart-line-up text-base" />,
+    },
   ];
 
   return (
-    <aside className="hidden lg:flex flex-col w-64 h-full bg-white dark:bg-[#0E1118] border-r border-slate-200 dark:border-slate-800 shadow-sm z-40 no-print flex-shrink-0">
+    <aside className="hidden lg:flex flex-col w-64 h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 z-40 no-print shrink-0">
       {/* Brand & Logo */}
-      <div className="flex items-center gap-3 px-6 py-6 border-b border-slate-100 dark:border-slate-800/60">
-        <Logo className="w-10 h-10" />
-        <div>
-          <h1 className="text-xl font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
+      <div className="flex items-center gap-3 px-6 py-5 border-b border-slate-100 dark:border-slate-800">
+        <Logo className="w-9 h-9" />
+        <div className="min-w-0">
+          <h1 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white truncate">
             {t.appName}
           </h1>
-          <p className="text-[10px] uppercase font-bold tracking-widest text-slate-400 dark:text-slate-500">
-            {language === 'bn' ? 'ম্যানেজমেন্ট সিস্টেম' : 'Property Management'}
+          <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
+            {language === 'bn' ? 'প্রপার্টি ম্যানেজমেন্ট' : 'Property Management'}
           </p>
         </div>
       </div>
 
       {/* Navigation */}
-      <div className="flex-1 overflow-y-auto py-6 px-4 space-y-1.5 scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700">
+      <div className="flex-1 overflow-y-auto py-4 px-3 space-y-1 scrollbar-none">
         {navItems.map((item) => {
           const isActive = activeTab === item.id;
           const isUnpaidTab = item.id === 'unpaid' && (item.badge || 0) > 0;
@@ -54,28 +101,34 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <button
               key={item.id}
               onClick={() => onTabChange(item.id)}
-              className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer whitespace-nowrap ${
                 isActive
-                  ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 shadow-sm'
+                  ? 'bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400'
                   : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-200'
               }`}
             >
               <div className="flex items-center gap-3">
-                <span className={`${isActive ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400 dark:text-slate-500'}`}>
+                <span
+                  className={`${
+                    isActive
+                      ? 'text-indigo-600 dark:text-indigo-400'
+                      : 'text-slate-400 dark:text-slate-500'
+                  }`}
+                >
                   {item.icon}
                 </span>
                 <span>{language === 'bn' ? item.labelBn : item.labelEn}</span>
               </div>
-              
+
               {item.badge !== undefined && (
-                <span className={`px-2 py-0.5 text-[10px] font-black rounded-full ${
-                  isUnpaidTab
-                    ? 'bg-rose-500 text-white animate-pulse shadow-sm shadow-rose-500/20'
-                    : isActive
-                      ? 'bg-indigo-200 dark:bg-indigo-800 text-indigo-800 dark:text-indigo-200'
-                      : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
-                }`}>
-                  {item.badge}
+                <span
+                  className={`font-mono tabular-nums text-xs font-bold ${
+                    isUnpaidTab
+                      ? 'text-rose-600 dark:text-rose-400'
+                      : 'text-slate-500 dark:text-slate-400'
+                  }`}
+                >
+                  ({item.badge})
                 </span>
               )}
             </button>

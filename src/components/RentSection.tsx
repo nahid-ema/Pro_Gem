@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { RentRecord, Tenant, Room, Language } from '../types';
 import { getTranslation } from '../data/translations';
-
 import { matchesQuery } from '../lib/search';
 import { formatShortDate } from '../lib/dateUtils';
 
@@ -32,7 +31,6 @@ export const RentSection: React.FC<RentSectionProps> = ({
   selectedYear,
   selectedMonth,
   initialTenantId,
-  initialDueAmount,
   initialRentRecordId,
   onClearQuickPay,
   onAddRent,
@@ -68,16 +66,14 @@ export const RentSection: React.FC<RentSectionProps> = ({
     if (!targetTenantId) return 0;
     const tn = safeTenants.find((t) => t && t.id === targetTenantId);
     if (!tn) return 0;
-    
+
     const roomKey = (tn.room || '').trim().toLowerCase();
     const tenantKey = (tn.name || '').trim().toLowerCase();
 
-    // Prior records strictly before this record or excluding editingId
     const priorRecords = safeRents.filter((r) => {
       if (!r || (editingId && r.id === editingId)) return false;
       const rRoom = (r.room || '').trim().toLowerCase();
       const rTenant = (r.tenant || '').trim().toLowerCase();
-      // Must match BOTH room and tenant to inherit dues. We don't want a new tenant to inherit the previous tenant's dues.
       if (rRoom !== roomKey || rTenant !== tenantKey) return false;
       if (date && r.date) {
         if (r.date < date) return true;
@@ -117,11 +113,10 @@ export const RentSection: React.FC<RentSectionProps> = ({
         const previousDues = getPreviousDues(tenantId);
         const currentPkg = rm.rentAmount + rm.gasBill + rm.waterBill + rm.wasteBill;
         const suggestedPaid = Math.max(0, currentPkg + previousDues);
-        
+
         setNote('');
-        
         setRent(String(currentPkg));
-        setPaid(String(suggestedPaid)); // Default paid to suggested total for quick entry
+        setPaid(String(suggestedPaid));
       } else {
         setRent('');
       }
@@ -132,14 +127,13 @@ export const RentSection: React.FC<RentSectionProps> = ({
     if (initialTenantId) {
       setIsFormOpen(true);
       handleTenantSelect(initialTenantId);
-      
+
       if (initialRentRecordId) {
         const rt = safeRents.find((r) => r && r.id === initialRentRecordId);
         if (rt) {
           setEditingId(rt.id);
           setDate(rt.date);
           setRent(String(rt.rent || 0));
-          // Pre-fill paid with the full rent amount to clear the due
           setPaid(String(rt.rent || 0));
           setNote(rt.note || '');
         }
@@ -150,7 +144,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
 
   useEffect(() => {
     if (!selectedTenantId || !date) return;
-    
+
     const tn = safeTenants.find((t) => t && t.id === selectedTenantId);
     if (!tn) return;
 
@@ -171,14 +165,13 @@ export const RentSection: React.FC<RentSectionProps> = ({
     } else {
       if (editingId) {
         setEditingId(null);
-        // Recalculate default values for new entry
         const rm = safeRooms.find((r) => r && (r.roomNo || '').trim() === (tn.room || '').trim());
         if (rm) {
           let previousDues = 0;
           safeRents.forEach((r) => {
             if (!r) return;
-            if ((r.room || "").trim() === (tn.room || "").trim()) {
-              previousDues += (r.due || 0);
+            if ((r.room || '').trim() === (tn.room || '').trim()) {
+              previousDues += r.due || 0;
             }
           });
           const currentPkg = rm.rentAmount + rm.gasBill + rm.waterBill + rm.wasteBill;
@@ -207,7 +200,9 @@ export const RentSection: React.FC<RentSectionProps> = ({
     setEditingId(rt.id);
     setDate(rt.date);
     const matchedTenant = tenants.find(
-      (tn) => (tn.name || '').trim() === (rt.tenant || '').trim() && (tn.room || '').trim() === (rt.room || '').trim()
+      (tn) =>
+        (tn.name || '').trim() === (rt.tenant || '').trim() &&
+        (tn.room || '').trim() === (rt.room || '').trim()
     );
     setSelectedTenantId(matchedTenant ? matchedTenant.id : '');
     setDispRoom(rt.room || '');
@@ -216,7 +211,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
     setPaid(String(rt.paid || 0));
     setNote(rt.note || '');
     setIsFormOpen(true);
-      if (initialRentRecordId) setEditingId(initialRentRecordId);
+    if (initialRentRecordId) setEditingId(initialRentRecordId);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -226,7 +221,7 @@ export const RentSection: React.FC<RentSectionProps> = ({
     const matchedTenant = tenants.find((tn) => tn.id === selectedTenantId);
     const fallBackRent = rents.find((r) => r.id === editingId);
 
-    const tenantName = matchedTenant ? matchedTenant.name : (fallBackRent ? fallBackRent.tenant : '');
+    const tenantName = matchedTenant ? matchedTenant.name : fallBackRent ? fallBackRent.tenant : '';
     const rentVal = Number(rent) || 0;
     const paidVal = Number(paid) || 0;
     const prevDuesVal = prevDues;
@@ -254,7 +249,6 @@ export const RentSection: React.FC<RentSectionProps> = ({
 
     resetForm();
   };
-
 
   const filteredRents = safeRents
     .filter((rt) => {
@@ -299,61 +293,59 @@ export const RentSection: React.FC<RentSectionProps> = ({
 
   const formatCurrency = (val: number) => `${t.currencySymbol}${val.toLocaleString()}`;
 
+  const paymentMethodPresets =
+    language === 'bn'
+      ? ['ক্যাশ (নগদ)', 'বিকাশ', 'নগদ অ্যাপ', 'ব্যাংক ট্রান্সফার']
+      : ['Cash', 'bKash', 'Nagad', 'Bank Transfer'];
+
   return (
-    <div className="rounded-[32px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 mb-6 shadow-sm">
+    <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 sm:p-6 mb-6 shadow-xs">
       {/* Header */}
-      <div className="flex items-center justify-between pb-5 mb-5 border-b border-slate-100 dark:border-slate-800">
-        <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-[#4F46E5] dark:text-indigo-400 flex items-center justify-center font-bold text-lg shrink-0 border border-indigo-100 dark:border-indigo-800/30">
-            <i className="fi fi-sr-money-bill-wave" />
-          </div>
-          <div>
-            <h3 className="text-base md:text-lg font-extrabold text-slate-900 dark:text-white tracking-tight">
-              {t.rentTitle}
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-              {t.rentSubtitle}
-            </p>
-          </div>
+      <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
+        <div>
+          <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
+            {t.rentTitle}
+          </h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{t.rentSubtitle}</p>
         </div>
 
         <button
           onClick={() => setIsFormOpen(!isFormOpen)}
-          className="no-print flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#4F46E5] text-white hover:bg-[#4338CA] font-bold text-xs transition-all active:scale-95 cursor-pointer"
+          className="no-print flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 font-semibold text-xs transition-colors cursor-pointer whitespace-nowrap"
         >
           <i className={`fi fi-sr-add transition-transform duration-200 ${isFormOpen ? 'rotate-45' : ''}`} />
-          <span className="hidden sm:inline">{editingId ? t.rentUpdateBtn : t.rentToggleLabel}</span>
+          <span>{editingId ? t.rentUpdateBtn : t.rentToggleLabel}</span>
         </button>
       </div>
 
-      {/* Filter Pills Bar */}
-      <div className="flex items-center gap-2 mb-5 overflow-x-auto pb-1 no-print">
+      {/* Segmented Filter Control */}
+      <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl w-fit mb-5 no-print">
         <button
           onClick={() => setStatusFilter('all')}
-          className={`px-4 py-2 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer ${
+          className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors shrink-0 cursor-pointer whitespace-nowrap ${
             statusFilter === 'all'
-              ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-sm scale-105'
-              : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+              ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           {language === 'bn' ? 'সকল লেনদেন' : 'All Transactions'}
         </button>
         <button
           onClick={() => setStatusFilter('paid')}
-          className={`px-4 py-2 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer ${
+          className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors shrink-0 cursor-pointer whitespace-nowrap ${
             statusFilter === 'paid'
-              ? 'bg-emerald-600 dark:bg-emerald-500 text-white shadow-sm scale-105'
-              : 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/50'
+              ? 'bg-white dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 shadow-xs'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           {language === 'bn' ? 'পরিশোধিত' : 'Fully Paid'}
         </button>
         <button
           onClick={() => setStatusFilter('due')}
-          className={`px-4 py-2 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer ${
+          className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors shrink-0 cursor-pointer whitespace-nowrap ${
             statusFilter === 'due'
-              ? 'bg-rose-600 dark:bg-rose-500 text-white shadow-sm scale-105'
-              : 'bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/50'
+              ? 'bg-white dark:bg-slate-900 text-rose-600 dark:text-rose-400 shadow-xs'
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
           }`}
         >
           {language === 'bn' ? 'বকেয়া আছে' : 'Has Due'}
@@ -362,26 +354,33 @@ export const RentSection: React.FC<RentSectionProps> = ({
 
       {/* Expandable Form */}
       {isFormOpen && (
-        <form onSubmit={handleSubmit} className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-[24px] p-5 mb-6 space-y-4 no-print animate-fadeIn">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-xl p-5 mb-6 space-y-4 no-print animate-fadeIn"
+        >
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.thRentDate} *</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                {t.thRentDate} *
+              </label>
               <input
                 type="date"
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50"
+                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.rentSelectOpt} *</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                {t.rentSelectOpt} *
+              </label>
               <select
                 required
                 value={selectedTenantId}
                 onChange={(e) => handleTenantSelect(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50"
+                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
               >
                 <option value="">{t.rentSelectOpt}</option>
                 {safeTenants.map((tn) => (
@@ -393,29 +392,33 @@ export const RentSection: React.FC<RentSectionProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.dispRoomPlaceholder}</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                {t.dispRoomPlaceholder}
+              </label>
               <input
                 type="text"
                 readOnly
                 value={dispRoom}
                 placeholder={t.dispRoomPlaceholder}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs md:text-sm font-bold text-slate-700 dark:text-slate-300"
+                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs md:text-sm font-bold text-slate-700 dark:text-slate-300"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.dispPhonePlaceholder}</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                {t.dispPhonePlaceholder}
+              </label>
               <input
                 type="text"
                 readOnly
                 value={dispPhone}
                 placeholder={t.dispPhonePlaceholder}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs md:text-sm text-slate-700 dark:text-slate-300 font-medium"
+                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs md:text-sm font-mono tabular-nums text-slate-700 dark:text-slate-300"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 {language === 'bn' ? 'চলতি মাসের ভাড়া *' : 'Current Rent *'}
               </label>
               <input
@@ -425,36 +428,50 @@ export const RentSection: React.FC<RentSectionProps> = ({
                 value={rent}
                 onChange={(e) => setRent(e.target.value)}
                 placeholder={t.rentPlaceholder}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-bold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50"
+                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-bold font-mono tabular-nums text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                {prevDues < 0 ? (language === 'bn' ? 'পূর্বের অগ্রিম' : 'Previous Advance') : (language === 'bn' ? 'পূর্বের বকেয়া' : 'Previous Due')}
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                {prevDues < 0
+                  ? language === 'bn'
+                    ? 'পূর্বের অগ্রিম'
+                    : 'Previous Advance'
+                  : language === 'bn'
+                  ? 'পূর্বের বকেয়া'
+                  : 'Previous Due'}
               </label>
               <input
                 type="text"
                 readOnly
                 value={formatCurrency(Math.abs(prevDues))}
-                className={`w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs md:text-sm font-bold ${prevDues < 0 ? 'text-emerald-600' : (prevDues > 0 ? 'text-rose-600' : 'text-slate-500')}`}
+                className={`w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs md:text-sm font-bold font-mono tabular-nums ${
+                  prevDues < 0
+                    ? 'text-emerald-600'
+                    : prevDues > 0
+                    ? 'text-rose-600'
+                    : 'text-slate-500'
+                }`}
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 {language === 'bn' ? 'সর্বমোট প্রদেয়' : 'Total Payable'}
               </label>
               <input
                 type="text"
                 readOnly
                 value={formatCurrency(Math.max(0, totalPayable))}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs md:text-sm font-bold text-slate-900 dark:text-white"
+                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs md:text-sm font-bold font-mono tabular-nums text-slate-900 dark:text-white"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.thPaidAmount} *</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                {t.thPaidAmount} *
+              </label>
               <input
                 type="number"
                 required
@@ -462,30 +479,59 @@ export const RentSection: React.FC<RentSectionProps> = ({
                 value={paid}
                 onChange={(e) => setPaid(e.target.value)}
                 placeholder={t.paidPlaceholder}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-bold text-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-bold font-mono tabular-nums text-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
-                {remainingDue < 0 ? (language === 'bn' ? 'বর্তমান অগ্রিম' : 'Current Advance') : (language === 'bn' ? 'বর্তমান বকেয়া' : 'Current Due')}
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                {remainingDue < 0
+                  ? language === 'bn'
+                    ? 'বর্তমান অগ্রিম'
+                    : 'Current Advance'
+                  : language === 'bn'
+                  ? 'বর্তমান বকেয়া'
+                  : 'Current Due'}
               </label>
               <input
                 type="text"
                 readOnly
                 value={formatCurrency(Math.abs(remainingDue))}
-                className={`w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs md:text-sm font-bold ${remainingDue < 0 ? 'text-emerald-600' : (remainingDue > 0 ? 'text-rose-600' : 'text-slate-500')}`}
+                className={`w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-xs md:text-sm font-bold font-mono tabular-nums ${
+                  remainingDue < 0
+                    ? 'text-emerald-600'
+                    : remainingDue > 0
+                    ? 'text-rose-600'
+                    : 'text-slate-500'
+                }`}
               />
             </div>
 
-            <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.rentNote || 'নোট / বিবরণ'}</label>
+            <div className="sm:col-span-2 lg:col-span-3">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  {t.rentNote || 'নোট / বিবরণ'}
+                </label>
+                {/* Payment Method Quick Presets */}
+                <div className="flex items-center gap-1 flex-wrap">
+                  {paymentMethodPresets.map((preset) => (
+                    <button
+                      key={preset}
+                      type="button"
+                      onClick={() => setNote(preset)}
+                      className="px-2 py-0.5 rounded bg-slate-200/80 dark:bg-slate-700 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 text-[11px] font-medium text-slate-700 dark:text-slate-200 transition-colors cursor-pointer"
+                    >
+                      +{preset}
+                    </button>
+                  ))}
+                </div>
+              </div>
               <input
                 type="text"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
                 placeholder={t.rentNotePh || 'যেমন: বিকাশে প্রাপ্ত'}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50"
+                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
               />
             </div>
           </div>
@@ -494,13 +540,13 @@ export const RentSection: React.FC<RentSectionProps> = ({
             <button
               type="button"
               onClick={resetForm}
-              className="px-4 py-2 rounded-full bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 text-slate-700 dark:text-slate-200 font-bold text-xs transition-colors cursor-pointer"
+              className="px-4 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-colors cursor-pointer"
             >
               {t.cancelBtn}
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-full bg-[#4F46E5] text-white hover:bg-[#4338CA] font-bold text-xs shadow-md transition-colors cursor-pointer"
+              className="px-5 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 font-semibold text-xs transition-colors cursor-pointer"
             >
               {editingId ? t.rentUpdateBtn : t.rentSubmitBtn}
             </button>
@@ -509,22 +555,22 @@ export const RentSection: React.FC<RentSectionProps> = ({
       )}
 
       {/* Table Container */}
-      <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 max-h-[500px]">
+      <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
         <table className="w-full text-left text-xs md:text-sm border-collapse">
-          <thead className="sticky top-0 bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-200 dark:border-slate-800 z-10">
+          <thead className="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 text-xs font-semibold border-b border-slate-200 dark:border-slate-800">
             <tr>
-              <th className="p-3.5 pl-4">{t.thRentDate}</th>
-              <th className="p-3.5">{t.thRentName}</th>
-              <th className="p-3.5 text-right">{t.thRentAmount}</th>
-              <th className="p-3.5 text-right">{t.thPaidAmount}</th>
-              <th className="p-3.5 text-right">{t.thDueStatus}</th>
-              <th className="p-3.5 pr-4 no-print text-right">{t.thRentAction}</th>
+              <th className="py-3 px-4">{t.thRentDate}</th>
+              <th className="py-3 px-4">{t.thRentName}</th>
+              <th className="py-3 px-4 text-right">{t.thRentAmount}</th>
+              <th className="py-3 px-4 text-right">{t.thPaidAmount}</th>
+              <th className="py-3 px-4 text-right">{t.thDueStatus}</th>
+              <th className="py-3 px-4 no-print text-right">{t.thRentAction}</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 font-medium text-slate-800 dark:text-slate-200">
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 text-slate-800 dark:text-slate-200">
             {filteredRents.length === 0 ? (
               <tr>
-                <td colSpan={6} className="p-8 text-center text-slate-400 font-bold">
+                <td colSpan={6} className="p-8 text-center text-slate-400 font-semibold">
                   {t.noData}
                 </td>
               </tr>
@@ -532,69 +578,84 @@ export const RentSection: React.FC<RentSectionProps> = ({
               filteredRents.map((rt) => {
                 const isPaid = rt.due <= 0;
                 return (
-                  <tr key={rt.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                    <td className="p-3.5 pl-4 font-mono text-xs text-slate-500 dark:text-slate-400">
+                  <tr
+                    key={rt.id}
+                    className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors"
+                  >
+                    <td className="py-3 px-4 font-mono tabular-nums text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
                       {formatShortDate(rt.date, language)}
                     </td>
-                    <td className="p-3.5">
-                      <div className="font-bold text-slate-900 dark:text-white">
-                        {rt.tenant}
-                      </div>
-                      <div className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-                        {t.roomText}: {rt.room} {rt.previousDue ? (language === 'bn' ? ` • পূর্বের বকেয়া: ${formatCurrency(rt.previousDue)}` : ` • Prev Due: ${formatCurrency(rt.previousDue)}`) : ''} {rt.note ? `• ${rt.note}` : ''}
+                    <td className="py-3 px-4">
+                      <div className="font-bold text-slate-900 dark:text-white">{rt.tenant}</div>
+                      <div className="text-[11px] text-slate-500 dark:text-slate-400">
+                        {t.roomText} {rt.room}
+                        {rt.previousDue
+                          ? language === 'bn'
+                            ? ` · পূর্বের বকেয়া: ${formatCurrency(rt.previousDue)}`
+                            : ` · Prev Due: ${formatCurrency(rt.previousDue)}`
+                          : ''}
+                        {rt.note ? ` · ${rt.note}` : ''}
                       </div>
                     </td>
-                    <td className="p-3.5 font-mono font-bold text-slate-600 dark:text-slate-300 text-right">{formatCurrency(rt.rent)}</td>
-                    <td className="p-3.5 font-mono font-bold text-emerald-600 dark:text-emerald-400 text-right">
+                    <td className="py-3 px-4 font-mono tabular-nums font-semibold text-slate-600 dark:text-slate-300 text-right">
+                      {formatCurrency(rt.rent)}
+                    </td>
+                    <td className="py-3 px-4 font-mono tabular-nums font-bold text-emerald-600 dark:text-emerald-400 text-right">
                       {formatCurrency(rt.paid)}
                     </td>
-                    <td className="p-3.5 text-right">
+                    <td className="py-3 px-4 text-right">
                       {isPaid ? (
-                        <span className="inline-flex items-center px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 font-extrabold text-[10px] uppercase tracking-wider">
-                          {rt.due < 0 ? (language === 'bn' ? `অগ্রিম ${formatCurrency(Math.abs(rt.due))}` : `Advance ${formatCurrency(Math.abs(rt.due))}`) : t.paidStatus}
+                        <span className="font-semibold text-emerald-600 dark:text-emerald-400 text-xs">
+                          {rt.due < 0
+                            ? language === 'bn'
+                              ? `অগ্রিম ${formatCurrency(Math.abs(rt.due))}`
+                              : `Advance ${formatCurrency(Math.abs(rt.due))}`
+                            : language === 'bn'
+                            ? 'পরিশোধিত'
+                            : 'Paid'}
                         </span>
                       ) : (
-                        <div className="flex items-center justify-end gap-1.5">
-                          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-rose-50 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400 font-extrabold text-[10px] uppercase tracking-wider">
-                            <i className="fi fi-sr-triangle-warning text-xs" />
-                            {t.dueStatus} <span className="font-mono">{formatCurrency(rt.due)}</span>
+                        <div className="flex items-center justify-end gap-2">
+                          <span className="font-bold text-rose-600 dark:text-rose-400 text-xs">
+                            {t.dueStatus}{' '}
+                            <span className="font-mono tabular-nums">{formatCurrency(rt.due)}</span>
                           </span>
                           <a
                             href={getWhatsAppLink(rt)}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="no-print p-1.5 rounded-full text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-colors"
+                            className="no-print p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-colors"
                             title="Send WhatsApp Reminder"
                           >
-                            <i className="fi fi-sr-comment text-sm" />
+                            <i className="fi fi-sr-comment text-xs" />
                           </a>
                         </div>
                       )}
                     </td>
-                    <td className="p-3.5 pr-4 no-print text-right">
-                      <div className="flex items-center justify-end gap-1.5">
+                    <td className="py-3 px-4 no-print text-right">
+                      <div className="flex items-center justify-end gap-1">
                         <button
                           onClick={() => onSelectReceipt(rt)}
-                          className="p-2 rounded-full text-slate-400 hover:text-emerald-600 dark:text-slate-500 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-colors"
+                          className="p-2 rounded-lg text-slate-400 hover:text-emerald-600 dark:text-slate-500 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-colors cursor-pointer"
                           title={t.receiptBtn}
                         >
-                          <i className="fi fi-sr-receipt text-sm" />
+                          <i className="fi fi-sr-receipt text-xs" />
                         </button>
                         <button
                           onClick={() => handleEditClick(rt)}
-                          className="p-2 rounded-full text-slate-400 hover:text-indigo-600 dark:text-slate-500 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
+                          className="p-2 rounded-lg text-slate-400 hover:text-indigo-600 dark:text-slate-500 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors cursor-pointer"
                           title={t.edit}
                         >
-                          <i className="fi fi-sr-edit text-sm" />
+                          <i className="fi fi-sr-edit text-xs" />
                         </button>
                         <button
                           onClick={() => {
                             if (confirm(t.deleteConfirm)) onDeleteRent(rt.id);
                           }}
-                          className="p-2 rounded-full text-slate-400 hover:text-rose-600 dark:text-slate-500 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-colors"
+                          className="p-2 rounded-lg text-slate-400 hover:text-rose-600 dark:text-slate-500 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-colors cursor-pointer"
                           title={t.delete}
                         >
-                          <i className="fi fi-sr-trash text-sm" />
+                          <i className="fi fi-sr-trash text-xs" />
                         </button>
                       </div>
                     </td>
@@ -605,18 +666,34 @@ export const RentSection: React.FC<RentSectionProps> = ({
           </tbody>
 
           {filteredRents.length > 0 && (
-            <tfoot className="sticky bottom-0 z-10">
+            <tfoot>
               <tr className="bg-slate-50 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white border-t border-slate-200 dark:border-slate-800">
-                <td className="p-3.5 pl-4">{t.totalRow} ({filteredRents.length})</td>
-                <td className="p-3.5">-</td>
-                <td className="p-3.5 font-mono font-extrabold text-slate-600 dark:text-slate-300 text-right">{formatCurrency(totalRentAmount)}</td>
-                <td className="p-3.5 font-mono font-extrabold text-emerald-600 dark:text-emerald-400 text-right">{formatCurrency(totalPaidAmount)}</td>
-                <td className={`p-3.5 font-mono font-extrabold text-right ${totalDueAmount < 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
+                <td className="py-3 px-4">
+                  {t.totalRow} ({filteredRents.length})
+                </td>
+                <td className="py-3 px-4">-</td>
+                <td className="py-3 px-4 font-mono tabular-nums font-bold text-slate-600 dark:text-slate-300 text-right">
+                  {formatCurrency(totalRentAmount)}
+                </td>
+                <td className="py-3 px-4 font-mono tabular-nums font-bold text-emerald-600 dark:text-emerald-400 text-right">
+                  {formatCurrency(totalPaidAmount)}
+                </td>
+                <td
+                  className={`py-3 px-4 font-mono tabular-nums font-bold text-right ${
+                    totalDueAmount < 0
+                      ? 'text-emerald-600 dark:text-emerald-400'
+                      : 'text-rose-600 dark:text-rose-400'
+                  }`}
+                >
                   <div className="flex justify-end">
-                    {totalDueAmount !== 0 ? (totalDueAmount < 0 ? `(অগ্রিম) ${formatCurrency(Math.abs(totalDueAmount))}` : formatCurrency(totalDueAmount)) : '-'}
+                    {totalDueAmount !== 0
+                      ? totalDueAmount < 0
+                        ? `(অগ্রিম) ${formatCurrency(Math.abs(totalDueAmount))}`
+                        : formatCurrency(totalDueAmount)
+                      : '-'}
                   </div>
                 </td>
-                <td className="p-3.5 pr-4 no-print"></td>
+                <td className="py-3 px-4 no-print"></td>
               </tr>
             </tfoot>
           )}

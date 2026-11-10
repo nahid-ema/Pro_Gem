@@ -105,61 +105,63 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
   };
 
   return (
-    <div className="rounded-[32px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 mb-6 shadow-sm">
+    <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 sm:p-6 mb-6 shadow-xs">
       {/* Header Title */}
-      <div className="flex items-center justify-between pb-5 mb-5 border-b border-slate-100 dark:border-slate-800">
-        <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-[#4F46E5] dark:text-indigo-400 flex items-center justify-center font-bold text-lg shrink-0 border border-indigo-100 dark:border-indigo-800/30">
-            <i className="fi fi-sr-shop" />
-          </div>
-          <div>
-            <h3 className="text-base md:text-lg font-extrabold text-slate-900 dark:text-white tracking-tight">
-              {t.dokanTitle}
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-              {t.dokanSubtitle}
-            </p>
-          </div>
+      <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
+        <div>
+          <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
+            {t.dokanTitle}
+          </h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{t.dokanSubtitle}</p>
         </div>
 
         <button
           onClick={() => setIsFormOpen(!isFormOpen)}
-          className="no-print flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#4F46E5] text-white hover:bg-[#4338CA] font-bold text-xs transition-all active:scale-95 cursor-pointer"
+          className="no-print flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 font-semibold text-xs transition-colors cursor-pointer whitespace-nowrap"
         >
           <i className={`fi fi-sr-add transition-transform duration-200 ${isFormOpen ? 'rotate-45' : ''}`} />
-          <span className="hidden sm:inline">{editingId ? t.dokanUpdateBtn : t.dokanToggleLabel}</span>
+          <span>{editingId ? t.dokanUpdateBtn : t.dokanToggleLabel}</span>
         </button>
       </div>
 
       {/* Expandable Form */}
       {isFormOpen && (
-        <form onSubmit={handleSubmit} className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-[24px] p-5 mb-6 space-y-4 no-print animate-fadeIn">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-xl p-5 mb-6 space-y-4 no-print animate-fadeIn"
+        >
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.thDokDate} *</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                {t.thDokDate} *
+              </label>
               <input
                 type="date"
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50"
+                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.thDokDesc} *</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                {t.thDokDesc} *
+              </label>
               <input
                 type="text"
                 required
                 value={desc}
                 onChange={(e) => setDesc(e.target.value)}
                 placeholder={t.dokanDescPh}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50"
+                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.thDokAmt} *</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                {t.thDokAmt} *
+              </label>
               <input
                 type="number"
                 step="any"
@@ -167,7 +169,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder={t.dokanAmtPh}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs md:text-sm font-bold text-amber-600 dark:text-amber-400 focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50"
+                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs md:text-sm font-mono tabular-nums font-bold text-amber-600 dark:text-amber-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
               />
             </div>
           </div>
@@ -176,13 +178,13 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
             <button
               type="button"
               onClick={resetForm}
-              className="px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs transition-colors cursor-pointer"
+              className="px-4 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-colors cursor-pointer"
             >
               {t.cancelBtn}
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-full bg-[#4F46E5] text-white hover:bg-[#4338CA] font-bold text-xs transition-colors cursor-pointer"
+              className="px-5 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 font-semibold text-xs transition-colors cursor-pointer"
             >
               {editingId ? t.dokanUpdateBtn : t.dokanSubmitBtn}
             </button>
@@ -191,48 +193,59 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
       )}
 
       {/* Table Container */}
-      <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+      <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
         <table className="w-full text-left text-xs md:text-sm border-collapse">
           <thead>
-            <tr className="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-200 dark:border-slate-800">
-              <th className="p-3.5 pl-4">{t.thDokDate}</th>
-              <th className="p-3.5">{t.thDokDesc}</th>
-              <th className="p-3.5 text-right">{t.thDokAmt}</th>
-              <th className="p-3.5 pr-4 no-print text-right">{t.thDokAct}</th>
+            <tr className="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 text-xs font-semibold border-b border-slate-200 dark:border-slate-800">
+              <th className="py-3 px-4">{t.thDokDate}</th>
+              <th className="py-3 px-4">{t.thDokDesc}</th>
+              <th className="py-3 px-4 text-right">{t.thDokAmt}</th>
+              <th className="py-3 px-4 no-print text-right">{t.thDokAct}</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 font-medium text-slate-800 dark:text-slate-200">
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 text-slate-800 dark:text-slate-200">
             {filteredDokan.length === 0 ? (
               <tr>
-                <td colSpan={4} className="p-8 text-center text-slate-400 font-bold">
+                <td colSpan={4} className="p-8 text-center text-slate-400 font-semibold">
                   {t.noData}
                 </td>
               </tr>
             ) : (
               filteredDokan.map((dk) => (
-                <tr key={dk.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                  <td className="p-3.5 pl-4 font-mono text-xs text-slate-500 dark:text-slate-400">{formatShortDate(dk.date, language)}</td>
-                  <td className="p-3.5 font-bold text-slate-900 dark:text-white">{dk.desc}</td>
-                  <td className={`p-3.5 font-mono font-bold text-right ${dk.amount < 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'}`}>
+                <tr
+                  key={dk.id}
+                  className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors"
+                >
+                  <td className="py-3 px-4 font-mono tabular-nums text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                    {formatShortDate(dk.date, language)}
+                  </td>
+                  <td className="py-3 px-4 font-bold text-slate-900 dark:text-white">{dk.desc}</td>
+                  <td
+                    className={`py-3 px-4 font-mono tabular-nums font-bold text-right ${
+                      dk.amount < 0
+                        ? 'text-emerald-600 dark:text-emerald-400'
+                        : 'text-amber-600 dark:text-amber-400'
+                    }`}
+                  >
                     {formatCurrency(dk.amount)}
                   </td>
-                  <td className="p-3.5 pr-4 no-print text-right">
-                    <div className="flex items-center justify-end gap-1.5">
+                  <td className="py-3 px-4 no-print text-right">
+                    <div className="flex items-center justify-end gap-1">
                       <button
                         onClick={() => handleEditClick(dk)}
-                        className="p-2 rounded-full text-slate-400 hover:text-indigo-600 dark:text-slate-500 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
+                        className="p-2 rounded-lg text-slate-400 hover:text-indigo-600 dark:text-slate-500 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors cursor-pointer"
                         title={t.edit}
                       >
-                        <i className="fi fi-sr-edit text-sm" />
+                        <i className="fi fi-sr-edit text-xs" />
                       </button>
                       <button
                         onClick={() => {
                           if (confirm(t.deleteConfirm)) onDeleteDokanDue(dk.id);
                         }}
-                        className="p-2 rounded-full text-slate-400 hover:text-rose-600 dark:text-slate-500 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-colors"
+                        className="p-2 rounded-lg text-slate-400 hover:text-rose-600 dark:text-slate-500 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-colors cursor-pointer"
                         title={t.delete}
                       >
-                        <i className="fi fi-sr-trash text-sm" />
+                        <i className="fi fi-sr-trash text-xs" />
                       </button>
                     </div>
                   </td>
@@ -244,10 +257,14 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
           {filteredDokan.length > 0 && (
             <tfoot>
               <tr className="bg-slate-50 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white border-t border-slate-200 dark:border-slate-800">
-                <td className="p-3.5 pl-4">{t.totalRow} ({filteredDokan.length})</td>
-                <td className="p-3.5">-</td>
-                <td className="p-3.5 text-amber-600 dark:text-amber-400 font-mono font-extrabold text-right">{formatCurrency(totalDokanSum)}</td>
-                <td className="p-3.5 pr-4 no-print"></td>
+                <td className="py-3 px-4">
+                  {t.totalRow} ({filteredDokan.length})
+                </td>
+                <td className="py-3 px-4">-</td>
+                <td className="py-3 px-4 text-amber-600 dark:text-amber-400 font-mono tabular-nums font-bold text-right">
+                  {formatCurrency(totalDokanSum)}
+                </td>
+                <td className="py-3 px-4 no-print"></td>
               </tr>
             </tfoot>
           )}

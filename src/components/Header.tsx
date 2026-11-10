@@ -38,8 +38,6 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   language,
   theme,
-  activeTab,
-  onTabChange,
   onLanguageToggle,
   onThemeToggle,
   onTriggerBackup,
@@ -50,7 +48,6 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenAuthModal,
   onLockApp,
   userEmail,
-  ownerEmail,
   isFirebaseActive,
   isSyncing,
   lastCloudBackupTime,
@@ -64,13 +61,11 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const t = getTranslation(language);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isQuickNavOpen, setIsQuickNavOpen] = useState(false);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [isAndroidModalOpen, setIsAndroidModalOpen] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
-  const quickNavRef = useRef<HTMLDivElement>(null);
   const datePickerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -78,31 +73,16 @@ export const Header: React.FC<HeaderProps> = ({
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsMenuOpen(false);
       }
-      if (quickNavRef.current && !quickNavRef.current.contains(event.target as Node)) {
-        setIsQuickNavOpen(false);
-      }
       if (datePickerRef.current && !datePickerRef.current.contains(event.target as Node)) {
         setIsDatePickerOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
-    
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-      
     };
   }, []);
-
-  const navItems: { id: TabType; labelEn: string; labelBn: string; icon: React.ReactNode }[] = [
-    { id: 'brief', labelEn: 'Summary', labelBn: 'সারসংক্ষেপ', icon: <i className="fi fi-sr-chart-histogram text-base text-[#4F46E5]" /> },
-    { id: 'rooms', labelEn: 'Rooms', labelBn: 'রুমসমূহ', icon: <i className="fi fi-sr-door-closed text-base text-indigo-600" /> },
-    { id: 'tenants', labelEn: 'Tenants', labelBn: 'ভাড়াটিয়া', icon: <i className="fi fi-sr-users text-base text-emerald-500" /> },
-    { id: 'rent', labelEn: 'Rent Collection', labelBn: 'ভাড়া আদায়', icon: <i className="fi fi-sr-money-bill-wave text-base text-amber-500" /> },
-    { id: 'unpaid', labelEn: 'Unpaid Dues', labelBn: 'বকেয়া হিসাব', icon: <i className="fi fi-sr-triangle-warning text-base text-rose-500" /> },
-    { id: 'expense', labelEn: 'Expenses', labelBn: 'খরচসমূহ', icon: <i className="fi fi-sr-receipt text-base text-indigo-600" /> },
-    { id: 'dokan', labelEn: 'Shop Dues', labelBn: 'দোকান বাকি', icon: <i className="fi fi-sr-shop text-base text-orange-500" /> },
-    { id: 'analytics', labelEn: 'Analytics', labelBn: 'অ্যানালিটিক্স', icon: <i className="fi fi-sr-chart-line-up text-base text-indigo-500" /> },
-  ];
 
   const handlePrevMonth = () => {
     const now = new Date();
@@ -156,7 +136,7 @@ export const Header: React.FC<HeaderProps> = ({
 
     const monthIndex = selectedMonth !== 'all' ? parseInt(selectedMonth, 10) - 1 : -1;
     const monthName = monthIndex >= 0 && t?.months ? t.months[monthIndex] : '';
-    
+
     if (selectedMonth !== 'all' && selectedYear !== 'all') {
       return `${monthName} ${selectedYear}`;
     }
@@ -167,282 +147,330 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="header-section no-print rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 sm:p-5 shadow-sm text-slate-800 dark:text-slate-100 relative z-50">
-      
+    <header className="header-section no-print rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 sm:p-5 shadow-xs text-slate-800 dark:text-slate-100 relative z-50">
+      {/* Hidden File Input for Local JSON Restore */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".json,application/json"
+        onChange={onTriggerRestore}
+        className="hidden"
+      />
+
       {/* 1. Kalima */}
       <div className="text-center text-sm sm:text-base font-bold text-slate-800 dark:text-slate-200 pb-2 mb-3 border-b border-slate-100 dark:border-slate-800 tracking-wide">
         لَا إِلَٰهَ إِلَّا ٱللَّٰهُ مُحَمَّدٌ رَسُولُ ٱللَّٰهِ
       </div>
-      
-      {/* 2. Top Bar: Search + Actions */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+
+      {/* 2. Top Bar: Brand (Mobile) + Search + Date Filter + Menu */}
+      <div className="flex flex-col md:flex-row items-center justify-between gap-3">
         {/* Mobile Brand Logo & Name (Hidden on Desktop) */}
-        <div className="flex lg:hidden items-center gap-3 shrink-0 self-start md:self-auto mb-2 md:mb-0">
-          <Logo className="w-8 h-8" />
-          <div>
-            <h1 className="text-base sm:text-lg font-extrabold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
-              {t.appName}
-            </h1>
-          </div>
+        <div className="flex lg:hidden items-center gap-2.5 shrink-0 self-start md:self-auto">
+          <Logo className="w-7 h-7" />
+          <h1 className="text-base font-bold tracking-tight text-slate-900 dark:text-white whitespace-nowrap">
+            {t.appName}
+          </h1>
         </div>
 
         {/* Search Bar */}
         <div className="relative flex-1 w-full max-w-xl">
-          <i className="fi fi-sr-search text-sm absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+          <i className="fi fi-sr-search text-xs absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder={t.searchPlaceholder}
-            className="w-full pl-11 pr-9 py-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full text-xs sm:text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50 transition-all"
+            className="w-full pl-9 pr-8 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all"
           />
           {searchQuery && (
             <button
               type="button"
               onClick={() => onSearchChange('')}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-200 cursor-pointer"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-200 cursor-pointer"
             >
               <i className="fi fi-sr-cross text-xs" />
             </button>
           )}
         </div>
 
-        {/* Control Pill Buttons */}
+        {/* Control Buttons */}
         <div className="flex items-center gap-2 w-full md:w-auto justify-end relative z-30">
-          {/* Date Selector Pill Button */}
-          <div className="relative shrink-0 flex-1 md:flex-none" ref={datePickerRef}>
+          {/* Date Selector with Quick Month Steppers */}
+          <div className="flex items-center bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-0.5 flex-1 md:flex-none">
             <button
               type="button"
-              onClick={() => {
-                setIsDatePickerOpen((prev) => !prev);
-                setIsQuickNavOpen(false);
-                setIsMenuOpen(false);
-              }}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 text-xs font-bold transition-all cursor-pointer shadow-sm active:scale-95"
+              onClick={handlePrevMonth}
+              title={language === 'bn' ? 'পূর্ববর্তী মাস' : 'Previous Month'}
+              className="p-2 rounded-lg hover:bg-slate-200/70 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer shrink-0"
             >
-              <i className="fi fi-sr-calendar text-sm text-[#4F46E5] shrink-0" />
-              <span className="truncate max-w-[80px] sm:max-w-none">{getSelectedDateLabel()}</span>
-              <i className={`fi fi-sr-angle-down text-xs text-slate-400 shrink-0 transition-transform duration-200 ${isDatePickerOpen ? 'rotate-180' : ''}`} />
+              <i className="fi fi-sr-angle-left text-[11px]" />
             </button>
 
-            {/* Date Selection Popover Dropdown */}
-            {isDatePickerOpen && (
-              <div className="absolute left-0 sm:left-auto sm:right-0 mt-2 w-64 sm:w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-xl z-50 p-4 space-y-3 animate-in fade-in zoom-in-95 duration-150">
-                {/* Header & Quick Action Buttons */}
-                <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
-                  <button
-                    type="button"
-                    onClick={handleThisMonth}
-                    className="flex-1 px-3 py-1.5 rounded-full bg-[#4F46E5]/10 text-[#4F46E5] hover:bg-[#4F46E5]/20 text-[11px] font-bold transition-colors cursor-pointer text-center"
-                  >
-                    {language === 'bn' ? 'চলতি মাস' : 'This Month'}
-                  </button>
+            <div className="relative flex-1 md:flex-none" ref={datePickerRef}>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsDatePickerOpen((prev) => !prev);
+                  setIsMenuOpen(false);
+                }}
+                className="w-full flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-slate-200/60 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap"
+              >
+                <i className="fi fi-sr-calendar text-xs text-indigo-600 dark:text-indigo-400 shrink-0" />
+                <span className="truncate max-w-[110px] sm:max-w-none">{getSelectedDateLabel()}</span>
+                <i
+                  className={`fi fi-sr-angle-down text-[10px] text-slate-400 shrink-0 transition-transform duration-200 ${
+                    isDatePickerOpen ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
 
-                  <button
-                    type="button"
-                    onClick={handleAllTime}
-                    className="flex-1 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-[11px] font-bold transition-colors cursor-pointer text-center"
-                  >
-                    {language === 'bn' ? 'সকল সময়' : 'All Time'}
-                  </button>
-                </div>
-
-                {/* Month Stepper Bar */}
-                <div className="flex items-center justify-between bg-slate-100/70 dark:bg-slate-800/70 rounded-full p-1.5 border border-slate-200/60 dark:border-slate-800">
-                  <button
-                    type="button"
-                    onClick={handlePrevMonth}
-                    title={language === 'bn' ? 'পূর্ববর্তী মাস' : 'Previous Month'}
-                    className="p-1 rounded-full hover:bg-white dark:hover:bg-slate-700 text-slate-700 dark:text-slate-100 transition-colors cursor-pointer"
-                  >
-                    <i className="fi fi-sr-angle-left text-xs" />
-                  </button>
-
-                  <span className="text-xs font-bold text-slate-800 dark:text-slate-100">
-                    {getSelectedDateLabel()}
-                  </span>
-
-                  <button
-                    type="button"
-                    onClick={handleNextMonth}
-                    title={language === 'bn' ? 'পরবর্তী মাস' : 'Next Month'}
-                    className="p-1 rounded-full hover:bg-white dark:hover:bg-slate-700 text-slate-700 dark:text-slate-100 transition-colors cursor-pointer"
-                  >
-                    <i className="fi fi-sr-angle-right text-xs" />
-                  </button>
-                </div>
-
-                {/* Year Select Row */}
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
-                    {language === 'bn' ? 'বছর:' : 'Year:'}
-                  </span>
-                  <select
-                    value={selectedYear}
-                    onChange={(e) => onYearChange(e.target.value)}
-                    className="flex-1 bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 rounded-full px-3 py-1 text-xs font-bold text-slate-800 dark:text-slate-100 focus:outline-none cursor-pointer"
-                  >
-                    <option value="all" className="dark:bg-slate-900">{t.yearAllOpt}</option>
-                    {(availableYears || []).map((yr) => (
-                      <option key={yr} value={yr} className="dark:bg-slate-900">
-                        {yr}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Month Grid */}
-                <div>
-                  <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-1.5">
-                    {language === 'bn' ? 'মাস নির্বাচন করুন' : 'Select Month'}
-                  </div>
-                  <div className="grid grid-cols-3 gap-1">
+              {/* Date Selection Popover Dropdown */}
+              {isDatePickerOpen && (
+                <div className="absolute left-0 sm:left-auto sm:right-0 mt-2 w-64 sm:w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl z-50 p-4 space-y-3">
+                  {/* Header & Quick Action Buttons */}
+                  <div className="flex items-center justify-between gap-2 pb-2 border-b border-slate-100 dark:border-slate-800">
                     <button
                       type="button"
-                      onClick={() => { onMonthChange('all'); setIsDatePickerOpen(false); }}
-                      className={`py-1.5 px-2 rounded-full text-[11px] font-bold transition-all cursor-pointer ${
-                        selectedMonth === 'all'
-                          ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 shadow-sm font-bold'
-                          : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
-                      }`}
+                      onClick={handleThisMonth}
+                      className="flex-1 px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 text-xs font-semibold transition-colors cursor-pointer text-center whitespace-nowrap"
                     >
-                      {t.monthAllOpt}
+                      {language === 'bn' ? 'চলতি মাস' : 'This Month'}
                     </button>
-                    {(t?.months || []).map((m, idx) => {
-                      const val = String(idx + 1).padStart(2, '0');
-                      const isSelected = selectedMonth === val;
-                      return (
-                        <button
-                          key={val}
-                          type="button"
-                          onClick={() => {
-                            if (selectedYear === 'all') {
-                              onYearChange(String(new Date().getFullYear()));
-                            }
-                            onMonthChange(val);
-                            setIsDatePickerOpen(false);
-                          }}
-                          className={`py-1.5 px-2 rounded-full text-[11px] font-semibold truncate transition-all cursor-pointer ${
-                            isSelected
-                              ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold shadow-sm'
-                              : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
-                          }`}
-                        >
-                          {m}
-                        </button>
-                      );
-                    })}
+
+                    <button
+                      type="button"
+                      onClick={handleAllTime}
+                      className="flex-1 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold transition-colors cursor-pointer text-center whitespace-nowrap"
+                    >
+                      {language === 'bn' ? 'সকল সময়' : 'All Time'}
+                    </button>
+                  </div>
+
+                  {/* Year Select Row */}
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
+                      {language === 'bn' ? 'বছর:' : 'Year:'}
+                    </span>
+                    <select
+                      value={selectedYear}
+                      onChange={(e) => onYearChange(e.target.value)}
+                      className="flex-1 bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 rounded-lg px-3 py-1.5 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none cursor-pointer"
+                    >
+                      <option value="all" className="dark:bg-slate-900">
+                        {t.yearAllOpt}
+                      </option>
+                      {(availableYears || []).map((yr) => (
+                        <option key={yr} value={yr} className="dark:bg-slate-900">
+                          {yr}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Month Grid */}
+                  <div>
+                    <div className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 mb-1.5">
+                      {language === 'bn' ? 'মাস নির্বাচন করুন' : 'Select Month'}
+                    </div>
+                    <div className="grid grid-cols-3 gap-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onMonthChange('all');
+                          setIsDatePickerOpen(false);
+                        }}
+                        className={`py-1.5 px-2 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                          selectedMonth === 'all'
+                            ? 'bg-indigo-600 text-white'
+                            : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
+                        }`}
+                      >
+                        {t.monthAllOpt}
+                      </button>
+                      {(t?.months || []).map((m, idx) => {
+                        const val = String(idx + 1).padStart(2, '0');
+                        const isSelected = selectedMonth === val;
+                        return (
+                          <button
+                            key={val}
+                            type="button"
+                            onClick={() => {
+                              if (selectedYear === 'all') {
+                                onYearChange(String(new Date().getFullYear()));
+                              }
+                              onMonthChange(val);
+                              setIsDatePickerOpen(false);
+                            }}
+                            className={`py-1.5 px-2 rounded-lg text-xs font-semibold truncate transition-colors cursor-pointer ${
+                              isSelected
+                                ? 'bg-indigo-600 text-white'
+                                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200'
+                            }`}
+                          >
+                            {m}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={handleNextMonth}
+              title={language === 'bn' ? 'পরবর্তী মাস' : 'Next Month'}
+              className="p-2 rounded-lg hover:bg-slate-200/70 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer shrink-0"
+            >
+              <i className="fi fi-sr-angle-right text-[11px]" />
+            </button>
           </div>
 
-          {/* Menu Pill Button */}
-          <div className="relative shrink-0 flex-1 md:flex-none" ref={menuRef}>
+          {/* Menu Button */}
+          <div className="relative shrink-0" ref={menuRef}>
             <button
               type="button"
               onClick={() => {
                 setIsMenuOpen((prev) => !prev);
                 setIsDatePickerOpen(false);
-                setIsQuickNavOpen(false);
               }}
-              className="w-full flex items-center justify-center gap-2 bg-[#4F46E5] text-white hover:bg-[#4338CA] px-4 py-2.5 rounded-full text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer"
+              className="flex items-center justify-center gap-2 bg-indigo-600 text-white hover:bg-indigo-700 px-3.5 py-2 rounded-xl text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap"
             >
-              <i className="fi fi-sr-menu-burger text-sm" />
-              <span className="truncate max-w-[40px] sm:max-w-none">{language === 'bn' ? 'মেনু' : 'Menu'}</span>
-              <i className={`fi fi-sr-angle-down text-xs transition-transform duration-200 ${isMenuOpen ? 'rotate-180' : ''}`} />
+              <i className="fi fi-sr-menu-burger text-xs" />
+              <span>{language === 'bn' ? 'মেনু' : 'Menu'}</span>
+              <i
+                className={`fi fi-sr-angle-down text-[10px] transition-transform duration-200 ${
+                  isMenuOpen ? 'rotate-180' : ''
+                }`}
+              />
             </button>
 
             {/* Dropdown Menu */}
             {isMenuOpen && (
-              <div className="absolute right-0 mt-2 w-[280px] sm:w-80 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 z-50 overflow-hidden text-xs divide-y divide-slate-100 dark:divide-slate-800 max-h-[85vh] overflow-y-auto">
-                
+              <div className="absolute right-0 mt-2 w-72 sm:w-80 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 z-50 overflow-hidden text-xs divide-y divide-slate-100 dark:divide-slate-800 max-h-[85vh] overflow-y-auto">
                 {/* Online Sync State Banner */}
-                <div className="p-4 bg-slate-50 dark:bg-slate-800/40 flex items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800">
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <span className="relative flex h-3 w-3 shrink-0">
-                      <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                        isFirebaseActive ? 'bg-emerald-400' : 'bg-amber-400'
-                      }`} />
-                      <span className={`relative inline-flex rounded-full h-3 w-3 ${
-                        isFirebaseActive ? 'bg-emerald-500' : 'bg-amber-500'
-                      }`} />
-                    </span>
-                    <div className="min-w-0">
-                      <div className="font-bold text-xs text-slate-800 dark:text-slate-100 flex items-center gap-1.5 truncate">
-                        <span>{isFirebaseActive ? (language === 'bn' ? 'অনলাইন সিন্ক সক্রিয়' : 'Online Sync Active') : t.offlineMode}</span>
-                        {isSyncing && <i className="fi fi-sr-refresh text-xs animate-spin text-emerald-500 shrink-0" />}
-                      </div>
-                      <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
-                        {isFirebaseActive 
-                          ? (language === 'bn' ? 'ফায়ারবেস ক্লাউড ডেটাবেস লাইভ' : 'Firebase Cloud DB Live')
-                          : (language === 'bn' ? 'লোকাল স্টোরেজ মোড' : 'Local Storage Mode')}
-                      </div>
+                <div className="p-3.5 bg-slate-50 dark:bg-slate-800/40 flex items-center justify-between gap-2">
+                  <div className="min-w-0">
+                    <div className="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-1.5">
+                      <span
+                        className={`w-2 h-2 rounded-full shrink-0 ${
+                          isFirebaseActive ? 'bg-emerald-500' : 'bg-amber-500'
+                        }`}
+                      />
+                      <span>
+                        {isFirebaseActive
+                          ? language === 'bn'
+                            ? 'অনলাইন সিন্ক সক্রিয়'
+                            : 'Online Sync Active'
+                          : t.offlineMode}
+                      </span>
+                      {isSyncing && (
+                        <i className="fi fi-sr-refresh text-xs animate-spin text-emerald-500 shrink-0" />
+                      )}
+                    </div>
+                    <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+                      {lastCloudBackupTime
+                        ? `${language === 'bn' ? 'সর্বশেষ সিন্ক:' : 'Last synced:'} ${lastCloudBackupTime}`
+                        : isFirebaseActive
+                        ? language === 'bn'
+                          ? 'ফায়ারবেস ক্লাউড ডেটাবেস লাইভ'
+                          : 'Firebase Cloud DB Live'
+                        : language === 'bn'
+                        ? 'লোকাল স্টোরেজ মোড'
+                        : 'Local Storage Mode'}
                     </div>
                   </div>
                 </div>
 
-                {/* Cloud & Data Backup */}
-                <div className="p-4 space-y-2">
-                  <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 dark:text-slate-500 flex items-center gap-1.5">
-                    <i className="fi fi-sr-cloud-upload-alt text-sm text-emerald-500" />
-                    <span>{language === 'bn' ? 'ক্লাউড ব্যাকআপ ও রিস্টোর' : 'Cloud Backup & Sync'}</span>
+                {/* Cloud & Local Data Backup */}
+                <div className="p-3.5 space-y-2.5">
+                  <div className="text-[11px] font-semibold text-slate-400 dark:text-slate-500">
+                    {language === 'bn' ? 'ক্লাউড ও ফাইল ব্যাকআপ' : 'Cloud & File Backup'}
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
                     <button
                       type="button"
-                      onClick={() => { setIsMenuOpen(false); onFirebaseCloudBackup(); }}
-                      className="flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white py-2 px-3 rounded-full font-bold text-xs transition-colors cursor-pointer shadow-sm"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        onFirebaseCloudBackup();
+                      }}
+                      className="flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white py-2 px-3 rounded-lg font-semibold text-xs transition-colors cursor-pointer"
                     >
-                      <i className="fi fi-sr-cloud-upload-alt text-sm" />
-                      <span>{language === 'bn' ? 'ব্যাকআপ নিন' : 'Cloud Backup'}</span>
+                      <i className="fi fi-sr-cloud-upload-alt text-xs" />
+                      <span>{language === 'bn' ? 'ক্লাউড ব্যাকআপ' : 'Cloud Save'}</span>
                     </button>
                     <button
                       type="button"
-                      onClick={() => { setIsMenuOpen(false); onFirebaseCloudRestore(); }}
-                      className="flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 py-2 px-3 rounded-full font-bold text-xs transition-colors cursor-pointer border border-slate-200 dark:border-slate-700"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        onFirebaseCloudRestore();
+                      }}
+                      className="flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 py-2 px-3 rounded-lg font-semibold text-xs transition-colors cursor-pointer border border-slate-200 dark:border-slate-700"
                     >
-                      <i className="fi fi-sr-cloud-download-alt text-sm text-indigo-500" />
-                      <span>{language === 'bn' ? 'রিস্টোর করুন' : 'Cloud Restore'}</span>
+                      <i className="fi fi-sr-cloud-download-alt text-xs text-indigo-500" />
+                      <span>{language === 'bn' ? 'ক্লাউড রিস্টোর' : 'Cloud Restore'}</span>
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        onTriggerBackup();
+                      }}
+                      className="flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 py-2 px-3 rounded-lg font-semibold text-xs transition-colors cursor-pointer border border-slate-200 dark:border-slate-700"
+                    >
+                      <i className="fi fi-sr-download text-xs text-slate-500" />
+                      <span>{t.backupBtn}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        fileInputRef.current?.click();
+                      }}
+                      className="flex items-center justify-center gap-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 py-2 px-3 rounded-lg font-semibold text-xs transition-colors cursor-pointer border border-slate-200 dark:border-slate-700"
+                    >
+                      <i className="fi fi-sr-upload text-xs text-slate-500" />
+                      <span>{t.restoreBtn}</span>
                     </button>
                   </div>
                 </div>
 
                 {/* Display & Language Options */}
-                <div className="p-4 space-y-2">
-                  <div className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 dark:text-slate-500">
+                <div className="p-3.5 space-y-2">
+                  <div className="text-[11px] font-semibold text-slate-400 dark:text-slate-500">
                     {language === 'bn' ? 'ডিসপ্লে ও ভাষা' : 'Display & Language'}
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
-                    {/* Language Switch */}
                     <button
                       type="button"
-                      onClick={() => { onLanguageToggle(); }}
-                      className="flex items-center justify-between bg-slate-100 dark:bg-slate-800 p-2.5 rounded-full border border-slate-200/80 dark:border-slate-700 cursor-pointer hover:bg-slate-200 transition-colors px-4"
+                      onClick={() => onLanguageToggle()}
+                      className="flex items-center justify-between bg-slate-100 dark:bg-slate-800 py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-200 transition-colors"
                     >
-                      <div className="flex items-center gap-1.5 text-slate-800 dark:text-slate-100 font-medium">
-                        <i className="fi fi-sr-globe text-sm text-indigo-600 dark:text-indigo-400" />
-                        <span className="text-[11px] font-bold">{language === 'bn' ? 'বাংলা' : 'English'}</span>
+                      <div className="flex items-center gap-1.5 text-slate-800 dark:text-slate-100 font-semibold">
+                        <i className="fi fi-sr-globe text-xs text-indigo-600 dark:text-indigo-400" />
+                        <span>{language === 'bn' ? 'বাংলা' : 'English'}</span>
                       </div>
                       <span className="text-[10px] text-slate-400 font-bold">⇄</span>
                     </button>
 
-                    {/* Dark Mode Switch */}
                     <button
                       type="button"
-                      onClick={() => { onThemeToggle(); }}
-                      className="flex items-center justify-between bg-slate-100 dark:bg-slate-800 p-2.5 rounded-full border border-slate-200/80 dark:border-slate-700 cursor-pointer hover:bg-slate-200 transition-colors px-4"
+                      onClick={() => onThemeToggle()}
+                      className="flex items-center justify-between bg-slate-100 dark:bg-slate-800 py-2 px-3 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-200 transition-colors"
                     >
-                      <div className="flex items-center gap-1.5 text-slate-800 dark:text-slate-100 font-medium">
+                      <div className="flex items-center gap-1.5 text-slate-800 dark:text-slate-100 font-semibold">
                         {theme === 'dark' ? (
-                          <i className="fi fi-sr-moon text-sm text-indigo-400" />
+                          <i className="fi fi-sr-moon text-xs text-indigo-400" />
                         ) : (
-                          <i className="fi fi-sr-sun text-sm text-amber-500" />
+                          <i className="fi fi-sr-sun text-xs text-amber-500" />
                         )}
-                        <span className="text-[11px] font-bold">{theme === 'dark' ? 'Dark' : 'Light'}</span>
+                        <span>{theme === 'dark' ? 'Dark' : 'Light'}</span>
                       </div>
                       <span className="text-[10px] text-slate-400 font-bold">⇄</span>
                     </button>
@@ -451,29 +479,38 @@ export const Header: React.FC<HeaderProps> = ({
                   {/* Print Action */}
                   <button
                     type="button"
-                    onClick={() => { setIsMenuOpen(false); onPrint(); }}
-                    className="w-full text-left px-4 py-2.5 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 flex items-center justify-between text-slate-700 dark:text-slate-100 font-bold transition-colors cursor-pointer border border-slate-200/80 dark:border-slate-700 mt-2"
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      onPrint();
+                    }}
+                    className="w-full text-left px-3 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-between text-slate-700 dark:text-slate-100 font-semibold transition-colors cursor-pointer border border-slate-200 dark:border-slate-700"
                   >
                     <div className="flex items-center gap-2">
-                      <i className="fi fi-sr-print text-sm text-emerald-600 dark:text-emerald-400" />
+                      <i className="fi fi-sr-print text-xs text-emerald-600 dark:text-emerald-400" />
                       <span>{t.printBtn}</span>
                     </div>
                   </button>
                 </div>
 
                 {/* Owner Account & Security */}
-                <div className="p-4 bg-slate-50 dark:bg-slate-800/40 space-y-2 border-t border-slate-100 dark:border-slate-800">
+                <div className="p-3.5 bg-slate-50 dark:bg-slate-800/40 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1.5 text-[11px]">
-                      <i className="fi fi-sr-shield-check text-sm text-emerald-500" />
+                    <span className="font-semibold text-slate-500 dark:text-slate-400 text-[11px]">
                       {language === 'bn' ? 'মালিক অ্যাকাউন্ট:' : 'Owner Status:'}
                     </span>
                     <button
                       type="button"
-                      onClick={() => { setIsMenuOpen(false); onOpenAuthModal(); }}
-                      className="text-[#4F46E5] hover:underline font-extrabold cursor-pointer text-xs"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        onOpenAuthModal();
+                      }}
+                      className="text-indigo-600 dark:text-indigo-400 hover:underline font-bold cursor-pointer text-xs"
                     >
-                      {userEmail ? (language === 'bn' ? 'অ্যাকাউন্ট সেটিংস' : 'Manage') : t.loginBtn}
+                      {userEmail
+                        ? language === 'bn'
+                          ? 'অ্যাকাউন্ট সেটিংস'
+                          : 'Manage'
+                        : t.loginBtn}
                     </button>
                   </div>
                   {userEmail ? (
@@ -489,11 +526,16 @@ export const Header: React.FC<HeaderProps> = ({
                   {onLockApp && (
                     <button
                       type="button"
-                      onClick={() => { setIsMenuOpen(false); onLockApp(); }}
-                      className="w-full mt-2 py-2 px-4 rounded-full bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 text-[#4F46E5] font-extrabold text-[11px] transition-colors flex items-center justify-center gap-1.5 cursor-pointer border border-indigo-200 dark:border-indigo-900"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        onLockApp();
+                      }}
+                      className="w-full mt-1 py-2 px-3 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 text-indigo-600 dark:text-indigo-400 font-bold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer border border-indigo-200 dark:border-indigo-900"
                     >
                       <i className="fi fi-sr-lock text-xs" />
-                      <span>{language === 'bn' ? 'ওয়েবসাইট লক করুন (লগআউট)' : 'Lock Website (Log Out)'}</span>
+                      <span>
+                        {language === 'bn' ? 'ওয়েবসাইট লক করুন' : 'Lock Website'}
+                      </span>
                     </button>
                   )}
                 </div>
@@ -512,6 +554,3 @@ export const Header: React.FC<HeaderProps> = ({
     </header>
   );
 };
-
-
-

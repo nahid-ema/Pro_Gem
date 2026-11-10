@@ -1,26 +1,30 @@
 import React, { useState } from 'react';
-import { Tenant, Room, Language } from '../types';
+import { Tenant, Room, RentRecord, Language } from '../types';
 import { getTranslation } from '../data/translations';
 import { matchesQuery } from '../lib/search';
 
 interface TenantsSectionProps {
   tenants: Tenant[];
   rooms: Room[];
+  rents?: RentRecord[];
   language: Language;
   searchQuery: string;
   onAddTenant: (tenant: Omit<Tenant, 'id'>) => void;
   onUpdateTenant: (id: string, tenant: Omit<Tenant, 'id'>) => void;
   onDeleteTenant: (id: string) => void;
+  onSelectTenantLedger?: (tenant: Tenant, room?: Room) => void;
 }
 
 export const TenantsSection: React.FC<TenantsSectionProps> = ({
   tenants,
   rooms,
+  rents = [],
   language,
   searchQuery,
   onAddTenant,
   onUpdateTenant,
   onDeleteTenant,
+  onSelectTenantLedger,
 }) => {
   const t = getTranslation(language);
 
@@ -31,6 +35,8 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
   const [phone, setPhone] = useState('');
   const [room, setRoom] = useState('');
   const [nid, setNid] = useState('');
+  const [advance, setAdvance] = useState('');
+  const [occupation, setOccupation] = useState('');
 
   const resetForm = () => {
     setEditingId(null);
@@ -38,6 +44,8 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
     setPhone('');
     setRoom('');
     setNid('');
+    setAdvance('');
+    setOccupation('');
     setIsFormOpen(false);
   };
 
@@ -47,6 +55,8 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
     setPhone(tn.phone);
     setRoom(tn.room);
     setNid(tn.nid || '');
+    setAdvance(tn.advance ? String(tn.advance) : '');
+    setOccupation(tn.occupation || '');
     setIsFormOpen(true);
   };
 
@@ -54,11 +64,13 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
     e.preventDefault();
     if (!name.trim() || !phone.trim() || !room.trim()) return;
 
-    const payload = {
+    const payload: Omit<Tenant, 'id'> = {
       name: name.trim(),
       phone: phone.trim(),
       room: room.trim(),
       nid: nid.trim(),
+      advance: advance ? Number(advance) : undefined,
+      occupation: occupation.trim() || undefined,
     };
 
     if (editingId) {
@@ -94,86 +106,136 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
     return clean;
   };
 
+  const getTenantBalance = (tn: Tenant) => {
+    const rRoom = (tn.room || '').trim().toLowerCase();
+    const rName = (tn.name || '').trim().toLowerCase();
+    let billed = 0;
+    let paid = 0;
+    rents.forEach((r) => {
+      if (!r || r.isVacant) return;
+      if (
+        (r.room || '').trim().toLowerCase() === rRoom &&
+        (r.tenant || '').trim().toLowerCase() === rName
+      ) {
+        billed += r.rent || 0;
+        paid += r.paid || 0;
+      }
+    });
+    return billed - paid;
+  };
+
   return (
-    <div className="rounded-[32px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 mb-6 shadow-sm">
+    <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 sm:p-6 mb-6 shadow-xs">
       {/* Title */}
-      <div className="flex items-center justify-between pb-5 mb-5 border-b border-slate-100 dark:border-slate-800">
-        <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-[#4F46E5] dark:text-indigo-400 flex items-center justify-center font-bold text-lg shrink-0 border border-indigo-100 dark:border-indigo-800/30">
-            <i className="fi fi-sr-users" />
-          </div>
-          <div>
-            <h3 className="text-base md:text-lg font-extrabold text-slate-900 dark:text-white tracking-tight">
-              {t.tenantTitle}
-            </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-              {t.tenantSubtitle}
-            </p>
-          </div>
+      <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
+        <div>
+          <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
+            {t.tenantTitle}
+          </h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{t.tenantSubtitle}</p>
         </div>
 
         <button
           onClick={() => setIsFormOpen(!isFormOpen)}
-          className="no-print flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#4F46E5] text-white hover:bg-[#4338CA] font-bold text-xs transition-all active:scale-95 cursor-pointer"
+          className="no-print flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 font-semibold text-xs transition-colors cursor-pointer whitespace-nowrap"
         >
           <i className={`fi fi-sr-add transition-transform duration-200 ${isFormOpen ? 'rotate-45' : ''}`} />
-          <span className="hidden sm:inline">{editingId ? t.tenantUpdateBtn : t.tenantToggleLabel}</span>
+          <span>{editingId ? t.tenantUpdateBtn : t.tenantToggleLabel}</span>
         </button>
       </div>
 
       {/* Expandable Add/Edit Form */}
       {isFormOpen && (
-        <form onSubmit={handleSubmit} className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-[24px] p-5 mb-6 space-y-4 no-print animate-fadeIn">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-xl p-5 mb-6 space-y-4 no-print animate-fadeIn"
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.thName} *</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                {t.thName} *
+              </label>
               <input
                 type="text"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder={t.tNamePh}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50"
+                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.thPhone} *</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                {t.thPhone} *
+              </label>
               <input
                 type="text"
                 required
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder={t.tPhonePh}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50"
+                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-mono tabular-nums font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.thRoom} *</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                {t.thRoom} *
+              </label>
               <select
                 required
                 value={room}
                 onChange={(e) => setRoom(e.target.value)}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50"
+                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
               >
                 <option value="">{t.tRoomPh}</option>
                 {safeRooms.map((rm) => (
                   <option key={rm.id} value={rm.roomNo}>
-                    {rm.roomNo} ({t.currencySymbol}{rm.rentAmount})
+                    {rm.roomNo} ({t.currencySymbol}
+                    {rm.rentAmount})
                   </option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">{t.thNid}</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                {t.thNid}
+              </label>
               <input
                 type="text"
                 value={nid}
                 onChange={(e) => setNid(e.target.value)}
                 placeholder={t.tNidPh}
-                className="w-full px-4 py-2.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#4F46E5]/50"
+                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-mono tabular-nums text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                {language === 'bn' ? 'অগ্রিম / সিকিউরিটি জামানত' : 'Security Deposit / Advance'}
+              </label>
+              <input
+                type="number"
+                min="0"
+                value={advance}
+                onChange={(e) => setAdvance(e.target.value)}
+                placeholder={language === 'bn' ? 'জামানতের টাকা (ঐচ্ছিক)' : 'Advance deposit (optional)'}
+                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm font-mono tabular-nums text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+                {language === 'bn' ? 'পেশা / পরিচয়' : 'Occupation / Notes'}
+              </label>
+              <input
+                type="text"
+                value={occupation}
+                onChange={(e) => setOccupation(e.target.value)}
+                placeholder={language === 'bn' ? 'যেমন: চাকরিজীবী / ব্যবসায়ী' : 'e.g. Service holder / Business'}
+                className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs md:text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
               />
             </div>
           </div>
@@ -182,13 +244,13 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
             <button
               type="button"
               onClick={resetForm}
-              className="px-4 py-2 rounded-full bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 text-slate-700 dark:text-slate-200 font-bold text-xs transition-colors cursor-pointer"
+              className="px-4 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-colors cursor-pointer"
             >
               {t.cancelBtn}
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-full bg-[#4F46E5] text-white hover:bg-[#4338CA] font-bold text-xs shadow-md transition-colors cursor-pointer"
+              className="px-5 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 font-semibold text-xs transition-colors cursor-pointer"
             >
               {editingId ? t.tenantUpdateBtn : t.tenantSubmitBtn}
             </button>
@@ -197,79 +259,127 @@ export const TenantsSection: React.FC<TenantsSectionProps> = ({
       )}
 
       {/* Table Container */}
-      <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+      <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
         <table className="w-full text-left text-xs md:text-sm border-collapse">
           <thead>
-            <tr className="bg-slate-50 dark:bg-slate-800/80 text-slate-600 dark:text-slate-400 uppercase text-[10px] font-bold tracking-widest border-b border-slate-200 dark:border-slate-800">
-              <th className="p-3.5 pl-4">{t.thName}</th>
-              <th className="p-3.5 text-right">{t.thPhone}</th>
-              <th className="p-3.5 text-right">{t.thRoom}</th>
-              <th className="p-3.5 text-right">{t.thNid}</th>
-              <th className="p-3.5 pr-4 no-print text-right">{t.thAction}</th>
+            <tr className="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 text-xs font-semibold border-b border-slate-200 dark:border-slate-800">
+              <th className="py-3 px-4">{t.thName}</th>
+              <th className="py-3 px-4 text-right">{t.thPhone}</th>
+              <th className="py-3 px-4 text-right">{t.thRoom}</th>
+              <th className="py-3 px-4 text-right">{t.thNid}</th>
+              <th className="py-3 px-4 no-print text-right">{t.thAction}</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 font-medium text-slate-800 dark:text-slate-200">
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 text-slate-800 dark:text-slate-200">
             {filteredTenants.length === 0 ? (
               <tr>
-                <td colSpan={5} className="p-8 text-center text-slate-400 font-bold">
+                <td colSpan={5} className="p-8 text-center text-slate-400 font-semibold">
                   {t.noData}
                 </td>
               </tr>
             ) : (
-              filteredTenants.map((tn) => (
-                <tr key={tn.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                  <td className="p-3.5 pl-4 font-bold text-slate-900 dark:text-white">
-                    {tn.name}
-                  </td>
-                  <td className="p-3.5 text-right">
-                    <div className="flex items-center justify-end gap-2 font-mono text-xs">
-                      <span>{tn.phone}</span>
-                      <a
-                        href={`tel:${tn.phone}`}
-                        className="no-print p-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-                        title="Call Tenant"
-                      >
-                        <i className="fi fi-sr-phone-call text-xs" />
-                      </a>
-                      <a
-                        href={`https://wa.me/${getCleanPhone(tn.phone)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="no-print p-1.5 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors"
-                        title="Open WhatsApp"
-                      >
-                        <i className="fi fi-sr-comment text-xs" />
-                      </a>
-                    </div>
-                  </td>
-                  <td className="p-3.5 text-right">
-                    <span className="inline-block px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs">
-                      {t.roomText}: {tn.room}
-                    </span>
-                  </td>
-                  <td className="p-3.5 font-mono text-slate-500 dark:text-slate-400 text-right">{tn.nid || '-'}</td>
-                  <td className="p-3.5 pr-4 no-print text-right">
-                    <div className="flex items-center justify-end gap-1.5">
-                      <button
-                        onClick={() => handleEditClick(tn)}
-                        className="p-2 rounded-full text-slate-400 hover:text-indigo-600 dark:text-slate-500 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors"
-                        title={t.edit}
-                      >
-                        <i className="fi fi-sr-edit text-sm" />
-                      </button>
-                      <button
-                        onClick={() => {
-                          if (confirm(t.deleteConfirm)) onDeleteTenant(tn.id);
-                        }}
-                        className="p-2 rounded-full text-slate-400 hover:text-rose-600 dark:text-slate-500 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-colors"
-                        title={t.delete}
-                      >
-                        <i className="fi fi-sr-trash text-sm" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
+              filteredTenants.map((tn) => {
+                const matchedRoom = safeRooms.find(
+                  (r) => String(r.roomNo).trim().toLowerCase() === String(tn.room).trim().toLowerCase()
+                );
+                const netBal = getTenantBalance(tn);
+
+                return (
+                  <tr
+                    key={tn.id}
+                    className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors"
+                  >
+                    <td className="py-3 px-4">
+                      {onSelectTenantLedger ? (
+                        <button
+                          type="button"
+                          onClick={() => onSelectTenantLedger(tn, matchedRoom)}
+                          className="font-bold text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer text-left"
+                        >
+                          {tn.name}
+                        </button>
+                      ) : (
+                        <div className="font-bold text-slate-900 dark:text-white">{tn.name}</div>
+                      )}
+                      {(tn.occupation || tn.advance || netBal !== 0) && (
+                        <div className="text-[11px] text-slate-500 dark:text-slate-400 flex flex-wrap items-center gap-x-1.5 mt-0.5">
+                          {tn.occupation && <span>{tn.occupation}</span>}
+                          {tn.advance ? (
+                            <span>
+                              {tn.occupation ? '· ' : ''}
+                              {language === 'bn' ? 'জামানত:' : 'Deposit:'} {t.currencySymbol}
+                              {tn.advance.toLocaleString()}
+                            </span>
+                          ) : null}
+                          {netBal > 0 && (
+                            <span className="text-rose-600 dark:text-rose-400 font-mono tabular-nums font-semibold">
+                              {(tn.occupation || tn.advance) ? '· ' : ''}
+                              {language === 'bn' ? 'বকেয়া:' : 'Due:'} {t.currencySymbol}
+                              {netBal.toLocaleString()}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </td>
+                    <td className="py-3 px-4 text-right">
+                      <div className="flex items-center justify-end gap-2 font-mono tabular-nums text-xs">
+                        <span>{tn.phone}</span>
+                        <a
+                          href={`tel:${tn.phone}`}
+                          className="no-print p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                          title="Call Tenant"
+                        >
+                          <i className="fi fi-sr-phone-call text-xs" />
+                        </a>
+                        <a
+                          href={`https://wa.me/${getCleanPhone(tn.phone)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="no-print p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors"
+                          title="Open WhatsApp"
+                        >
+                          <i className="fi fi-sr-comment text-xs" />
+                        </a>
+                      </div>
+                    </td>
+                    <td className="py-3 px-4 text-right font-mono tabular-nums font-bold text-slate-800 dark:text-slate-200 whitespace-nowrap">
+                      {t.roomText} {tn.room}
+                    </td>
+                    <td className="py-3 px-4 font-mono tabular-nums text-slate-500 dark:text-slate-400 text-right">
+                      {tn.nid || '-'}
+                    </td>
+                    <td className="py-3 px-4 no-print text-right">
+                      <div className="flex items-center justify-end gap-1">
+                        {onSelectTenantLedger && (
+                          <button
+                            onClick={() => onSelectTenantLedger(tn, matchedRoom)}
+                            className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 text-slate-700 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 text-xs font-semibold transition-colors cursor-pointer mr-1"
+                            title={language === 'bn' ? 'সম্পূর্ণ লেজার দেখুন' : 'View Full Ledger'}
+                          >
+                            {language === 'bn' ? 'খতিয়ান' : 'Ledger'}
+                          </button>
+                        )}
+                        <button
+                          onClick={() => handleEditClick(tn)}
+                          className="p-2 rounded-lg text-slate-400 hover:text-indigo-600 dark:text-slate-500 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors cursor-pointer"
+                          title={t.edit}
+                        >
+                          <i className="fi fi-sr-edit text-xs" />
+                        </button>
+                        <button
+                          onClick={() => {
+                            if (confirm(t.deleteConfirm)) onDeleteTenant(tn.id);
+                          }}
+                          className="p-2 rounded-lg text-slate-400 hover:text-rose-600 dark:text-slate-500 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-colors cursor-pointer"
+                          title={t.delete}
+                        >
+                          <i className="fi fi-sr-trash text-xs" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>

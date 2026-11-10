@@ -41,6 +41,7 @@ import { Logo } from './components/Logo';
 import { RoomMatrixGrid } from './components/RoomMatrixGrid';
 import { BatchRentChecklistModal } from './components/BatchRentChecklistModal';
 import { MonthlyReportModal } from './components/MonthlyReportModal';
+import { TenantLedgerModal } from './components/TenantLedgerModal';
 import { QuickActionBar } from './components/QuickActionBar';
 import { getTranslation } from './data/translations';
 import { initialRooms, initialTenants, initialRentRecords, initialExpenses, initialShopDues } from './data/sampleData';
@@ -82,6 +83,7 @@ export default function App() {
   const [isBatchChecklistOpen, setIsBatchChecklistOpen] = useState(false);
   const [isMonthlyReportOpen, setIsMonthlyReportOpen] = useState(false);
   const [receiptRecord, setReceiptRecord] = useState<RentRecord | null>(null);
+  const [ledgerTarget, setLedgerTarget] = useState<{ tenant: Tenant; room?: Room } | null>(null);
   const [quickPayTenantId, setQuickPayTenantId] = useState<string | null>(null);
   const [quickPayDueAmount, setQuickPayDueAmount] = useState<number | null>(null);
   const [quickPayRentRecordId, setQuickPayRentRecordId] = useState<string | null>(null);
@@ -967,53 +969,6 @@ export default function App() {
           {/* 1. Brief Dashboard */}
           {activeTab === 'brief' && (
             <>
-              {/* Quick Feature Action Banners for 1-Click Checklist and Statement */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 no-print">
-                <button
-                  onClick={() => setIsBatchChecklistOpen(true)}
-                  className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white shadow-md transition-all cursor-pointer group text-left"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-amber-300">
-                      <i className="fi fi-sr-bolt text-lg" />
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-black tracking-tight">
-                        {t.batchChecklistTitle || '১-ক্লিক মাসিক ভাড়া চেকশিট'}
-                      </h4>
-                      <p className="text-xs text-white/80">
-                        {language === 'bn' ? 'সব ভাড়াটিয়ার ভাড়া একসাথে দ্রুত জমা করুন' : 'Collect rent for all rooms in one tap'}
-                      </p>
-                    </div>
-                  </div>
-                  <span className="text-xs font-bold bg-white/20 px-3 py-1.5 rounded-xl group-hover:bg-white group-hover:text-emerald-800 transition-colors shrink-0">
-                    {language === 'bn' ? 'খুলুন →' : 'Open →'}
-                  </span>
-                </button>
-
-                <button
-                  onClick={() => setIsMonthlyReportOpen(true)}
-                  className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-indigo-600 to-rose-600 hover:from-indigo-700 hover:to-rose-700 text-white shadow-md transition-all cursor-pointer group text-left"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-white">
-                      <i className="fi fi-sr-file-invoice text-lg" />
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-black tracking-tight">
-                        {t.monthlyReportTitle || 'মাসিক আর্থিক বিবরণী ও অডিট'}
-                      </h4>
-                      <p className="text-xs text-white/80">
-                        {language === 'bn' ? 'PDF ও এক্সেলে সম্পূর্ণ হিসাব স্টেটমেন্ট' : 'Printable PDF & CSV audit statement'}
-                      </p>
-                    </div>
-                  </div>
-                  <span className="text-xs font-bold bg-white/20 px-3 py-1.5 rounded-xl group-hover:bg-white group-hover:text-indigo-800 transition-colors shrink-0">
-                    {language === 'bn' ? 'রিপোর্ট →' : 'Report →'}
-                  </span>
-                </button>
-              </div>
-
               {/* Core Financial Metrics Dashboard */}
               <BriefDashboard
                 language={language}
@@ -1025,6 +980,8 @@ export default function App() {
                 totalEntriesCount={totalEntriesCount}
                 selectedYear={selectedYear}
                 selectedMonth={selectedMonth}
+                onOpenBatchChecklist={() => setIsBatchChecklistOpen(true)}
+                onOpenMonthlyReport={() => setIsMonthlyReportOpen(true)}
               />
 
               {/* Visual Room Status Matrix Grid */}
@@ -1072,6 +1029,7 @@ export default function App() {
                   await handleDeleteRent(rentRecordId);
                 }}
                 onSelectReceipt={(rec) => setReceiptRecord(rec)}
+                onSelectTenantLedger={(tenant, room) => setLedgerTarget({ tenant, room })}
                 onNavigateTab={(tab) => setActiveTab(tab)}
               />
 
@@ -1084,6 +1042,7 @@ export default function App() {
                   selectedMonth={selectedMonth}
                   searchQuery={searchQuery}
                   onQuickPay={handleQuickPay}
+                  onSelectTenantLedger={(item) => setLedgerTarget({ tenant: item.tenant, room: item.room })}
                 />
               )}
             </>
@@ -1107,11 +1066,13 @@ export default function App() {
             <TenantsSection
               tenants={tenants}
               rooms={rooms}
+              rents={rents}
               language={language}
               searchQuery={searchQuery}
               onAddTenant={handleAddTenant}
               onUpdateTenant={handleUpdateTenant}
               onDeleteTenant={handleDeleteTenant}
+              onSelectTenantLedger={(tenant, room) => setLedgerTarget({ tenant, room })}
             />
           )}
 
@@ -1149,6 +1110,7 @@ export default function App() {
               selectedMonth={selectedMonth}
               searchQuery={searchQuery}
               onQuickPay={handleQuickPay}
+              onSelectTenantLedger={(item) => setLedgerTarget({ tenant: item.tenant, room: item.room })}
             />
           )}
 
@@ -1204,6 +1166,26 @@ export default function App() {
       />
 
       {/* Modals & Toasts */}
+      <TenantLedgerModal
+        tenant={ledgerTarget?.tenant || null}
+        room={ledgerTarget?.room}
+        rents={rents}
+        language={language}
+        onClose={() => setLedgerTarget(null)}
+        onSelectReceipt={(rec) => {
+          setLedgerTarget(null);
+          setReceiptRecord(rec);
+        }}
+        onQuickPay={(tenantId, dueAmount, rentRecordId) => {
+          setLedgerTarget(null);
+          setQuickPayTenantId(tenantId);
+          if (dueAmount) setQuickPayDueAmount(dueAmount);
+          if (rentRecordId) setQuickPayRentRecordId(rentRecordId);
+          setActiveTab('rent');
+        }}
+        showToast={showToast}
+      />
+
       <ReceiptModal
         rentRecord={receiptRecord}
         rooms={rooms}

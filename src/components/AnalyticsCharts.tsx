@@ -161,10 +161,10 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Monthly Income vs Expense Bar Chart */}
-        <div className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 shadow-sm">
+        <div className="border-t sm:border-t-0 pt-4 sm:pt-0">
           <div className="flex items-center gap-2 mb-4">
-            <i className="fi fi-sr-arrow-trend-up text-base text-[#4F46E5] dark:text-indigo-400" />
-            <h4 className="text-sm font-extrabold text-slate-900 dark:text-white">
+            <i className="fi fi-sr-arrow-trend-up text-base text-indigo-600 dark:text-indigo-400" />
+            <h4 className="text-sm font-bold text-slate-900 dark:text-white">
               {t.chartIncomeVsExpense} ({activeYear})
             </h4>
           </div>
@@ -178,26 +178,26 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
                   contentStyle={{
                     backgroundColor: '#0f172a',
                     borderColor: '#334155',
-                    borderRadius: '16px',
+                    borderRadius: '12px',
                     color: '#fff',
                     fontSize: '11px',
                     fontWeight: 'bold',
                   }}
                   formatter={(value: any) => [formatCurrency(Number(value) || 0), '']}
                 />
-                <Bar dataKey={language === 'bn' ? 'আদায় (Income)' : 'Income'} fill="#10b981" radius={[8, 8, 0, 0]} />
-                <Bar dataKey={language === 'bn' ? 'খরচ (Expenses)' : 'Expenses'} fill="#f43f5e" radius={[8, 8, 0, 0]} />
-                <Bar dataKey={language === 'bn' ? 'দোকান বাকি (Shop Dues)' : 'Shop Dues'} fill="#f59e0b" radius={[8, 8, 0, 0]} />
+                <Bar dataKey={language === 'bn' ? 'আদায় (Income)' : 'Income'} fill="#10b981" radius={[6, 6, 0, 0]} />
+                <Bar dataKey={language === 'bn' ? 'খরচ (Expenses)' : 'Expenses'} fill="#f43f5e" radius={[6, 6, 0, 0]} />
+                <Bar dataKey={language === 'bn' ? 'দোকান বাকি (Shop Dues)' : 'Shop Dues'} fill="#f59e0b" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Financial Breakdown Pie Chart */}
-        <div className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 shadow-sm flex flex-col justify-between">
+        <div className="border-t lg:border-t-0 lg:border-l border-slate-100 dark:border-slate-800 pt-4 lg:pt-0 lg:pl-6 flex flex-col justify-between">
           <div className="flex items-center gap-2 mb-4">
-            <i className="fi fi-sr-chart-pie text-base text-[#4F46E5] dark:text-indigo-400" />
-            <h4 className="text-sm font-extrabold text-slate-900 dark:text-white">
+            <i className="fi fi-sr-chart-pie text-base text-indigo-600 dark:text-indigo-400" />
+            <h4 className="text-sm font-bold text-slate-900 dark:text-white">
               {language === 'bn' ? 'অর্থসংস্থানের সার্বিক বন্টন' : 'Overall Financial Breakdown'}
             </h4>
           </div>
@@ -222,7 +222,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
                   contentStyle={{
                     backgroundColor: '#0f172a',
                     borderColor: '#334155',
-                    borderRadius: '16px',
+                    borderRadius: '12px',
                     color: '#fff',
                     fontSize: '11px',
                     fontWeight: 'bold',
@@ -238,15 +238,15 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
 
       {/* Expense Type / Category Breakdown Chart */}
       {expenseCategoryData.length > 0 && (
-        <div className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 shadow-sm space-y-6">
+        <div className="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <i className="fi fi-sr-chart-pie text-base text-[#4F46E5] dark:text-indigo-400" />
-              <h4 className="text-sm font-extrabold text-slate-900 dark:text-white">
+              <i className="fi fi-sr-chart-pie text-base text-indigo-600 dark:text-indigo-400" />
+              <h4 className="text-sm font-bold text-slate-900 dark:text-white">
                 {t.chartExpenseCategories} ({language === 'bn' ? 'খাতভিত্তিক খরচ' : 'Expense Category Breakdown'})
               </h4>
             </div>
-            <span className="text-xs font-black text-rose-600 dark:text-rose-400 px-3 py-1 bg-rose-50 dark:bg-rose-900/30 rounded-full border border-rose-100 dark:border-rose-800/30">
+            <span className="text-xs font-bold font-mono tabular-nums text-rose-600 dark:text-rose-400">
               {formatCurrency(totalExpenses)}
             </span>
           </div>
@@ -283,18 +283,18 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
               </ResponsiveContainer>
             </div>
 
-            <div className="space-y-2 max-h-56 overflow-y-auto pr-2 scrollbar-none">
+            <div className="divide-y divide-slate-100 dark:divide-slate-800 max-h-56 overflow-y-auto pr-2 scrollbar-none">
               {expenseCategoryData.map((catItem) => {
                 const pct = totalExpenses > 0 ? ((catItem.value / totalExpenses) * 100).toFixed(1) : '0';
                 return (
-                  <div key={catItem.name} className="flex items-center justify-between text-xs p-2.5 rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
-                    <div className="flex items-center gap-2.5 min-w-0 pl-1">
-                      <span className="w-3.5 h-3.5 rounded-full shrink-0 shadow-sm" style={{ backgroundColor: catItem.color }} />
+                  <div key={catItem.name} className="flex items-center justify-between text-xs py-2.5 px-1">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: catItem.color }} />
                       <span className="font-bold text-slate-800 dark:text-slate-200 truncate">{catItem.name}</span>
                     </div>
-                    <div className="flex items-center gap-2 shrink-0 pr-1">
-                      <span className="font-black text-slate-900 dark:text-white">{formatCurrency(catItem.value)}</span>
-                      <span className="text-[10px] text-slate-400 font-mono">({pct}%)</span>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="font-black text-slate-900 dark:text-white tabular-nums">{formatCurrency(catItem.value)}</span>
+                      <span className="text-[11px] text-slate-400 tabular-nums">({pct}%)</span>
                     </div>
                   </div>
                 );
@@ -303,18 +303,18 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
           </div>
 
           {/* Detailed Expenses Ledger */}
-          <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+          <div className="mt-6 pt-5 border-t border-slate-200 dark:border-slate-800">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
               <h4 className="text-sm font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
                 <i className="fi fi-sr-clipboard-list text-slate-400" />
                 {language === 'bn' ? 'বিস্তারিত খরচের তালিকা' : 'Detailed Expense List'}
               </h4>
-              <div className="flex items-center gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl">
+              <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg">
                 <button
                   onClick={() => setExpenseSortBy('amount')}
-                  className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-colors ${
+                  className={`px-3 py-1.5 text-xs font-bold rounded-md transition-colors cursor-pointer ${
                     expenseSortBy === 'amount'
-                      ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
+                      ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs'
                       : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
                   }`}
                 >
@@ -322,9 +322,9 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
                 </button>
                 <button
                   onClick={() => setExpenseSortBy('date')}
-                  className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-colors ${
+                  className={`px-3 py-1.5 text-xs font-bold rounded-md transition-colors cursor-pointer ${
                     expenseSortBy === 'date'
-                      ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
+                      ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs'
                       : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
                   }`}
                 >
@@ -333,7 +333,7 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
               </div>
             </div>
             
-            <div className="space-y-3">
+            <div className="divide-y divide-slate-100 dark:divide-slate-800">
               {filteredExpenses
                 .slice()
                 .sort((a, b) => {
@@ -342,35 +342,36 @@ export const AnalyticsCharts: React.FC<AnalyticsChartsProps> = ({
                   }
                   return new Date(b.date || '').getTime() - new Date(a.date || '').getTime();
                 })
-                .slice(0, 10) // Show top 10 largest or most recent expenses
+                .slice(0, 10)
                 .map((ex, idx) => (
-                  <div key={ex.id || idx} className="flex items-start justify-between p-3 rounded-2xl bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 shadow-sm">
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-900/50 flex items-center justify-center shrink-0 border border-slate-100 dark:border-slate-700/50">
-                         {ex.category === 'electricity' ? <i className="fi fi-sr-bolt text-amber-500" /> : 
-                          ex.category === 'water' ? <i className="fi fi-sr-raindrops text-indigo-600" /> :
-                          ex.category === 'gas' ? <i className="fi fi-sr-flame text-orange-500" /> :
-                          ex.category === 'waste' ? <i className="fi fi-sr-trash text-slate-500" /> :
-                          ex.category === 'wifi' ? <i className="fi fi-sr-wifi text-emerald-500" /> :
-                          ex.category === 'cleaning' ? <i className="fi fi-sr-broom text-teal-500" /> :
-                          ex.category === 'maintenance' ? <i className="fi fi-sr-tools text-slate-600 dark:text-slate-400" /> :
-                          <i className="fi fi-sr-box text-slate-400" />}
+                  <div key={ex.id || idx} className="flex items-center justify-between py-3 px-1 hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-colors">
+                    <div className="flex items-start gap-3 min-w-0">
+                      <div className="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 mt-0.5">
+                         {ex.category === 'electricity' ? <i className="fi fi-sr-bolt text-amber-500 text-xs" /> : 
+                          ex.category === 'water' ? <i className="fi fi-sr-raindrops text-indigo-600 text-xs" /> :
+                          ex.category === 'gas' ? <i className="fi fi-sr-flame text-orange-500 text-xs" /> :
+                          ex.category === 'waste' ? <i className="fi fi-sr-trash text-slate-500 text-xs" /> :
+                          ex.category === 'wifi' ? <i className="fi fi-sr-wifi text-emerald-500 text-xs" /> :
+                          ex.category === 'cleaning' ? <i className="fi fi-sr-broom text-teal-500 text-xs" /> :
+                          ex.category === 'maintenance' ? <i className="fi fi-sr-tools text-slate-600 dark:text-slate-400 text-xs" /> :
+                          <i className="fi fi-sr-box text-slate-400 text-xs" />}
                       </div>
-                      <div>
-                        <p className="text-sm font-bold text-slate-900 dark:text-white">
-                          {formatCategory(ex.category, language)}
-                        </p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className="text-sm font-bold text-slate-900 dark:text-white">
+                            {formatCategory(ex.category, language)}
+                          </p>
+                          <span className="text-[11px] font-semibold text-slate-400 dark:text-slate-500 tabular-nums">
+                            • {formatShortDate(ex.date, language)}
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">
                           {ex.desc || (language === 'bn' ? 'কোনো বিবরণ নেই' : 'No details provided')}
-                        </p>
-                        <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">
-                          <i className="fi fi-sr-calendar text-[8px] mr-1" />
-                          {formatShortDate(ex.date, language)}
                         </p>
                       </div>
                     </div>
-                    <div className="text-right shrink-0">
-                      <p className="text-sm font-black text-rose-600 dark:text-rose-400">
+                    <div className="text-right shrink-0 pl-3">
+                      <p className="text-sm font-black text-rose-600 dark:text-rose-400 tabular-nums">
                         -{formatCurrency(ex.amount || 0)}
                       </p>
                     </div>
