@@ -18,7 +18,7 @@ import {
   exportBackupJSON, 
   validateAndMergeBackup 
 } from './lib/storage';
-import { auth, db, isFirebaseInitialized } from './lib/firebase';
+import { auth, db, isFirebaseInitialized, handleFirestoreError, OperationType } from './lib/firebase';
 import { onAuthStateChanged, User, signOut } from 'firebase/auth';
 import { collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, setDoc, getDoc } from 'firebase/firestore';
 
@@ -77,6 +77,7 @@ export default function App() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [dokanDues, setDokanDues] = useState<ShopDue[]>([]);
   const [shopNames, setShopNames] = useState<string[]>(['সাইফুল দোকান']);
+  const [shopDocs, setShopDocs] = useState<{ id: string; name: string }[]>([]);
 
   // Auth & Modal States
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -272,6 +273,13 @@ export default function App() {
       for (const d of dokanDues) {
         if (d.id) await setDoc(doc(db, 'dokanBaki', d.id), d, { merge: true });
       }
+      for (const sName of shopNames) {
+        const clean = (sName || '').trim();
+        if (!clean) continue;
+        const existingDoc = shopDocs.find((s) => s.name.trim().toLowerCase() === clean.toLowerCase());
+        const shopId = existingDoc?.id || getShopDocId(clean);
+        await setDoc(doc(db, 'shops', shopId), { id: shopId, name: clean, createdAt: new Date().toISOString() }, { merge: true });
+      }
 
       const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       setLastCloudBackupTime(timeStr);
@@ -411,12 +419,39 @@ export default function App() {
       setExpenses(items);
     }, () => {});
 
-    const unsubDok = onSnapshot(collection(db, 'dokanBaki'), (snap) => {
-      const items: ShopDue[] = [];
-      snap.forEach((docSnap) => items.push({ id: docSnap.id, ...docSnap.data() } as ShopDue));
-      items.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
-      setDokanDues(items);
-    }, () => {});
+    const unsubDok = onSnapshot(
+      collection(db, 'dokanBaki'),
+      (snap) => {
+        const items: ShopDue[] = [];
+        snap.forEach((docSnap) => items.push({ id: docSnap.id, ...docSnap.data() } as ShopDue));
+        items.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+        setDokanDues(items);
+      },
+      (err) => {
+        handleFirestoreError(err, OperationType.GET, 'dokanBaki');
+      }
+    );
+
+    const unsubShops = onSnapshot(
+      collection(db, 'shops'),
+      (snap) => {
+        const docs: { id: string; name: string }[] = [];
+        snap.forEach((docSnap) => {
+          const data = docSnap.data();
+          if (data && typeof data.name === 'string' && data.name.trim()) {
+            docs.push({ id: docSnap.id, name: data.name.trim() });
+          }
+        });
+        setShopDocs(docs);
+        if (docs.length > 0) {
+          const remoteNames = docs.map((d) => d.name);
+          setShopNames((prev) => Array.from(new Set([...prev, ...remoteNames])));
+        }
+      },
+      (err) => {
+        handleFirestoreError(err, OperationType.GET, 'shops');
+      }
+    );
 
     return () => {
       unsubRooms();
@@ -424,6 +459,7 @@ export default function App() {
       unsubRents();
       unsubExp();
       unsubDok();
+      unsubShops();
     };
   }, []);
 
@@ -763,13 +799,30 @@ export default function App() {
     }
   };
 
+  const getShopDocId = (name: string) => {
+    const clean = name.trim().toLowerCase();
+    let hash = 5381;
+    for (let i = 0; i < clean.length; i++) {
+      hash = ((hash << 5) + hash) ^ clean.charCodeAt(i);
+    }
+    return `shop-${(hash >>> 0).toString(36)}`;
+  };
+
   const handleAddDokanDue = async (dueData: Omit<ShopDue, 'id'>) => {
     const newDue: ShopDue = { id: `dok-${Date.now()}`, ...dueData };
     setDokanDues((prev) => [...prev, newDue]);
     showToast(language === 'bn' ? 'দোকান বাকি যোগ করা হয়েছে!' : 'Shop credit logged!');
 
-    if (db) {
-      try { await setDoc(doc(db, 'dokanBaki', newDue.id), newDue); } catch (e) {}
+    if (db && isFirebaseInitialized) {
+      try {
+        await setDoc(doc(db, 'dokanBaki', newDue.id), newDue);
+      } catch (e) {
+        handleFirestoreError(e, OperationType.WRITE, `dokanBaki/${newDue.id}`);
+        showToast(
+          language === 'bn' ? 'ফায়ারবেসে সেভ করতে সমস্যা হয়েছে!' : 'Failed to save to Firebase!',
+          'error'
+        );
+      }
     }
   };
 
@@ -777,8 +830,16 @@ export default function App() {
     setDokanDues((prev) => prev.map((d) => (d.id === id ? { ...d, ...dueData } : d)));
     showToast(language === 'bn' ? 'দোকান বাকি আপডেট করা হয়েছে!' : 'Shop credit updated!');
 
-    if (db) {
-      try { await setDoc(doc(db, 'dokanBaki', id), { ...dueData, id }, { merge: true }); } catch (e) {}
+    if (db && isFirebaseInitialized) {
+      try {
+        await setDoc(doc(db, 'dokanBaki', id), { ...dueData, id }, { merge: true });
+      } catch (e) {
+        handleFirestoreError(e, OperationType.UPDATE, `dokanBaki/${id}`);
+        showToast(
+          language === 'bn' ? 'ফায়ারবেসে আপডেট করতে সমস্যা হয়েছে!' : 'Failed to update in Firebase!',
+          'error'
+        );
+      }
     }
   };
 
@@ -786,8 +847,16 @@ export default function App() {
     setDokanDues((prev) => prev.filter((d) => d.id !== id));
     showToast(language === 'bn' ? 'দোকান বাকি মুছে ফেলা হয়েছে!' : 'Shop credit deleted.', 'info');
 
-    if (db) {
-      try { await deleteDoc(doc(db, 'dokanBaki', id)); } catch (e) {}
+    if (db && isFirebaseInitialized) {
+      try {
+        await deleteDoc(doc(db, 'dokanBaki', id));
+      } catch (e) {
+        handleFirestoreError(e, OperationType.DELETE, `dokanBaki/${id}`);
+        showToast(
+          language === 'bn' ? 'ফায়ারবেস থেকে মুছতে সমস্যা হয়েছে!' : 'Failed to delete from Firebase!',
+          'error'
+        );
+      }
     }
   };
 
@@ -804,11 +873,11 @@ export default function App() {
     );
   };
 
-  const handleAddShopName = (name: string) => {
+  const handleAddShopName = async (name: string) => {
     const trimmed = name.trim();
     if (!trimmed) return;
     setShopNames((prev) => {
-      if (prev.includes(trimmed)) return prev;
+      if (prev.some((s) => s.trim().toLowerCase() === trimmed.toLowerCase())) return prev;
       return [...prev, trimmed];
     });
     showToast(
@@ -816,16 +885,57 @@ export default function App() {
         ? `নতুন দোকান যুক্ত হয়েছে: ${trimmed}`
         : `New shop added: ${trimmed}`
     );
+
+    if (db && isFirebaseInitialized) {
+      const existingDoc = shopDocs.find(
+        (s) => s.name.trim().toLowerCase() === trimmed.toLowerCase()
+      );
+      const shopId = existingDoc?.id || getShopDocId(trimmed);
+      try {
+        await setDoc(
+          doc(db, 'shops', shopId),
+          {
+            id: shopId,
+            name: trimmed,
+            createdAt: new Date().toISOString(),
+          },
+          { merge: true }
+        );
+      } catch (e) {
+        handleFirestoreError(e, OperationType.WRITE, `shops/${shopId}`);
+        showToast(
+          language === 'bn'
+            ? 'ফায়ারবেসে নতুন দোকান সেভ করতে সমস্যা হয়েছে!'
+            : 'Failed to save new shop to Firebase!',
+          'error'
+        );
+      }
+    }
   };
 
-  const handleDeleteShopName = (name: string) => {
-    setShopNames((prev) => prev.filter((s) => s !== name));
+  const handleDeleteShopName = async (name: string) => {
+    const trimmed = name.trim();
+    setShopNames((prev) => prev.filter((s) => s.trim().toLowerCase() !== trimmed.toLowerCase()));
     showToast(
       language === 'bn'
         ? `দোকানের নাম তালিকা থেকে সরানো হয়েছে`
         : `Shop removed from saved list`,
       'info'
     );
+
+    if (db && isFirebaseInitialized) {
+      const matchingDocs = shopDocs.filter(
+        (s) => s.name.trim().toLowerCase() === trimmed.toLowerCase()
+      );
+      const idsToDelete = matchingDocs.length > 0 ? matchingDocs.map((d) => d.id) : [getShopDocId(trimmed)];
+      for (const shopId of idsToDelete) {
+        try {
+          await deleteDoc(doc(db, 'shops', shopId));
+        } catch (e) {
+          handleFirestoreError(e, OperationType.DELETE, `shops/${shopId}`);
+        }
+      }
+    }
   };
 
   const handleTriggerBackup = () => {

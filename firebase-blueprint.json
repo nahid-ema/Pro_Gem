@@ -1,23 +1,36 @@
 {
   "entities": {
+    "Room": {
+      "title": "Room Record",
+      "description": "Represents a rental unit with base rent and utility charges",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "roomNo": { "type": "string" },
+        "rentAmount": { "type": "number" },
+        "gasBill": { "type": "number" },
+        "waterBill": { "type": "number" },
+        "wasteBill": { "type": "number" },
+        "meterNo": { "type": "string" }
+      },
+      "required": ["id", "roomNo", "rentAmount"]
+    },
     "RentRecord": {
       "title": "Rent Record",
       "description": "Represents a monthly rent collection record for a tenant/room",
       "type": "object",
       "properties": {
         "id": { "type": "string" },
-        "tenantName": { "type": "string" },
-        "roomNo": { "type": "string" },
-        "month": { "type": "string" },
-        "year": { "type": "string" },
-        "amount": { "type": "number" },
+        "tenant": { "type": "string" },
+        "room": { "type": "string" },
+        "phone": { "type": "string" },
+        "rent": { "type": "number" },
         "paid": { "type": "number" },
         "due": { "type": "number" },
         "date": { "type": "string" },
-        "note": { "type": "string" },
-        "paymentMethod": { "type": "string" }
+        "note": { "type": "string" }
       },
-      "required": ["id", "tenantName", "roomNo", "amount"]
+      "required": ["id", "tenant", "room", "rent"]
     },
     "Expense": {
       "title": "Expense Record",
@@ -38,11 +51,23 @@
       "type": "object",
       "properties": {
         "id": { "type": "string" },
+        "shopName": { "type": "string" },
         "desc": { "type": "string" },
         "amount": { "type": "number" },
         "date": { "type": "string" }
       },
       "required": ["id", "desc", "amount"]
+    },
+    "Shop": {
+      "title": "Shop / Shopkeeper",
+      "description": "Represents a saved shopkeeper or store name for shop dues",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "name"]
     },
     "Tenant": {
       "title": "Tenant Record",
@@ -51,17 +76,20 @@
       "properties": {
         "id": { "type": "string" },
         "name": { "type": "string" },
-        "roomNo": { "type": "string" },
+        "room": { "type": "string" },
         "phone": { "type": "string" },
-        "rentAmount": { "type": "number" },
-        "advanceAmount": { "type": "number" },
-        "joinDate": { "type": "string" },
-        "active": { "type": "boolean" }
+        "nid": { "type": "string" },
+        "advance": { "type": "number" },
+        "occupation": { "type": "string" }
       },
-      "required": ["id", "name", "roomNo"]
+      "required": ["id", "name", "room"]
     }
   },
   "firestore": {
+    "/rooms/{roomId}": {
+      "schema": "#/entities/Room",
+      "description": "Rental room configurations"
+    },
     "/rents/{rentId}": {
       "schema": "#/entities/RentRecord",
       "description": "Rent collection documents"
@@ -70,9 +98,13 @@
       "schema": "#/entities/Expense",
       "description": "Expense records"
     },
-    "/dokanDues/{dueId}": {
+    "/dokanBaki/{dueId}": {
       "schema": "#/entities/ShopDue",
       "description": "Shop credit / due records"
+    },
+    "/shops/{shopId}": {
+      "schema": "#/entities/Shop",
+      "description": "Saved shopkeeper / store names"
     },
     "/tenants/{tenantId}": {
       "schema": "#/entities/Tenant",
