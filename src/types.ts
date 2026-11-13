@@ -64,6 +64,7 @@ export interface BackupData {
   rents: Omit<RentRecord, 'id'>[] | RentRecord[];
   expenses: Omit<Expense, 'id'>[] | Expense[];
   dokanBaki: Omit<ShopDue, 'id'>[] | ShopDue[];
+  shopNames?: string[];
   exportDate?: string;
   version?: string;
 }

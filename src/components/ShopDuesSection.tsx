@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { ShopDue, Language } from '../types';
 import { getTranslation } from '../data/translations';
 import { matchesQuery } from '../lib/search';
@@ -6,6 +6,7 @@ import { formatShortDate } from '../lib/dateUtils';
 
 interface ShopDuesSectionProps {
   dokanDues: ShopDue[];
+  shopNames?: string[];
   language: Language;
   searchQuery: string;
   selectedYear: string;
@@ -13,10 +14,34 @@ interface ShopDuesSectionProps {
   onAddDokanDue: (due: Omit<ShopDue, 'id'>) => void;
   onUpdateDokanDue: (id: string, due: Omit<ShopDue, 'id'>) => void;
   onDeleteDokanDue: (id: string) => void;
+  onAddShopName?: (name: string) => void;
+  onDeleteShopName?: (name: string) => void;
 }
+
+export const resolveShopName = (dk: ShopDue, lang: Language = 'bn'): string => {
+  if (dk.shopName && dk.shopName.trim()) {
+    return dk.shopName.trim();
+  }
+  const rawDesc = (dk.desc || '').trim();
+  if (!rawDesc) {
+    return lang === 'bn' ? 'সাধারণ দোকান' : 'General Shop';
+  }
+  if (
+    rawDesc === 'সাইফুল' ||
+    rawDesc.toLowerCase() === 'saiful' ||
+    rawDesc.startsWith('সাইফুল')
+  ) {
+    return 'সাইফুল দোকান';
+  }
+  if (rawDesc.includes('—')) {
+    return rawDesc.split('—')[0].trim();
+  }
+  return rawDesc;
+};
 
 export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
   dokanDues,
+  shopNames = [],
   language,
   searchQuery,
   selectedYear,
@@ -24,6 +49,8 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
   onAddDokanDue,
   onUpdateDokanDue,
   onDeleteDokanDue,
+  onAddShopName,
+  onDeleteShopName,
 }) => {
   const t = getTranslation(language);
 
@@ -33,16 +60,43 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
     return d.toISOString().slice(0, 10);
   };
 
+  const safeDokanDues = Array.isArray(dokanDues) ? dokanDues : [];
+
+  // Combine saved shopNames with any shopName present in records
+  const allShops = useMemo(() => {
+    const set = new Set<string>();
+    (Array.isArray(shopNames) ? shopNames : []).forEach((s) => {
+      if (s && s.trim()) set.add(s.trim());
+    });
+    safeDokanDues.forEach((dk) => {
+      if (dk) {
+        const resolved = resolveShopName(dk, language);
+        if (resolved) set.add(resolved);
+      }
+    });
+    if (set.size === 0) {
+      set.add('সাইফুল দোকান');
+    }
+    return Array.from(set);
+  }, [shopNames, safeDokanDues, language]);
+
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isManageShopsOpen, setIsManageShopsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const [date, setDate] = useState(todayStr());
+  const [selectedShop, setSelectedShop] = useState<string>(() => allShops[0] || 'সাইফুল দোকান');
+  const [newShopInput, setNewShopInput] = useState('');
+  const [standaloneShopInput, setStandaloneShopInput] = useState('');
   const [desc, setDesc] = useState('');
   const [amount, setAmount] = useState('');
+  const [selectedShopFilter, setSelectedShopFilter] = useState<string>('all');
 
   const resetForm = () => {
     setEditingId(null);
     setDate(todayStr());
+    setSelectedShop(allShops[0] || 'সাইফুল দোকান');
+    setNewShopInput('');
     setDesc('');
     setAmount('');
     setIsFormOpen(false);
@@ -51,20 +105,55 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
   const handleEditClick = (dk: ShopDue) => {
     setEditingId(dk.id);
     setDate(dk.date);
+    const resolvedShop = resolveShopName(dk, language);
+    if (allShops.includes(resolvedShop)) {
+      setSelectedShop(resolvedShop);
+      setNewShopInput('');
+    } else {
+      setSelectedShop('__NEW__');
+      setNewShopInput(resolvedShop);
+    }
     setDesc(dk.desc);
     setAmount(String(dk.amount));
     setIsFormOpen(true);
   };
 
+  const handleQuickAddShopInForm = () => {
+    const trimmed = newShopInput.trim();
+    if (!trimmed) return;
+    onAddShopName?.(trimmed);
+    setSelectedShop(trimmed);
+    setNewShopInput('');
+  };
+
+  const handleStandaloneAddShop = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = standaloneShopInput.trim();
+    if (!trimmed) return;
+    onAddShopName?.(trimmed);
+    setSelectedShop(trimmed);
+    setStandaloneShopInput('');
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!date || !desc.trim() || !amount) return;
+    const finalShopName =
+      selectedShop === '__NEW__' ? newShopInput.trim() : selectedShop.trim();
 
-    const payload = {
+    if (!date || !finalShopName || !amount) return;
+
+    // Save the shop name if it is newly entered
+    if (!allShops.includes(finalShopName)) {
+      onAddShopName?.(finalShopName);
+    }
+
+    const finalDesc = desc.trim() || finalShopName;
+
+    const payload: Omit<ShopDue, 'id'> = {
       date,
-      desc: desc.trim(),
+      shopName: finalShopName,
+      desc: finalDesc,
       amount: Number(amount) || 0,
-      shopName: desc.split('—')[0]?.trim() || '',
     };
 
     if (editingId) {
@@ -76,10 +165,9 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
     resetForm();
   };
 
-  const safeDokanDues = Array.isArray(dokanDues) ? dokanDues : [];
-
-  const filteredDokan = safeDokanDues
-    .filter((dk) => {
+  // Period-filtered shop dues (before shop filter)
+  const periodDokan = useMemo(() => {
+    return safeDokanDues.filter((dk) => {
       if (!dk || !dk.date) return false;
       const parts = dk.date.split('-');
       const matchY = selectedYear === 'all' || parts[0] === selectedYear;
@@ -87,13 +175,41 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
 
       if (!matchY || !matchM) return false;
 
-      return matchesQuery(searchQuery, [dk.desc, dk.amount, dk.date]);
-    })
-    .sort((a, b) => {
-      const dateCmp = (a.date || '').localeCompare(b.date || '');
-      if (dateCmp !== 0) return dateCmp;
-      return (a.desc || '').localeCompare(b.desc || '');
+      const sName = resolveShopName(dk, language);
+      return matchesQuery(searchQuery, [dk.desc, dk.shopName, sName, dk.amount, dk.date]);
     });
+  }, [safeDokanDues, selectedYear, selectedMonth, searchQuery, language]);
+
+  // Shop summary stats for filter bar
+  const shopFilterStats = useMemo(() => {
+    const map = new Map<string, { count: number; total: number }>();
+    // Include all saved shops so the user can see and filter by any added shop
+    allShops.forEach((shop) => {
+      map.set(shop, { count: 0, total: 0 });
+    });
+    periodDokan.forEach((dk) => {
+      const sName = resolveShopName(dk, language);
+      const prev = map.get(sName) || { count: 0, total: 0 };
+      map.set(sName, {
+        count: prev.count + 1,
+        total: prev.total + (dk.amount || 0),
+      });
+    });
+    return Array.from(map.entries());
+  }, [allShops, periodDokan, language]);
+
+  const filteredDokan = useMemo(() => {
+    return periodDokan
+      .filter((dk) => {
+        if (selectedShopFilter === 'all') return true;
+        return resolveShopName(dk, language) === selectedShopFilter;
+      })
+      .sort((a, b) => {
+        const dateCmp = (b.date || '').localeCompare(a.date || '');
+        if (dateCmp !== 0) return dateCmp;
+        return (a.desc || '').localeCompare(b.desc || '');
+      });
+  }, [periodDokan, selectedShopFilter, language]);
 
   const totalDokanSum = filteredDokan.reduce((acc, dk) => acc + (dk.amount || 0), 0);
 
@@ -106,8 +222,8 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
 
   return (
     <div className="rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 sm:p-6 mb-6 shadow-xs">
-      {/* Header Title */}
-      <div className="flex items-center justify-between pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
+      {/* Header Title & Action Buttons */}
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
         <div>
           <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
             {t.dokanTitle}
@@ -115,22 +231,108 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{t.dokanSubtitle}</p>
         </div>
 
-        <button
-          onClick={() => setIsFormOpen(!isFormOpen)}
-          className="no-print flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 font-semibold text-xs transition-colors cursor-pointer whitespace-nowrap"
-        >
-          <i className={`fi fi-sr-add transition-transform duration-200 ${isFormOpen ? 'rotate-45' : ''}`} />
-          <span>{editingId ? t.dokanUpdateBtn : t.dokanToggleLabel}</span>
-        </button>
+        <div className="flex items-center gap-2 no-print">
+          <button
+            type="button"
+            onClick={() => setIsManageShopsOpen(!isManageShopsOpen)}
+            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap ${
+              isManageShopsOpen
+                ? 'bg-slate-900 text-white border-slate-900 dark:bg-white dark:text-slate-900 dark:border-white'
+                : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
+            }`}
+          >
+            <i className="fi fi-sr-shop text-xs" />
+            <span>{t.dokanAddShopBtn || '+ নতুন দোকান'}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsFormOpen(!isFormOpen)}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 font-semibold text-xs transition-colors cursor-pointer whitespace-nowrap"
+          >
+            <i className={`fi fi-sr-add transition-transform duration-200 ${isFormOpen ? 'rotate-45' : ''}`} />
+            <span>{editingId ? t.dokanUpdateBtn : t.dokanToggleLabel}</span>
+          </button>
+        </div>
       </div>
 
-      {/* Expandable Form */}
+      {/* Quick Shopkeeper / Shop Name Manager Panel */}
+      {isManageShopsOpen && (
+        <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl p-4 mb-5 no-print animate-fadeIn">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+            <div>
+              <h4 className="text-xs md:text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <i className="fi fi-sr-shop text-indigo-600 dark:text-indigo-400" />
+                <span>
+                  {language === 'bn'
+                    ? 'দোকানদার / দোকানের তালিকা ও নতুন নাম সংযোজন'
+                    : 'Saved Shopkeepers / Stores & Add New'}
+                </span>
+              </h4>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                {language === 'bn'
+                  ? 'এখানে দোকানের নাম যোগ করলে বাকি এন্ট্রি করার সময় সরাসরি সিলেক্ট করতে পারবেন'
+                  : 'Add shopkeeper names here to quickly select them when logging credit dues'}
+              </p>
+            </div>
+
+            <form onSubmit={handleStandaloneAddShop} className="flex items-center gap-2 w-full sm:w-auto">
+              <input
+                type="text"
+                value={standaloneShopInput}
+                onChange={(e) => setStandaloneShopInput(e.target.value)}
+                placeholder={t.dokanNewShopPh || 'নতুন দোকানের নাম লিখুন...'}
+                className="flex-1 sm:w-64 px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+              />
+              <button
+                type="submit"
+                className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition-colors cursor-pointer shrink-0"
+              >
+                {t.dokanSaveShopBtn || 'যোগ করুন'}
+              </button>
+            </form>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-200/70 dark:border-slate-700/60">
+            {allShops.map((shop) => (
+              <div
+                key={shop}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200"
+              >
+                <span
+                  onClick={() => {
+                    setSelectedShop(shop);
+                    setIsFormOpen(true);
+                  }}
+                  className="cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400"
+                  title={language === 'bn' ? 'এই দোকানে বাকি যোগ করতে ক্লিক করুন' : 'Click to log due for this shop'}
+                >
+                  {shop}
+                </span>
+                {allShops.length > 1 && onDeleteShopName && (
+                  <button
+                    type="button"
+                    onClick={() => onDeleteShopName(shop)}
+                    className="text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 transition-colors cursor-pointer"
+                    title={language === 'bn' ? 'তালিকা থেকে সরান' : 'Remove from list'}
+                  >
+                    <i className="fi fi-sr-cross-small text-xs" />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Expandable Due Entry Form */}
       {isFormOpen && (
         <form
           onSubmit={handleSubmit}
           className="bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800 rounded-xl p-5 mb-6 space-y-4 no-print animate-fadeIn"
         >
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* 1. Date */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 {t.thDokDate} *
@@ -144,13 +346,79 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
               />
             </div>
 
+            {/* 2. Shopkeeper / Shop Name Select + Add New */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  {t.dokanShopLbl || 'দোকানদার / দোকানের নাম'} *
+                </label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (selectedShop === '__NEW__') {
+                      setSelectedShop(allShops[0] || 'সাইফুল দোকান');
+                    } else {
+                      setSelectedShop('__NEW__');
+                    }
+                  }}
+                  className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
+                >
+                  {selectedShop === '__NEW__'
+                    ? (language === 'bn' ? 'তালিকা থেকে বাছুন' : 'Select existing')
+                    : (t.dokanAddShopBtn || '+ নতুন দোকান')}
+                </button>
+              </div>
+
+              {selectedShop !== '__NEW__' ? (
+                <select
+                  value={selectedShop}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setSelectedShop(val);
+                  }}
+                  className="w-full px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+                >
+                  {allShops.map((shop) => (
+                    <option key={shop} value={shop}>
+                      {shop}
+                    </option>
+                  ))}
+                  <option value="__NEW__">
+                    {t.optAddNewShop || '+ নতুন দোকানের নাম যোগ করুন...'}
+                  </option>
+                </select>
+              ) : (
+                <div className="flex items-center gap-1.5">
+                  <input
+                    type="text"
+                    required
+                    autoFocus
+                    value={newShopInput}
+                    onChange={(e) => setNewShopInput(e.target.value)}
+                    placeholder={t.dokanNewShopPh || 'নতুন দোকানদার বা দোকানের নাম...'}
+                    className="w-full px-3.5 py-2 rounded-lg border border-indigo-400 dark:border-indigo-500 bg-white dark:bg-slate-900 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+                  />
+                  {newShopInput.trim() && (
+                    <button
+                      type="button"
+                      onClick={handleQuickAddShopInForm}
+                      className="px-3 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shrink-0 cursor-pointer"
+                      title={t.dokanSaveShopBtn || 'দোকান যোগ করুন'}
+                    >
+                      {language === 'bn' ? 'সেভ' : 'Save'}
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* 3. Item / Description */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
-                {t.thDokDesc} *
+                {t.thDokDesc}
               </label>
               <input
                 type="text"
-                required
                 value={desc}
                 onChange={(e) => setDesc(e.target.value)}
                 placeholder={t.dokanDescPh}
@@ -158,6 +426,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
               />
             </div>
 
+            {/* 4. Amount */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 {t.thDokAmt} *
@@ -192,12 +461,51 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
         </form>
       )}
 
+      {/* Segmented Shopkeeper Filter Bar */}
+      {shopFilterStats.length > 0 && (
+        <div className="flex items-center gap-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl overflow-x-auto mb-5 no-print scrollbar-none w-fit max-w-full">
+          <button
+            type="button"
+            onClick={() => setSelectedShopFilter('all')}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors shrink-0 cursor-pointer whitespace-nowrap ${
+              selectedShopFilter === 'all'
+                ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+            }`}
+          >
+            {t.dokanAllShops || 'সব দোকান'} ({periodDokan.length})
+          </button>
+
+          {shopFilterStats.map(([shopName, stats]) => (
+            <button
+              key={shopName}
+              type="button"
+              onClick={() => setSelectedShopFilter(shopName)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors shrink-0 cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
+                selectedShopFilter === shopName
+                  ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-xs'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              <span>{shopName}</span>
+              <span className="text-[11px] font-mono tabular-nums text-amber-600 dark:text-amber-400 font-bold">
+                {formatCurrency(stats.total)}
+              </span>
+              <span className="text-[10px] font-mono tabular-nums text-slate-400 dark:text-slate-500">
+                ({stats.count})
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Table Container */}
       <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
         <table className="w-full text-left text-xs md:text-sm border-collapse">
           <thead>
             <tr className="bg-slate-50 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 text-xs font-semibold border-b border-slate-200 dark:border-slate-800">
               <th className="py-3 px-4">{t.thDokDate}</th>
+              <th className="py-3 px-4">{t.thDokShop || 'দোকানদার / দোকান'}</th>
               <th className="py-3 px-4">{t.thDokDesc}</th>
               <th className="py-3 px-4 text-right">{t.thDokAmt}</th>
               <th className="py-3 px-4 no-print text-right">{t.thDokAct}</th>
@@ -206,62 +514,70 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 text-slate-800 dark:text-slate-200">
             {filteredDokan.length === 0 ? (
               <tr>
-                <td colSpan={4} className="p-8 text-center text-slate-400 font-semibold">
+                <td colSpan={5} className="p-8 text-center text-slate-400 font-semibold">
                   {t.noData}
                 </td>
               </tr>
             ) : (
-              filteredDokan.map((dk) => (
-                <tr
-                  key={dk.id}
-                  className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors"
-                >
-                  <td className="py-3 px-4 font-mono tabular-nums text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
-                    {formatShortDate(dk.date, language)}
-                  </td>
-                  <td className="py-3 px-4 font-bold text-slate-900 dark:text-white">{dk.desc}</td>
-                  <td
-                    className={`py-3 px-4 font-mono tabular-nums font-bold text-right ${
-                      dk.amount < 0
-                        ? 'text-emerald-600 dark:text-emerald-400'
-                        : 'text-amber-600 dark:text-amber-400'
-                    }`}
+              filteredDokan.map((dk) => {
+                const sName = resolveShopName(dk, language);
+                return (
+                  <tr
+                    key={dk.id}
+                    className="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors"
                   >
-                    {formatCurrency(dk.amount)}
-                  </td>
-                  <td className="py-3 px-4 no-print text-right">
-                    <div className="flex items-center justify-end gap-1">
-                      <button
-                        onClick={() => handleEditClick(dk)}
-                        className="p-2 rounded-lg text-slate-400 hover:text-indigo-600 dark:text-slate-500 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors cursor-pointer"
-                        title={t.edit}
-                      >
-                        <i className="fi fi-sr-edit text-xs" />
-                      </button>
-                      <button
-                        onClick={() => {
-                          if (confirm(t.deleteConfirm)) onDeleteDokanDue(dk.id);
-                        }}
-                        className="p-2 rounded-lg text-slate-400 hover:text-rose-600 dark:text-slate-500 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-colors cursor-pointer"
-                        title={t.delete}
-                      >
-                        <i className="fi fi-sr-trash text-xs" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
+                    <td className="py-3 px-4 font-mono tabular-nums text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                      {formatShortDate(dk.date, language)}
+                    </td>
+                    <td className="py-3 px-4 font-bold text-slate-900 dark:text-white whitespace-nowrap">
+                      {sName}
+                    </td>
+                    <td className="py-3 px-4 text-slate-600 dark:text-slate-300 font-medium">
+                      {dk.desc}
+                    </td>
+                    <td
+                      className={`py-3 px-4 font-mono tabular-nums font-bold text-right whitespace-nowrap ${
+                        dk.amount < 0
+                          ? 'text-emerald-600 dark:text-emerald-400'
+                          : 'text-amber-600 dark:text-amber-400'
+                      }`}
+                    >
+                      {formatCurrency(dk.amount)}
+                    </td>
+                    <td className="py-3 px-4 no-print text-right">
+                      <div className="flex items-center justify-end gap-1">
+                        <button
+                          onClick={() => handleEditClick(dk)}
+                          className="p-2 rounded-lg text-slate-400 hover:text-indigo-600 dark:text-slate-500 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors cursor-pointer"
+                          title={t.edit}
+                        >
+                          <i className="fi fi-sr-edit text-xs" />
+                        </button>
+                        <button
+                          onClick={() => {
+                            if (confirm(t.deleteConfirm)) onDeleteDokanDue(dk.id);
+                          }}
+                          className="p-2 rounded-lg text-slate-400 hover:text-rose-600 dark:text-slate-500 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/30 transition-colors cursor-pointer"
+                          title={t.delete}
+                        >
+                          <i className="fi fi-sr-trash text-xs" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
 
           {filteredDokan.length > 0 && (
             <tfoot>
               <tr className="bg-slate-50 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white border-t border-slate-200 dark:border-slate-800">
-                <td className="py-3 px-4">
+                <td className="py-3 px-4" colSpan={3}>
                   {t.totalRow} ({filteredDokan.length})
+                  {selectedShopFilter !== 'all' ? ` · ${selectedShopFilter}` : ''}
                 </td>
-                <td className="py-3 px-4">-</td>
-                <td className="py-3 px-4 text-amber-600 dark:text-amber-400 font-mono tabular-nums font-bold text-right">
+                <td className="py-3 px-4 text-amber-600 dark:text-amber-400 font-mono tabular-nums font-bold text-right whitespace-nowrap">
                   {formatCurrency(totalDokanSum)}
                 </td>
                 <td className="py-3 px-4 no-print"></td>

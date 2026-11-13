@@ -76,6 +76,7 @@ export default function App() {
   const [rents, setRents] = useState<RentRecord[]>([]);
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [dokanDues, setDokanDues] = useState<ShopDue[]>([]);
+  const [shopNames, setShopNames] = useState<string[]>(['সাইফুল দোকান']);
 
   // Auth & Modal States
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -136,12 +137,13 @@ export default function App() {
 
   // Load local data on boot
   useEffect(() => {
-    const { rooms: r, tenants: t, rents: rt, expenses: e, dokan: d } = loadInitialData();
+    const { rooms: r, tenants: t, rents: rt, expenses: e, dokan: d, shopNames: sn } = loadInitialData();
     setRooms(r);
     setTenants(t);
     setRents(rt);
     setExpenses(e);
     setDokanDues(d);
+    if (sn && sn.length > 0) setShopNames(sn);
   }, []);
 
   // Save local data changes
@@ -150,6 +152,7 @@ export default function App() {
   useEffect(() => { safeSetItem(STORAGE_KEYS.RENTS, rents); }, [rents]);
   useEffect(() => { safeSetItem(STORAGE_KEYS.EXPENSES, expenses); }, [expenses]);
   useEffect(() => { safeSetItem(STORAGE_KEYS.DOKAN, dokanDues); }, [dokanDues]);
+  useEffect(() => { safeSetItem(STORAGE_KEYS.SHOPS, shopNames); }, [shopNames]);
 
   // Handle auto-print if opened via iframe workaround
   useEffect(() => {
@@ -211,6 +214,7 @@ export default function App() {
           rents,
           expenses,
           dokanDues,
+          shopNames,
           ownerEmail,
           updatedAt: new Date().toISOString(),
         };
@@ -229,7 +233,7 @@ export default function App() {
     }, 1200);
 
     return () => clearTimeout(syncTimer);
-  }, [rooms, tenants, rents, expenses, dokanDues, currentUser]);
+  }, [rooms, tenants, rents, expenses, dokanDues, shopNames, currentUser]);
 
   // Firebase Console Cloud Backup
   const handleFirebaseCloudBackup = async () => {
@@ -244,6 +248,7 @@ export default function App() {
         rents,
         expenses,
         dokanDues,
+        shopNames,
         ownerEmail,
         updatedAt: new Date().toISOString(),
       };
@@ -295,6 +300,7 @@ export default function App() {
         if (Array.isArray(data.rents)) setRents(data.rents);
         if (Array.isArray(data.expenses)) setExpenses(data.expenses);
         if (Array.isArray(data.dokanDues)) setDokanDues(data.dokanDues);
+        if (Array.isArray(data.shopNames)) setShopNames(data.shopNames);
         showToast(
           language === 'bn' 
             ? '✓ ফায়ারবেস ক্লাউড থেকে ডাটা সফলভাবে রিস্টোর করা হয়েছে!' 
@@ -798,8 +804,32 @@ export default function App() {
     );
   };
 
+  const handleAddShopName = (name: string) => {
+    const trimmed = name.trim();
+    if (!trimmed) return;
+    setShopNames((prev) => {
+      if (prev.includes(trimmed)) return prev;
+      return [...prev, trimmed];
+    });
+    showToast(
+      language === 'bn'
+        ? `নতুন দোকান যুক্ত হয়েছে: ${trimmed}`
+        : `New shop added: ${trimmed}`
+    );
+  };
+
+  const handleDeleteShopName = (name: string) => {
+    setShopNames((prev) => prev.filter((s) => s !== name));
+    showToast(
+      language === 'bn'
+        ? `দোকানের নাম তালিকা থেকে সরানো হয়েছে`
+        : `Shop removed from saved list`,
+      'info'
+    );
+  };
+
   const handleTriggerBackup = () => {
-    exportBackupJSON(rooms, tenants, rents, expenses, dokanDues);
+    exportBackupJSON(rooms, tenants, rents, expenses, dokanDues, shopNames);
     showToast(language === 'bn' ? 'ব্যাকআপ ফাইল ডাউনলোড হয়েছে!' : 'Backup JSON downloaded successfully!');
   };
 
@@ -1132,6 +1162,7 @@ export default function App() {
           {activeTab === 'dokan' && (
             <ShopDuesSection
               dokanDues={dokanDues}
+              shopNames={shopNames}
               language={language}
               searchQuery={searchQuery}
               selectedYear={selectedYear}
@@ -1139,6 +1170,8 @@ export default function App() {
               onAddDokanDue={handleAddDokanDue}
               onUpdateDokanDue={handleUpdateDokanDue}
               onDeleteDokanDue={handleDeleteDokanDue}
+              onAddShopName={handleAddShopName}
+              onDeleteShopName={handleDeleteShopName}
             />
           )}
 

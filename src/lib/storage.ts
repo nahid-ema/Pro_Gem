@@ -9,6 +9,7 @@ const STORAGE_KEYS = {
   RENTS: 'nk_rents_v3',
   EXPENSES: 'nk_expenses_v3',
   DOKAN: 'nk_dokan_v3',
+  SHOPS: 'nk_shops_v1',
   THEME: 'nk_theme_v2',
   LANG: 'nk_lang_v2',
   MINIMIZED: 'nk_minimized_cards',
@@ -50,12 +51,23 @@ export function loadInitialData() {
     return r;
   });
 
+  const defaultShops = Array.from(
+    new Set([
+      'সাইফুল দোকান',
+      ...(Array.isArray(dokan) ? dokan : initialShopDues)
+        .map((d) => (d.shopName || '').trim())
+        .filter(Boolean),
+    ])
+  );
+  const shopNames = safeGetItem<string[]>(STORAGE_KEYS.SHOPS, defaultShops);
+
   return {
     rooms: Array.isArray(rooms) ? rooms : initialRooms,
     tenants: Array.isArray(tenants) ? tenants : initialTenants,
     rents: cleanedRents,
     expenses: Array.isArray(expenses) ? expenses : initialExpenses,
     dokan: Array.isArray(dokan) ? dokan : initialShopDues,
+    shopNames: Array.isArray(shopNames) && shopNames.length > 0 ? shopNames : defaultShops,
   };
 }
 
@@ -64,7 +76,8 @@ export function exportBackupJSON(
   tenants: Tenant[],
   rents: RentRecord[],
   expenses: Expense[],
-  dokan: ShopDue[]
+  dokan: ShopDue[],
+  shopNames?: string[]
 ) {
   const backup: BackupData = {
     rooms,
@@ -72,6 +85,7 @@ export function exportBackupJSON(
     rents,
     expenses,
     dokanBaki: dokan,
+    shopNames,
     exportDate: new Date().toISOString(),
     version: '2.0-react'
   };
