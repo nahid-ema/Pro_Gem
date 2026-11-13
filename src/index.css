@@ -101,13 +101,13 @@ html {
 
 @media (min-width: 1024px) {
   html {
-    font-size: 14px; /* Balanced desktop scaling */
+    font-size: 15.4px; /* +10% desktop font scaling */
   }
 }
 
 @media (min-width: 1600px) {
   html {
-    font-size: 14.5px; /* Clean scaling for high resolution full screen desktop monitors */
+    font-size: 15.95px; /* +10% scaling for large desktop monitors */
   }
 }
 
