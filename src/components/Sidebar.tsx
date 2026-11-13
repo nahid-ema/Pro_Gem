@@ -78,16 +78,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <aside className="hidden lg:flex flex-col w-64 h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 z-40 no-print shrink-0">
-      {/* Brand & Logo */}
-      <div className="flex items-center gap-3 px-6 py-5 border-b border-slate-100 dark:border-slate-800">
-        <Logo className="w-9 h-9" />
-        <div className="min-w-0">
-          <h1 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white truncate">
-            {t.appName}
-          </h1>
-          <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
-            {language === 'bn' ? 'প্রপার্টি ম্যানেজমেন্ট' : 'Property Management'}
-          </p>
+      {/* Kalima & Brand Header */}
+      <div className="px-5 pt-3.5 pb-4 border-b border-slate-100 dark:border-slate-800 space-y-2.5">
+        <p
+          dir="rtl"
+          className="text-center text-xs font-bold text-slate-700 dark:text-slate-200 tracking-wide pb-2 border-b border-slate-100 dark:border-slate-800/80"
+        >
+          لَا إِلَٰهَ إِلَّا ٱللَّٰهُ مُحَمَّدٌ رَسُولُ ٱللَّٰهِ
+        </p>
+        <div className="flex items-center gap-3 px-1">
+          <Logo className="w-9 h-9" />
+          <div className="min-w-0">
+            <h1 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white truncate">
+              {t.appName}
+            </h1>
+            <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
+              {language === 'bn' ? 'প্রপার্টি ম্যানেজমেন্ট' : 'Property Management'}
+            </p>
+          </div>
         </div>
       </div>
 

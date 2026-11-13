@@ -157,8 +157,11 @@ export const Header: React.FC<HeaderProps> = ({
         className="hidden"
       />
 
-      {/* 1. Kalima */}
-      <div className="text-center text-sm sm:text-base font-bold text-slate-800 dark:text-slate-200 pb-2 mb-3 border-b border-slate-100 dark:border-slate-800 tracking-wide">
+      {/* 1. Kalima (Mobile/Tablet above mobile Nahid Kutir header) */}
+      <div
+        dir="rtl"
+        className="lg:hidden text-center text-sm sm:text-base font-bold text-slate-800 dark:text-slate-200 pb-2 mb-3 border-b border-slate-100 dark:border-slate-800 tracking-wide"
+      >
         لَا إِلَٰهَ إِلَّا ٱللَّٰهُ مُحَمَّدٌ رَسُولُ ٱللَّٰهِ
       </div>
 

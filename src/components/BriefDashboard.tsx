@@ -90,15 +90,6 @@ export const BriefDashboard: React.FC<BriefDashboardProps> = ({
 
         {/* Workspace Action Controls */}
         <div className="flex flex-wrap items-center gap-2.5 no-print">
-          {onOpenBatchChecklist && (
-            <button
-              onClick={onOpenBatchChecklist}
-              className="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap shadow-xs"
-            >
-              <i className="fi fi-sr-bolt text-xs" />
-              <span>{t.batchChecklistTitle || '১-ক্লিক মাসিক ভাড়া চেকশিট'}</span>
-            </button>
-          )}
           {onOpenMonthlyReport && (
             <button
               onClick={onOpenMonthlyReport}
