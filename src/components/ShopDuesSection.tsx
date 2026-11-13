@@ -81,11 +81,13 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
   }, [shopNames, safeDokanDues, language]);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isManageShopsOpen, setIsManageShopsOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const [date, setDate] = useState(todayStr());
   const [selectedShop, setSelectedShop] = useState<string>(() => allShops[0] || 'সাইফুল দোকান');
   const [newShopInput, setNewShopInput] = useState('');
+  const [standaloneShopInput, setStandaloneShopInput] = useState('');
   const [desc, setDesc] = useState('');
   const [amount, setAmount] = useState('');
   const [selectedShopFilter, setSelectedShopFilter] = useState<string>('all');
@@ -122,6 +124,15 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
     onAddShopName?.(trimmed);
     setSelectedShop(trimmed);
     setNewShopInput('');
+  };
+
+  const handleStandaloneAddShop = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = standaloneShopInput.trim();
+    if (!trimmed) return;
+    onAddShopName?.(trimmed);
+    setSelectedShop(trimmed);
+    setStandaloneShopInput('');
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -223,6 +234,19 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
         <div className="flex items-center gap-2 no-print">
           <button
             type="button"
+            onClick={() => setIsManageShopsOpen(!isManageShopsOpen)}
+            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl border text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap ${
+              isManageShopsOpen
+                ? 'bg-slate-900 text-white border-slate-900 dark:bg-white dark:text-slate-900 dark:border-white'
+                : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
+            }`}
+          >
+            <i className="fi fi-sr-shop text-xs" />
+            <span>{t.dokanAddShopBtn || '+ নতুন দোকান'}</span>
+          </button>
+
+          <button
+            type="button"
             onClick={() => setIsFormOpen(!isFormOpen)}
             className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 font-semibold text-xs transition-colors cursor-pointer whitespace-nowrap"
           >
@@ -231,6 +255,75 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Quick Shopkeeper / Shop Name Manager Panel */}
+      {isManageShopsOpen && (
+        <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl p-4 mb-5 no-print animate-fadeIn">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+            <div>
+              <h4 className="text-xs md:text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <i className="fi fi-sr-shop text-indigo-600 dark:text-indigo-400" />
+                <span>
+                  {language === 'bn'
+                    ? 'দোকানদার / দোকানের তালিকা ও নতুন নাম সংযোজন'
+                    : 'Saved Shopkeepers / Stores & Add New'}
+                </span>
+              </h4>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                {language === 'bn'
+                  ? 'এখানে দোকানের নাম যোগ করলে বাকি এন্ট্রি করার সময় সরাসরি সিলেক্ট করতে পারবেন'
+                  : 'Add shopkeeper names here to quickly select them when logging credit dues'}
+              </p>
+            </div>
+
+            <form onSubmit={handleStandaloneAddShop} className="flex items-center gap-2 w-full sm:w-auto">
+              <input
+                type="text"
+                value={standaloneShopInput}
+                onChange={(e) => setStandaloneShopInput(e.target.value)}
+                placeholder={t.dokanNewShopPh || 'নতুন দোকানের নাম লিখুন...'}
+                className="flex-1 sm:w-64 px-3.5 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs md:text-sm font-semibold text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+              />
+              <button
+                type="submit"
+                className="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs transition-colors cursor-pointer shrink-0"
+              >
+                {t.dokanSaveShopBtn || 'যোগ করুন'}
+              </button>
+            </form>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-200/70 dark:border-slate-700/60">
+            {allShops.map((shop) => (
+              <div
+                key={shop}
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-800 dark:text-slate-200"
+              >
+                <span
+                  onClick={() => {
+                    setSelectedShop(shop);
+                    setIsFormOpen(true);
+                  }}
+                  className="cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400"
+                  title={language === 'bn' ? 'এই দোকানে বাকি যোগ করতে ক্লিক করুন' : 'Click to log due for this shop'}
+                >
+                  {shop}
+                </span>
+                {allShops.length > 1 && onDeleteShopName && (
+                  <button
+                    type="button"
+                    onClick={() => onDeleteShopName(shop)}
+                    className="text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 transition-colors cursor-pointer"
+                    title={language === 'bn' ? 'তালিকা থেকে সরান' : 'Remove from list'}
+                  >
+                    <i className="fi fi-sr-cross-small text-xs" />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Expandable Due Entry Form */}
       {isFormOpen && (
