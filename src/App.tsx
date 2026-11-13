@@ -76,7 +76,7 @@ export default function App() {
   const [rents, setRents] = useState<RentRecord[]>([]);
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [dokanDues, setDokanDues] = useState<ShopDue[]>([]);
-  const [shopNames, setShopNames] = useState<string[]>(['সাইফুল দোকান']);
+  const [shopNames, setShopNames] = useState<string[]>([]);
   const [shopDocs, setShopDocs] = useState<{ id: string; name: string }[]>([]);
 
   // Auth & Modal States
@@ -144,7 +144,7 @@ export default function App() {
     setRents(rt);
     setExpenses(e);
     setDokanDues(d);
-    if (sn && sn.length > 0) setShopNames(sn);
+    if (Array.isArray(sn)) setShopNames(sn);
   }, []);
 
   // Save local data changes
@@ -436,12 +436,24 @@ export default function App() {
       collection(db, 'shops'),
       (snap) => {
         const docs: { id: string; name: string }[] = [];
+        const hasCleanedDefault = safeGetItem<boolean>('nk_saiful_firestore_cleaned_v1', false);
+
         snap.forEach((docSnap) => {
           const data = docSnap.data();
           if (data && typeof data.name === 'string' && data.name.trim()) {
-            docs.push({ id: docSnap.id, name: data.name.trim() });
+            const cleanName = data.name.trim();
+            if (!hasCleanedDefault && cleanName === 'সাইফুল দোকান') {
+              deleteDoc(doc(db, 'shops', docSnap.id)).catch(() => {});
+              return;
+            }
+            docs.push({ id: docSnap.id, name: cleanName });
           }
         });
+
+        if (!hasCleanedDefault) {
+          safeSetItem('nk_saiful_firestore_cleaned_v1', true);
+        }
+
         setShopDocs(docs);
         if (docs.length > 0) {
           const remoteNames = docs.map((d) => d.name);

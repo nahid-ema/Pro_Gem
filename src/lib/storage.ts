@@ -52,14 +52,20 @@ export function loadInitialData() {
   });
 
   const defaultShops = Array.from(
-    new Set([
-      'সাইফুল দোকান',
-      ...(Array.isArray(dokan) ? dokan : initialShopDues)
+    new Set(
+      (Array.isArray(dokan) ? dokan : initialShopDues)
         .map((d) => (d.shopName || '').trim())
-        .filter(Boolean),
-    ])
+        .filter((s) => Boolean(s) && s !== 'সাইফুল দোকান')
+    )
   );
-  const shopNames = safeGetItem<string[]>(STORAGE_KEYS.SHOPS, defaultShops);
+  const rawShopNames = safeGetItem<string[]>(STORAGE_KEYS.SHOPS, defaultShops);
+  const cleanedFlag = safeGetItem<boolean>('nk_saiful_shop_removed_v1', false);
+  let shopNames = Array.isArray(rawShopNames) ? rawShopNames : defaultShops;
+  if (!cleanedFlag) {
+    shopNames = shopNames.filter((s) => s.trim() !== 'সাইফুল দোকান');
+    safeSetItem(STORAGE_KEYS.SHOPS, shopNames);
+    safeSetItem('nk_saiful_shop_removed_v1', true);
+  }
 
   return {
     rooms: Array.isArray(rooms) ? rooms : initialRooms,
@@ -67,7 +73,7 @@ export function loadInitialData() {
     rents: cleanedRents,
     expenses: Array.isArray(expenses) ? expenses : initialExpenses,
     dokan: Array.isArray(dokan) ? dokan : initialShopDues,
-    shopNames: Array.isArray(shopNames) && shopNames.length > 0 ? shopNames : defaultShops,
+    shopNames,
   };
 }
 

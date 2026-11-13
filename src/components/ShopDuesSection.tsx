@@ -26,13 +26,6 @@ export const resolveShopName = (dk: ShopDue, lang: Language = 'bn'): string => {
   if (!rawDesc) {
     return lang === 'bn' ? 'সাধারণ দোকান' : 'General Shop';
   }
-  if (
-    rawDesc === 'সাইফুল' ||
-    rawDesc.toLowerCase() === 'saiful' ||
-    rawDesc.startsWith('সাইফুল')
-  ) {
-    return 'সাইফুল দোকান';
-  }
   if (rawDesc.includes('—')) {
     return rawDesc.split('—')[0].trim();
   }
@@ -61,29 +54,31 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
 
   const safeDokanDues = Array.isArray(dokanDues) ? dokanDues : [];
 
-  // Combine saved shopNames with any shopName present in records
+  // Combine saved shopNames with any explicit shopName present in current records
   const allShops = useMemo(() => {
     const set = new Set<string>();
     (Array.isArray(shopNames) ? shopNames : []).forEach((s) => {
       if (s && s.trim()) set.add(s.trim());
     });
     safeDokanDues.forEach((dk) => {
-      if (dk) {
-        const resolved = resolveShopName(dk, language);
-        if (resolved) set.add(resolved);
+      if (dk && dk.shopName && dk.shopName.trim() && dk.shopName.trim() !== 'সাইফুল দোকান') {
+        set.add(dk.shopName.trim());
       }
     });
-    if (set.size === 0) {
-      set.add('সাইফুল দোকান');
-    }
     return Array.from(set);
-  }, [shopNames, safeDokanDues, language]);
+  }, [shopNames, safeDokanDues]);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
   const [date, setDate] = useState(todayStr());
-  const [selectedShop, setSelectedShop] = useState<string>(() => allShops[0] || 'সাইফুল দোকান');
+  const [selectedShop, setSelectedShop] = useState<string>(() => allShops[0] || '__NEW__');
+
+  React.useEffect(() => {
+    if (!isFormOpen && selectedShop === '__NEW__' && allShops.length > 0) {
+      setSelectedShop(allShops[0]);
+    }
+  }, [allShops, isFormOpen, selectedShop]);
   const [newShopInput, setNewShopInput] = useState('');
   const [desc, setDesc] = useState('');
   const [amount, setAmount] = useState('');
@@ -92,7 +87,7 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
   const resetForm = () => {
     setEditingId(null);
     setDate(todayStr());
-    setSelectedShop(allShops[0] || 'সাইফুল দোকান');
+    setSelectedShop(allShops[0] || '__NEW__');
     setNewShopInput('');
     setDesc('');
     setAmount('');
@@ -258,24 +253,26 @@ export const ShopDuesSection: React.FC<ShopDuesSectionProps> = ({
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
                   {t.dokanShopLbl || 'দোকানদার / দোকানের নাম'} *
                 </label>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (selectedShop === '__NEW__') {
-                      setSelectedShop(allShops[0] || 'সাইফুল দোকান');
-                    } else {
-                      setSelectedShop('__NEW__');
-                    }
-                  }}
-                  className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
-                >
-                  {selectedShop === '__NEW__'
-                    ? (language === 'bn' ? 'তালিকা থেকে বাছুন' : 'Select existing')
-                    : (t.dokanAddShopBtn || '+ নতুন দোকান')}
-                </button>
+                {allShops.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (selectedShop === '__NEW__') {
+                        setSelectedShop(allShops[0]);
+                      } else {
+                        setSelectedShop('__NEW__');
+                      }
+                    }}
+                    className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
+                  >
+                    {selectedShop === '__NEW__'
+                      ? (language === 'bn' ? 'তালিকা থেকে বাছুন' : 'Select existing')
+                      : (t.dokanAddShopBtn || '+ নতুন দোকান')}
+                  </button>
+                )}
               </div>
 
-              {selectedShop !== '__NEW__' ? (
+              {selectedShop !== '__NEW__' && allShops.length > 0 ? (
                 <select
                   value={selectedShop}
                   onChange={(e) => {
